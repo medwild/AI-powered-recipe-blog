@@ -252,3 +252,15 @@ export async function getCalibrationStats(): Promise<CalibrationStats> {
     sourceBreakdown,
   }
 }
+
+import { pipelineErrors, type NewPipelineError } from "@/lib/db/schema"
+
+export async function logPipelineError(params: {
+  recipeId: number
+  stepName: string
+  errorType: "timeout" | "parse" | "rate_limit" | "llm_unavailable" | "unknown"
+  message: string
+  severity: "warning" | "degraded" | "critical"
+}) {
+  return db.insert(pipelineErrors).values(params as NewPipelineError)
+}

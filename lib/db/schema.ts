@@ -72,6 +72,29 @@ export const imageVariantStats = pgTable(
   }),
 )
 
+export const pipelineErrors = pgTable(
+  "pipeline_errors",
+  {
+    id: serial("id").primaryKey(),
+    recipeId: integer("recipe_id").notNull(),
+    stepName: text("step_name").notNull(),
+    errorType: text("error_type").notNull(),
+    message: text("message").notNull(),
+    severity: text("severity").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => ({
+    recipeIdx: index("idx_pe_recipe").on(table.recipeId),
+    stepIdx: index("idx_pe_step").on(table.stepName),
+    severityIdx: index("idx_pe_severity").on(table.severity),
+  }),
+)
+
+export type PipelineError = typeof pipelineErrors.$inferSelect
+export type NewPipelineError = typeof pipelineErrors.$inferInsert
+
 export type ImageVariantStat = typeof imageVariantStats.$inferSelect
 export type NewImageVariantStat = typeof imageVariantStats.$inferInsert
 
