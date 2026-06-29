@@ -9,7 +9,7 @@ import {
 } from "@/lib/db/schema"
 import { eq, desc, sql } from "drizzle-orm"
 import { slugify } from "@/lib/slug"
-import { getCalibrationStats } from "@/lib/queries"
+import { getCalibrationStats, logPipelineError } from "@/lib/queries"
 import { fetchSerp, type SerpResult } from "@/lib/agents/serp"
 import { runImage } from "@/lib/agents/cloudflare"
 import { uploadImage } from "@/lib/agents/cloudinary"
@@ -19,9 +19,9 @@ import { agentStrategist, agentStrategistV2 } from "./agents/strategist"
 import { structureSerpData } from "@/lib/agents/serp-structurer"
 import { agentWriter } from "./agents/writer"
 import type { RecipeDraft } from "./agents/writer"
-import { agentAuditor } from "./agents/auditor"
+import { agentAuditor, type AuditReport } from "./agents/auditor"
 import { agentEditor, MAX_HUMANIZATION_PASSES } from "./agents/editor"
-import { agentQA } from "./agents/qa"
+import { agentQA, type QAReport } from "./agents/qa"
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -71,6 +71,79 @@ function generateSyntheticPAA(keyword: string): string[] {
   ]
 }
 
+/**
+ * Checks whether an error is transient and should be retried by Inngest
+ * rather than triggering the step-level fallback.
+ */
+function isRecoverableError(err: Error): boolean {
+  const msg = err.message
+  return (
+    msg.includes("No JSON object") ||
+    msg.includes("Failed to parse JSON") ||
+    msg.includes("aborted") ||
+    msg.includes("returned no response") ||
+    msg.includes("timed out") ||
+    msg.includes("timeout") ||
+    msg.includes("403") ||
+    msg.includes("408") ||
+    msg.includes("429") ||
+    msg.includes("500") ||
+    msg.includes("502") ||
+    msg.includes("503") ||
+    msg.includes("504")
+  )
+}
+
+/** Criterion names matching the Auditor v5.1 skill (8 criteria). */
+const SYNTHETIC_CRITERION_NAMES = [
+  "EXPERIENCE — First-Hand Familiarity",
+  "EXPERTISE — Depth & Accuracy",
+  "AUTHORITATIVENESS — Source Quality & Citations",
+  "TRUSTWORTHINESS — Verifiability & Accuracy",
+  "SEO / GEO OPTIMIZATION",
+  "READABILITY & STRUCTURE",
+  "ANTI-AI-SLOP DETECTION",
+  "VOICE CONSISTENCY — ADAPTIVE v5.1",
+]
+
+function buildSyntheticAuditReport(): AuditReport {
+  return {
+    overallScore: 60,
+    verdict: "OK",
+    score_ia_estimation: 50,
+    factual_corrections: [],
+    summary: "Auditor unavailable — auto-pass with default scores.",
+    criteria: SYNTHETIC_CRITERION_NAMES.map((name) => ({
+      name,
+      score: 12,
+      issues: [],
+      recommendation: "Auditor unavailable — auto-pass",
+    })),
+  }
+}
+
+function buildSyntheticQAReport(): QAReport {
+  return {
+    qaScore: 70,
+    verdict: "PASS",
+    summary: "QA skipped — Editor output accepted without cross-agent verification.",
+    checks: [],
+  }
+}
+
+/** Deterministic image prompt fallback — no LLM call needed. */
+function buildFallbackImagePrompt(title: string, tags: string[]): string {
+  const dish = title || "the dish"
+  const cuisine = tags[1] || tags[0] || ""
+  const cuisineSuffix = cuisine ? `, ${cuisine} cuisine` : ""
+  return [
+    `Professional food photography of ${dish}${cuisineSuffix}.`,
+    "Overhead shot on rustic wooden table, natural window light,",
+    "styled with fresh herbs and ingredients.",
+    "4K, shallow depth of field, warm color grading.",
+  ].join(" ")
+}
+
 // ---------------------------------------------------------------------------
 // Inngest function — multi-agent workflow with Human-in-the-Loop
 // ---------------------------------------------------------------------------
@@ -102,11 +175,14 @@ export const generateRecipeWorkflow = inngest.createFunction(
       keyword: string
     }
 
+    let degraded = false
+
     try {
       // =====================================================================
-      // Step 1 — SERP Analysis
+      // Step 1 — SERP Analysis (Critical — no fallback)
       // =====================================================================
-      await step.run("analyze-serp", async () => {
+      try {
+        await step.run("analyze-serp", async () => {
         await appendLog(
           recipeId,
           logEntry("SERP", "running", `Google analysis for "${keyword}"`),
@@ -127,63 +203,105 @@ export const generateRecipeWorkflow = inngest.createFunction(
           ),
         )
       })
-      await step.sleep("sleep-after-serp", "2s")
+    } catch (err) {
+      if (!isRecoverableError(err as Error)) {
+        await logPipelineError({
+          recipeId, stepName: "analyze-serp",
+          errorType: "llm_unavailable", message: (err as Error).message,
+          severity: "critical",
+        })
+      }
+      throw err // critical — always re-throw
+    }
+    await step.sleep("sleep-after-serp", "2s")
 
       // =====================================================================
       // Step 1.5 — Agent 0: SERP Data Structurer (deterministic, no LLM)
       // =====================================================================
-      const structuredSerp = await step.run("structure-serp-data", async () => {
+      let structuredSerp: Awaited<ReturnType<typeof structureSerpData>>
+      try {
+        structuredSerp = await step.run("structure-serp-data", async () => {
+          const [row] = await db
+            .select({ serpData: recipes.serpData })
+            .from(recipes)
+            .where(eq(recipes.id, recipeId))
+
+          const serp = row?.serpData as SerpResult | undefined
+          if (!serp) {
+            throw new Error("SERP data not found — workflow may be corrupted.")
+          }
+
+          // PAA Fallback
+          if (!serp.relatedQuestions || serp.relatedQuestions.length < 2) {
+            const syntheticPAA = generateSyntheticPAA(keyword)
+            serp.relatedQuestions = syntheticPAA.map((q) => ({
+              question: q,
+              snippet: undefined,
+              sourceUrl: undefined,
+            }))
+            await appendLog(
+              recipeId,
+              logEntry("SERP", "error",
+                `No PAA questions — using ${syntheticPAA.length} synthetic PAA fallbacks`),
+            )
+          }
+
+          await appendLog(
+            recipeId,
+            logEntry("SERP Structurer", "running",
+              `Structuring SERP data — ${serp.organic.length} competitors, ${serp.relatedQuestions.length} questions`),
+          )
+
+          const result = structureSerpData(keyword, serp, {
+            niche: "recipe",
+            audience: "home cooks",
+            contentGoal: "organic SEO",
+          })
+
+          await appendLog(
+            recipeId,
+            logEntry("SERP Structurer", "done",
+              `${result.normalized_competitors.length} competitors, ${result.user_questions.length} questions, ${result.content_opportunities.length} opportunities, ${result.risks.length} risks`),
+          )
+
+          return result
+        })
+      } catch (err) {
+        if (isRecoverableError(err as Error)) throw err
+        await logPipelineError({
+          recipeId, stepName: "structure-serp-data",
+          errorType: "unknown", message: (err as Error).message,
+          severity: "warning",
+        })
+        degraded = true
+        // Build minimal StructuredSerp from raw SERP data
         const [row] = await db
           .select({ serpData: recipes.serpData })
           .from(recipes)
           .where(eq(recipes.id, recipeId))
-
         const serp = row?.serpData as SerpResult | undefined
-        if (!serp) {
-          throw new Error("SERP data not found — workflow may be corrupted.")
+        const fallbackSerp: SerpResult = {
+          organic: serp?.organic ?? [],
+          relatedQuestions: generateSyntheticPAA(keyword).map((q) => ({
+            question: q, snippet: undefined, sourceUrl: undefined,
+          })),
+          knowledgeGraph: undefined,
+          relatedSearches: [],
         }
-
-        // PAA Fallback
-        if (!serp.relatedQuestions || serp.relatedQuestions.length < 2) {
-          const syntheticPAA = generateSyntheticPAA(keyword)
-          serp.relatedQuestions = syntheticPAA.map((q) => ({
-            question: q,
-            snippet: undefined,
-            sourceUrl: undefined,
-          }))
-          await appendLog(
-            recipeId,
-            logEntry("SERP", "error",
-              `No PAA questions — using ${syntheticPAA.length} synthetic PAA fallbacks`),
-          )
-        }
-
-        await appendLog(
-          recipeId,
-          logEntry("SERP Structurer", "running",
-            `Structuring SERP data — ${serp.organic.length} competitors, ${serp.relatedQuestions.length} questions`),
-        )
-
-        const result = structureSerpData(keyword, serp, {
-          niche: "recipe",
-          audience: "home cooks",
-          contentGoal: "organic SEO",
-        })
-
-        await appendLog(
-          recipeId,
-          logEntry("SERP Structurer", "done",
-            `${result.normalized_competitors.length} competitors, ${result.user_questions.length} questions, ${result.content_opportunities.length} opportunities, ${result.risks.length} risks`),
-        )
-
-        return result
-      })
+        structuredSerp = structureSerpData(keyword, fallbackSerp, { niche: "recipe", audience: "home cooks", contentGoal: "organic SEO" })
+        await appendLog(recipeId, logEntry(
+          "SERP Structurer", "error",
+          `Degraded — using synthetic data (${structuredSerp.normalized_competitors.length} competitors, ${structuredSerp.user_questions.length} questions)`,
+        ))
+      }
       await step.sleep("sleep-after-structurer", "1s")
 
       // =====================================================================
-      // Step 2 — Agent 1: SEO Strategist (V2 — pre-structured SERP)
+      // Step 2 — Agent 1: SEO Strategist (V2 — pre-structured SERP) (Critical — no fallback)
       // =====================================================================
-      const seoPlan = await step.run("agent-1-strategist", async () => {
+      let seoPlan: Awaited<ReturnType<typeof agentStrategistV2>>
+      try {
+        seoPlan = await step.run("agent-1-strategist", async () => {
         // Load past lessons with full context for relevance filtering.
         const pastLogs = await db
           .select({
@@ -247,12 +365,24 @@ export const generateRecipeWorkflow = inngest.createFunction(
         )
         return plan
       })
-      await step.sleep("sleep-after-strategist", "25s")
+    } catch (err) {
+      if (!isRecoverableError(err as Error)) {
+        await logPipelineError({
+          recipeId, stepName: "agent-1-strategist",
+          errorType: "llm_unavailable", message: (err as Error).message,
+          severity: "critical",
+        })
+      }
+      throw err
+    }
+    await step.sleep("sleep-after-strategist", "25s")
 
       // =====================================================================
-      // Step 3 — Agent 2: Writer (Chef Augustin Lefèvre)
+      // Step 3 — Agent 2: Writer (Chef Augustin Lefèvre) (Critical — no fallback)
       // =====================================================================
-      const draft = await step.run("agent-2-writer", async () => {
+      let draft: RecipeDraft
+      try {
+        draft = await step.run("agent-2-writer", async () => {
         await appendLog(
           recipeId,
           logEntry("Writer", "running", "Writing as Chef Augustin Lefèvre"),
@@ -268,12 +398,24 @@ export const generateRecipeWorkflow = inngest.createFunction(
         )
         return result
       })
-      await step.sleep("sleep-after-writer", "25s")
+    } catch (err) {
+      if (!isRecoverableError(err as Error)) {
+        await logPipelineError({
+          recipeId, stepName: "agent-2-writer",
+          errorType: "llm_unavailable", message: (err as Error).message,
+          severity: "critical",
+        })
+      }
+      throw err
+    }
+    await step.sleep("sleep-after-writer", "25s")
 
       // =====================================================================
       // Step 4 — Agent 3: Auditor (7 criteria + AI score)
       // =====================================================================
-      const audit = await step.run("agent-3-auditor", async () => {
+      let audit: AuditReport
+      try {
+        audit = await step.run("agent-3-auditor", async () => {
         await appendLog(
           recipeId,
           logEntry("Auditor", "running", "7-criteria evaluation + anti-AI score"),
@@ -289,7 +431,21 @@ export const generateRecipeWorkflow = inngest.createFunction(
         )
         return report
       })
-      await step.sleep("sleep-after-auditor", "2s")
+    } catch (err) {
+      if (isRecoverableError(err as Error)) throw err
+      await logPipelineError({
+        recipeId, stepName: "agent-3-auditor",
+        errorType: "llm_unavailable", message: (err as Error).message,
+        severity: "degraded",
+      })
+      degraded = true
+      audit = buildSyntheticAuditReport()
+      await appendLog(recipeId, logEntry(
+        "Auditor", "error",
+        `Degraded — using synthetic audit (score: ${audit.overallScore}/100)`,
+      ))
+    }
+    await step.sleep("sleep-after-auditor", "2s")
 
       // =====================================================================
       // Step 5 — Persist draft for human review
@@ -399,65 +555,97 @@ export const generateRecipeWorkflow = inngest.createFunction(
 
         humanizationPass++
 
-        finalRecipe = await step.run(
-          `agent-4-editor-pass-${humanizationPass}`,
-          async () => {
-            await appendLog(
-              recipeId,
-              logEntry(
-                "Editor",
-                "running",
-                `Pass ${humanizationPass}/${MAX_HUMANIZATION_PASSES} — Correction${currentAudit.verdict === "NEEDS REVISION" && currentAudit.score_ia_estimation >= 20 ? " + anti-AI humanization" : ""}`,
-              ),
-            )
-            const corrected = await agentEditor(
-              keyword,
-              currentDraft,
-              currentAudit,
-              humanizationPass,
-            )
-            await appendLog(
-              recipeId,
-              logEntry(
-                "Editor",
-                "done",
-                `Pass ${humanizationPass} complete — ${corrected.changes_summary}`,
-              ),
-            )
-            return corrected
-          },
-        )
+        try {
+          finalRecipe = await step.run(
+            `agent-4-editor-pass-${humanizationPass}`,
+            async () => {
+              await appendLog(
+                recipeId,
+                logEntry(
+                  "Editor",
+                  "running",
+                  `Pass ${humanizationPass}/${MAX_HUMANIZATION_PASSES} — Correction${currentAudit.verdict === "NEEDS REVISION" && currentAudit.score_ia_estimation >= 20 ? " + anti-AI humanization" : ""}`,
+                ),
+              )
+              const corrected = await agentEditor(
+                keyword,
+                currentDraft,
+                currentAudit,
+                humanizationPass,
+              )
+              await appendLog(
+                recipeId,
+                logEntry(
+                  "Editor",
+                  "done",
+                  `Pass ${humanizationPass} complete — ${corrected.changes_summary}`,
+                ),
+              )
+              return corrected
+            },
+          )
+        } catch (err) {
+          if (isRecoverableError(err as Error)) throw err
+          await logPipelineError({
+            recipeId, stepName: `agent-4-editor-pass-${humanizationPass}`,
+            errorType: "llm_unavailable", message: (err as Error).message,
+            severity: "degraded",
+          })
+          degraded = true
+          finalRecipe = currentDraft // keep current draft as-is
+          await appendLog(recipeId, logEntry(
+            "Editor", "error",
+            `Degraded — Editor unavailable, keeping current draft`,
+          ))
+          break // exit the while loop
+        }
         await step.sleep("sleep-after-editor-pass", "2s")
 
         // Re-audit the corrected draft for the next iteration
         currentDraft = finalRecipe!
-        currentAudit = await step.run(
-          `agent-3-re-audit-pass-${humanizationPass}`,
-          async () => {
-            await appendLog(
-              recipeId,
-              logEntry(
-                "Auditor",
-                "running",
-                `Re-evaluation after pass ${humanizationPass}`,
-              ),
-            )
-            const report = await agentAuditor(
-              keyword,
-              currentDraft,
-              seoPlan.semanticEntities,
-            )
-            await appendLog(
-              recipeId,
-              logEntry(
-                "Auditor",
-                "done",
-                `Score: ${report.overallScore}/100 | AI: ${report.score_ia_estimation}/100 | Verdict: ${report.verdict}`,
-              ),
-            )
-            return report
-          },
-        )
+        try {
+          currentAudit = await step.run(
+            `agent-3-re-audit-pass-${humanizationPass}`,
+            async () => {
+              await appendLog(
+                recipeId,
+                logEntry(
+                  "Auditor",
+                  "running",
+                  `Re-evaluation after pass ${humanizationPass}`,
+                ),
+              )
+              const report = await agentAuditor(
+                keyword,
+                currentDraft,
+                seoPlan.semanticEntities,
+              )
+              await appendLog(
+                recipeId,
+                logEntry(
+                  "Auditor",
+                  "done",
+                  `Score: ${report.overallScore}/100 | AI: ${report.score_ia_estimation}/100 | Verdict: ${report.verdict}`,
+                ),
+              )
+              return report
+            },
+          )
+        } catch (err) {
+          if (isRecoverableError(err as Error)) throw err
+          await logPipelineError({
+            recipeId, stepName: `agent-3-re-audit-pass-${humanizationPass}`,
+            errorType: "llm_unavailable", message: (err as Error).message,
+            severity: "degraded",
+          })
+          degraded = true
+          currentAudit = buildSyntheticAuditReport()
+          await appendLog(recipeId, logEntry(
+            "Auditor", "error",
+            `Degraded — re-audit unavailable, using synthetic audit`,
+          ))
+          break
+        }
         await step.sleep("sleep-after-re-audit", "2s")
       }
 
@@ -480,7 +668,9 @@ export const generateRecipeWorkflow = inngest.createFunction(
       // =====================================================================
       // Step 7.5 — Agent 5: QA (cross-agent verification)
       // =====================================================================
-      const qaReport = await step.run("agent-5-qa", async () => {
+      let qaReport: QAReport
+      try {
+        qaReport = await step.run("agent-5-qa", async () => {
         await appendLog(
           recipeId,
           logEntry("QA", "running", "Cross-agent verification — 5 checks (factual, voice, structure, JSON, anti-regression)"),
@@ -503,7 +693,21 @@ export const generateRecipeWorkflow = inngest.createFunction(
         )
         return report
       })
-      await step.sleep("sleep-after-qa", "2s")
+    } catch (err) {
+      if (isRecoverableError(err as Error)) throw err
+      await logPipelineError({
+        recipeId, stepName: "agent-5-qa",
+        errorType: "llm_unavailable", message: (err as Error).message,
+        severity: "degraded",
+      })
+      degraded = true
+      qaReport = buildSyntheticQAReport()
+      await appendLog(recipeId, logEntry(
+        "QA", "error",
+        `Degraded — QA unavailable, accepting Editor output`,
+      ))
+    }
+    await step.sleep("sleep-after-qa", "2s")
 
       // QA-NEEDS_FIX feedback loop — max 1 extra Editor pass if QA flags issues
       if (qaReport.verdict === "NEEDS_FIX" && humanizationPass < MAX_HUMANIZATION_PASSES) {
@@ -603,7 +807,9 @@ export const generateRecipeWorkflow = inngest.createFunction(
       // =====================================================================
       // Step 8 — Image Prompt Optimizer (LLM + food-photography skill)
       // =====================================================================
-      const safeImagePrompt = await step.run("optimize-image-prompt", async () => {
+      let safeImagePrompt: string
+      try {
+        safeImagePrompt = await step.run("optimize-image-prompt", async () => {
         const optimized = await agentImagePromptOptimizer({
           title: finalRecipe!.title,
           tags: finalRecipe!.tags,
@@ -625,7 +831,21 @@ export const generateRecipeWorkflow = inngest.createFunction(
         )
         return optimized
       })
-      await step.sleep("sleep-after-image-optimizer", "1s")
+    } catch (err) {
+      if (isRecoverableError(err as Error)) throw err
+      await logPipelineError({
+        recipeId, stepName: "optimize-image-prompt",
+        errorType: "llm_unavailable", message: (err as Error).message,
+        severity: "degraded",
+      })
+      degraded = true
+      safeImagePrompt = buildFallbackImagePrompt(finalRecipe!.title, finalRecipe!.tags)
+      await appendLog(recipeId, logEntry(
+        "Image Prompt", "error",
+        `Degraded — deterministic fallback prompt (${safeImagePrompt.length} chars)`,
+      ))
+    }
+    await step.sleep("sleep-after-image-optimizer", "1s")
 
       // =====================================================================
       // Step 9 — Image generation + Cloudinary upload (multi-variant)
@@ -696,7 +916,8 @@ export const generateRecipeWorkflow = inngest.createFunction(
       // =====================================================================
       // Step 10 — Self-Improvement: closed feedback loop
       // =====================================================================
-      await step.run("self-improvement", async () => {
+      try {
+        await step.run("self-improvement", async () => {
         const tagList = finalRecipe!.tags ?? []
 
         // 1. Auditor criteria scoring below threshold (existing behavior, now with source)
@@ -769,12 +990,26 @@ export const generateRecipeWorkflow = inngest.createFunction(
           ),
         )
       })
-      await step.sleep("sleep-after-self-improvement", "2s")
+    } catch (err) {
+      if (isRecoverableError(err as Error)) throw err
+      await logPipelineError({
+        recipeId, stepName: "self-improvement",
+        errorType: "unknown", message: (err as Error).message,
+        severity: "warning",
+      })
+      await appendLog(recipeId, logEntry(
+        "Self-Improvement", "error",
+        `Warning — self-improvement skipped: ${(err as Error).message}`,
+      ))
+      // Non-critical — continue without saving lessons
+    }
+    await step.sleep("sleep-after-self-improvement", "2s")
 
       // =====================================================================
-      // Step 11 — Persist the finished draft in DB
+      // Step 11 — Persist the finished draft in DB (Critical — no fallback)
       // =====================================================================
-      await step.run("persist-draft-final", async () => {
+      try {
+        await step.run("persist-draft-final", async () => {
         // -----------------------------------------------------------------
         // Programmatic SEO guards (v5.2) — enforce critical rules in code,
         // not just LLM instructions. These run on the final recipe output.
@@ -926,7 +1161,7 @@ export const generateRecipeWorkflow = inngest.createFunction(
             heroImageUrl,
             imageVariants,
             jsonLd,
-            status: "draft",
+            status: degraded ? "degraded" : "draft",
             updatedAt: new Date(),
           })
           .where(eq(recipes.id, recipeId))
@@ -939,7 +1174,25 @@ export const generateRecipeWorkflow = inngest.createFunction(
             `Draft ready — ${humanizationPass} editorial pass(es) — ${imageVariants.length} image variant(s) — Final verdict: ${currentAudit.verdict} — AI Score: ${currentAudit.score_ia_estimation}/100`,
           ),
         )
+
+        if (degraded) {
+          await appendLog(
+            recipeId,
+            logEntry("Workflow", "error",
+              "Pipeline completed in DEGRADED mode — some steps used fallbacks. Review manually before publishing."),
+          )
+        }
       })
+    } catch (err) {
+      if (!isRecoverableError(err as Error)) {
+        await logPipelineError({
+          recipeId, stepName: "persist-draft-final",
+          errorType: "unknown", message: (err as Error).message,
+          severity: "critical",
+        })
+      }
+      throw err
+    }
 
       // =====================================================================
       // Step 12 — Initialize A/B tracking for image variants
