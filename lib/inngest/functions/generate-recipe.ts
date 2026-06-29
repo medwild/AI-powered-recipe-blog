@@ -54,7 +54,7 @@ function logEntry(
  * Uses keyword-derived templates covering the 5 most common PAA patterns:
  * method, ingredients, health/nutrition, storage/shelf-life, and technique.
  */
-function generateSyntheticPAA(keyword: string): string[] {
+export function generateSyntheticPAA(keyword: string): string[] {
   const q = keyword.trim()
   // Normalize: lowercase first letter for mid-sentence embedding
   const lc = q.charAt(0).toLowerCase() + q.slice(1)
@@ -66,7 +66,7 @@ function generateSyntheticPAA(keyword: string): string[] {
     `Can you freeze ${lc}?`,
     `How long does ${lc} last in the fridge?`,
     `What to serve with ${lc}?`,
-    `Common mistakes when making ${lc}`,
+    `Common mistakes when making ${lc}?`,
     `How to store ${lc} properly?`,
   ]
 }
