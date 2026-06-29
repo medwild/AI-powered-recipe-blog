@@ -717,42 +717,59 @@ export const generateRecipeWorkflow = inngest.createFunction(
           .flatMap((c) => c.issues)
           .join("; ")
 
-        const qaFixedDraft = await step.run(
-          `agent-4-editor-qa-fix`,
-          async () => {
-            await appendLog(
-              recipeId,
-              logEntry(
-                "Editor",
-                "running",
-                `QA fix pass — ${qaIssues.substring(0, 120)}`,
-              ),
-            )
-            // Build a synthetic audit that carries the QA issues as recommendations
-            const qaAudit: typeof currentAudit = {
-              ...currentAudit,
-              verdict: "NEEDS REVISION" as const,
-              criteria: currentAudit.criteria.map((c) => ({
-                ...c,
-                issues: qaIssues ? [...c.issues, qaIssues] : c.issues,
-              })),
-            }
-            const corrected = await agentEditor(
-              keyword,
-              finalRecipe!,
-              qaAudit,
-              humanizationPass,
-            )
-            await appendLog(
-              recipeId,
-              logEntry("Editor", "done", `QA fix pass complete — ${corrected.changes_summary}`),
-            )
-            return corrected
-          },
-        )
+        let qaFixedDraft: RecipeDraft | null = null
+        try {
+          qaFixedDraft = await step.run(
+            `agent-4-editor-qa-fix`,
+            async () => {
+              await appendLog(
+                recipeId,
+                logEntry(
+                  "Editor",
+                  "running",
+                  `QA fix pass — ${qaIssues.substring(0, 120)}`,
+                ),
+              )
+              // Build a synthetic audit that carries the QA issues as recommendations
+              const qaAudit: typeof currentAudit = {
+                ...currentAudit,
+                verdict: "NEEDS REVISION" as const,
+                criteria: currentAudit.criteria.map((c) => ({
+                  ...c,
+                  issues: qaIssues ? [...c.issues, qaIssues] : c.issues,
+                })),
+              }
+              const corrected = await agentEditor(
+                keyword,
+                finalRecipe!,
+                qaAudit,
+                humanizationPass,
+              )
+              await appendLog(
+                recipeId,
+                logEntry("Editor", "done", `QA fix pass complete — ${corrected.changes_summary}`),
+              )
+              return corrected
+            },
+          )
+        } catch (err) {
+          if (isRecoverableError(err as Error)) throw err
+          await logPipelineError({
+            recipeId, stepName: "agent-4-editor-qa-fix",
+            errorType: "llm_unavailable", message: (err as Error).message,
+            severity: "degraded",
+          })
+          degraded = true
+          await appendLog(recipeId, logEntry(
+            "Editor", "error",
+            `Degraded — QA fix LLM call failed, continuing with pre-fix recipe`,
+          ))
+        }
         await step.sleep("sleep-after-editor-qa-fix", "2s")
 
-        finalRecipe = qaFixedDraft
+        if (qaFixedDraft) {
+          finalRecipe = qaFixedDraft
+        }
 
         // Re-run QA to verify the fix.
         // NOTE: `currentAudit` is the last audit from the Editor loop — it audited
@@ -760,27 +777,42 @@ export const generateRecipeWorkflow = inngest.createFunction(
         // an extra LLM call. Trade-off: accept potential false positives from stale
         // audit data; the QA REJECT/CRITICAL after re-check proceeds with warnings
         // (soft failure) rather than a hard stop.
-        const qaReReport = await step.run("agent-5-qa-recheck", async () => {
-          const report = await agentQA(
-            keyword,
-            seoPlan,
-            draft,
-            currentAudit,
-            finalRecipe!,
-          )
-          await appendLog(
-            recipeId,
-            logEntry(
-              "QA",
-              report.verdict === "PASS" ? "done" : "error",
-              `QA Re-check: ${report.qaScore}/100 | Verdict: ${report.verdict} | ${report.summary}`,
-            ),
-          )
-          return report
-        })
+        let qaReReport: QAReport | null = null
+        try {
+          qaReReport = await step.run("agent-5-qa-recheck", async () => {
+            const report = await agentQA(
+              keyword,
+              seoPlan,
+              draft,
+              currentAudit,
+              finalRecipe!,
+            )
+            await appendLog(
+              recipeId,
+              logEntry(
+                "QA",
+                report.verdict === "PASS" ? "done" : "error",
+                `QA Re-check: ${report.qaScore}/100 | Verdict: ${report.verdict} | ${report.summary}`,
+              ),
+            )
+            return report
+          })
+        } catch (err) {
+          if (isRecoverableError(err as Error)) throw err
+          await logPipelineError({
+            recipeId, stepName: "agent-5-qa-recheck",
+            errorType: "llm_unavailable", message: (err as Error).message,
+            severity: "degraded",
+          })
+          degraded = true
+          await appendLog(recipeId, logEntry(
+            "QA", "error",
+            `Degraded — QA re-check LLM call failed, proceeding with pre-fix recipe`,
+          ))
+        }
         await step.sleep("sleep-after-qa-recheck", "2s")
 
-        if (qaReReport.verdict === "REJECT" || qaReReport.verdict === "CRITICAL") {
+        if (qaReReport && (qaReReport.verdict === "REJECT" || qaReReport.verdict === "CRITICAL")) {
           await appendLog(
             recipeId,
             logEntry(
