@@ -1369,7 +1369,7 @@ export const generateRecipeWorkflow = inngest.createFunction(
 
             // Reverse link — add mention in the recipe pointing to the article
             if (articleRow?.id && finalRecipe) {
-              const reverseLink = `\n\n### Pour Aller Plus Loin\n\nPour comprendre la science derrière cette recette, consultez [notre article : ${aorResult.title}](/articles/${articleSlug}).`
+              const reverseLink = `\n\n### Pour Aller Plus Loin\n\nPour comprendre la science derrière cette recette, consultez [notre article : ${aorResult.title}](/${category}/${articleSlug}).`
               const updatedRecipeContent = (finalRecipe.contentMarkdown ?? "") + reverseLink
               await db
                 .update(recipes)
