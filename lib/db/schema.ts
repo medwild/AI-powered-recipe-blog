@@ -123,6 +123,10 @@ export const recipes = pgTable(
     jsonLd: jsonb("json_ld").$type<Record<string, unknown>>(),
     status: text("status").notNull().default("draft"),
     workflowLog: jsonb("workflow_log").$type<WorkflowLogEntry[]>().default([]),
+    // v7.0 Aor — content type differentiation
+    content_type: text("content_type").default("recipe"),
+    category: text("category"),
+    linked_content_id: integer("linked_content_id"),
     publishedAt: timestamp("published_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true })
       .notNull()
