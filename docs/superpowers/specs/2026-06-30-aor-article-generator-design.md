@@ -67,9 +67,16 @@ agent-6-aor-article (optionnel)
 
 ```
 Recipe (persisted) ──┐
-SeoPlan              ├──→ Aor Writer Agent ──→ AorArticle (persisted)
+SeoPlan              ├──→ Aor Writer Agent ──→ AorArticle
 StructuredSerp       │         │
 aorCategory + angle ─┘         │
+                               ▼
+                     Image Prompt Optimizer
+                     (adapté pour angle article)
+                               │
+                               ▼
+                     FLUX-1-Schnell → Cloudinary
+                               │
                                ▼
                      Semantic Linker
                                │
@@ -191,7 +198,9 @@ Recette → Article :
 
 ### 6.2 Image hero
 
-L'article **réutilise la hero image de la recette source**. Pas de génération d'image séparée — la photo de la recette est visuellement pertinente pour l'article Aor (ex: un article sur la réaction de Maillard illustré par la photo du croissant doré).
+L'article Aor génère sa **propre image via FLUX-1-Schnell** (Cloudflare Workers AI), en utilisant le même Image Prompt Optimizer que les recettes. Le prompt image est dérivé de l'angle Aor (ex: "Une photo culinaire professionnelle illustrant la réaction de Maillard sur une croûte de croissant doré, éclairage studio, profondeur de champ réduite").
+
+**Flow :** Aor Writer output → Image Prompt Optimizer (adapté pour angle article) → FLUX-1-Schnell → Cloudinary upload → `heroImageUrl` stocké.
 
 ### 6.3 Structure de la page
 
@@ -200,7 +209,7 @@ L'article **réutilise la hero image de la recette source**. Pas de génération
 │  Breadcrumb                  │
 │  Home > Techniques > Titre   │
 ├─────────────────────────────┤
-│  Hero Image (from recipe)    │
+│  Hero Image (FLUX-1 generated)   │
 ├─────────────────────────────┤
 │  H1 + Meta info              │
 │  (auteur, date, lecture)     │
