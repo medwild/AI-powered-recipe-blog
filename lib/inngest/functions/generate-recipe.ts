@@ -22,6 +22,8 @@ import type { RecipeDraft } from "./agents/writer"
 import { agentAuditor, type AuditReport } from "./agents/auditor"
 import { agentEditor, MAX_HUMANIZATION_PASSES } from "./agents/editor"
 import { agentQA, type QAReport } from "./agents/qa"
+import { agentAorWriter } from "./agents/aor-writer"
+import type { AorCategory } from "./agents/aor-writer"
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -170,9 +172,11 @@ export const generateRecipeWorkflow = inngest.createFunction(
     ],
   },
   async ({ event, step }) => {
-    const { recipeId, keyword } = event.data as {
+    const { recipeId, keyword, aorCategory, aorAngle } = event.data as {
       recipeId: number
       keyword: string
+      aorCategory?: string
+      aorAngle?: string
     }
 
     let degraded = false
@@ -1249,6 +1253,152 @@ export const generateRecipeWorkflow = inngest.createFunction(
         }
       })
       await step.sleep("sleep-after-variant-stats", "1s")
+
+      // =====================================================================
+      // Step 13 — Agent 6: Aor Article (optionnel, warning — non-blocking)
+      // =====================================================================
+      if (aorCategory) {
+        try {
+          await step.run("agent-6-aor-article", async () => {
+            await appendLog(
+              recipeId,
+              logEntry("Aor Writer", "running",
+                `Generating ${aorCategory} article — angle: ${aorAngle || "auto-deduced"}`),
+            )
+
+            const validCategories: AorCategory[] = ["techniques", "guides", "histoire", "equipement"]
+            const category = validCategories.includes(aorCategory as AorCategory)
+              ? (aorCategory as AorCategory)
+              : "techniques"
+
+            // Fetch recipe slug from DB (not available on RecipeDraft type)
+            const [recipeRow] = await db
+              .select({ slug: recipes.slug })
+              .from(recipes)
+              .where(eq(recipes.id, recipeId))
+            const recipeSlug = recipeRow?.slug || slugify(keyword)
+
+            const recipeUrl = `https://lecarnetgourmand.fr/recettes/${recipeSlug}`
+
+            const aorResult = await agentAorWriter({
+              keyword,
+              recipeTitle: finalRecipe!.title,
+              recipeSlug,
+              recipeUrl,
+              seoPlan,
+              serp: structuredSerp as Record<string, unknown>,
+              aorCategory: category,
+              aorAngle: aorAngle ?? null,
+            })
+
+            // Ensure unique slug within article namespace
+            let articleSlug = slugify(aorResult.slug) || slugify(aorResult.title) || "article"
+            const baseSlug = articleSlug
+            let suffix = 0
+            while (true) {
+              const existing = await db.query.recipes.findFirst({
+                where: (r, { eq, and }) =>
+                  and(eq(r.slug, articleSlug), eq(r.content_type, "article")),
+              })
+              if (!existing) break
+              suffix += 1
+              articleSlug = `${baseSlug}-${suffix}`
+            }
+
+            // Generate hero image via existing pipeline infrastructure
+            await appendLog(recipeId, logEntry("Aor Image", "running",
+              "Optimizing image prompt for article angle"))
+            const imagePrompt = await agentImagePromptOptimizer({
+              title: aorResult.title,
+              tags: aorResult.tags,
+              keyword,
+            })
+            await appendLog(recipeId, logEntry("Aor Image", "running",
+              "Generating article image via FLUX-1-Schnell"))
+            const imageBuffer = await runImage(imagePrompt)
+            const imageUrl = await uploadImage(imageBuffer, `article-${articleSlug}`)
+            await appendLog(recipeId, logEntry("Aor Image", "done",
+              "Article image uploaded to Cloudinary"))
+
+            // Enrich JSON-LD with dynamic fields
+            const now = new Date().toISOString()
+            const enrichedJsonLd = {
+              ...aorResult.jsonLd,
+              "@graph": ((aorResult.jsonLd["@graph"] as Record<string, unknown>[]) ?? []).map(node => {
+                if (node["@type"] === "Article") {
+                  return {
+                    ...node,
+                    datePublished: now,
+                    dateModified: now,
+                    image: imageUrl,
+                    mainEntityOfPage: `https://lecarnetgourmand.fr/${category}/${articleSlug}`,
+                  }
+                }
+                return node
+              }),
+            }
+
+            // Semantic Linker — inject contextual link into article body
+            const linkPhrase = `Cette technique est magnifiquement illustrée dans [${aorResult.anchorText}](/${category === "equipement" ? "equipement" : category}/${aorResult.linkedRecipeSlug || recipeSlug}), où chaque détail compte.`
+            const linkedContent = aorResult.contentMarkdown.replace(
+              /\n\n(?=## )/,
+              `\n\n${linkPhrase}\n\n`,
+            )
+
+            // Insert article into DB
+            const [articleRow] = await db
+              .insert(recipes)
+              .values({
+                slug: articleSlug,
+                keyword,
+                title: aorResult.title,
+                metaTitle: aorResult.metaTitle,
+                metaDescription: aorResult.metaDescription,
+                contentMarkdown: linkedContent,
+                excerpt: aorResult.excerpt,
+                status: "draft",
+                content_type: "article",
+                category,
+                linked_content_id: recipeId,
+                heroImageUrl: imageUrl,
+                tags: aorResult.tags,
+                jsonLd: enrichedJsonLd,
+                workflowLog: [],
+              })
+              .returning({ id: recipes.id })
+
+            // Reverse link — add mention in the recipe pointing to the article
+            if (articleRow?.id && finalRecipe) {
+              const reverseLink = `\n\n### Pour Aller Plus Loin\n\nPour comprendre la science derrière cette recette, consultez [notre article : ${aorResult.title}](/articles/${articleSlug}).`
+              const updatedRecipeContent = (finalRecipe.contentMarkdown ?? "") + reverseLink
+              await db
+                .update(recipes)
+                .set({
+                  contentMarkdown: updatedRecipeContent,
+                  linked_content_id: articleRow.id,
+                })
+                .where(eq(recipes.id, recipeId))
+            }
+
+            await appendLog(recipeId, logEntry("Aor Writer", "done",
+              `Article "${aorResult.title}" published — /${category}/${articleSlug} — linked to recipe #${recipeId}`))
+
+            // Track in self-improvement loop
+            await appendLog(recipeId, logEntry("Self-Improvement", "done",
+              `Aor article saved: /${category}/${articleSlug}`))
+          })
+        } catch (err) {
+          await logPipelineError({
+            recipeId,
+            stepName: "agent-6-aor-article",
+            errorType: "unknown",
+            message: (err as Error).message,
+            severity: "warning",
+          })
+          await appendLog(recipeId, logEntry("Aor Writer", "error",
+            `Aor article generation failed (non-blocking): ${(err as Error).message}`))
+        }
+      }
     } catch (err) {
       const [current] = await db
         .select({ status: recipes.status })
