@@ -1,0 +1,103 @@
+// Agent 7 — Aor Writer (Article de blog SEO)
+//
+// Génère un article Aor (Outer Section) orthogonal à une recette.
+// Couvre un angle technique, historique, ingrédient ou équipement.
+// Ne répète JAMAIS la recette — contenu 100% complémentaire.
+//
+// Architecture :
+//   System prompt ← loadSkillContent("agent-aor-writer")  (règles, anti-duplicate, contrat)
+//   User prompt   ← buildUserPrompt()                       (recette source, angle, catégorie)
+
+import { loadSkillContent } from "@/lib/skills"
+import { runTextAndParseJson } from "@/lib/agents/nararouter"
+import type { SeoPlan } from "./strategist"
+
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
+
+export type AorCategory = "techniques" | "guides" | "histoire" | "equipement"
+
+export type AorWriterInput = {
+  keyword: string
+  recipeTitle: string
+  recipeSlug: string
+  recipeUrl: string
+  seoPlan: SeoPlan
+  serp: Record<string, unknown>   // StructuredSerp — évite dépendance circulaire
+  aorCategory: AorCategory
+  aorAngle: string | null
+}
+
+export type AorArticle = {
+  title: string
+  slug: string
+  category: AorCategory
+  metaTitle: string
+  metaDescription: string
+  contentMarkdown: string
+  excerpt: string
+  linkedRecipeSlug: string
+  linkedRecipeTitle: string
+  anchorText: string
+  tags: string[]
+  jsonLd: Record<string, unknown>
+}
+
+// ---------------------------------------------------------------------------
+// User prompt builder
+// ---------------------------------------------------------------------------
+
+function buildUserPrompt(input: AorWriterInput): string {
+  const angleLine = input.aorAngle
+    ? `Angle éditorial imposé : "${input.aorAngle}"`
+    : `Angle éditorial : DÉDUIS-LE automatiquement à partir des content_opportunities du SeoPlan et de la catégorie "${input.aorCategory}".`
+
+  const categoryGuide: Record<AorCategory, string> = {
+    techniques: "Rédige un article PÉDAGOGIQUE qui explique la SCIENCE ou la TECHNIQUE derrière la recette.",
+    guides: "Rédige un GUIDE EXHAUSTIF sur un ingrédient clé de la recette.",
+    histoire: "Rédige une NARRATION CULTURELLE sur l'histoire ou l'origine du plat/technique.",
+    equipement: "Rédige une ANALYSE COMPARATIVE d'un équipement essentiel à la recette.",
+  }
+
+  return `Recette source :
+  Titre : ${input.recipeTitle}
+  URL : ${input.recipeUrl}
+  Slug : ${input.recipeSlug}
+
+Mot-clé principal : ${input.keyword}
+
+${angleLine}
+
+Catégorie Aor : ${input.aorCategory}
+${categoryGuide[input.aorCategory]}
+
+Plan SEO (SeoPlan) :
+${JSON.stringify(input.seoPlan, null, 2).substring(0, 8000)}
+
+Données SERP :
+${JSON.stringify(input.serp, null, 2).substring(0, 4000)}
+
+RÈGLE ABSOLUE — Ne répète PAS les ingrédients, étapes, ou instructions de la recette.
+Produis UN lien contextuel avec ancre riche vers la recette source dans le corps du texte.
+Longueur : 800-1200 mots.
+Structure : H2 informatifs (pas "Ingredients", pas "Instructions").
+Ton : expert pédagogique qui explique le "pourquoi", pas de "moi je" narratif.`
+}
+
+// ---------------------------------------------------------------------------
+// Agent
+// ---------------------------------------------------------------------------
+
+export async function agentAorWriter(input: AorWriterInput): Promise<AorArticle> {
+  const systemPrompt = await loadSkillContent("agent-aor-writer")
+  const userPrompt = buildUserPrompt(input)
+
+  const result = await runTextAndParseJson<AorArticle>(
+    systemPrompt,
+    userPrompt,
+    { temperature: 0.4, maxTokens: 6144 },
+  )
+
+  return result
+}
