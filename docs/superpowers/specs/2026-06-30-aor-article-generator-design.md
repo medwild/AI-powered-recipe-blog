@@ -72,7 +72,7 @@ StructuredSerp       │         │
 aorCategory + angle ─┘         │
                                ▼
                      Image Prompt Optimizer
-                     (adapté pour angle article)
+                     (réutilise agent existant, prompt adapté)
                                │
                                ▼
                      FLUX-1-Schnell → Cloudinary
@@ -132,6 +132,7 @@ Règles critiques encodées dans le system prompt :
 
 | Règle | Description |
 |---|---|
+| **CRITICAL OUTPUT RULE** | No reasoning or analysis. Start with `{`, end with `}`. Pure JSON output ONLY. |
 | **ORTHOGONALITÉ** | Ne pas répéter les ingrédients, étapes, ou instructions de la recette |
 | **ANGLE UNIQUE** | Couvrir la science, l'histoire, ou la technique DERRIÈRE la recette |
 | **ANCRE RICHE** | Produire UN lien contextuel Aor→Recette avec une phrase naturelle |
@@ -152,7 +153,7 @@ Règles critiques encodées dans le system prompt :
 
 - **Primaire :** NaraRouter (Mistral Medium 3.5)
 - **Fallback :** Cloudflare Gemma 4 26B
-- **maxTokens :** 4096
+- **maxTokens :** 6144 (headroom pour article 800-1200 mots + skill ~400 lignes — évite l'épuisement token sur fallback Cloudflare, leçon de l'Auditor fix)
 - **temperature :** 0.4
 
 ---
@@ -165,7 +166,7 @@ Au persist de l'article (Step 13), le linker :
 
 1. Cherche dans `contentMarkdown` de l'article un emplacement naturel (milieu de contenu, après un H2)
 2. Injecte une phrase de transition avec ancre enrichie pointant vers la recette
-3. Inverse : ajoute une mention légère dans la recette pointant vers l'article (section "Pour aller plus loin")
+3. Inverse : exécute un **UPDATE SQL** sur la recette (déjà persistée au Step 11) pour ajouter une mention dans une section "Pour aller plus loin" pointant vers l'article
 
 ### 5.2 Règles
 
@@ -287,7 +288,7 @@ L'article Aor génère sa **propre image via FLUX-1-Schnell** (Cloudflare Worker
 
 **Pas de `Recipe`** dans le JSON-LD des articles. **`Article`** à la place de `BlogPosting` (plus riche, meilleur pour le contenu informatif).
 
-### 7.2 Recette (corrigé — BlogPosting.mainEntity manquant)
+### 7.2 Recette (corrigé — BlogPosting.mainEntity + publisher manquants)
 
 Ajouter au JSON-LD existant des recettes :
 
@@ -296,7 +297,12 @@ Ajouter au JSON-LD existant des recettes :
   "@type": "BlogPosting",
   "@id": "#blogposting",
   "mainEntity": { "@id": "#recipe" },
-  "mainEntityOfPage": "https://lecarnetgourmand.fr/recettes/croissant"
+  "mainEntityOfPage": "https://lecarnetgourmand.fr/recettes/croissant",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Le Carnet Gourmand",
+    "url": "https://lecarnetgourmand.fr"
+  }
 }
 ```
 
@@ -325,7 +331,7 @@ Et au nœud Recipe :
 
 Les articles utilisent la même table `recipes` (renommée logiquement en "content" dans le code, mais sans renommer la table physiquement — interdit par les règles DB). Le `content_type` différencie les lignes.
 
-Les colonnes `ingredients`, `instructions`, `prepTime`, `cookTime`, `servings` sont `null` pour les articles.
+Les colonnes `ingredients`, `instructions`, `prepTime`, `cookTime`, `servings` sont `null` pour les articles. La colonne `heroImageUrl` est utilisée pour l'image générée par FLUX-1.
 
 ---
 
