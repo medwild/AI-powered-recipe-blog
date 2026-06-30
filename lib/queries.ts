@@ -1,6 +1,6 @@
 import { db } from "@/lib/db"
 import { recipes, selfImprovementLogs } from "@/lib/db/schema"
-import { desc, eq, and, ilike, or, sql } from "drizzle-orm"
+import { desc, eq, and, ne, ilike, or, sql } from "drizzle-orm"
 
 export async function getAllRecipes() {
   return db.select().from(recipes).orderBy(desc(recipes.createdAt))
@@ -88,6 +88,37 @@ export async function getRecipeBySlug(slug: string) {
 export async function getRecipeById(id: number) {
   const [row] = await db.select().from(recipes).where(eq(recipes.id, id))
   return row ?? null
+}
+
+export async function getArticleBySlug(slug: string) {
+  const rows = await db
+    .select()
+    .from(recipes)
+    .where(and(eq(recipes.slug, slug), eq(recipes.content_type, "article")))
+    .limit(1)
+  return rows[0] ?? null
+}
+
+export async function getRelatedForArticle(linkedRecipeId: number | null) {
+  if (!linkedRecipeId) return []
+  // Return the linked recipe + up to 2 other published recipes
+  const linked = await db
+    .select()
+    .from(recipes)
+    .where(eq(recipes.id, linkedRecipeId))
+    .limit(1)
+  const others = await db
+    .select()
+    .from(recipes)
+    .where(
+      and(
+        eq(recipes.status, "published"),
+        eq(recipes.content_type, "recipe"),
+        ne(recipes.id, linkedRecipeId),
+      ),
+    )
+    .limit(2)
+  return [...linked, ...others]
 }
 
 // ---------------------------------------------------------------------------
