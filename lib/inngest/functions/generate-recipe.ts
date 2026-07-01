@@ -854,15 +854,12 @@ export const generateRecipeWorkflow = inngest.createFunction(
           keyword,
           imagePrompt: finalRecipe!.imagePrompt,
         })
-        const isFallback = !finalRecipe!.imagePrompt?.trim()
         await appendLog(
           recipeId,
           logEntry(
             "Image Prompt",
             "done",
-            isFallback
-              ? "⚠️ Writer prompt empty — prompt generated via LLM from recipe data"
-              : `LLM-optimized prompt (${optimized.length} chars)`,
+            `LLM-optimized prompt (${optimized.length} chars) — generated from recipe data`,
           ),
         )
         return optimized
@@ -1318,7 +1315,7 @@ export const generateRecipeWorkflow = inngest.createFunction(
                 difficulty: finalRecipe!.difficulty,
               })
               await appendLog(recipeId, logEntry("Aor Image", "running",
-                "Generating article image via FLUX-1-Schnell"))
+                `Generating article image via FLUX-1-Schnell (prompt: ${imagePrompt.length} chars)`))
               const imageBuffer = await runImage(imagePrompt)
               imageUrl = await uploadImage(imageBuffer, `article-${articleSlug}`)
               await appendLog(recipeId, logEntry("Aor Image", "done",
