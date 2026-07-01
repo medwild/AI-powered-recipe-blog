@@ -53,9 +53,21 @@ function RecipeJsonLd({
     const graph = base["@graph"] as Record<string, unknown>[]
     // Merge dynamic fields into the Recipe node
     const enrichedGraph = graph.map((node) => {
+      if (node["@type"] === "BlogPosting") {
+        return {
+          ...node,
+          mainEntity: { "@id": "#recipe" },
+          publisher: {
+            "@type": "Organization",
+            name: "Le Carnet Gourmand",
+            url: "https://lecarnetgourmand.fr",
+          },
+        }
+      }
       if (node["@type"] === "Recipe") {
         return {
           ...node,
+          "@id": "#recipe",
           name: recipe.title,
           description: recipe.metaDescription || recipe.excerpt || undefined,
           image: recipe.heroImageUrl ? [recipe.heroImageUrl] : undefined,
