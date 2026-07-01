@@ -14,26 +14,26 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: {
-    default: 'The Gourmet Notebook — French Cooking Recipes',
-    template: '%s | The Gourmet Notebook',
+    default: 'August Cook — International Home Cooking by Chef Augustin',
+    template: '%s | August Cook',
   },
   description:
-    'Generous, easy-to-make recipes, optimized and tested to succeed every time.',
+    'Chef Augustin Lefevre brings world cuisines to your kitchen. Easy, tested international recipes for home cooks.',
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || 'https://lecarnetgourmand.fr',
+    process.env.NEXT_PUBLIC_SITE_URL || 'https://augustcook.com',
   ),
   openGraph: {
     type: 'website',
-    siteName: 'The Gourmet Notebook',
-    title: 'The Gourmet Notebook — French Cooking Recipes',
+    siteName: 'August Cook',
+    title: 'August Cook — International Home Cooking by Chef Augustin',
     description:
-      'Generous, easy-to-make recipes, optimized and tested to succeed every time.',
+      'Chef Augustin Lefevre brings world cuisines to your kitchen. Easy, tested international recipes for home cooks.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'The Gourmet Notebook — French Cooking Recipes',
+    title: 'August Cook — International Home Cooking by Chef Augustin',
     description:
-      'Generous, easy-to-make recipes, optimized and tested to succeed every time.',
+      'Chef Augustin Lefevre brings world cuisines to your kitchen.',
   },
 }
 
@@ -49,7 +49,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="fr"
+      lang="en"
       suppressHydrationWarning
       className={`${geistSans.variable} ${playfair.variable} bg-background`}
     >

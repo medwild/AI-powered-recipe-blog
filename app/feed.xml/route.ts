@@ -1,6 +1,6 @@
 import { getPublishedRecipes } from "@/lib/queries"
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://lecarnetgourmand.fr"
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://augustcook.com"
 
 export async function GET() {
   const recipes = await getPublishedRecipes()
@@ -22,10 +22,10 @@ export async function GET() {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Recettes AI Blog</title>
+    <title>August Cook — International Home Cooking</title>
     <link>${BASE_URL}</link>
-    <description>Des recettes généreuses, testées et expliquées pas à pas, optimisées par l'IA.</description>
-    <language>fr</language>
+    <description>Easy, tested international recipes for home cooks by Chef Augustin Lefevre.</description>
+    <language>en</language>
     <atom:link href="${BASE_URL}/feed.xml" rel="self" type="application/rss+xml" />
     ${itemsXml}
   </channel>
