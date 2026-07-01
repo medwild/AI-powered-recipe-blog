@@ -65,7 +65,8 @@ ${writerPrompt}
 4. Choose the optimal framing based on the dish type (see Quick-Reference map)
 5. If the Writer's prompt is decent, enhance it with all missing layers
 6. If the Writer's prompt is empty/poor, build from scratch
-7. Output ONLY the final prompt string — nothing else`
+
+CRITICAL: Output ONLY the raw prompt text. No markdown fences, no "Prompt:" prefix, no commentary, no analysis. Just the prompt string, nothing else. Start directly with the first word of the prompt.`
 }
 
 // ---------------------------------------------------------------------------
@@ -89,13 +90,21 @@ export async function agentImagePromptOptimizer(
     const userPrompt = buildUserPrompt(source)
 
     const optimized = await runText(systemPrompt, userPrompt, {
-      maxTokens: 512,
+      maxTokens: 1024,
       temperature: 0.7,
     })
 
+    // Strip any markdown fences, leading/trailing prose the LLM may have added
+    let cleaned = optimized.trim()
+    const fenceMatch = cleaned.match(/```(?:[a-z]*)\s*([\s\S]*?)```/)
+    if (fenceMatch) cleaned = fenceMatch[1].trim()
+    // Remove common prefixes like "Prompt:" or "Here is the prompt:"
+    cleaned = cleaned.replace(/^(?:Prompt|Here is the optimized prompt|Output):\s*/i, "").trim()
+
     // Validate: must be a non-empty string of reasonable length
-    if (optimized && optimized.trim().length >= 50) {
-      return optimized.trim()
+    if (cleaned.length >= 50) {
+      console.log(`[ImagePromptOptimizer] Prompt (${cleaned.length} chars): ${cleaned.substring(0, 120)}...`)
+      return cleaned
     }
 
     console.warn(

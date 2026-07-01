@@ -1313,6 +1313,9 @@ export const generateRecipeWorkflow = inngest.createFunction(
                 title: aorResult.title,
                 tags: aorResult.tags,
                 keyword,
+                // Pass recipe ingredients so the prompt describes the actual dish
+                ingredients: finalRecipe!.ingredients,
+                difficulty: finalRecipe!.difficulty,
               })
               await appendLog(recipeId, logEntry("Aor Image", "running",
                 "Generating article image via FLUX-1-Schnell"))
