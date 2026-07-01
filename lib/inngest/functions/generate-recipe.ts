@@ -1297,28 +1297,33 @@ export const generateRecipeWorkflow = inngest.createFunction(
             let suffix = 0
             while (true) {
               const existing = await db.query.recipes.findFirst({
-                where: (r, { eq, and }) =>
-                  and(eq(r.slug, articleSlug), eq(r.content_type, "article")),
+                where: (r, { eq }) => eq(r.slug, articleSlug),
               })
               if (!existing) break
               suffix += 1
               articleSlug = `${baseSlug}-${suffix}`
             }
 
-            // Generate hero image via existing pipeline infrastructure
-            await appendLog(recipeId, logEntry("Aor Image", "running",
-              "Optimizing image prompt for article angle"))
-            const imagePrompt = await agentImagePromptOptimizer({
-              title: aorResult.title,
-              tags: aorResult.tags,
-              keyword,
-            })
-            await appendLog(recipeId, logEntry("Aor Image", "running",
-              "Generating article image via FLUX-1-Schnell"))
-            const imageBuffer = await runImage(imagePrompt)
-            const imageUrl = await uploadImage(imageBuffer, `article-${articleSlug}`)
-            await appendLog(recipeId, logEntry("Aor Image", "done",
-              "Article image uploaded to Cloudinary"))
+            // Generate hero image (non-blocking — article persists even if image fails)
+            let imageUrl: string | null = null
+            try {
+              await appendLog(recipeId, logEntry("Aor Image", "running",
+                "Optimizing image prompt for article angle"))
+              const imagePrompt = await agentImagePromptOptimizer({
+                title: aorResult.title,
+                tags: aorResult.tags,
+                keyword,
+              })
+              await appendLog(recipeId, logEntry("Aor Image", "running",
+                "Generating article image via FLUX-1-Schnell"))
+              const imageBuffer = await runImage(imagePrompt)
+              imageUrl = await uploadImage(imageBuffer, `article-${articleSlug}`)
+              await appendLog(recipeId, logEntry("Aor Image", "done",
+                "Article image uploaded to Cloudinary"))
+            } catch (imgErr) {
+              await appendLog(recipeId, logEntry("Aor Image", "error",
+                `Image generation failed: ${(imgErr as Error).message} — persisting article without image`))
+            }
 
             // Enrich JSON-LD with dynamic fields
             const now = new Date().toISOString()
@@ -1331,7 +1336,7 @@ export const generateRecipeWorkflow = inngest.createFunction(
                     datePublished: now,
                     dateModified: now,
                     image: imageUrl,
-                    mainEntityOfPage: `https://lecarnetgourmand.fr/${category}/${articleSlug}`,
+                    mainEntityOfPage: `https://lecarnetgourmand.fr/recettes/${articleSlug}`,
                   }
                 }
                 return node
@@ -1339,7 +1344,7 @@ export const generateRecipeWorkflow = inngest.createFunction(
             }
 
             // Semantic Linker — inject contextual link into article body
-            const linkPhrase = `Cette technique est magnifiquement illustrée dans [${aorResult.anchorText}](/${category === "equipement" ? "equipement" : category}/${aorResult.linkedRecipeSlug || recipeSlug}), où chaque détail compte.`
+            const linkPhrase = `Cette technique est magnifiquement illustrée dans [${aorResult.anchorText}](/recettes/${aorResult.linkedRecipeSlug || recipeSlug}), où chaque détail compte.`
             const linkedContent = aorResult.contentMarkdown.replace(
               /\n\n(?=## )/,
               `\n\n${linkPhrase}\n\n`,
@@ -1369,7 +1374,7 @@ export const generateRecipeWorkflow = inngest.createFunction(
 
             // Reverse link — add mention in the recipe pointing to the article
             if (articleRow?.id && finalRecipe) {
-              const reverseLink = `\n\n### Pour Aller Plus Loin\n\nPour comprendre la science derrière cette recette, consultez [notre article : ${aorResult.title}](/${category}/${articleSlug}).`
+              const reverseLink = `\n\n### Pour Aller Plus Loin\n\nPour comprendre la science derrière cette recette, consultez [notre article : ${aorResult.title}](/recettes/${articleSlug}).`
               const updatedRecipeContent = (finalRecipe.contentMarkdown ?? "") + reverseLink
               await db
                 .update(recipes)

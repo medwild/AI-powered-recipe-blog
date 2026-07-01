@@ -10,7 +10,12 @@ export async function getPublishedRecipes() {
   return db
     .select()
     .from(recipes)
-    .where(eq(recipes.status, "published"))
+    .where(
+      and(
+        eq(recipes.status, "published"),
+        eq(recipes.content_type, "recipe"),
+      ),
+    )
     .orderBy(desc(recipes.publishedAt))
 }
 
@@ -64,7 +69,12 @@ export async function getRelatedRecipes(currentId: number, tags: string[]) {
   const all = await db
     .select()
     .from(recipes)
-    .where(eq(recipes.status, "published"))
+    .where(
+      and(
+        eq(recipes.status, "published"),
+        eq(recipes.content_type, "recipe"),
+      ),
+    )
     .orderBy(desc(recipes.publishedAt))
 
   const scored = all
