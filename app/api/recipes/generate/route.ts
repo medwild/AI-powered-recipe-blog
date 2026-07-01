@@ -7,6 +7,28 @@ import { checkRateLimit } from "@/lib/rate-limit"
 
 export const maxDuration = 30
 
+function getDefaultIngredients(cuisine: string): string {
+  const defaults: Record<string, string> = {
+    swedish: "salmon, rye flour, lingonberry, dill, cardamom, cream, potatoes, herring",
+    finnish: "salmon, rye flour, dill, potatoes, blueberries, mushrooms, cream, cardamom",
+    polish: "cabbage, potatoes, sausage, sour cream, dill, beets, mushrooms, rye",
+    cuban: "plantains, black beans, rice, pork, citrus, cumin, oregano, garlic",
+    french: "butter, cream, wine, shallots, herbs de Provence, garlic, cheese, bread",
+  }
+  return defaults[cuisine.toLowerCase()] ?? defaults.french
+}
+
+function getDefaultTechniques(cuisine: string): string {
+  const defaults: Record<string, string> = {
+    swedish: "curing (gravlax), rye bread baking, cream-based sauces, cardamom baking",
+    finnish: "rye bread baking, salmon soup making, berry desserts, slow fermentation",
+    polish: "pierogi making, slow-braising, pickling, sour cream sauces",
+    cuban: "slow-braising (ropa vieja), mojo marination, plantain frying, sofrito base",
+    french: "sauce making, braising, pastry, knife skills, butter-based cooking",
+  }
+  return defaults[cuisine.toLowerCase()] ?? defaults.french
+}
+
 export async function POST(req: Request) {
   // Rate limiting — protège les quotas Serper + Cloudflare
   const ip =
@@ -69,6 +91,14 @@ export async function POST(req: Request) {
     aorAngle = body?.aorAngle?.toString().trim() || undefined
   }
 
+  // Cuisine focus — makes the pipeline cuisine-agnostic
+  // If not provided, defaults to "French" (backward compatible)
+  const cuisine = body?.cuisine?.toString().trim() || "French"
+  const cuisineIngredients = body?.cuisineIngredients?.toString().trim() ||
+    getDefaultIngredients(cuisine)
+  const cuisineTechniques = body?.cuisineTechniques?.toString().trim() ||
+    getDefaultTechniques(cuisine)
+
   // Ensure a unique slug
   const base = slugify(keyword) || "recette"
   let slug = base
@@ -101,6 +131,9 @@ export async function POST(req: Request) {
     data: {
       recipeId: created.id,
       keyword,
+      cuisine,
+      cuisineIngredients,
+      cuisineTechniques,
       ...(aorCategory ? { aorCategory, aorAngle } : {}),
     },
   })

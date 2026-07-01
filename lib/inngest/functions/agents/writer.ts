@@ -108,9 +108,10 @@ Follow the rules, persona, section structure, and output format defined in your 
 export async function agentWriter(
   keyword: string,
   plan: SeoPlan,
+  replacements?: Record<string, string>,
 ): Promise<RecipeDraft> {
   try {
-    const systemPrompt = await loadSkillContent("agent-writer")
+    const systemPrompt = await loadSkillContent("agent-writer", replacements)
     const userPrompt = buildUserPrompt(keyword, plan)
 
     // maxTokens 6144: the full article (1800-2200 words) + JSON metadata (title, meta,

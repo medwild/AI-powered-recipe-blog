@@ -115,9 +115,10 @@ export async function agentStrategist(
   keyword: string,
   serp: SerpResult,
   pastImprovements: string[],
+  replacements?: Record<string, string>,
 ): Promise<SeoPlan> {
   try {
-    const systemPrompt = await loadSkillContent("agent-strategist")
+    const systemPrompt = await loadSkillContent("agent-strategist", replacements)
     const userPrompt = buildUserPrompt(keyword, serp, pastImprovements)
     // NOTE: V1 is deprecated — V2 is the production path. Keeping V1 aligned
     // with V2 defaults to prevent silent regressions if V1 is ever called.
@@ -209,9 +210,10 @@ export async function agentStrategistV2(
   keyword: string,
   structuredSerp: StructuredSerp,
   pastImprovements: string[],
+  replacements?: Record<string, string>,
 ): Promise<SeoPlan> {
   try {
-    const systemPrompt = await loadSkillContent("agent-strategist")
+    const systemPrompt = await loadSkillContent("agent-strategist", replacements)
     const userPrompt = buildUserPromptV2(keyword, structuredSerp, pastImprovements)
     return runTextAndParseJson<SeoPlan>(systemPrompt, userPrompt, {
       maxTokens: 4096,

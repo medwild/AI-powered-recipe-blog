@@ -172,11 +172,20 @@ export const generateRecipeWorkflow = inngest.createFunction(
     ],
   },
   async ({ event, step }) => {
-    const { recipeId, keyword, aorCategory, aorAngle } = event.data as {
+    const { recipeId, keyword, aorCategory, aorAngle, cuisine, cuisineIngredients, cuisineTechniques } = event.data as {
       recipeId: number
       keyword: string
       aorCategory?: string
       aorAngle?: string
+      cuisine?: string
+      cuisineIngredients?: string
+      cuisineTechniques?: string
+    }
+
+    const cuisineReplacements = {
+      cuisine: cuisine || "French",
+      cuisine_ingredients: cuisineIngredients || "butter, cream, wine, shallots, garlic",
+      cuisine_techniques: cuisineTechniques || "sauce making, braising, pastry",
     }
 
     let degraded = false
@@ -358,7 +367,7 @@ export const generateRecipeWorkflow = inngest.createFunction(
             `SERP analysis + ${improvements.length} past lessons + calibration data → editorial plan`,
           ),
         )
-        const plan = await agentStrategistV2(keyword, structuredSerp, improvements)
+        const plan = await agentStrategistV2(keyword, structuredSerp, improvements, cuisineReplacements)
         await appendLog(
           recipeId,
           logEntry(
@@ -391,7 +400,7 @@ export const generateRecipeWorkflow = inngest.createFunction(
           recipeId,
           logEntry("Writer", "running", "Writing as Chef Augustin Lefèvre"),
         )
-        const result = await agentWriter(keyword, seoPlan)
+        const result = await agentWriter(keyword, seoPlan, cuisineReplacements)
         await appendLog(
           recipeId,
           logEntry(
