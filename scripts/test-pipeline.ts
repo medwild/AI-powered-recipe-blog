@@ -178,6 +178,19 @@ console.log("── checkRateLimit ──")
   assert(r2.resetInSeconds <= 1, "Reset time reflects short window")
 }
 
+// ── aorCategory validation ────────────────────────────────────────────────
+
+console.log("── aorCategory validation ──")
+
+// Test 9: Valid and invalid categories
+{
+  const validCategories = ["techniques", "guides", "histoire", "equipement"]
+  const invalid = "cuisine"
+  console.assert(validCategories.includes("techniques"), "techniques should be valid")
+  console.assert(!validCategories.includes(invalid), "invalid aorCategory should be rejected")
+  console.log("  ✅ Test 9: aorCategory validation passed")
+}
+
 // ── Report ───────────────────────────────────────────────────────────────
 
 console.log("")

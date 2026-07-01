@@ -72,7 +72,9 @@
       "WebFetch(domain:www.namesilo.com)",
       "WebFetch(domain:www.contentgrip.com)",
       "WebFetch(domain:sydekar.com)",
-      "WebFetch(domain:www.brightedge.com)"
+      "WebFetch(domain:www.brightedge.com)",
+      "Bash(/home/user/.claude/plugins/cache/claude-plugins-official/superpowers/6.0.3/skills/subagent-driven-development/scripts/task-brief docs/superpowers/plans/2026-06-30-aor-article-generator.md 4)",
+      "Bash(git add *our ta memoir pour reprendre demain la ou on s'est arreter aujourdhuis)"
     ]
   }
 }

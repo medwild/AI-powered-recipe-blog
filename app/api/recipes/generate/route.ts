@@ -39,8 +39,9 @@ export async function POST(req: Request) {
   }
 
   let keyword: string
+  let body: Record<string, unknown>
   try {
-    const body = await req.json()
+    body = await req.json()
     keyword = (body?.keyword ?? "").toString().trim()
   } catch {
     return NextResponse.json({ error: "Corps de requête invalide." }, { status: 400 })
@@ -48,6 +49,24 @@ export async function POST(req: Request) {
 
   if (!keyword) {
     return NextResponse.json({ error: "Le mot-clé est requis." }, { status: 400 })
+  }
+
+  // Aor article params (Step 13 — optional)
+  const validAorCategories = ["techniques", "guides", "histoire", "equipement"]
+  let aorCategory: string | undefined
+  let aorAngle: string | undefined
+
+  if (body?.generateAorArticle === true) {
+    aorCategory = body?.aorCategory?.toString().trim()
+    if (!aorCategory || !validAorCategories.includes(aorCategory)) {
+      return NextResponse.json(
+        {
+          error: `aorCategory invalide. Valeurs acceptées : ${validAorCategories.join(", ")}`,
+        },
+        { status: 400 },
+      )
+    }
+    aorAngle = body?.aorAngle?.toString().trim() || undefined
   }
 
   // Ensure a unique slug
@@ -79,7 +98,11 @@ export async function POST(req: Request) {
   // avec retry automatique et observabilité (dashboard Inngest).
   await inngest.send({
     name: "recipe/generate",
-    data: { recipeId: created.id, keyword },
+    data: {
+      recipeId: created.id,
+      keyword,
+      ...(aorCategory ? { aorCategory, aorAngle } : {}),
+    },
   })
 
   return NextResponse.json(

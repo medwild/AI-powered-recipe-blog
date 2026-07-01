@@ -6,6 +6,7 @@
 
   # Use https://search.nixos.org/packages to find packages
   packages = [
+    pkgs.gh
     # pkgs.go
     # pkgs.python311
     # pkgs.python311Packages.pip
@@ -17,7 +18,7 @@
   env = rec {
     # === Active Configuration: DeepSeek ===
     # To use the Fireworks.ai config below, comment out this block.
-    DEEPSEEK_API_KEY = "YOUR_DEEPSEEK_API_KEY";
+    DEEPSEEK_API_KEY = "sk-9b88477d569a4e9b91886fe8109ded89";
     ANTHROPIC_BASE_URL = "https://api.deepseek.com/anthropic";
     ANTHROPIC_AUTH_TOKEN = "${DEEPSEEK_API_KEY}";
     ANTHROPIC_MODEL = "deepseek-v4-pro";
@@ -32,7 +33,7 @@
     # To use this, uncomment this block and comment out the DeepSeek block above.
     # WARNING: This configuration is likely incompatible.
     /*
-    FIREWORKS_API_KEY = "YOUR_FIREWORKS_API_KEY";
+    FIREWORKS_API_KEY = "fw_BcrBeXPtbvSXscNeUX5VSu";
     ANTHROPIC_BASE_URL = "https://api.fireworks.ai/inference";
     ANTHROPIC_AUTH_TOKEN = "Bearer ${FIREWORKS_API_KEY}";
     ANTHROPIC_MODEL = "accounts/fireworks/models/glm-5p2";

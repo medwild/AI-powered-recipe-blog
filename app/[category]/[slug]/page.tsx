@@ -15,7 +15,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   techniques: "Techniques",
   guides: "Guides",
   histoire: "Histoire",
-  equipement: "Equipement",
+  equipement: "Équipement",
 }
 
 export async function generateMetadata({
@@ -150,7 +150,7 @@ export default async function ArticlePage({
         {relatedRecipes.length > 0 ? (
           <section className="mx-auto max-w-5xl px-4 py-14">
             <h2 className="mb-8 font-serif text-2xl text-balance">
-              Recettes Associees
+              Recettes Associées
             </h2>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {relatedRecipes.map((r) => (
