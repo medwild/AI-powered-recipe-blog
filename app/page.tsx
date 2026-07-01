@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/site-footer"
 import { RecipeCard } from "@/components/recipe-card"
 import { Button } from "@/components/ui/button"
 import { getPublishedRecipes, getRecipeCategories } from "@/lib/queries"
+import { FOOD_BLUR_PLACEHOLDER } from "@/lib/utils"
 
 export const revalidate = 60
 
@@ -64,6 +65,8 @@ export default async function HomePage() {
                 className="object-cover"
                 priority
                 sizes="(max-width: 768px) 100vw, 50vw"
+                placeholder="blur"
+                blurDataURL={FOOD_BLUR_PLACEHOLDER}
               />
             </div>
           </div>
@@ -196,6 +199,41 @@ export default async function HomePage() {
       </main>
 
       <SiteFooter />
+
+      {/* Organization + WebSite JSON-LD for E-E-A-T */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([
+            {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "The Gourmet Notebook",
+              url: process.env.NEXT_PUBLIC_SITE_URL || "https://lecarnetgourmand.fr",
+              logo: `${process.env.NEXT_PUBLIC_SITE_URL || "https://lecarnetgourmand.fr"}/hero-kitchen.png`,
+              sameAs: [
+                "https://www.instagram.com/lecarnetgourmand",
+                "https://www.pinterest.com/lecarnetgourmand",
+                "https://www.youtube.com/@lecarnetgourmand",
+              ],
+            },
+            {
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "The Gourmet Notebook",
+              url: process.env.NEXT_PUBLIC_SITE_URL || "https://lecarnetgourmand.fr",
+              potentialAction: {
+                "@type": "SearchAction",
+                target: {
+                  "@type": "EntryPoint",
+                  urlTemplate: `${process.env.NEXT_PUBLIC_SITE_URL || "https://lecarnetgourmand.fr"}/recettes?q={search_term_string}`,
+                },
+                "query-input": "required name=search_term_string",
+              },
+            },
+          ]),
+        }}
+      />
     </div>
   )
 }

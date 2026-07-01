@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { Clock, Flame, Users, Soup, Printer, Share2 } from "lucide-react"
 import type { Recipe } from "@/lib/db/schema"
+import { FOOD_BLUR_PLACEHOLDER } from "@/lib/utils"
 
 /** Convertit un texte de durée ("15 min", "1h 30 min") en ISO 8601 ("PT15M", "PT1H30M") */
 function toIsoDuration(text: string | null | undefined): string | undefined {
@@ -130,6 +131,8 @@ export function RecipeArticle({ recipe }: { recipe: Recipe }) {
             className="object-cover"
             priority
             sizes="(max-width: 768px) 100vw, 768px"
+            placeholder="blur"
+            blurDataURL={FOOD_BLUR_PLACEHOLDER}
           />
           <figcaption className="sr-only">
             Photo: {recipe.title}

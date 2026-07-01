@@ -5,10 +5,11 @@ import { ThemeProvider } from 'next-themes'
 import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
 
-const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
+const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'], display: 'swap' })
 const playfair = Playfair_Display({
   variable: '--font-playfair',
   subsets: ['latin'],
+  display: 'swap',
 })
 
 export const metadata: Metadata = {
@@ -18,7 +19,22 @@ export const metadata: Metadata = {
   },
   description:
     'Generous, easy-to-make recipes, optimized and tested to succeed every time.',
-  generator: 'v0.app',
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || 'https://lecarnetgourmand.fr',
+  ),
+  openGraph: {
+    type: 'website',
+    siteName: 'The Gourmet Notebook',
+    title: 'The Gourmet Notebook — French Cooking Recipes',
+    description:
+      'Generous, easy-to-make recipes, optimized and tested to succeed every time.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'The Gourmet Notebook — French Cooking Recipes',
+    description:
+      'Generous, easy-to-make recipes, optimized and tested to succeed every time.',
+  },
 }
 
 export const viewport: Viewport = {

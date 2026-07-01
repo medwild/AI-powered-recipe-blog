@@ -1,11 +1,13 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
+import Image from "next/image"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { RecipeCard } from "@/components/recipe-card"
 import { getArticleBySlug, getRelatedForArticle } from "@/lib/queries"
+import { FOOD_BLUR_PLACEHOLDER } from "@/lib/utils"
 import { MarkdownRenderer } from "@/components/markdown-renderer"
 
 export const revalidate = 300
@@ -108,11 +110,16 @@ export default async function ArticlePage({
         <article className="mx-auto max-w-3xl px-4 py-8">
           {/* Hero Image */}
           {article.heroImageUrl ? (
-            <div className="mb-8 overflow-hidden rounded-2xl">
-              <img
+            <div className="relative mb-8 aspect-[16/9] overflow-hidden rounded-2xl">
+              <Image
                 src={article.heroImageUrl}
                 alt={article.title}
-                className="w-full object-cover aspect-[16/9]"
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, 768px"
+                className="object-cover"
+                placeholder="blur"
+                blurDataURL={FOOD_BLUR_PLACEHOLDER}
               />
             </div>
           ) : null}

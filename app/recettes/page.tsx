@@ -12,6 +12,12 @@ export const metadata: Metadata = {
   title: "All recipes",
   description:
     "Browse our collection of French cooking recipes, optimized and explained step by step.",
+  openGraph: {
+    title: "All recipes | The Gourmet Notebook",
+    description:
+      "Browse our collection of French cooking recipes, optimized and explained step by step.",
+    type: "website",
+  },
 }
 
 export default async function RecipesPage({
