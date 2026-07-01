@@ -49,7 +49,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="fr"
       suppressHydrationWarning
       className={`${geistSans.variable} ${playfair.variable} bg-background`}
     >

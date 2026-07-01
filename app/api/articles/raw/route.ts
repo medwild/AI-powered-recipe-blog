@@ -1,14 +1,19 @@
 import { NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { recipes } from "@/lib/db/schema"
-import { eq } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 
 export async function GET() {
   try {
     const rows = await db
       .select()
       .from(recipes)
-      .where(eq(recipes.content_type, "article"))
+      .where(
+        and(
+          eq(recipes.content_type, "article"),
+          eq(recipes.status, "published"),
+        ),
+      )
       .orderBy(recipes.id)
     return NextResponse.json(rows)
   } catch (err) {

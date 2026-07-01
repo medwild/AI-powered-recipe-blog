@@ -111,7 +111,7 @@ const SYNTHETIC_CRITERION_NAMES = [
 function buildSyntheticAuditReport(): AuditReport {
   return {
     overallScore: 60,
-    verdict: "OK",
+    verdict: "NEEDS REVISION",
     score_ia_estimation: 50,
     factual_corrections: [],
     summary: "Auditor unavailable — auto-pass with default scores.",
@@ -550,6 +550,7 @@ export const generateRecipeWorkflow = inngest.createFunction(
       let currentDraft = draft
       let currentAudit = audit
       let humanizationPass = 0
+      let qaFixApplied = false
       let finalRecipe: RecipeDraft
 
       while (humanizationPass < MAX_HUMANIZATION_PASSES) {
@@ -714,7 +715,8 @@ export const generateRecipeWorkflow = inngest.createFunction(
     await step.sleep("sleep-after-qa", "2s")
 
       // QA-NEEDS_FIX feedback loop — max 1 extra Editor pass if QA flags issues
-      if (qaReport.verdict === "NEEDS_FIX" && humanizationPass < MAX_HUMANIZATION_PASSES) {
+      if (qaReport.verdict === "NEEDS_FIX" && !qaFixApplied) {
+        qaFixApplied = true
         humanizationPass++
         const qaIssues = qaReport.checks
           .filter((c) => c.status !== "PASS")
@@ -1257,6 +1259,21 @@ export const generateRecipeWorkflow = inngest.createFunction(
       if (aorCategory) {
         try {
           await step.run("agent-6-aor-article", async () => {
+            // Idempotence guard — if this step is retried (Inngest retry on transient error),
+            // an article may already exist for this recipe. Skip generation to avoid duplicates.
+            const [existingArticle] = await db
+              .select({ id: recipes.id, slug: recipes.slug })
+              .from(recipes)
+              .where(eq(recipes.linked_content_id, recipeId))
+            if (existingArticle) {
+              await appendLog(
+                recipeId,
+                logEntry("Aor Writer", "done",
+                  `Skipped — article already exists (slug: ${existingArticle.slug}) — idempotent retry guard`),
+              )
+              return
+            }
+
             await appendLog(
               recipeId,
               logEntry("Aor Writer", "running",

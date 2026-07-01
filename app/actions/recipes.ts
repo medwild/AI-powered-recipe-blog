@@ -1,12 +1,22 @@
 "use server"
 
+import { cookies } from "next/headers"
 import { db } from "@/lib/db"
 import { recipes } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 import { inngest } from "@/lib/inngest/client"
 
+async function checkAuth() {
+  const cookieStore = await cookies()
+  const token = cookieStore.get("dashboard_auth")?.value
+  if (!token || token !== process.env.DASHBOARD_SECRET_TOKEN) {
+    throw new Error("Unauthorized")
+  }
+}
+
 export async function publishRecipe(id: number) {
+  await checkAuth()
   const [row] = await db
     .update(recipes)
     .set({ status: "published", publishedAt: new Date(), updatedAt: new Date() })
@@ -20,6 +30,7 @@ export async function publishRecipe(id: number) {
 }
 
 export async function unpublishRecipe(id: number) {
+  await checkAuth()
   const [row] = await db
     .update(recipes)
     .set({ status: "draft", updatedAt: new Date() })
@@ -33,6 +44,7 @@ export async function unpublishRecipe(id: number) {
 }
 
 export async function deleteRecipe(id: number) {
+  await checkAuth()
   const [row] = await db
     .delete(recipes)
     .where(eq(recipes.id, id))
@@ -44,6 +56,7 @@ export async function deleteRecipe(id: number) {
 }
 
 export async function approveRecipe(id: number) {
+  await checkAuth()
   const [recipe] = await db
     .select({ status: recipes.status })
     .from(recipes)
@@ -69,6 +82,7 @@ export async function approveRecipe(id: number) {
 }
 
 export async function cancelRecipe(id: number) {
+  await checkAuth()
   // Vérifier que la recette est bien en cours de génération
   const [recipe] = await db
     .select({ status: recipes.status })

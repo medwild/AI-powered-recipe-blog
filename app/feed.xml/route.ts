@@ -1,6 +1,6 @@
 import { getPublishedRecipes } from "@/lib/queries"
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://example.com"
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://lecarnetgourmand.fr"
 
 export async function GET() {
   const recipes = await getPublishedRecipes()

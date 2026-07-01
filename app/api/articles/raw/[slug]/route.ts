@@ -12,7 +12,13 @@ export async function GET(
     const row = await db
       .select()
       .from(recipes)
-      .where(and(eq(recipes.slug, slug), eq(recipes.content_type, "article")))
+      .where(
+        and(
+          eq(recipes.slug, slug),
+          eq(recipes.content_type, "article"),
+          eq(recipes.status, "published"),
+        ),
+      )
       .limit(1)
     if (!row.length) {
       return NextResponse.json({ error: "Article not found" }, { status: 404 })
