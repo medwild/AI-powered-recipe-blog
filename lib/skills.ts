@@ -48,18 +48,45 @@ export async function loadSkill(name: string): Promise<string> {
 }
 
 /**
+ * Replaces {{placeholder}} variables in skill content with actual values.
+ * Used to inject cuisine-specific data without duplicating skill files.
+ *
+ * Example:
+ *   replacePlaceholders("Focus on {{cuisine}} using {{cuisine_ingredients}}", {
+ *     cuisine: "Swedish",
+ *     cuisine_ingredients: "salmon, rye, lingonberry, dill, cardamom"
+ *   })
+ */
+export function replacePlaceholders(
+  content: string,
+  replacements: Record<string, string>,
+): string {
+  return Object.entries(replacements).reduce(
+    (text, [key, value]) => text.replaceAll(`{{${key}}}`, value),
+    content,
+  )
+}
+
+/**
  * Charge le contenu d'un skill SANS le frontmatter YAML.
  *
  * Utilisé par les agents IA comme system prompt — le frontmatter YAML
  * est une métadonnée pour le loader (id, version, description, model…),
  * pas pour le LLM. Le contenu restant (rôle, règles, format de sortie)
  * constitue le system prompt complet.
+ *
+ * Si `replacements` est fourni, les placeholders {{key}} dans le contenu
+ * sont remplacés par les valeurs correspondantes.
  */
-export async function loadSkillContent(name: string): Promise<string> {
+export async function loadSkillContent(
+  name: string,
+  replacements?: Record<string, string>,
+): Promise<string> {
   const raw = await loadSkill(name)
   // Strip YAML frontmatter (délimité par --- au début du fichier)
   const stripped = raw.replace(/^---\n[\s\S]*?---\n?/, "")
-  return stripped.trim()
+  const content = stripped.trim()
+  return replacements ? replacePlaceholders(content, replacements) : content
 }
 
 /**
