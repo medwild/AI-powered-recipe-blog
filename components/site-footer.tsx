@@ -8,7 +8,7 @@ export function SiteFooter() {
           Chef Augustin
         </p>
         <p>
-          {"AI-generated and optimized recipes · "}
+          {"AI-assisted recipes · Human-tested & verified by Chef Augustin Lefèvre · "}
           {new Date().getFullYear()}
         </p>
         <Link href="/dashboard" className="transition-colors hover:text-foreground">
