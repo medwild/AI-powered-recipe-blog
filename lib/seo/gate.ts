@@ -275,6 +275,56 @@ function checkSchemaContentMismatch(
   return null
 }
 
+// ── BLOCK/WARNING Check (dual return) ────────────────────────────────────────
+
+/** B9 — hero image must be reachable and return a valid image Content-Type. */
+async function checkImageReachable(
+  heroImageUrl: string | null,
+): Promise<{ block: BlockingIssue | null; warn: Warning | null }> {
+  if (!heroImageUrl) return { block: null, warn: null } // handled by B5
+
+  // Only validate absolute HTTP(S) URLs
+  if (!heroImageUrl.startsWith("http")) return { block: null, warn: null }
+
+  try {
+    const res = await fetch(heroImageUrl, {
+      method: "HEAD",
+      signal: AbortSignal.timeout(5000),
+    })
+
+    if (!res.ok) {
+      return {
+        block: null,
+        warn: warn("IMAGE_HEAD_FAILED", `Image URL returned HTTP ${res.status}. Verify the image is accessible.`),
+      }
+    }
+
+    const contentType = res.headers.get("content-type") ?? ""
+    if (!contentType.startsWith("image/")) {
+      return {
+        block: block("IMAGE_UNREACHABLE", `Image URL returned Content-Type "${contentType}" instead of an image type. The URL may be broken or point to a non-image resource.`),
+        warn: null,
+      }
+    }
+
+    const contentLength = parseInt(res.headers.get("content-length") ?? "0", 10)
+    if (contentLength > 0 && contentLength < 5000) {
+      return {
+        block: null,
+        warn: warn("IMAGE_TOO_SMALL", `Image is only ${contentLength} bytes — may be a placeholder or error image.`),
+      }
+    }
+
+    return { block: null, warn: null }
+  } catch {
+    // Network error, DNS failure, timeout — not a permanent image issue
+    return {
+      block: null,
+      warn: warn("IMAGE_HEAD_FAILED", "Could not verify image accessibility (network error or timeout). Image will be re-checked on next publish attempt."),
+    }
+  }
+}
+
 // ── Recipe Node Extractor ────────────────────────────────────────────────────
 
 function findRecipeNode(jsonLd: Record<string, unknown> | null): Record<string, unknown> | null {
@@ -323,6 +373,11 @@ export async function runSeoGate(input: GateInput): Promise<GateResult> {
   // Cannibalization is async (DB query)
   const cannibal = await checkCannibalization(input.recipeId, input.focusKeyphrase, input.content_type)
   if (cannibal) blockingIssues.push(cannibal)
+
+  // Image reachability is async (HTTP HEAD)
+  const imageCheck = await checkImageReachable(input.heroImageUrl)
+  if (imageCheck.block) blockingIssues.push(imageCheck.block)
+  if (imageCheck.warn) warnings.push(imageCheck.warn)
 
   // WARNING checks (all synchronous)
   const recipeWarnings = input.content_type === "recipe"
