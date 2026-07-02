@@ -183,7 +183,12 @@ export function RecipeRow({ recipe }: { recipe: Recipe }) {
               disabled={pending}
               title="Publish"
               onClick={() =>
-                run(() => publishRecipe(recipe.id), "Recipe published")
+                run(async () => {
+                  const result = await publishRecipe(recipe.id)
+                  if (!result.ok && result.error) {
+                    throw new Error(result.error)
+                  }
+                }, "Recipe published")
               }
             >
               <Eye className="h-4 w-4" aria-hidden="true" />

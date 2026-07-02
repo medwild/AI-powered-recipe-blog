@@ -6,6 +6,8 @@ import { recipes } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 import { inngest } from "@/lib/inngest/client"
+import { runSeoGate } from "@/lib/seo/gate"
+import type { GateResult } from "@/lib/seo/types"
 
 async function checkAuth() {
   const cookieStore = await cookies()
@@ -15,8 +17,52 @@ async function checkAuth() {
   }
 }
 
-export async function publishRecipe(id: number) {
+export async function publishRecipe(id: number): Promise<{ ok: boolean; gate?: GateResult; error?: string }> {
   await checkAuth()
+
+  // Fetch full recipe data needed for the SEO gate
+  const [recipe] = await db
+    .select({
+      id: recipes.id,
+      title: recipes.title,
+      slug: recipes.slug,
+      keyword: recipes.keyword,
+      metaTitle: recipes.metaTitle,
+      metaDescription: recipes.metaDescription,
+      contentMarkdown: recipes.contentMarkdown,
+      heroImageUrl: recipes.heroImageUrl,
+      jsonLd: recipes.jsonLd,
+      content_type: recipes.content_type,
+      status: recipes.status,
+    })
+    .from(recipes)
+    .where(eq(recipes.id, id))
+
+  if (!recipe) throw new Error("Recipe not found")
+
+  // Run SEO pre-publish gate
+  const gateResult = await runSeoGate({
+    recipeId: recipe.id,
+    title: recipe.title,
+    metaTitle: recipe.metaTitle,
+    metaDescription: recipe.metaDescription,
+    slug: recipe.slug,
+    focusKeyphrase: recipe.keyword,
+    contentMarkdown: recipe.contentMarkdown,
+    heroImageUrl: recipe.heroImageUrl,
+    jsonLd: recipe.jsonLd as Record<string, unknown> | null,
+    content_type: (recipe.content_type as "recipe" | "article") ?? "recipe",
+  })
+
+  if (gateResult.status === "BLOCK") {
+    return {
+      ok: false,
+      gate: gateResult,
+      error: `Publication blocked: ${gateResult.summary}`,
+    }
+  }
+
+  // Publish
   const [row] = await db
     .update(recipes)
     .set({ status: "published", publishedAt: new Date(), updatedAt: new Date() })
@@ -27,6 +73,8 @@ export async function publishRecipe(id: number) {
   revalidatePath("/dashboard")
   revalidatePath("/recettes")
   if (row) revalidatePath(`/recettes/${row.slug}`)
+
+  return { ok: true, gate: gateResult }
 }
 
 export async function unpublishRecipe(id: number) {
