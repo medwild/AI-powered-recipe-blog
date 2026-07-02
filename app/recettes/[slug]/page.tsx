@@ -59,8 +59,8 @@ function RecipeJsonLd({
           mainEntity: { "@id": "#recipe" },
           publisher: {
             "@type": "Organization",
-            name: "Le Carnet Gourmand",
-            url: "https://lecarnetgourmand.fr",
+            name: "August Cook",
+            url: "https://augustcook.com",
           },
         }
       }
