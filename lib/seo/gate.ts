@@ -231,6 +231,46 @@ function checkCookTime(jsonLd: Record<string, unknown> | null): Warning | null {
   return null
 }
 
+/** W8 — Schema data must match visible content (Google SD policies). */
+function checkSchemaContentMismatch(
+  jsonLd: Record<string, unknown> | null,
+  contentMarkdown: string | null,
+): Warning | null {
+  const recipeNode = findRecipeNode(jsonLd)
+  if (!recipeNode || !contentMarkdown) return null
+
+  const content = contentMarkdown.toLowerCase()
+
+  // Check nutrition: if schema has calories, content should mention them
+  const nutrition = recipeNode["nutrition"] as Record<string, unknown> | undefined
+  if (nutrition) {
+    const calories = nutrition["calories"]
+    if (calories && typeof calories === "string" && calories.length > 0) {
+      const calorieNumber = calories.replace(/[^0-9]/g, "")
+      if (calorieNumber && !content.includes(calorieNumber)) {
+        return warn(
+          "SCHEMA_CONTENT_MISMATCH",
+          `Schema declares nutrition.calories (${calories}) but calorie count not found in visible content. Google requires structured data to match on-page content.`,
+        )
+      }
+    }
+  }
+
+  // Check aggregateRating: if schema has ratings, content should show them
+  const rating = recipeNode["aggregateRating"] as Record<string, unknown> | undefined
+  if (rating) {
+    const ratingValue = rating["ratingValue"]
+    if (ratingValue && !content.includes("rated") && !content.includes("stars") && !content.includes("review")) {
+      return warn(
+        "SCHEMA_CONTENT_MISMATCH",
+        "Schema declares aggregateRating but no visible ratings or reviews found in content. Google requires structured data to match on-page content.",
+      )
+    }
+  }
+
+  return null
+}
+
 // ── Recipe Node Extractor ────────────────────────────────────────────────────
 
 function findRecipeNode(jsonLd: Record<string, unknown> | null): Record<string, unknown> | null {
@@ -286,6 +326,7 @@ export async function runSeoGate(input: GateInput): Promise<GateResult> {
         checkNutrition(input.jsonLd),
         checkRating(input.jsonLd),
         checkCookTime(input.jsonLd),
+        checkSchemaContentMismatch(input.jsonLd, input.contentMarkdown),
       ]
     : []
 
