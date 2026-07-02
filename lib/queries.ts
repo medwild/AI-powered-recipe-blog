@@ -1,5 +1,6 @@
 import { db } from "@/lib/db"
 import { recipes, selfImprovementLogs } from "@/lib/db/schema"
+import type { Recipe } from "@/lib/db/schema"
 import { desc, eq, and, ne, ilike, or, sql } from "drizzle-orm"
 
 export async function getAllRecipes() {
@@ -63,31 +64,42 @@ export async function getRecipeCategories() {
   return Array.from(tagSet).sort()
 }
 
-export async function getRelatedRecipes(currentId: number, tags: string[]) {
+export async function getRelatedRecipes(currentId: number, tags: string[]): Promise<Recipe[]> {
   if (tags.length === 0) return []
 
-  const all = await db
-    .select()
+  // Build a tag-overlap score at the DB level with LIMIT 5.
+  // For each published recipe (excluding current), count how many of
+  // its tags appear in the current recipe's tag list, then take top 5.
+  const tagConditions = tags.map((t) =>
+    sql`CASE WHEN ${recipes.tags}::text ILIKE ${`%${t}%`} THEN 1 ELSE 0 END`
+  )
+  const overlapExpr = sql.join(tagConditions, sql` + `)
+
+  const rows = await db
+    .select({
+      id: recipes.id,
+      slug: recipes.slug,
+      title: recipes.title,
+      heroImageUrl: recipes.heroImageUrl,
+      excerpt: recipes.excerpt,
+      tags: recipes.tags,
+      totalTime: recipes.totalTime,
+      servings: recipes.servings,
+      difficulty: recipes.difficulty,
+      score: sql<number>`(${overlapExpr})`.as("score"),
+    })
     .from(recipes)
     .where(
       and(
         eq(recipes.status, "published"),
         eq(recipes.content_type, "recipe"),
+        ne(recipes.id, currentId),
       ),
     )
-    .orderBy(desc(recipes.publishedAt))
+    .orderBy((t) => desc(t.score))
+    .limit(5)
 
-  const scored = all
-    .filter((r) => r.id !== currentId)
-    .map((r) => {
-      const rTags = r.tags ?? []
-      const overlap = tags.filter((t) => rTags.includes(t)).length
-      return { recipe: r, score: overlap }
-    })
-    .filter((s) => s.score > 0)
-    .sort((a, b) => b.score - a.score)
-
-  return scored.slice(0, 5).map((s) => s.recipe)
+  return rows.filter((r) => (r.score as number) > 0) as unknown as Recipe[]
 }
 
 export async function getRecipeBySlug(slug: string) {

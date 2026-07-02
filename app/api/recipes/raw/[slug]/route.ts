@@ -1,6 +1,6 @@
 import { db } from "@/lib/db"
 import { recipes } from "@/lib/db/schema"
-import { eq } from "drizzle-orm"
+import { eq, and } from "drizzle-orm"
 import { NextResponse } from "next/server"
 
 const PUBLIC_FIELDS = {
@@ -22,10 +22,7 @@ const PUBLIC_FIELDS = {
   instructions: recipes.instructions,
   category: recipes.category,
   content_type: recipes.content_type,
-  status: recipes.status,
   publishedAt: recipes.publishedAt,
-  createdAt: recipes.createdAt,
-  updatedAt: recipes.updatedAt,
   jsonLd: recipes.jsonLd,
 }
 
@@ -37,7 +34,7 @@ export async function GET(
   const [recipe] = await db
     .select(PUBLIC_FIELDS)
     .from(recipes)
-    .where(eq(recipes.slug, slug))
+    .where(and(eq(recipes.slug, slug), eq(recipes.status, "published")))
     .limit(1)
   if (!recipe) return NextResponse.json({ error: "not found" }, { status: 404 })
   return NextResponse.json(recipe)

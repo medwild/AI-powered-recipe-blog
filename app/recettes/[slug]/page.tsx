@@ -23,7 +23,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params
   const recipe = await getRecipeBySlug(slug)
-  if (!recipe || (recipe.status !== "published" && recipe.status !== "draft")) {
+  if (!recipe || recipe.status !== "published") {
     return { title: "Recipe not found" }
   }
   return {
@@ -141,7 +141,7 @@ export default async function RecipePage({
   const { slug } = await params
   const recipe = await getRecipeBySlug(slug)
 
-  if (!recipe || (recipe.status !== "published" && recipe.status !== "draft")) {
+  if (!recipe || recipe.status !== "published") {
     notFound()
   }
 

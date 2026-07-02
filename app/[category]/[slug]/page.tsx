@@ -27,7 +27,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params
   const article = await getArticleBySlug(slug)
-  if (!article || (article.status !== "published" && article.status !== "draft")) {
+  if (!article || article.status !== "published") {
     return { title: "Article not found" }
   }
   return {
@@ -86,7 +86,7 @@ export default async function ArticlePage({
   const { slug } = await params
   const article = await getArticleBySlug(slug)
 
-  if (!article || (article.status !== "published" && article.status !== "draft")) {
+  if (!article || article.status !== "published") {
     notFound()
   }
 
