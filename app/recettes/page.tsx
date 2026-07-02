@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   title: "All recipes",
   description:
     "Browse our collection of French cooking recipes, optimized and explained step by step.",
+  alternates: { canonical: "/recettes" },
   openGraph: {
     title: "All recipes | Chef Augustin",
     description:

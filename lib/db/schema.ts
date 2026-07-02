@@ -140,6 +140,8 @@ export const recipes = pgTable(
     slugIdx: index("idx_recipes_slug").on(table.slug),
     publishedAtIdx: index("idx_recipes_published_at").on(table.publishedAt),
     createdAtIdx: index("idx_recipes_created_at").on(table.createdAt),
+    contentTypeIdx: index("idx_recipes_content_type").on(table.content_type),
+    linkedContentIdIdx: index("idx_recipes_linked_content_id").on(table.linked_content_id),
   }),
 )
 

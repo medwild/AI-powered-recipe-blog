@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, Clock, ChefHat, Sparkles, TrendingUp } from "lucide-react"
@@ -7,6 +8,10 @@ import { RecipeCard } from "@/components/recipe-card"
 import { Button } from "@/components/ui/button"
 import { getPublishedRecipes, getRecipeCategories } from "@/lib/queries"
 import { FOOD_BLUR_PLACEHOLDER } from "@/lib/utils"
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+}
 
 export const revalidate = 60
 

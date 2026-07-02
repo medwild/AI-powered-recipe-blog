@@ -1,7 +1,13 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+import { checkRateLimit } from "@/lib/rate-limit"
 
 export async function POST(req: NextRequest) {
+  const rateLimit = checkRateLimit("login", { maxRequests: 5, windowMs: 60_000 })
+  if (!rateLimit.allowed) {
+    return NextResponse.json({ error: "Too many login attempts. Try again in a minute." }, { status: 429 })
+  }
+
   let token: string
   try {
     const body = await req.json()
