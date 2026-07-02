@@ -562,7 +562,7 @@ export const generateRecipeWorkflow = inngest.createFunction(
       let currentAudit = audit
       let humanizationPass = 0
       let qaFixApplied = false
-      let finalRecipe: RecipeDraft
+      let finalRecipe: RecipeDraft = draft
 
       while (humanizationPass < MAX_HUMANIZATION_PASSES) {
         // If the previous iteration's re-audit already showed OK, stop.
@@ -665,11 +665,8 @@ export const generateRecipeWorkflow = inngest.createFunction(
         await step.sleep("sleep-after-re-audit", "2s")
       }
 
-      // If the loop never ran (verdict was OK from the start), use the
-      // original draft as the final recipe — no editing was needed.
-      if (!finalRecipe!) {
-        finalRecipe = draft
-      }
+      // If the loop never ran (verdict was OK from the start), finalRecipe
+      // already equals draft from initialization — no editing was needed.
 
       // Post-loop content integrity check — ensure the final content is not
       // truncated or empty (can happen when the LLM token limit is reached).

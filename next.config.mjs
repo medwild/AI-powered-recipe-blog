@@ -33,7 +33,7 @@ const nextConfig = {
               "default-src 'self'",
               "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
               "style-src 'self' 'unsafe-inline'",
-              "img-src 'self' https: data: blob:",
+              "img-src 'self' https://res.cloudinary.com data: blob:",
               "font-src 'self'",
               "connect-src 'self' https://res.cloudinary.com",
               "frame-ancestors 'none'",
