@@ -1,6 +1,6 @@
 import { getPublishedRecipes } from "@/lib/queries"
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://augustcook.com"
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com"
 
 export async function GET() {
   const recipes = await getPublishedRecipes()
@@ -22,7 +22,7 @@ export async function GET() {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>August Cook — International Home Cooking</title>
+    <title>Chef Augustin — International Home Cooking</title>
     <link>${BASE_URL}</link>
     <description>Easy, tested international recipes for home cooks by Chef Augustin Lefevre.</description>
     <language>en</language>

@@ -31,7 +31,7 @@ export async function generateMetadata({
     description: `Browse our ${label.toLowerCase()} articles — French cooking tips, techniques, and guides.`,
     alternates: { canonical: `/${category}` },
     openGraph: {
-      title: `${label} | The Gourmet Notebook`,
+      title: `${label} | Chef Augustin`,
       description: `Browse our ${label.toLowerCase()} articles — French cooking tips, techniques, and guides.`,
       type: "website",
     },

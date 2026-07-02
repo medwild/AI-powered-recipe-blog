@@ -14,24 +14,24 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: {
-    default: 'August Cook — International Home Cooking by Chef Augustin',
-    template: '%s | August Cook',
+    default: 'Chef Augustin — International Home Cooking',
+    template: '%s | Chef Augustin',
   },
   description:
     'Chef Augustin Lefevre brings world cuisines to your kitchen. Easy, tested international recipes for home cooks.',
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || 'https://augustcook.com',
+    process.env.NEXT_PUBLIC_SITE_URL || 'https://chefaugustin.com',
   ),
   openGraph: {
     type: 'website',
-    siteName: 'August Cook',
-    title: 'August Cook — International Home Cooking by Chef Augustin',
+    siteName: 'Chef Augustin',
+    title: 'Chef Augustin — International Home Cooking',
     description:
       'Chef Augustin Lefevre brings world cuisines to your kitchen. Easy, tested international recipes for home cooks.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'August Cook — International Home Cooking by Chef Augustin',
+    title: 'Chef Augustin — International Home Cooking',
     description:
       'Chef Augustin Lefevre brings world cuisines to your kitchen.',
   },

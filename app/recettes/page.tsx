@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description:
     "Browse our collection of French cooking recipes, optimized and explained step by step.",
   openGraph: {
-    title: "All recipes | The Gourmet Notebook",
+    title: "All recipes | Chef Augustin",
     description:
       "Browse our collection of French cooking recipes, optimized and explained step by step.",
     type: "website",

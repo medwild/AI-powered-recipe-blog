@@ -4,7 +4,7 @@ import { db } from "@/lib/db"
 import { recipes } from "@/lib/db/schema"
 import { getPublishedRecipes } from "@/lib/queries"
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://augustcook.com"
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [allRecipes, articles] = await Promise.all([

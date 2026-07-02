@@ -5,7 +5,7 @@ export function SiteFooter() {
     <footer className="mt-20 border-t border-border bg-secondary/40">
       <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 px-4 py-10 text-sm text-muted-foreground sm:flex-row">
         <p className="font-serif text-base text-foreground">
-          The Gourmet Notebook
+          Chef Augustin
         </p>
         <p>
           {"AI-generated and optimized recipes · "}

@@ -11,7 +11,7 @@ export function SiteHeader() {
             <ChefHat className="h-5 w-5" aria-hidden="true" />
           </span>
           <span className="font-serif text-lg font-semibold tracking-tight">
-            The Gourmet Notebook
+            Chef Augustin
           </span>
         </Link>
         <nav className="flex items-center gap-1 text-sm font-medium">

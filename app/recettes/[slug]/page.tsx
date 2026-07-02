@@ -59,8 +59,8 @@ function RecipeJsonLd({
           mainEntity: { "@id": "#recipe" },
           publisher: {
             "@type": "Organization",
-            name: "August Cook",
-            url: "https://augustcook.com",
+            name: "Chef Augustin",
+            url: "https://chefaugustin.com",
           },
         }
       }

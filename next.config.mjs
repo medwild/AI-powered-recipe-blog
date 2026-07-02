@@ -8,7 +8,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "lecarnetgourmand.fr",
+        hostname: "chefaugustin.com",
       },
     ],
   },

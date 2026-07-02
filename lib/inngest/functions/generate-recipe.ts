@@ -1112,7 +1112,7 @@ export const generateRecipeWorkflow = inngest.createFunction(
           "@type": "Recipe",
           name: finalRecipe!.title,
           description: finalRecipe!.metaDescription || finalRecipe!.excerpt || undefined,
-          author: { "@type": "Person", name: "Chef Augustin Lefèvre", url: "https://augustcook.com/about" },
+          author: { "@type": "Person", name: "Chef Augustin Lefèvre", url: "https://chefaugustin.com/about" },
           prepTime: finalRecipe!.prepTime
             ? `PT${(finalRecipe!.prepTime.match(/\d+/) ?? ["0"])[0]}M`
             : "PT0M",
@@ -1147,7 +1147,7 @@ export const generateRecipeWorkflow = inngest.createFunction(
               "@type": "BlogPosting",
               headline: finalRecipe!.title,
               description: finalRecipe!.metaDescription || finalRecipe!.excerpt || undefined,
-              author: { "@type": "Person", name: "Chef Augustin Lefèvre", url: "https://augustcook.com/about" },
+              author: { "@type": "Person", name: "Chef Augustin Lefèvre", url: "https://chefaugustin.com/about" },
               datePublished: now,
               dateModified: now,
               keywords: (finalRecipe!.tags ?? []).join(", "),
@@ -1168,8 +1168,8 @@ export const generateRecipeWorkflow = inngest.createFunction(
             {
               "@type": "BreadcrumbList",
               itemListElement: [
-                { "@type": "ListItem", position: 1, name: "Home", item: "https://augustcook.com/" },
-                { "@type": "ListItem", position: 2, name: "Recipes", item: "https://augustcook.com/recettes" },
+                { "@type": "ListItem", position: 1, name: "Home", item: "https://chefaugustin.com/" },
+                { "@type": "ListItem", position: 2, name: "Recipes", item: "https://chefaugustin.com/recettes" },
                 { "@type": "ListItem", position: 3, name: finalRecipe!.title },
               ],
             },
@@ -1301,7 +1301,7 @@ export const generateRecipeWorkflow = inngest.createFunction(
               .where(eq(recipes.id, recipeId))
             const recipeSlug = recipeRow?.slug || slugify(keyword)
 
-            const recipeUrl = `https://augustcook.com/recettes/${recipeSlug}`
+            const recipeUrl = `https://chefaugustin.com/recettes/${recipeSlug}`
 
             const aorResult = await agentAorWriter({
               keyword,
@@ -1362,7 +1362,7 @@ export const generateRecipeWorkflow = inngest.createFunction(
                     datePublished: now,
                     dateModified: now,
                     image: imageUrl,
-                    mainEntityOfPage: `https://augustcook.com/${category}/${articleSlug}`,
+                    mainEntityOfPage: `https://chefaugustin.com/${category}/${articleSlug}`,
                   }
                 }
                 return node

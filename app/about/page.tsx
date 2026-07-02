@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "About Chef Augustin Lefèvre — August Cook",
+  title: "About Chef Augustin Lefèvre — Chef Augustin",
   description:
-    "Meet Chef Augustin Lefèvre, the culinary voice behind August Cook. French-trained chef, 20+ years of professional kitchen experience, bringing world cuisines to home cooks everywhere.",
+    "Meet Chef Augustin Lefèvre, the culinary voice behind Chef Augustin. French-trained chef, 20+ years of professional kitchen experience, bringing world cuisines to home cooks everywhere.",
   alternates: { canonical: "/about" },
   openGraph: {
     title: "About Chef Augustin Lefèvre",
@@ -62,7 +62,7 @@ export default function AboutPage() {
             </p>
 
             <p>
-              Every recipe on August Cook has been tested at least 200
+              Every recipe on Chef Augustin has been tested at least 200
               times — not by robots, not in a test kitchen 3,000 miles away, but
               by me, in my home kitchen, on my own stove. I&apos;ve ruined
               enough loaves of banana bread, under-seasoned enough soups, and
@@ -127,7 +127,7 @@ export default function AboutPage() {
             jobTitle: "Chef & Recipe Developer",
             description:
               "French-trained chef with 20+ years of professional kitchen experience, dedicated to creating foolproof recipes for home cooks.",
-            url: "https://augustcook.com/about",
+            url: "https://chefaugustin.com/about",
             knowsAbout: [
               "International Home Cooking",
               "French Cuisine",
