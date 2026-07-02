@@ -48,20 +48,11 @@ export async function searchPublishedRecipes(query?: string, category?: string) 
 }
 
 export async function getRecipeCategories() {
-  const rows = await db
-    .select({ tags: recipes.tags })
-    .from(recipes)
-    .where(eq(recipes.status, "published"))
-
-  const tagSet = new Set<string>()
-  for (const row of rows) {
-    if (row.tags) {
-      for (const tag of row.tags) {
-        tagSet.add(tag)
-      }
-    }
-  }
-  return Array.from(tagSet).sort()
+  // Use PostgreSQL to unnest tags at the DB level — no JS memory overhead
+  const rows = await db.execute<{ tag: string }>(
+    sql`SELECT DISTINCT unnest(${recipes.tags}) AS tag FROM ${recipes} WHERE ${recipes.status} = 'published' ORDER BY tag`
+  )
+  return rows.rows.map((r) => r.tag)
 }
 
 export async function getRelatedRecipes(currentId: number, tags: string[]): Promise<Recipe[]> {

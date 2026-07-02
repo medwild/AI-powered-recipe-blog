@@ -25,11 +25,18 @@ export async function uploadImage(
   publicId: string,
 ): Promise<string> {
   configure()
+  const UPLOAD_TIMEOUT_MS = 30_000
+
   return new Promise<string>((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new Error(`Cloudinary upload timed out after ${UPLOAD_TIMEOUT_MS / 1000}s`))
+    }, UPLOAD_TIMEOUT_MS)
+
     cloudinary.uploader
       .upload_stream(
         { folder: "recipes", public_id: publicId, overwrite: true },
         (error, result) => {
+          clearTimeout(timer)
           if (error || !result) {
             reject(error ?? new Error("Cloudinary upload returned no result."))
             return

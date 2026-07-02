@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { cookies } from "next/headers"
 import { db } from "@/lib/db"
 import { imageVariantStats } from "@/lib/db/schema"
 import { eq, and, sql } from "drizzle-orm"
@@ -7,6 +8,7 @@ import { eq, and, sql } from "drizzle-orm"
  * POST /api/recipes/[id]/image-variant/track
  *
  * Records an impression or click on a food photo variant for A/B testing.
+ * Requires dashboard authentication.
  *
  * Body: { variantIndex: number, event: "impression" | "click" }
  */
@@ -15,6 +17,15 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params
+
+  // Auth check — same as dashboard middleware
+  const cookieStore = await cookies()
+  const authCookie = cookieStore.get("dashboard_auth")
+  const expected = process.env.DASHBOARD_SECRET_TOKEN
+  if (!expected || !authCookie || authCookie.value !== expected) {
+    return NextResponse.json({ error: "Unauthorized." }, { status: 401 })
+  }
+
   const numericId = parseInt(id, 10)
   if (isNaN(numericId)) {
     return NextResponse.json({ error: "Invalid recipe ID." }, { status: 400 })

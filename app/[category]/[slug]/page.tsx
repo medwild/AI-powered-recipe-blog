@@ -40,6 +40,12 @@ export async function generateMetadata({
       type: "article",
       images: article.heroImageUrl ? [article.heroImageUrl] : undefined,
     },
+    twitter: {
+      card: "summary_large_image",
+      title: article.metaTitle || article.title,
+      description: article.metaDescription || article.excerpt || undefined,
+      images: article.heroImageUrl ? [article.heroImageUrl] : undefined,
+    },
   }
 }
 
@@ -49,29 +55,60 @@ function ArticleJsonLd({
   article: NonNullable<Awaited<ReturnType<typeof getArticleBySlug>>>
 }) {
   const base = (article.jsonLd as Record<string, unknown>) ?? {}
+  const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com"
+  const categoryLabel = CATEGORY_LABELS[article.category ?? ""] ?? article.category ?? "Blog"
+
   if (base["@graph"] && Array.isArray(base["@graph"])) {
+    const graph = base["@graph"] as Record<string, unknown>[]
+    // Ensure BreadcrumbList is present
+    const hasBreadcrumb = graph.some((n) => n["@type"] === "BreadcrumbList")
+    const enrichedGraph = hasBreadcrumb
+      ? graph
+      : [
+          ...graph,
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
+              { "@type": "ListItem", position: 2, name: categoryLabel, item: `${SITE}/${article.category}` },
+              { "@type": "ListItem", position: 3, name: article.title },
+            ],
+          },
+        ]
     return (
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(base),
+          __html: JSON.stringify({ ...base, "@graph": enrichedGraph }),
         }}
       />
     )
   }
-  // Fallback
+  // Fallback with BreadcrumbList
   return (
     <script
       type="application/ld+json"
       dangerouslySetInnerHTML={{
         __html: JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "Article",
-          headline: article.title,
-          description: article.metaDescription || article.excerpt,
-          author: { "@type": "Person", name: "Chef Augustin Lefevre" },
-          datePublished: article.publishedAt?.toISOString(),
-          image: article.heroImageUrl,
+          "@graph": [
+            {
+              "@type": "Article",
+              headline: article.title,
+              description: article.metaDescription || article.excerpt,
+              author: { "@type": "Person", name: "Chef Augustin Lefevre" },
+              datePublished: article.publishedAt?.toISOString(),
+              image: article.heroImageUrl,
+            },
+            {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
+                { "@type": "ListItem", position: 2, name: categoryLabel, item: `${SITE}/${article.category}` },
+                { "@type": "ListItem", position: 3, name: article.title },
+              ],
+            },
+          ],
         }),
       }}
     />

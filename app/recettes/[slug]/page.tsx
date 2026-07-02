@@ -38,6 +38,12 @@ export async function generateMetadata({
       type: "article",
       images: recipe.heroImageUrl ? [recipe.heroImageUrl] : undefined,
     },
+    twitter: {
+      card: "summary_large_image",
+      title: recipe.metaTitle || recipe.title,
+      description: recipe.metaDescription || recipe.excerpt || undefined,
+      images: recipe.heroImageUrl ? [recipe.heroImageUrl] : undefined,
+    },
   }
 }
 
