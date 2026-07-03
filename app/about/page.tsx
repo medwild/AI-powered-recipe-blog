@@ -9,7 +9,7 @@ import { ArrowRight } from "lucide-react"
 export const metadata: Metadata = {
   title: "About Chef Augustin Lefèvre — Chef Augustin",
   description:
-    "Meet Chef Augustin Lefèvre, the culinary voice behind Chef Augustin. French-trained chef, 20+ years of professional kitchen experience, bringing world cuisines to home cooks everywhere.",
+    "Meet Chef Augustin Lefèvre, the culinary voice behind Chef Augustin. French-trained chef, 20+ years of professional kitchen experience, bringing French sourdough techniques to home bakers everywhere.",
   alternates: { canonical: "/about" },
   openGraph: {
     title: "About Chef Augustin Lefèvre",
@@ -129,7 +129,7 @@ export default function AboutPage() {
               "French-trained chef with 20+ years of professional kitchen experience, dedicated to creating foolproof recipes for home cooks.",
             url: "https://chefaugustin.com/about",
             knowsAbout: [
-              "International Home Cooking",
+              "Sourdough Baking",
               "French Cuisine",
               "Baking",
               "Quick Breads",
