@@ -1,15 +1,16 @@
 # The Sourdough Kitchen — Design Spec
 
-> **Status**: Validé — 2026-07-03
+> **Status**: Validé — 2026-07-03 | **Revision**: v1.1 (post LLM Council review)
 > **Concept**: Chef Augustin vous apprend le sourdough — du starter au discard, de la croûte à la mie
 > **Méthodologie**: Topical Authority Map — Koray Tuğberk GÜBÜR (Entity-Attribute-Value)
 > **Source**: 204 keywords Semrush US, filtres volume≥50, KD≤29, intent info+commercial
+> **Data extracted**: 2026-07-03 (Semrush US database)
 
 ---
 
-## 1. Pourquoi Sourdough (et pas les cuisines du monde)
+## 1. Why Sourdough (and not world cuisines)
 
-Les données Semrush ont parlé. 204 keywords analysés, 6 clusters identifiés, et un verdict sans appel :
+204 keywords analyzed, 6 clusters identified. Here's the data:
 
 | Métrique | Sourdough | Filipino cuisine | Georgian cuisine |
 |---|---|---|---|
@@ -19,11 +20,51 @@ Les données Semrush ont parlé. 204 keywords analysés, 6 clusters identifiés,
 | Résultats SERP médians | **<200** | 100K+ | 100K+ |
 | Profondeur contenu | 90+ articles | 15-20 | 8-10 |
 
-Le sourdough est 5-8x plus facile à ranker que les cuisines, avec 7x plus de volume.
+Sourdough is 5-8x easier to rank than the cuisines, with 7x more volume.
+
+### Methodology & Caveats
+
+- **Source**: Semrush US database, extracted 2026-07-03
+- **Filters applied**: monthly volume ≥50, KD ≤29, intent = informational + commercial
+- **KD interpretation**: Semrush KD measures backlink difficulty, not content quality of incumbents. A KD of 3.8 means backlink requirements are low, but it does NOT guarantee ranking — on-page quality, E-E-A-T signals, and brand authority still determine SERP position.
+- **What this data CAN tell us**: relative opportunity size vs. other cuisines; topical depth available; keyword-level entry points.
+- **What this data CANNOT tell us**: whether AI-generated content can outrank The Perfect Loaf or King Arthur for competitive terms; whether Google will index 90+ articles from a new domain.
 
 ---
 
-## 2. Entité Centrale
+## 2. Competitive Landscape
+
+### Who ranks for sourdough terms (top SERP incumbents)
+
+| Competitor | Domain Rating (est.) | Strengths | Weaknesses |
+|---|---|---|---|
+| **King Arthur Baking** | DR 79+ | 230+ years brand, employee-owned, tested recipes, massive backlink profile, dedicated sourdough discard collection | Generalist (flour company first, sourdough is one category); corporate voice |
+| **The Perfect Loaf** | DR 65+ | Single-topic authority, baker persona (Maurizio), deep technique articles, baking schedules, community | One person = content cadence limited; persona is a software engineer, not a chef |
+| **The Clever Carrot** | DR 55+ | Approachable tone, beginner-friendly, strong Pinterest presence, cookbook author | Less technical depth; general baking, not sourdough-only |
+| **Farmhouse on Boone** | DR 50+ | Lifestyle/mommy blog crossover, strong Pinterest, video content | Not sourdough-specialized; persona is a homesteader, not a trained chef |
+| **Little Spoon Farm** | DR 40+ | Beginner sourdough focus, simple recipes, "no-knead" angle | Narrow technique range; limited advanced content |
+| **Pantry Mama** | DR 35+ | Strong discard recipe collection, Pinterest optimized | Limited technical authority; no culinary credentials |
+| **Reddit r/Sourdough** | DR 90+ (domain) | 600K+ members, real user Q&A, troubleshooting goldmine, Google ranks Reddit threads high for long-tail questions | Not a blog; no structured recipes; no monetization |
+| **YouTube (various)** | DR 95+ (domain) | Video demonstrations, visual proof of results, personality-driven | Not text-optimized for Google snippets; harder to extract quick answers |
+
+### The gap: where we can win
+
+1. **French chef authority** — Zero sourdough blogs position from a French-trained chef perspective. Incumbents are American bakers, homesteaders, or flour companies. A French culinary school + Parisian bakery narrative is a unique E-E-A-T signal.
+2. **Sourdough-only depth** — Most competitors are either generalist (King Arthur) or lifestyle (Farmhouse on Boone). A single-entity sourdough site can go deeper on technique, science, and troubleshooting.
+3. **Discard recipes with culinary credibility** — Pantry Mama and Little Spoon Farm have discard recipes, but none from a trained chef. The "discard + French technique" angle is open.
+4. **Topical map coverage** — No single competitor covers all 6 sourdough clusters at depth. The Perfect Loaf covers technique + breads, but not dishes/storage. King Arthur covers everything but without a unified voice.
+5. **Reddit gap analysis** — r/Sourdough reveals real user problems competitors don't address well: starter diagnostics by smell/texture, bulk fermentation visual cues, humidity adjustments, high-altitude baking. These are content moats.
+
+### The threat: why we can lose
+
+1. **King Arthur's discard collection** validates the demand but also proves the niche has an 800-pound gorilla. Their "Sourdough Discard Recipes" collection page ranks top 3 for the head term.
+2. **Google's Helpful Content system** penalizes unverified AI content. If recipes aren't tested, the site won't survive a core update.
+3. **Zero backlink profile** — new domain, no existing authority. KD 3.8 means link requirements are low, but not zero.
+4. **The Perfect Loaf's depth** — Maurizio's technique articles are 3,000-5,000 words with original photography. Matching that depth with AI requires the full pipeline (Auditor + Editor loop).
+
+---
+
+## 3. Central Entity
 
 ```
 Entity: Sourdough Home Baking
@@ -51,18 +92,18 @@ Attributes:
 
 ---
 
-## 3. Architecture Topical Map
+## 4. Topical Map Architecture
 
 ```
                     [THE SOURDOUGH KITCHEN]
                    Chef Augustin Lefevre
                 Entity: Sourdough Home Baking
                             |
-    ┌───────────┬───────────┼───────────┬───────────┬───────────┐
-    |           |           |           |           |           |
-[STARTER]   [TECHNIQUE] [DISCARD]   [BREADS]   [DISHES]   [STORAGE]
- 12 kw        15 kw       20+ kw      24 kw       41 kw      13 kw
- 5,650/mo    13,860/mo   78,000/mo    5,750/mo   13,680/mo   3,810/mo
+	    ┌───────────┬───────────┼───────────┬───────────┬───────────┐
+	    |           |           |           |           |           |
+	[STARTER]   [TECHNIQUE] [DISCARD]   [BREADS]   [DISHES]   [STORAGE]
+	 12 kw        15 kw       20+ kw      24 kw       41 kw      13 kw
+	 5,650/mo    13,860/mo   78,000/mo    5,750/mo   13,680/mo   3,810/mo
 ```
 
 ### Cluster 1: Starter Care & Troubleshooting (12 articles)
@@ -205,20 +246,20 @@ Attributes:
 
 ---
 
-## 4. Internal Linking Strategy (Koray GÜBÜR method)
+## 5. Internal Linking Strategy (Koray GÜBÜR method)
 
 ```
 [HOME: The Sourdough Kitchen]
            |
-    ┌──────┴──────┐
-    |             |
-[STARTER] ←→ [TECHNIQUE]
-    |      ×      |
-    |      ×      |
-[DISCARD] ←→ [BREADS]
-    |      ×      |
-    |             |
-[DISHES] ←→ [STORAGE]
+	    ┌──────┴──────┐
+	    |             |
+	[STARTER] ←→ [TECHNIQUE]
+	    |      ×      |
+	    |      ×      |
+	[DISCARD] ←→ [BREADS]
+	    |      ×      |
+	    |             |
+	[DISHES] ←→ [STORAGE]
 
 Rules:
 1. Every spoke → its hub (bottom-up)
@@ -232,7 +273,7 @@ Rules:
 
 ---
 
-## 5. Persona — Chef Augustin for Sourdough
+## 6. Persona — Chef Augustin for Sourdough
 
 ```
 Chef Augustin Lefevre — French-trained chef who mastered sourdough
@@ -247,28 +288,28 @@ USP: French chef credibility + zero-waste philosophy + complete topic coverage
 
 ---
 
-## 6. Traffic Strategy
+## 7. Traffic Strategy
 
 ### Phase 1: Pinterest (Month 1-3)
-- Sourdough = catégorie #1 baking sur Pinterest
-- Sourdough discard snacks = +180% month-over-month
+- Sourdough = #1 baking category on Pinterest
+- Sourdough discard snacks: growing category (Pinterest Trends, 2026 — verify with Pinterest Trends API before citing specific percentages)
 - 3-5 pins per recipe (hero, crumb shot, step-by-step)
 - Boards: "Sourdough Starter Guide", "Discard Recipes", "Artisan Bread at Home"
 
 ### Phase 2: Google Organic (Month 3-6)
-- Target KD 0-3 keywords first (30% du cluster, 15,890/mo)
-- KD 4-5 keywords suivent naturellement (autorité accumulée)
-- Objectif: 70%+ de couverture du cluster en 6 mois
+- Target KD 0-3 keywords first (30% of cluster, 15,890/mo)
+- KD 4-5 keywords follow naturally (accumulated authority)
+- Goal: 70%+ cluster coverage within 6 months
 - Rich snippets: Recipe schema + How-To schema
 
 ### Phase 3: Monetization (Month 6-12)
-- Affiliate: farines spéciales, ustensiles (lame, banneton, dutch oven)
+- Affiliate: specialty flours, tools (lame, banneton, dutch oven)
 - Digital products: "Sourdough Starter Guide PDF", "Discard Recipe eBook"
 - Mediavine eligibility at 50K sessions/mo
 
 ---
 
-## 7. Pipeline Adaptation
+## 8. Pipeline Adaptation
 
 ### What changes
 | Component | Before | After |
@@ -288,17 +329,48 @@ USP: French chef credibility + zero-waste philosophy + complete topic coverage
 
 ---
 
-## 8. Non-Goals (YAGNI)
+## 9. Risks & Counter-Arguments
 
-- Ne pas supprimer le pipeline multi-cuisine existant (il reste pour expansion future)
-- Ne pas créer de nouveau branding visuel complet
-- Ne pas lancer tous les clusters en même temps — Starter + Discard d'abord
-- Ne pas créer d'autres comptes sociaux que Pinterest
-- Ne pas supprimer le code "Grandmother's Kitchen Table" déjà écrit dans le pipeline
+A strategy document that doesn't acknowledge its own risks is marketing, not strategy. Here are the real counter-arguments:
+
+### 1. Head term dominance by strong incumbents
+**Risk**: "sourdough discard recipes" (74K/mo, KD 29) is already dominated by King Arthur Baking (DR 79+), The Clever Carrot (DR 55+), and others. KD measures backlink difficulty, not brand authority — a new domain with DR 0 won't rank for this term within 6 months.
+**Mitigation**: Target long-tail spokes first (KD 2-4, volume 170-590 each). Accumulate topical authority bottom-up. Don't expect the pillar page to rank until domain authority exists.
+
+### 2. AI-generated recipes lack culinary proof
+**Risk**: Google's Helpful Content system rewards first-hand experience. AI-generated recipes without actual testing risk being classified as "created primarily for search engines." A core update could wipe the site.
+**Mitigation**: The Auditor agent fact-checks ingredient ratios, temperatures, and technique plausibility. The Editor agent applies humanization passes. But the pipeline does NOT physically test recipes — this is a structural limitation. Mitigation degrades gracefully; it does not eliminate the risk.
+
+### 3. "Chef Augustin" persona has no off-site presence
+**Risk**: E-E-A-T requires demonstrated expertise. A fictional chef with no social media, no published books, no YouTube channel, and no press mentions has zero off-site E-E-A-T signals. Google's Quality Rater Guidelines consider the author's real-world reputation.
+**Mitigation**: (1) Create Pinterest profile with real photos. (2) Add an author page with detailed bio. (3) Long-term: publish on Medium/Substack to build off-site footprint. (4) If the site gains traction, consider partnering with a real chef for content review.
+
+### 4. 90+ article topical map before validation is dangerous
+**Risk**: Publishing 90 AI-generated articles before any traffic data or user feedback validates the approach. If the content doesn't rank or convert, 90 articles of sunk cost with no learnings.
+**Mitigation**: Phase rollout (see §10 Non-Goals and §11 Success Metrics). Starter + Discard clusters first (25 articles). Validate with 3 months of GSC data. Expand only after confirming ranking signals.
+
+### 5. "French chef = sourdough authority" is an untested assumption
+**Risk**: The persona assumes French culinary training confers sourdough credibility. But sourdough has strong non-French traditions (San Francisco, German rye, Eastern European). A French chef persona may not resonate with the American sourdough audience as strongly as a homesteader or science-baker persona would.
+**Mitigation**: Test in content. The Writer agent emphasizes French technique precision AND explains the underlying science — the value prop is "precision + science," not "French = better." Monitor user engagement signals (time on page, bounce rate) for persona-audience fit.
+
+### 6. Scope creep from "discard" to "everything sourdough"
+**Risk**: Starting with discard (a concrete user problem) but expanding immediately to breads, dishes, and storage dilutes the initial wedge. A "sourdough everything" site competes against everyone; a "sourdough discard" site has a defensible angle.
+**Mitigation**: Use "The Sourdough Kitchen" as the umbrella brand but lead with Starter + Discard content for the first 3-6 months (see §10). The topical map defines the full architecture; the rollout defines the actual publishing cadence.
 
 ---
 
-## 9. Success Metrics
+## 10. Non-Goals (YAGNI)
+
+- Don't delete the existing multi-cuisine pipeline (it stays for future expansion)
+- Don't create a full new visual brand
+- Don't launch all clusters at once — **Starter + Discard first** (25 articles initial batch)
+- Don't create social accounts beyond Pinterest
+- Don't delete the "Grandmother's Kitchen Table" code already in the pipeline
+- Don't publish 90 articles before validating with 3 months of GSC data
+
+---
+
+## 11. Success Metrics
 
 | Metric | 3-month | 6-month | 12-month |
 |---|---|---|---|
@@ -308,3 +380,15 @@ USP: French chef credibility + zero-waste philosophy + complete topic coverage
 | Cluster coverage | 30% | 70% | 90% |
 | Domain Rating | 5 | 15 | 30 |
 | "sourdough discard recipes" rank | Top 50 | Top 20 | Top 10 |
+
+### Phase 1 Validation Gate (after 25 articles / 3 months)
+
+Before expanding beyond Starter + Discard:
+- [ ] ≥10 articles indexed in Google Search Console
+- [ ] ≥1 article ranking top 30 for its target keyword
+- [ ] ≥500 total organic clicks
+- [ ] ≥5K Pinterest monthly views
+- [ ] Zero manual actions or HCU-related drops
+- [ ] SEO Gate pass rate ≥80% (14/17 criteria average)
+
+**If these gates aren't met**: pause publishing, diagnose (content quality? indexing? keyword selection?), iterate before scaling to Breads + Dishes clusters.
