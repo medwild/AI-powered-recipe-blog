@@ -14,26 +14,26 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Chef Augustin — International Home Cooking',
+    default: 'Chef Augustin — The Sourdough Kitchen',
     template: '%s | Chef Augustin',
   },
   description:
-    'Chef Augustin Lefevre brings world cuisines to your kitchen. Easy, tested international recipes for home cooks.',
+    'Chef Augustin Lefevre brings French sourdough techniques to your kitchen. Tested artisan bread recipes for home bakers — from starter to discard, from crust to crumb.',
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || 'https://chefaugustin.com',
   ),
   openGraph: {
     type: 'website',
     siteName: 'Chef Augustin',
-    title: 'Chef Augustin — International Home Cooking',
+    title: 'Chef Augustin — The Sourdough Kitchen',
     description:
-      'Chef Augustin Lefevre brings world cuisines to your kitchen. Easy, tested international recipes for home cooks.',
+      'Chef Augustin Lefevre brings French sourdough techniques to your kitchen. Tested artisan bread recipes for home bakers.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Chef Augustin — International Home Cooking',
+    title: 'Chef Augustin — The Sourdough Kitchen',
     description:
-      'Chef Augustin Lefevre brings world cuisines to your kitchen.',
+      'Chef Augustin Lefevre brings French sourdough techniques to your kitchen.',
   },
 }
 
