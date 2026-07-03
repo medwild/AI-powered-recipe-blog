@@ -37,11 +37,12 @@ export default async function HomePage() {
                 AI-written and optimized recipes
               </span>
               <h1 className="font-serif text-4xl leading-tight text-balance md:text-5xl">
-                French cooking, simple and always successful.
+                French sourdough, made simple for your home kitchen.
               </h1>
               <p className="text-lg leading-relaxed text-muted-foreground text-pretty">
-                Generous recipes, tested and explained step by step. Each
-                article is designed to save you time in the kitchen.
+                Artisan bread recipes from a French-trained chef. Each recipe is
+                tested, explained step by step, and designed to help you master
+                sourdough — from your first starter to your best loaf.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Button
@@ -103,8 +104,8 @@ export default async function HomePage() {
                 <Clock className="h-5 w-5 text-primary" aria-hidden="true" />
               </div>
               <div>
-                <div className="text-2xl font-bold">{"<30"}</div>
-                <div className="text-xs text-muted-foreground">Min on average</div>
+                <div className="text-2xl font-bold">72h</div>
+                <div className="text-xs text-muted-foreground">Cold ferment</div>
               </div>
             </div>
           </div>
@@ -183,11 +184,10 @@ export default async function HomePage() {
         <section className="border-t border-border bg-secondary/30">
           <div className="mx-auto max-w-5xl px-4 py-16 text-center">
             <h2 className="font-serif text-3xl text-balance">
-              Ready to cook?
+              Ready to bake?
             </h2>
             <p className="mx-auto mt-3 max-w-lg text-muted-foreground">
-              Browse our recipe collection and find inspiration
-              for your next meal.
+              Browse our sourdough collection and start your next loaf.
             </p>
             <div className="mt-6 flex justify-center gap-3">
               <Button
@@ -216,6 +216,8 @@ export default async function HomePage() {
               name: "Chef Augustin",
               url: process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com",
               logo: `${process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com"}/hero-kitchen.png`,
+              description:
+                "Chef Augustin Lefevre teaches French sourdough — artisan bread recipes for home bakers.",
               sameAs: [
                 "https://www.instagram.com/chefaugustin",
                 "https://www.pinterest.com/chefaugustin",

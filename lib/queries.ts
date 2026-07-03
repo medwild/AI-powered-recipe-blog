@@ -50,7 +50,7 @@ export async function searchPublishedRecipes(query?: string, category?: string) 
 export async function getRecipeCategories() {
   // Use PostgreSQL to unnest tags at the DB level — no JS memory overhead
   const rows = await db.execute<{ tag: string }>(
-    sql`SELECT DISTINCT unnest(${recipes.tags}) AS tag FROM ${recipes} WHERE ${recipes.status} = 'published' ORDER BY tag`
+    sql`SELECT DISTINCT jsonb_array_elements_text(${recipes.tags}) AS tag FROM ${recipes} WHERE ${recipes.status} = 'published' ORDER BY tag`
   )
   return rows.rows.map((r) => r.tag)
 }
