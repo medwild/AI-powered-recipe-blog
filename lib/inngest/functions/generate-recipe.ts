@@ -41,9 +41,9 @@ export const generateRecipeWorkflow = inngest.createFunction(
     }
 
     const cuisineReplacements = {
-      cuisine: cuisine || "French",
-      cuisine_ingredients: cuisineIngredients || "butter, cream, wine, shallots, garlic",
-      cuisine_techniques: cuisineTechniques || "sauce making, braising, pastry",
+      cuisine: cuisine || "Sourdough",
+      cuisine_ingredients: cuisineIngredients || "bread flour, rye flour, whole wheat flour, sourdough starter, salt, water, olive oil, honey, butter",
+      cuisine_techniques: cuisineTechniques || "autolyse, stretch and fold, coil fold, bulk fermentation, cold retard, bench rest, scoring, steam baking (dutch oven), lamination",
     }
 
     let degraded = false

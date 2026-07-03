@@ -9,24 +9,26 @@ export const maxDuration = 30
 
 function getDefaultIngredients(cuisine: string): string {
   const defaults: Record<string, string> = {
+    sourdough: "bread flour, rye flour, whole wheat flour, sourdough starter, salt, water, olive oil, honey, butter",
     swedish: "salmon, rye flour, lingonberry, dill, cardamom, cream, potatoes, herring",
     finnish: "salmon, rye flour, dill, potatoes, blueberries, mushrooms, cream, cardamom",
     polish: "cabbage, potatoes, sausage, sour cream, dill, beets, mushrooms, rye",
     cuban: "plantains, black beans, rice, pork, citrus, cumin, oregano, garlic",
     french: "butter, cream, wine, shallots, herbs de Provence, garlic, cheese, bread",
   }
-  return defaults[cuisine.toLowerCase()] ?? defaults.french
+  return defaults[cuisine.toLowerCase()] ?? defaults.sourdough
 }
 
 function getDefaultTechniques(cuisine: string): string {
   const defaults: Record<string, string> = {
+    sourdough: "autolyse, stretch and fold, coil fold, bulk fermentation, cold retard, bench rest, scoring, steam baking (dutch oven), lamination",
     swedish: "curing (gravlax), rye bread baking, cream-based sauces, cardamom baking",
     finnish: "rye bread baking, salmon soup making, berry desserts, slow fermentation",
     polish: "pierogi making, slow-braising, pickling, sour cream sauces",
     cuban: "slow-braising (ropa vieja), mojo marination, plantain frying, sofrito base",
     french: "sauce making, braising, pastry, knife skills, butter-based cooking",
   }
-  return defaults[cuisine.toLowerCase()] ?? defaults.french
+  return defaults[cuisine.toLowerCase()] ?? defaults.sourdough
 }
 
 export async function POST(req: Request) {
@@ -92,8 +94,8 @@ export async function POST(req: Request) {
   }
 
   // Cuisine focus — makes the pipeline cuisine-agnostic
-  // If not provided, defaults to "French" (backward compatible)
-  const cuisine = body?.cuisine?.toString().trim() || "French"
+  // If not provided, defaults to "sourdough" (backward compatible)
+  const cuisine = body?.cuisine?.toString().trim() || "sourdough"
   const cuisineIngredients = body?.cuisineIngredients?.toString().trim() ||
     getDefaultIngredients(cuisine)
   const cuisineTechniques = body?.cuisineTechniques?.toString().trim() ||
