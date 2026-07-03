@@ -1,0 +1,202 @@
+{
+  "clusterName": "Nordic Cuisine",
+  "pillarKeyword": "scandinavian food",
+  "totalSpokesAnalyzed": 10,
+  "gapsFound": 8,
+  "opportunitiesFound": 4,
+  "defersFound": 0,
+  "batchPlan": [
+    {
+      "rank": 1,
+      "keyword": "swedish meatballs recipe",
+      "priority": "MANDATORY",
+      "classification": "MANDATORY",
+      "contentType": "RECIPE",
+      "estimatedDifficulty": "LOW",
+      "rationale": "5/5 competitors cover this high-volume keyword (22k SV) with thin content (950 words, no FAQ). Anchor piece for the cluster, easy to outrank with 2000+ words + FAQ + Why This Works.",
+      "entityContribution": [
+        "Swedish meatballs",
+        "lingonberry",
+        "cream sauce",
+        "Nordic comfort food"
+      ],
+      "internalLinkTargets": [
+        "lingonberry-sauce",
+        "swedish-cinnamon-buns"
+      ],
+      "siteRadius": "CORE",
+      "evergreenScore": "HIGH",
+      "generationOrder": 1
+    },
+    {
+      "rank": 2,
+      "keyword": "gravlax cured salmon",
+      "priority": "MANDATORY",
+      "classification": "MANDATORY",
+      "contentType": "RECIPE",
+      "estimatedDifficulty": "LOW",
+      "rationale": "5/5 competitors cover this, but content is thin (800 words, no FAQ). High authority potential with detailed curing guide + FAQ + internal links to salmon-based dishes.",
+      "entityContribution": [
+        "gravlax",
+        "cured salmon",
+        "dill",
+        "Nordic seafood"
+      ],
+      "internalLinkTargets": [
+        "finnish-salmon-soup",
+        "swedish-meatballs"
+      ],
+      "siteRadius": "CORE",
+      "evergreenScore": "HIGH",
+      "generationOrder": 2
+    },
+    {
+      "rank": 3,
+      "keyword": "finnish salmon soup",
+      "priority": "HIGH",
+      "classification": "BLUE_OCEAN",
+      "contentType": "RECIPE",
+      "estimatedDifficulty": "LOW",
+      "rationale": "Only 1/5 competitors cover this (4.8k SV). Thin content (600 words) and no FAQ. First-mover advantage with rich, evergreen recipe + internal links to gravlax and Nordic seafood guides.",
+      "entityContribution": [
+        "Finnish salmon soup",
+        "salmon",
+        "dill",
+        "potatoes",
+        "Nordic soup"
+      ],
+      "internalLinkTargets": [
+        "gravlax-cured-salmon",
+        "icelandic-lamb-stew"
+      ],
+      "siteRadius": "CORE",
+      "evergreenScore": "HIGH",
+      "generationOrder": 3
+    },
+    {
+      "rank": 4,
+      "keyword": "danish pastries recipe",
+      "priority": "HIGH",
+      "classification": "EXPECTED",
+      "contentType": "RECIPE",
+      "estimatedDifficulty": "MEDIUM",
+      "rationale": "4/5 competitors cover this (15k SV). Competitor content is decent (1100 words, FAQ present), but can differentiate with deeper history, variations, and internal links to Danish rye bread.",
+      "entityContribution": [
+        "Danish pastries",
+        "puff pastry",
+        "cardamom",
+        "Nordic baking"
+      ],
+      "internalLinkTargets": [
+        "danish-rye-bread",
+        "swedish-cinnamon-buns"
+      ],
+      "siteRadius": "CORE",
+      "evergreenScore": "HIGH",
+      "generationOrder": 4
+    },
+    {
+      "rank": 5,
+      "keyword": "icelandic lamb stew",
+      "priority": "HIGH",
+      "classification": "BLUE_OCEAN",
+      "contentType": "RECIPE",
+      "estimatedDifficulty": "LOW",
+      "rationale": "0/5 competitors cover this (200 SV). Zero competition, but low volume. Still valuable for differentiation and long-tail authority. Pair with Nordic meat dishes for coherence.",
+      "entityContribution": [
+        "Icelandic lamb stew",
+        "lamb",
+        "root vegetables",
+        "Nordic stew"
+      ],
+      "internalLinkTargets": [
+        "gravlax-cured-salmon",
+        "finnish-salmon-soup"
+      ],
+      "siteRadius": "CORE",
+      "evergreenScore": "HIGH",
+      "generationOrder": 5
+    },
+    {
+      "rank": 6,
+      "keyword": "swedish cinnamon buns",
+      "priority": "MEDIUM",
+      "classification": "EXPECTED",
+      "contentType": "RECIPE",
+      "estimatedDifficulty": "LOW",
+      "rationale": "3/5 competitors cover this (12k SV). Thin content (900 words, no FAQ). Strong internal linking potential with Swedish meatballs and Danish pastries for a 'Swedish baking' sub-cluster.",
+      "entityContribution": [
+        "Swedish cinnamon buns",
+        "cardamom",
+        "baking",
+        "Nordic desserts"
+      ],
+      "internalLinkTargets": [
+        "swedish-meatballs-recipe",
+        "danish-pastries-recipe"
+      ],
+      "siteRadius": "CORE",
+      "evergreenScore": "HIGH",
+      "generationOrder": 6
+    },
+    {
+      "rank": 7,
+      "keyword": "danish rye bread",
+      "priority": "MEDIUM",
+      "classification": "EXPECTED",
+      "contentType": "RECIPE",
+      "estimatedDifficulty": "MEDIUM",
+      "rationale": "4/5 competitors cover this (8k SV). Strong content (1300 words, FAQ present), but can differentiate with historical context, sourdough techniques, and pairing suggestions.",
+      "entityContribution": [
+        "Danish rye bread",
+        "sourdough",
+        "whole grains",
+        "Nordic bread"
+      ],
+      "internalLinkTargets": [
+        "danish-pastries-recipe",
+        "swedish-cinnamon-buns"
+      ],
+      "siteRadius": "CORE",
+      "evergreenScore": "HIGH",
+      "generationOrder": 7
+    },
+    {
+      "rank": 8,
+      "keyword": "norwegian waffles",
+      "priority": "MEDIUM",
+      "classification": "DIFFERENTIATOR",
+      "contentType": "RECIPE",
+      "estimatedDifficulty": "LOW",
+      "rationale": "2/5 competitors cover this (3.5k SV). Very thin content (550 words, no FAQ). Opportunity to dominate with detailed recipe + cultural notes + internal links to other Nordic desserts.",
+      "entityContribution": [
+        "Norwegian waffles",
+        "cardamom",
+        "brown cheese",
+        "Nordic breakfast"
+      ],
+      "internalLinkTargets": [
+        "swedish-cinnamon-buns",
+        "danish-pastries-recipe"
+      ],
+      "siteRadius": "CORE",
+      "evergreenScore": "HIGH",
+      "generationOrder": 8
+    }
+  ],
+  "excludedSpokes": [
+    {
+      "keyword": "best kitchen knives 2026",
+      "reason": "INTENT_MISMATCH",
+      "suggestion": "Commercial intent. Belongs in a kitchen equipment cluster, not a recipe-focused Nordic Cuisine cluster."
+    },
+    {
+      "keyword": "lingonberry sauce",
+      "reason": "LOW_DEMAND",
+      "suggestion": "Low competitor coverage (2/5) and thin content (400 words) suggest low priority. Better addressed as a sub-section in Swedish meatballs or other recipes."
+    }
+  ],
+  "batchCoherenceScore": 95,
+  "recommendedCuisine": "Nordic",
+  "strategyNote": "Anchor with Swedish meatballs and gravlax (mandatory, high-volume, thin competition), then differentiate with Finnish salmon soup and Icelandic lamb stew (blue ocean). Close expected gaps with Danish pastries and rye bread. Internal linking forms a tight semantic mesh around Nordic baking and seafood."
+}

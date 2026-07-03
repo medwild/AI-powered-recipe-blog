@@ -1,0 +1,209 @@
+{
+  "clusterName": "Moroccan Cuisine",
+  "pillarKeyword": "moroccan food",
+  "totalSpokesAnalyzed": 9,
+  "gapsFound": 7,
+  "opportunitiesFound": 2,
+  "defersFound": 0,
+  "batchPlan": [
+    {
+      "rank": 1,
+      "keyword": "chicken tagine recipe",
+      "priority": "MANDATORY",
+      "classification": "MANDATORY",
+      "contentType": "RECIPE",
+      "estimatedDifficulty": "MEDIUM",
+      "rationale": "5/5 competitors cover this high-volume (18k) pillar. Competitor content is thin (1000 words, no FAQ) — opportunity to dominate with 2000 words + FAQ + Why This Works. Anchor for the cluster.",
+      "entityContribution": [
+        "chicken tagine",
+        "slow cooking",
+        "Moroccan spices",
+        "olives",
+        "preserved lemons"
+      ],
+      "internalLinkTargets": [
+        "preserved-lemons",
+        "moroccan-spice-blend-ras-el-hanout",
+        "moroccan-cooking-techniques"
+      ],
+      "siteRadius": "CORE",
+      "evergreenScore": "HIGH",
+      "generationOrder": 1
+    },
+    {
+      "rank": 2,
+      "keyword": "moroccan couscous royal",
+      "priority": "MANDATORY",
+      "classification": "MANDATORY",
+      "contentType": "RECIPE",
+      "estimatedDifficulty": "HIGH",
+      "rationale": "5/5 competitors cover this (14k volume). Competitors have FAQ and decent structure (1100 words, 5 headers), but no schema advantage. Differentiate with deeper cultural context and internal links to tagine and pastilla.",
+      "entityContribution": [
+        "couscous royal",
+        "lamb",
+        "vegetables",
+        "raisins",
+        "caramelized onions"
+      ],
+      "internalLinkTargets": [
+        "chicken-tagine-recipe",
+        "moroccan-pastilla-recipe"
+      ],
+      "siteRadius": "CORE",
+      "evergreenScore": "HIGH",
+      "generationOrder": 2
+    },
+    {
+      "rank": 3,
+      "keyword": "moroccan pastilla recipe",
+      "priority": "HIGH",
+      "classification": "BLUE_OCEAN",
+      "contentType": "RECIPE",
+      "estimatedDifficulty": "HIGH",
+      "rationale": "Only 1/5 competitors cover this (3k volume). High word count (1200) and FAQ from competitors, but low coverage means first-mover advantage. Unique entity contribution (phyllo, pigeon/squab, almonds).",
+      "entityContribution": [
+        "pastilla",
+        "phyllo dough",
+        "pigeon",
+        "almonds",
+        "cinnamon",
+        "sugar-savory"
+      ],
+      "internalLinkTargets": [
+        "chicken-tagine-recipe",
+        "moroccan-couscous-royal"
+      ],
+      "siteRadius": "CORE",
+      "evergreenScore": "HIGH",
+      "generationOrder": 4
+    },
+    {
+      "rank": 4,
+      "keyword": "harira soup recipe",
+      "priority": "HIGH",
+      "classification": "EXPECTED",
+      "contentType": "RECIPE",
+      "estimatedDifficulty": "LOW",
+      "rationale": "3/5 competitors cover this (8k volume). Thin content (700 words, 3 headers, no FAQ) — easy to outrank with 1800 words + FAQ. Fills a gap in Moroccan staple dishes.",
+      "entityContribution": [
+        "harira",
+        "lentils",
+        "chickpeas",
+        "tomatoes",
+        "lamb",
+        "Ramadan"
+      ],
+      "internalLinkTargets": [
+        "preserved-lemons",
+        "moroccan-spice-blend-ras-el-hanout"
+      ],
+      "siteRadius": "CORE",
+      "evergreenScore": "HIGH",
+      "generationOrder": 3
+    },
+    {
+      "rank": 5,
+      "keyword": "preserved lemons",
+      "priority": "MEDIUM",
+      "classification": "EXPECTED",
+      "contentType": "ARTICLE",
+      "estimatedDifficulty": "LOW",
+      "rationale": "4/5 competitors cover this (5k volume). Thin content (600 words) — opportunity to create a comprehensive guide (1500 words) with uses, storage, and recipes. Critical ingredient for tagine and pastilla.",
+      "entityContribution": [
+        "preserved lemons",
+        "fermentation",
+        "citrus",
+        "salt",
+        "Moroccan pantry"
+      ],
+      "internalLinkTargets": [
+        "chicken-tagine-recipe",
+        "moroccan-pastilla-recipe"
+      ],
+      "siteRadius": "CORE",
+      "evergreenScore": "HIGH",
+      "generationOrder": 5
+    },
+    {
+      "rank": 6,
+      "keyword": "moroccan spice blend ras el hanout",
+      "priority": "MEDIUM",
+      "classification": "EXPECTED",
+      "contentType": "ARTICLE",
+      "estimatedDifficulty": "MEDIUM",
+      "rationale": "4/5 competitors cover this (4.5k volume). Competitor word count is low (800 words) — can dominate with a deep dive (2000 words) including history, variations, and recipe applications.",
+      "entityContribution": [
+        "ras el hanout",
+        "spice blend",
+        "cumin",
+        "coriander",
+        "cardamom",
+        "saffron"
+      ],
+      "internalLinkTargets": [
+        "chicken-tagine-recipe",
+        "moroccan-couscous-royal",
+        "harira-soup-recipe"
+      ],
+      "siteRadius": "CORE",
+      "evergreenScore": "HIGH",
+      "generationOrder": 6
+    },
+    {
+      "rank": 7,
+      "keyword": "moroccan mint tea",
+      "priority": "MEDIUM",
+      "classification": "DIFFERENTIATOR",
+      "contentType": "ARTICLE",
+      "estimatedDifficulty": "LOW",
+      "rationale": "2/5 competitors cover this (6k volume). Very thin content (500 words, 2 headers) — easy win with a cultural + practical guide (1500 words). Unique entity (mint, tea ritual).",
+      "entityContribution": [
+        "mint tea",
+        "green tea",
+        "sugar",
+        "Moroccan hospitality",
+        "tea ceremony"
+      ],
+      "internalLinkTargets": [
+        "moroccan-cooking-techniques"
+      ],
+      "siteRadius": "ADJACENT",
+      "evergreenScore": "HIGH",
+      "generationOrder": 7
+    },
+    {
+      "rank": 8,
+      "keyword": "moroccan cooking techniques",
+      "priority": "LOW",
+      "classification": "BLUE_OCEAN",
+      "contentType": "ARTICLE",
+      "estimatedDifficulty": "MEDIUM",
+      "rationale": "0/5 competitors cover this (1k volume). No existing content to compete with — first-mover advantage. Reinforces cluster authority by tying techniques to recipes (tagine, couscous, pastilla).",
+      "entityContribution": [
+        "slow cooking",
+        "steaming",
+        "spice toasting",
+        "layering flavors",
+        "clay pot cooking"
+      ],
+      "internalLinkTargets": [
+        "chicken-tagine-recipe",
+        "moroccan-couscous-royal",
+        "harira-soup-recipe"
+      ],
+      "siteRadius": "CORE",
+      "evergreenScore": "HIGH",
+      "generationOrder": 8
+    }
+  ],
+  "excludedSpokes": [
+    {
+      "keyword": "best moroccan restaurants london",
+      "reason": "INTENT_MISMATCH",
+      "suggestion": "Local SEO intent. Belongs in a 'dining out' cluster, not a recipe/cuisine cluster. Exclude."
+    }
+  ],
+  "batchCoherenceScore": 95,
+  "recommendedCuisine": "Moroccan",
+  "strategyNote": "Anchor with mandatory high-volume recipes (chicken tagine, couscous royal). Differentiate with blue ocean opportunities (pastilla, cooking techniques). Close expected gaps (harira, preserved lemons, ras el hanout) to build topical authority. Mint tea adds cultural depth with low competition."
+}

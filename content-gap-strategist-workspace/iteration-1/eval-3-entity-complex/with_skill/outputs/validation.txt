@@ -1,0 +1,8 @@
+✅ batchPlan: 8 items
+  #1: chicken tagine recipe [MANDATORY]
+  #2: moroccan couscous royal [MANDATORY]
+  #3: moroccan pastilla recipe [HIGH]
+✅ excludedSpokes: 1 items
+  ✕ best moroccan restaurants london: INTENT_MISMATCH
+✅ strategyNote: Anchor with mandatory high-volume recipes (chicken tagine, couscous royal). Differentiate with blue ocean opportunities (pastilla, cooking techniques). Close expected gaps (harira, preserved lemons, ras el hanout) to build topical authority. Mint tea adds cultural depth with low competition.
+✅ batchCoherenceScore: 95

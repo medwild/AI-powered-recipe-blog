@@ -1,0 +1,9 @@
+✅ batchPlan: 8 items
+  #1: swedish meatballs recipe [MANDATORY]
+  #2: gravlax cured salmon [MANDATORY]
+  #3: finnish salmon soup [HIGH]
+✅ excludedSpokes: 2 items
+  ✕ best kitchen knives 2026: INTENT_MISMATCH
+  ✕ lingonberry sauce: LOW_DEMAND
+✅ strategyNote: Anchor with Swedish meatballs and gravlax (mandatory, high-volume, thin competition), then differentiate with Finnish salmon soup and Icelandic lamb stew (blue ocean). Close expected gaps with Danish pastries and rye bread. Internal linking forms a tight semantic mesh around Nordic baking and seafood.
+✅ batchCoherenceScore: 95

@@ -1,0 +1,40 @@
+{
+  "eval_id": 1,
+  "eval_name": "nordic-clear-gaps",
+  "prompt": "Prioritize the content batch for this Nordic Cuisine cluster. 10 spokes, 5 competitors, clear gaps and opportunities.",
+  "input": {
+    "cluster": {
+      "name": "Nordic Cuisine",
+      "pillarKeyword": "scandinavian food",
+      "cuisine": "Nordic"
+    },
+    "spokes": [
+      { "keyword": "swedish meatballs recipe", "competitorCoverage": 5, "yourCoverage": false, "avgCompetitorWordCount": 950, "avgCompetitorHeaders": 4, "hasCompetitorFAQ": false, "searchVolume": 22000 },
+      { "keyword": "danish pastries recipe", "competitorCoverage": 4, "yourCoverage": false, "avgCompetitorWordCount": 1100, "avgCompetitorHeaders": 5, "hasCompetitorFAQ": true, "searchVolume": 15000 },
+      { "keyword": "gravlax cured salmon", "competitorCoverage": 5, "yourCoverage": false, "avgCompetitorWordCount": 800, "avgCompetitorHeaders": 3, "hasCompetitorFAQ": false, "searchVolume": 9000 },
+      { "keyword": "finnish salmon soup", "competitorCoverage": 1, "yourCoverage": false, "avgCompetitorWordCount": 600, "avgCompetitorHeaders": 3, "hasCompetitorFAQ": false, "searchVolume": 4800 },
+      { "keyword": "norwegian waffles", "competitorCoverage": 2, "yourCoverage": false, "avgCompetitorWordCount": 550, "avgCompetitorHeaders": 2, "hasCompetitorFAQ": false, "searchVolume": 3500 },
+      { "keyword": "swedish cinnamon buns", "competitorCoverage": 3, "yourCoverage": false, "avgCompetitorWordCount": 900, "avgCompetitorHeaders": 4, "hasCompetitorFAQ": false, "searchVolume": 12000 },
+      { "keyword": "danish rye bread", "competitorCoverage": 4, "yourCoverage": false, "avgCompetitorWordCount": 1300, "avgCompetitorHeaders": 6, "hasCompetitorFAQ": true, "searchVolume": 8000 },
+      { "keyword": "best kitchen knives 2026", "competitorCoverage": 0, "yourCoverage": false, "avgCompetitorWordCount": 2500, "avgCompetitorHeaders": 8, "hasCompetitorFAQ": true, "searchVolume": 15000 },
+      { "keyword": "lingonberry sauce", "competitorCoverage": 2, "yourCoverage": false, "avgCompetitorWordCount": 400, "avgCompetitorHeaders": 2, "hasCompetitorFAQ": false, "searchVolume": 6000 },
+      { "keyword": "icelandic lamb stew", "competitorCoverage": 0, "yourCoverage": false, "avgCompetitorWordCount": 0, "avgCompetitorHeaders": 0, "hasCompetitorFAQ": false, "searchVolume": 200 }
+    ],
+    "competitors": [
+      { "domain": "scandinaviancook.com", "spokesCovered": 8, "avgWordCount": 1100, "usesSchema": true },
+      { "domain": "nordicfoodguide.com", "spokesCovered": 7, "avgWordCount": 900, "usesSchema": true },
+      { "domain": "simplyscandi.com", "spokesCovered": 6, "avgWordCount": 750, "usesSchema": false },
+      { "domain": "vikingkitchen.com", "spokesCovered": 5, "avgWordCount": 1300, "usesSchema": true },
+      { "domain": "tasteofnorth.com", "spokesCovered": 4, "avgWordCount": 600, "usesSchema": false }
+    ]
+  },
+  "expected_behavior": [
+    "swedish meatballs should be rank 1 (5/5 coverage, mandatory, thin competitors)",
+    "best kitchen knives should be excluded (intent mismatch — commercial, not recipe)",
+    "icelandic lamb stew should be excluded or scored low (searchVolume=200, no demand signal)",
+    "finnish salmon soup should be HIGH priority (blue ocean, thin competitor, decent volume)",
+    "lingonberry sauce should link to swedish meatballs (internal linking pair)",
+    "Batch should have 8 items max (10 - 2 excluded)",
+    "MANDATORYs (meatballs, gravlax) must be in top 3"
+  ]
+}

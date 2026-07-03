@@ -1,0 +1,12 @@
+✅ batchPlan: 2 items
+  #1: osso buco milanese [HIGH]
+  #2: cacio e pepe [HIGH]
+✅ excludedSpokes: 6 items
+  ✕ authentic carbonara recipe: ALREADY_COVERED
+  ✕ homemade pizza dough: ALREADY_COVERED
+  ✕ classic tiramisu: ALREADY_COVERED
+  ✕ risotto alla milanese: ALREADY_COVERED
+  ✕ authentic pesto genovese: ALREADY_COVERED
+  ✕ focaccia genovese: ALREADY_COVERED
+✅ strategyNote: Batch focuses on closing high-priority gaps in Milanese and Roman classics with thin competitor content. Osso buco anchors the Milanese sub-cluster, while cacio e pepe strengthens Roman pasta authority. Both are CORE, evergreen, and have clear differentiation paths via FAQ and technique depth.
+✅ batchCoherenceScore: 95

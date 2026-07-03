@@ -1,0 +1,91 @@
+{
+  "clusterName": "Italian Classics",
+  "pillarKeyword": "italian recipes",
+  "totalSpokesAnalyzed": 8,
+  "gapsFound": 2,
+  "opportunitiesFound": 2,
+  "defersFound": 0,
+  "batchPlan": [
+    {
+      "rank": 1,
+      "keyword": "osso buco milanese",
+      "priority": "HIGH",
+      "classification": "EXPECTED",
+      "contentType": "RECIPE",
+      "estimatedDifficulty": "MEDIUM",
+      "rationale": "3/5 competitors cover this but with thin content (950 words avg, no FAQ). High differentiation potential with 2000-word guide + FAQ + wine pairing. CORE entity (Milanese cuisine).",
+      "entityContribution": [
+        "osso buco",
+        "Milanese",
+        "veal shank",
+        "gremolata",
+        "white wine"
+      ],
+      "internalLinkTargets": [
+        "risotto-alla-milanese",
+        "authentic-carbonara-recipe"
+      ],
+      "siteRadius": "CORE",
+      "evergreenScore": "HIGH",
+      "generationOrder": 1
+    },
+    {
+      "rank": 2,
+      "keyword": "cacio e pepe",
+      "priority": "HIGH",
+      "classification": "EXPECTED",
+      "contentType": "RECIPE",
+      "estimatedDifficulty": "LOW",
+      "rationale": "4/5 competitors cover this but with weak structure (750 words, 3 headers, no FAQ). Easy win with 1800-word deep dive + technique FAQ + cheese selection guide. CORE Roman pasta entity.",
+      "entityContribution": [
+        "cacio e pepe",
+        "pecorino romano",
+        "black pepper",
+        "Roman pasta",
+        "tonnarelli"
+      ],
+      "internalLinkTargets": [
+        "authentic-carbonara-recipe",
+        "homemade-pizza-dough"
+      ],
+      "siteRadius": "CORE",
+      "evergreenScore": "HIGH",
+      "generationOrder": 2
+    }
+  ],
+  "excludedSpokes": [
+    {
+      "keyword": "authentic carbonara recipe",
+      "reason": "ALREADY_COVERED",
+      "suggestion": "Refresh if avgCompetitorWordCount grows beyond 2000 or if FAQ can be expanded to 10Q."
+    },
+    {
+      "keyword": "homemade pizza dough",
+      "reason": "ALREADY_COVERED",
+      "suggestion": "Refresh if competitor FAQ depth increases or if video content is added."
+    },
+    {
+      "keyword": "classic tiramisu",
+      "reason": "ALREADY_COVERED",
+      "suggestion": "Consider adding a variation guide (alcohol-free, eggless) to outperform competitors."
+    },
+    {
+      "keyword": "risotto alla milanese",
+      "reason": "ALREADY_COVERED",
+      "suggestion": "Refresh if saffron sourcing or technique details are outdated."
+    },
+    {
+      "keyword": "authentic pesto genovese",
+      "reason": "ALREADY_COVERED",
+      "suggestion": "Add pine nut alternatives and storage FAQ to improve depth."
+    },
+    {
+      "keyword": "focaccia genovese",
+      "reason": "ALREADY_COVERED",
+      "suggestion": "Expand with regional variations (e.g., Ligurian vs. Tuscan) to differentiate."
+    }
+  ],
+  "batchCoherenceScore": 95,
+  "recommendedCuisine": "Italian",
+  "strategyNote": "Batch focuses on closing high-priority gaps in Milanese and Roman classics with thin competitor content. Osso buco anchors the Milanese sub-cluster, while cacio e pepe strengthens Roman pasta authority. Both are CORE, evergreen, and have clear differentiation paths via FAQ and technique depth."
+}

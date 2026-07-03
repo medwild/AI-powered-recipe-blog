@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "About Chef Augustin Lefèvre",
     description:
-      "French-trained chef with 20+ years experience, sharing tested, foolproof recipes for home cooks.",
+      "French-trained chef with 20+ years experience, sharing tested, foolproof sourdough recipes for home bakers.",
     type: "profile",
   },
 }
@@ -38,7 +38,7 @@ export default function AboutPage() {
               <h1 className="font-serif text-4xl">Chef Augustin Lefèvre</h1>
               <p className="mt-2 text-lg text-muted-foreground">
                 French-trained chef, cookbook author, and advocate for foolproof
-                home cooking.
+                sourdough baking at home.
               </p>
             </div>
           </header>
@@ -126,7 +126,7 @@ export default function AboutPage() {
             name: "Chef Augustin Lefèvre",
             jobTitle: "Chef & Recipe Developer",
             description:
-              "French-trained chef with 20+ years of professional kitchen experience, dedicated to creating foolproof recipes for home cooks.",
+              "French-trained chef with 20+ years of professional kitchen experience, dedicated to creating foolproof sourdough recipes for home bakers.",
             url: "https://chefaugustin.com/about",
             knowsAbout: [
               "Sourdough Baking",

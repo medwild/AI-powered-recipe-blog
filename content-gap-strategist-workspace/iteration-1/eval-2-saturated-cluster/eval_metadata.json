@@ -1,0 +1,37 @@
+{
+  "eval_id": 2,
+  "eval_name": "saturated-cluster",
+  "prompt": "Prioritize this Italian cluster where 6/8 spokes are already covered. Find what remains to generate.",
+  "input": {
+    "cluster": {
+      "name": "Italian Classics",
+      "pillarKeyword": "italian recipes",
+      "cuisine": "Italian"
+    },
+    "spokes": [
+      { "keyword": "authentic carbonara recipe", "competitorCoverage": 5, "yourCoverage": true, "avgCompetitorWordCount": 1500, "avgCompetitorHeaders": 7, "hasCompetitorFAQ": true, "searchVolume": 30000 },
+      { "keyword": "homemade pizza dough", "competitorCoverage": 5, "yourCoverage": true, "avgCompetitorWordCount": 1800, "avgCompetitorHeaders": 8, "hasCompetitorFAQ": true, "searchVolume": 25000 },
+      { "keyword": "classic tiramisu", "competitorCoverage": 5, "yourCoverage": true, "avgCompetitorWordCount": 1200, "avgCompetitorHeaders": 6, "hasCompetitorFAQ": true, "searchVolume": 18000 },
+      { "keyword": "risotto alla milanese", "competitorCoverage": 4, "yourCoverage": true, "avgCompetitorWordCount": 1100, "avgCompetitorHeaders": 5, "hasCompetitorFAQ": true, "searchVolume": 14000 },
+      { "keyword": "authentic pesto genovese", "competitorCoverage": 4, "yourCoverage": true, "avgCompetitorWordCount": 900, "avgCompetitorHeaders": 4, "hasCompetitorFAQ": false, "searchVolume": 11000 },
+      { "keyword": "osso buco milanese", "competitorCoverage": 3, "yourCoverage": false, "avgCompetitorWordCount": 950, "avgCompetitorHeaders": 4, "hasCompetitorFAQ": false, "searchVolume": 6000 },
+      { "keyword": "cacio e pepe", "competitorCoverage": 4, "yourCoverage": false, "avgCompetitorWordCount": 750, "avgCompetitorHeaders": 3, "hasCompetitorFAQ": false, "searchVolume": 9000 },
+      { "keyword": "focaccia genovese", "competitorCoverage": 3, "yourCoverage": true, "avgCompetitorWordCount": 1000, "avgCompetitorHeaders": 4, "hasCompetitorFAQ": false, "searchVolume": 7000 }
+    ],
+    "competitors": [
+      { "domain": "italianfoodforever.com", "spokesCovered": 8, "avgWordCount": 1400, "usesSchema": true },
+      { "domain": "greatitalianchefs.com", "spokesCovered": 7, "avgWordCount": 1600, "usesSchema": true },
+      { "domain": "insidetherustickitchen.com", "spokesCovered": 6, "avgWordCount": 1100, "usesSchema": true },
+      { "domain": "themediterraneandish.com", "spokesCovered": 5, "avgWordCount": 1300, "usesSchema": true },
+      { "domain": "recipesfromitaly.com", "spokesCovered": 8, "avgWordCount": 900, "usesSchema": false }
+    ]
+  },
+  "expected_behavior": [
+    "6 spokes marked yourCoverage=true should be EXCLUDED from batch, not just deprioritized",
+    "Only osso buco milanese and cacio e pepe should be in the batch (yourCoverage=false)",
+    "Carbonara may get a REFRESH suggestion (competitors at 1500 words, if own content is shorter)",
+    "Batch should have at most 2 items + any refresh suggestions",
+    "cacio e pepe should rank above osso buco (4/5 coverage = EXPECTED vs 3/5 = EXPECTED, plus lower difficulty)",
+    "Strategy note should acknowledge the cluster is well-covered and focus on gap closing"
+  ]
+}

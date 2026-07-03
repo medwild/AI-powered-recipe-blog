@@ -1,0 +1,39 @@
+{
+  "eval_id": 3,
+  "eval_name": "entity-complex-moroccan",
+  "prompt": "Prioritize this Moroccan cluster with complex entity trade-offs. Some spokes share entities, others are peripheral.",
+  "input": {
+    "cluster": {
+      "name": "Moroccan Cuisine",
+      "pillarKeyword": "moroccan food",
+      "cuisine": "Moroccan"
+    },
+    "spokes": [
+      { "keyword": "chicken tagine recipe", "competitorCoverage": 5, "yourCoverage": false, "avgCompetitorWordCount": 1000, "avgCompetitorHeaders": 5, "hasCompetitorFAQ": false, "searchVolume": 18000 },
+      { "keyword": "moroccan couscous royal", "competitorCoverage": 5, "yourCoverage": false, "avgCompetitorWordCount": 1100, "avgCompetitorHeaders": 5, "hasCompetitorFAQ": true, "searchVolume": 14000 },
+      { "keyword": "harira soup recipe", "competitorCoverage": 3, "yourCoverage": false, "avgCompetitorWordCount": 700, "avgCompetitorHeaders": 3, "hasCompetitorFAQ": false, "searchVolume": 8000 },
+      { "keyword": "moroccan mint tea", "competitorCoverage": 2, "yourCoverage": false, "avgCompetitorWordCount": 500, "avgCompetitorHeaders": 2, "hasCompetitorFAQ": false, "searchVolume": 6000 },
+      { "keyword": "preserved lemons", "competitorCoverage": 4, "yourCoverage": false, "avgCompetitorWordCount": 600, "avgCompetitorHeaders": 3, "hasCompetitorFAQ": false, "searchVolume": 5000 },
+      { "keyword": "moroccan spice blend ras el hanout", "competitorCoverage": 4, "yourCoverage": false, "avgCompetitorWordCount": 800, "avgCompetitorHeaders": 4, "hasCompetitorFAQ": false, "searchVolume": 4500 },
+      { "keyword": "moroccan pastilla recipe", "competitorCoverage": 1, "yourCoverage": false, "avgCompetitorWordCount": 1200, "avgCompetitorHeaders": 6, "hasCompetitorFAQ": true, "searchVolume": 3000 },
+      { "keyword": "best moroccan restaurants london", "competitorCoverage": 0, "yourCoverage": false, "avgCompetitorWordCount": 0, "avgCompetitorHeaders": 0, "hasCompetitorFAQ": false, "searchVolume": 2500 },
+      { "keyword": "moroccan cooking techniques", "competitorCoverage": 0, "yourCoverage": false, "avgCompetitorWordCount": 0, "avgCompetitorHeaders": 0, "hasCompetitorFAQ": false, "searchVolume": 1000 }
+    ],
+    "competitors": [
+      { "domain": "moroccankitchen.com", "spokesCovered": 7, "avgWordCount": 1000, "usesSchema": true },
+      { "domain": "tasteofmorocco.com", "spokesCovered": 6, "avgWordCount": 900, "usesSchema": false },
+      { "domain": "thespruceeats.com", "spokesCovered": 5, "avgWordCount": 1300, "usesSchema": true },
+      { "domain": "marocmama.com", "spokesCovered": 5, "avgWordCount": 800, "usesSchema": false },
+      { "domain": "chefmorocco.com", "spokesCovered": 4, "avgWordCount": 700, "usesSchema": false }
+    ]
+  },
+  "expected_behavior": [
+    "chicken tagine should be rank 1 (5/5, mandatory, highest volume, core entity)",
+    "best moroccan restaurants london should be EXCLUDED (intent mismatch — local SEO, not recipe)",
+    "moroccan cooking techniques should be classified as ARTICLE, not RECIPE (informational intent)",
+    "preserved lemons and ras el hanout should link to chicken tagine or couscous (ingredient→recipe pairs)",
+    "moroccan pastilla should be HIGH priority despite low volume (1/5 = BLUE_OCEAN with real demand)",
+    "Batch should have 7 items (9 - 2 excluded/non-recipe)",
+    "Entity overlap between tagine, couscous, harira (all are main dishes) should be reflected in internalLinkTargets"
+  ]
+}
