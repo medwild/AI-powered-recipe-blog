@@ -124,14 +124,18 @@ export const generateRecipeWorkflow = inngest.createFunction(
       }
 
       // ── Phase 11: Pin Designer ────────────────────────────────────────────
-      await generatePins(
-        step,
-        recipeId,
-        editResult.finalRecipe,
-        agentResult.seoPlan,
-        imageResult.heroImageUrl,
-        imageResult.imageVariants as ImageVariant[],
-      )
+      try {
+        await generatePins(
+          step,
+          recipeId,
+          editResult.finalRecipe,
+          agentResult.seoPlan,
+          imageResult.heroImageUrl,
+          imageResult.imageVariants as ImageVariant[],
+        )
+      } catch (err) {
+        await logPipelineError({ recipeId, stepName: "agent-7-pin-designer", errorType: "unknown", message: (err as Error).message, severity: "warning" })
+      }
 
       // ── Phase 13: AOR article ─────────────────────────────────────────────
       if (aorCategory) {
