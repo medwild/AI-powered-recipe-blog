@@ -264,16 +264,17 @@ export function extractJson<T>(raw: string): T {
   const fenced = raw.match(/```(?:json)?\s*([\s\S]*?)```/)
   const candidate = fenced ? fenced[1] : raw
 
-  // 2. Locate the JSON object delimiters
-  const start = candidate.indexOf("{")
-  const end = candidate.lastIndexOf("}")
+  // 2. Detect JSON type: array [...] or object {...}
+  const isArray = candidate.trimStart().startsWith("[")
+  const start = isArray ? candidate.indexOf("[") : candidate.indexOf("{")
+  const end = isArray ? candidate.lastIndexOf("]") : candidate.lastIndexOf("}")
   if (start === -1 || end === -1) {
     if (process.env.DEBUG === "true") {
       console.error(
-        `[DEBUG extractJson] No JSON object found. Raw output (first 2000 chars):\n${raw.substring(0, 2000)}`,
+        `[DEBUG extractJson] No JSON found. Raw output (first 2000 chars):\n${raw.substring(0, 2000)}`,
       )
     }
-    throw new Error("No JSON object found in model output.")
+    throw new Error("No JSON found in model output.")
   }
 
   const jsonStr = candidate.slice(start, end + 1)
