@@ -98,6 +98,38 @@ export type NewPipelineError = typeof pipelineErrors.$inferInsert
 export type ImageVariantStat = typeof imageVariantStats.$inferSelect
 export type NewImageVariantStat = typeof imageVariantStats.$inferInsert
 
+export const pinDrafts = pgTable(
+  "pin_drafts",
+  {
+    id: serial("id").primaryKey(),
+    recipeId: integer("recipe_id").notNull(),
+    pinTitle: text("pin_title").notNull(),
+    overlayText: text("overlay_text").notNull(),
+    description: text("description").notNull(),
+    imagePrompt: text("image_prompt").notNull(),
+    board: text("board").notNull(),
+    intent: text("intent").notNull(),
+    ptraScore: integer("ptra_score").notNull(),
+    hashtags: jsonb("hashtags").$type<string[]>().default([]),
+    variantIndex: integer("variant_index").default(0),
+    status: text("status").notNull().default("draft"),
+    pinUrl: text("pin_url"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => ({
+    recipeIdx: index("idx_pin_drafts_recipe").on(table.recipeId),
+    statusIdx: index("idx_pin_drafts_status").on(table.status),
+  }),
+)
+
+export type PinDraft = typeof pinDrafts.$inferSelect
+export type NewPinDraft = typeof pinDrafts.$inferInsert
+
 export const recipes = pgTable(
   "recipes",
   {
