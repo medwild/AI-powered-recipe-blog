@@ -83,11 +83,11 @@ export const generateRecipeWorkflow = inngest.createFunction(
       if (editResult.needsRewrite) {
         await step.run("agent-2-writer-retry", async () => {
           await appendLog(recipeId, logEntry("Writer", "running", "Retry — QA rejected content, regenerating from scratch"))
-          const retryDraft = await agentWriter(keyword, agentResult.seoPlan, cuisineReplacements)
+          const retryDraft = await agentWriter(keyword, agentResult.seoPlan, cuisineReplacements, format)
           await appendLog(recipeId, logEntry("Writer", "done", `Retry draft: "${retryDraft.title}"`))
 
           await appendLog(recipeId, logEntry("Auditor", "running", "Re-evaluating retry draft"))
-          const retryAudit = await agentAuditor(keyword, retryDraft, agentResult.seoPlan.semanticEntities)
+          const retryAudit = await agentAuditor(keyword, retryDraft, agentResult.seoPlan.semanticEntities, format)
           await appendLog(recipeId, logEntry("Auditor", "done", `Retry score: ${retryAudit.overallScore}/100 | AI: ${retryAudit.score_ia_estimation}/100`))
 
           const retryEditResult = await runEditorQaLoop(step, recipeId, keyword, retryDraft, retryAudit, agentResult.seoPlan)
