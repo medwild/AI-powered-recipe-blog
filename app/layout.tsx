@@ -14,26 +14,26 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Chef Augustin — The Sourdough Kitchen',
+    default: 'Chef Augustin — Easy Weeknight Dinners for Two',
     template: '%s | Chef Augustin',
   },
   description:
-    'Chef Augustin Lefevre brings French sourdough techniques to your kitchen. Tested artisan bread recipes for home bakers — from starter to discard, from crust to crumb.',
+    'Simple small-batch dinner recipes for two people. Chef Augustin Lefevre shares practical weeknight meals with clear serving sizes and Pinterest-friendly inspiration.',
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || 'https://chefaugustin.com',
   ),
   openGraph: {
     type: 'website',
     siteName: 'Chef Augustin',
-    title: 'Chef Augustin — The Sourdough Kitchen',
+    title: 'Chef Augustin — Easy Weeknight Dinners for Two',
     description:
-      'Chef Augustin Lefevre brings French sourdough techniques to your kitchen. Tested artisan bread recipes for home bakers.',
+      'Simple small-batch dinner recipes for two people. Practical weeknight meals from a French-trained chef.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Chef Augustin — The Sourdough Kitchen',
+    title: 'Chef Augustin — Easy Weeknight Dinners for Two',
     description:
-      'Chef Augustin Lefevre brings French sourdough techniques to your kitchen.',
+      'Simple small-batch dinner recipes for two people.',
   },
 }
 
