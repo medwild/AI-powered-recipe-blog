@@ -317,11 +317,11 @@ ALL content in English only. This includes: pin_title, overlay_text, description
 ```json
 [
   {
-    "pin_title": "5-Minute Sourdough Discard Flatbread | No Yeast, No Rise",
-    "overlay_text": "5-Min Discard Flatbread",
-    "description": "Make soft, chewy sourdough discard flatbread in 5 minutes with this no-yeast recipe. Perfect for busy weeknights — save this Pin for your next discard day.",
-    "image_prompt": "Vertical Pinterest food photography (2:3, 1000x1500px, safe zone 8%), stack of golden-brown sourdough flatbreads on rustic ceramic plate, visible blisters and olive oil sheen, natural window light, warm kitchen atmosphere, space for text overlay top third, realistic homemade style, no misleading garnishes.",
-    "board": "Sourdough Discard Flatbread",
+    "pin_title": "15-Minute Lemon Chicken Dinner for Two | One Pan, Zero Leftovers",
+    "overlay_text": "15-Min Chicken for Two",
+    "description": "Make this bright, garlicky lemon chicken dinner for two in just 15 minutes with one pan. Perfect for busy weeknights — save this Pin for your next date night in.",
+    "image_prompt": "Vertical Pinterest food photography (2:3, 1000x1500px, safe zone 8%), golden pan-seared chicken breast with lemon slices on rustic ceramic plate for two, visible herbs and olive oil sheen, natural window light, warm kitchen atmosphere, space for text overlay top third, realistic homemade style, no misleading garnishes.",
+    "board": "Chicken Dinners for Two",
     "intent": "quick_solution",
     "ptra_score": 88
   }

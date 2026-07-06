@@ -72,8 +72,8 @@ IMPORTANT — MOT-CLÉ DISTINCT POUR L'ARTICLE :
 L'article NE doit PAS cibler le même mot-clé que la recette ("${input.keyword}").
 Déduis un mot-clé INFORMATIONNEL distinct pour l'article, basé sur l'angle et la catégorie.
 Exemples :
-- Recette "sourdough discard flatbread" → Article "why bench rest matters for flatbread"
-- Recette "sourdough starter troubleshooting" → Article "sourdough starter fermentation science"
+- Recette "one-pan lemon chicken for two" → Article "why searing locks in moisture for weeknight chicken"
+- Recette "slow cooker beef stew for two" → Article "how low-and-slow transforms tough cuts"
 - Recette "chocolate chip cookies" → Article "how brown sugar affects cookie texture"
 Le mot-clé de l'article doit refléter une intention de RECHERCHE ÉDUCATIVE, pas transactionnelle.
 Utilise ce mot-clé distinct dans le title, metaTitle, H1, et slug de l'article.

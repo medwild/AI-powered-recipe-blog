@@ -111,7 +111,7 @@ export async function POST(req: Request) {
   }
 
   // Cuisine focus — makes the pipeline cuisine-agnostic
-  // If not provided, defaults to "sourdough" (backward compatible)
+  // If not provided, defaults to "dinners-for-two" (backward compatible)
   const cuisine = body?.cuisine?.toString().trim() || "dinners-for-two"
   const cuisineIngredients = body?.cuisineIngredients?.toString().trim() ||
     getDefaultIngredients(cuisine)

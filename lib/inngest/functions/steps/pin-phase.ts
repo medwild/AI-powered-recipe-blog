@@ -34,7 +34,7 @@ export async function generatePins(
       ingredients: (finalRecipe.ingredients ?? []) as { name: string; quantity?: string }[],
       tags: finalRecipe.tags ?? [],
       seoPlan,
-      microNiche: "Sourdough Discard Recipes",
+      microNiche: "Easy Weeknight Dinners for Two",
       targetCountry: process.env.SERP_GL || "us",
     })
 
