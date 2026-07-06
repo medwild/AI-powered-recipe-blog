@@ -10,6 +10,7 @@
 
 import { loadSkillContent } from "@/lib/skills"
 import { runTextAndParseJson } from "@/lib/agents/nararouter"
+import { validateContract, AGENT_CONTRACTS } from "@/lib/agents/contract-validator"
 import type { RecipeDraft } from "./writer"
 
 // ---------------------------------------------------------------------------
@@ -78,9 +79,11 @@ export async function agentAuditor(
   keyword: string,
   draft: RecipeDraft,
   semanticEntities: string[],
+  format: "google" | "pin-first" = "google",
 ): Promise<AuditReport> {
   try {
-    const systemPrompt = await loadSkillContent("agent-auditor")
+    const mergedReplacements = { format } as Record<string, string>
+    const systemPrompt = await loadSkillContent("agent-auditor", mergedReplacements)
     const userPrompt = buildUserPrompt(keyword, draft, semanticEntities)
 
     // Temperature 0.1 for deterministic, reproducible scoring.
@@ -92,12 +95,25 @@ export async function agentAuditor(
       maxTokens: 6144,
     })
 
+    // Contract validation — catches skill/code field name mismatches at runtime.
+    // Maps aliases (aiScore → score_ia_estimation, factualCorrections → factual_corrections)
+    // and throws if critical fields are missing.
+    const validation = validateContract(report as Record<string, unknown>, AGENT_CONTRACTS.Auditor)
+    if (validation.warnings.length > 0) {
+      console.warn("[Auditor] Contract warnings:", validation.warnings.join("; "))
+    }
+    if (validation.aliased.length > 0) {
+      console.log("[Auditor] Aliased fields:", validation.aliased.join(", "))
+    }
+
     // Normalize: LLM may return null/undefined for empty arrays
     report.criteria = report.criteria ?? []
     report.factual_corrections = report.factual_corrections ?? []
 
     // Clamp scores to valid ranges (LLM sometimes returns > max)
-    report.overallScore = Math.max(0, Math.min(100, report.overallScore))
+    report.overallScore = typeof report.overallScore === "number" && !isNaN(report.overallScore)
+      ? Math.max(0, Math.min(100, report.overallScore))
+      : 0
     report.score_ia_estimation =
       typeof report.score_ia_estimation === "number" && !isNaN(report.score_ia_estimation)
         ? Math.max(0, Math.min(100, report.score_ia_estimation))

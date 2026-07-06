@@ -118,7 +118,7 @@ export async function runAgentPhase(
   try {
     audit = (await step.run("agent-3-auditor", async () => {
       await appendLog(recipeId, logEntry("Auditor", "running", "7-criteria evaluation + anti-AI score"))
-      const report = await agentAuditor(keyword, draft, seoPlan.semanticEntities)
+      const report = await agentAuditor(keyword, draft, seoPlan.semanticEntities, format)
       await appendLog(recipeId, logEntry("Auditor", "done",
         `Score: ${report.overallScore}/100 | AI: ${report.score_ia_estimation}/100 | Verdict: ${report.verdict}`))
       return report
