@@ -186,7 +186,7 @@ function buildSummaryPrompt(
     h2Structure: h2Sections.map((s) => s.heading),
     semanticEntities: strategistPlan.semanticEntities ?? [],
     paaQuestions: h2Sections.flatMap((s) => s.coverPaa).filter(Boolean),
-    targetWordCount: strategistPlan.targetWordCount ?? "1800-2200",
+    targetWordCount: strategistPlan.targetWordCount ?? (format === "pin-first" ? "1200-1500" : "1800-2200"),
     difficulty: strategistPlan.difficulty ?? "Medium",
   }
 

@@ -296,7 +296,7 @@ Respond ONLY with a valid JSON object. No markdown code blocks.
     "primaryExploit": "Specific angle/technique NONE of the top 3 cover — for 'What Most Recipes Get Wrong' section",
     "secondaryExploit": "Format/structure differentiator — e.g., 'FAQ schema with 5 Q&A', 'nutrition table'"
   },
-  "targetWordCount": "1800-2200",
+  "targetWordCount": "FORMAT-DEPENDENT — set to \"1200-1500\" for pin-first, \"1800-2200\" for google. See Step 7.",
   "faqItems": [
     { "question": "Can I substitute...?", "answer": "Yes, use... (2-3 sentences)" },
     { "question": "Why does my bread...?", "answer": "The most common reason is... (2-3 sentences)" }
