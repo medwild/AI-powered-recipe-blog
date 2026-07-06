@@ -37,15 +37,16 @@ export default async function HomePage() {
             <div className="flex flex-col gap-6">
               <span className="inline-flex w-fit items-center gap-2 rounded-full bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground">
                 <Sparkles className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
-                AI-written and optimized recipes
+                Small-batch dinner recipes for two
               </span>
               <h1 className="font-serif text-4xl leading-tight text-balance md:text-5xl">
-                French sourdough, made simple for your home kitchen.
+                Easy Weeknight Dinners for Two
               </h1>
               <p className="text-lg leading-relaxed text-muted-foreground text-pretty">
-                Artisan bread recipes from a French-trained chef. Each recipe is
-                tested, explained step by step, and designed to help you master
-                sourdough — from your first starter to your best loaf.
+                Simple small-batch dinner recipes made for real weeknights. Find
+                practical meals for two people, from one-pan dinners to mini slow
+                cooker recipes — without wasting ingredients or cooking oversized
+                family portions.
               </p>
               <div className="flex flex-wrap gap-3">
                 <Button
@@ -107,8 +108,8 @@ export default async function HomePage() {
                 <Clock className="h-5 w-5 text-primary" aria-hidden="true" />
               </div>
               <div>
-                <div className="text-2xl font-bold">72h</div>
-                <div className="text-xs text-muted-foreground">Cold ferment</div>
+                <div className="text-2xl font-bold">30min</div>
+                <div className="text-xs text-muted-foreground">Start to table</div>
               </div>
             </div>
           </div>
@@ -189,9 +190,9 @@ export default async function HomePage() {
             <div className="mx-auto max-w-5xl px-4 py-14">
               <div className="mb-8 flex items-end justify-between">
                 <div>
-                  <h2 className="font-serif text-3xl">Techniques &amp; Guides</h2>
+                  <h2 className="font-serif text-3xl">Quick &amp; Practical</h2>
                   <p className="mt-2 text-sm text-muted-foreground">
-                    Deep dives into the science and craft of sourdough baking.
+                    Tips for smarter weeknight cooking — not culinary school lectures.
                   </p>
                 </div>
                 <Link
@@ -215,10 +216,10 @@ export default async function HomePage() {
         <section className="border-t border-border bg-secondary/30">
           <div className="mx-auto max-w-5xl px-4 py-16 text-center">
             <h2 className="font-serif text-3xl text-balance">
-              Ready to bake?
+              Ready to cook?
             </h2>
             <p className="mx-auto mt-3 max-w-lg text-muted-foreground">
-              Browse our sourdough collection and start your next loaf.
+              Browse our dinner-for-two collection and start your weeknight revolution.
             </p>
             <div className="mt-6 flex justify-center gap-3">
               <Button
@@ -248,7 +249,7 @@ export default async function HomePage() {
               url: process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com",
               logo: `${process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com"}/hero-kitchen.png`,
               description:
-                "Chef Augustin Lefevre teaches French sourdough — artisan bread recipes for home bakers.",
+                "Chef Augustin Lefevre shares practical small-batch dinner recipes for two.",
               sameAs: [
                 "https://www.instagram.com/chefaugustin",
                 "https://www.pinterest.com/chefaugustin",

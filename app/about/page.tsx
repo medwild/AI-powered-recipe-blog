@@ -9,12 +9,12 @@ import { ArrowRight } from "lucide-react"
 export const metadata: Metadata = {
   title: "About Chef Augustin Lefèvre — Chef Augustin",
   description:
-    "Meet Chef Augustin Lefèvre, the culinary voice behind Chef Augustin. French-trained baker dedicated to bringing artisan sourdough techniques to home bakers everywhere.",
+    "Meet Chef Augustin Lefèvre, the culinary voice behind Chef Augustin. French-trained chef dedicated to bringing practical small-batch dinner recipes to couples and small households everywhere.",
   alternates: { canonical: "/about" },
   openGraph: {
     title: "About Chef Augustin Lefèvre",
     description:
-      "French-trained baker sharing tested sourdough recipes and techniques for home bakers.",
+      "French-trained chef sharing practical small-batch dinner recipes for two.",
     type: "profile",
   },
 }
@@ -37,15 +37,15 @@ export default function AboutPage() {
             <div>
               <h1 className="font-serif text-4xl">Chef Augustin Lefèvre</h1>
               <p className="mt-2 text-lg text-muted-foreground">
-                French-trained chef, cookbook author, and advocate for foolproof
-                sourdough baking at home.
+                French-trained chef, cookbook author, and advocate for practical
+                weeknight cooking for two.
               </p>
             </div>
           </header>
 
           <section className="mt-12 space-y-6 text-base leading-relaxed text-muted-foreground">
             <p>
-              I spent years learning the craft of artisan bread — from the
+              I spent years learning the craft of practical home cooking — from the
               precise techniques of French boulangeries to the rhythms of home
               baking. I learned that the best bread isn&apos;t always the most
               complicated. It&apos;s the loaf you make with care, baked in your
@@ -53,8 +53,8 @@ export default function AboutPage() {
             </p>
 
             <p>
-              My focus is simple: teaching home bakers how to make sourdough
-              recipes that work. Not recipes that look impressive on Instagram
+              My focus is simple: teaching home cooks how to make practical
+              dinners for two that work. Not recipes that look impressive on Instagram
               but fail on your plate. Recipes that hold up. Recipes you can nail
               the first time and perfect the fifth.
             </p>
@@ -62,10 +62,10 @@ export default function AboutPage() {
             <p>
               Every recipe on Chef Augustin is developed with professional
               technique and tested against the common mistakes that trip up home
-              bakers. I study what goes wrong — over-proofed dough, under-seasoned
+              cooks. I study what goes wrong — over-proofed dough, under-seasoned
               loaves, starters that won&apos;t rise — so my recipes catch you
               before you fall. The techniques are grounded in the science of
-              fermentation and the craft of artisan baking.
+              fermentation and the craft of classic French cooking.
             </p>
 
             <p>
@@ -80,7 +80,7 @@ export default function AboutPage() {
             <h2 className="font-serif text-2xl">Why Trust These Recipes?</h2>
             <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
               <li>
-                ✅ <strong>French-trained</strong> in classic artisan baking
+                ✅ <strong>French-trained</strong> in classic French cooking
                 technique
               </li>
               <li>
@@ -93,7 +93,7 @@ export default function AboutPage() {
               </li>
               <li>
                 ✅ <strong>Science-backed</strong> — techniques grounded in
-                fermentation science, not kitchen myths
+                practical kitchen science, not food fads
               </li>
               <li>
                 ✅ <strong>No fake reviews, no bought ratings</strong> — just
@@ -125,7 +125,7 @@ export default function AboutPage() {
             name: "Chef Augustin",
             url: "https://chefaugustin.com",
             description:
-              "Artisan sourdough recipes and techniques for home bakers, grounded in fermentation science and professional baking craft.",
+              "Practical small-batch dinner recipes for two, grounded in French cooking technique and real-world kitchen experience.",
             founder: {
               "@type": "Person",
               name: "Chef Augustin Lefèvre",
