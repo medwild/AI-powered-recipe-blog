@@ -77,6 +77,7 @@ export interface ValidatableDraft {
   ingredients?: unknown[] | null
   instructions?: unknown[] | null
   contentType?: string | null  // "recipe" | "article" — articles skip ingredient/instruction checks
+  format?: "google" | "pin-first"  // optional — pin-first adds structural rules
 }
 
 // ---------------------------------------------------------------------------
@@ -201,6 +202,24 @@ export function validateContent(draft: ValidatableDraft): ValidationResult {
         severity: "error",
         message: "No instructions — recipe schema requires at least one step",
       })
+    }
+  }
+
+  // 7. Pin-First structural rules (only when format is specified)
+  if (draft.format === "pin-first") {
+    const prohibitedSections = [
+      "## Nutrition Highlights",
+      "## What Most Recipes Get Wrong",
+      "**Why This Works**",
+    ]
+    for (const section of prohibitedSections) {
+      if (md.includes(section)) {
+        errors.push({
+          field: "contentMarkdown",
+          severity: "error",
+          message: `Pin-First format prohibits section: "${section}". Remove it.`,
+        })
+      }
     }
   }
 
