@@ -17,6 +17,7 @@
 
 import { loadSkillContent } from "@/lib/skills"
 import { runTextAndParseJson } from "@/lib/agents/nararouter"
+import { validateContract, AGENT_CONTRACTS } from "@/lib/agents/contract-validator"
 import type { SeoPlan } from "./strategist"
 import type { RecipeDraft } from "./writer"
 import type { AuditReport } from "./auditor"
@@ -65,6 +66,9 @@ function extractAnecdotes(
   const markers = [
     /(?:I remember|I once|I tried|I failed|I burned|I ruined|I lost|my first|when I was|I learned|I discovered)/gi,
     /(?:one afternoon|one evening|one morning|the first time|it took me)/gi,
+    /(?:last week|just last month|in all my years|the first time I|back when I was)/gi,
+    /(?:after \d+ years of|I will never forget|let me tell you about)/gi,
+    /(?:I made this \d+ times|I've tested this \d+|batch #\d+|I've made this)/gi,
   ]
   const lines = md.split("\n")
   for (const line of lines) {
@@ -78,7 +82,7 @@ function extractAnecdotes(
         break
       }
     }
-    if (anecdotes.length >= 5) break // max 5 anecdotes
+    if (anecdotes.length >= 8) break // max 8 anecdotes (was 5 — expanded per Karpathy review)
   }
   return anecdotes
 }
@@ -93,6 +97,11 @@ function extractSensoryDetails(
     /(?:velvety|silky|creamy|fluffy|crisp|tender|juicy|moist)/gi,
     /(?:aroma|fragrance|scent|smell|perfume)/gi,
     /(?:golden|bronze|russet|amber|crimson|emerald)/gi,
+    /(?:shatter|honeycomb|shaggy|supple|elastic|tacky)/gi,
+    /(?:glossy|mahogany|tawny|blonde|caramel)/gi,
+    /(?:puff|inflate|billow|dome|bloom)/gi,
+    /(?:steam|vapor|wisp)/gi,
+    /(?:weight|heft|dense|airy|light as)/gi,
   ]
   const lines = md.split("\n")
   for (const line of lines) {
@@ -105,7 +114,7 @@ function extractSensoryDetails(
         break
       }
     }
-    if (details.length >= 5) break
+    if (details.length >= 10) break // max 10 sensory details (was 5)
   }
   return details
 }
@@ -128,19 +137,20 @@ function detectVoiceTokens(md: string): string[] {
 
 /** Extrait les phrases courtes (≤5 mots) du markdown. */
 function extractShortSentences(md: string): string[] {
-  const sentences = md.match(/[A-Z][^.!?]+[.!?]/g) ?? []
+  // Matches sentences starting with uppercase OR lowercase (fragments like "y'know.")
+  const sentences = md.match(/(?:^|[.!?]\s+)[A-Za-z][^.!?]*[.!?]/g) ?? []
   return sentences
-    .filter((s) => s.split(/\s+/).length <= 5)
-    .slice(0, 3)
+    .filter((s) => s.trim().split(/\s+/).length <= 5)
+    .slice(0, 5)
     .map((s) => s.trim())
 }
 
 /** Extrait les phrases longues (≥25 mots) du markdown. */
 function extractLongSentences(md: string): string[] {
-  const sentences = md.match(/[A-Z][^.!?]+[.!?]/g) ?? []
+  const sentences = md.match(/(?:^|[.!?]\s+)[A-Za-z][^.!?]*[.!?]/g) ?? []
   return sentences
-    .filter((s) => s.split(/\s+/).length >= 25)
-    .slice(0, 3)
+    .filter((s) => s.trim().split(/\s+/).length >= 25)
+    .slice(0, 5)
     .map((s) => s.trim())
 }
 
@@ -175,7 +185,7 @@ function buildSummaryPrompt(
     h2Structure: h2Sections.map((s) => s.heading),
     semanticEntities: strategistPlan.semanticEntities ?? [],
     paaQuestions: h2Sections.flatMap((s) => s.coverPaa).filter(Boolean),
-    targetWordCount: "1800-2200",
+    targetWordCount: strategistPlan.targetWordCount ?? "1800-2200",
     difficulty: strategistPlan.difficulty ?? "Medium",
   }
 
@@ -278,6 +288,12 @@ export async function agentQA(
       temperature: 0.1,
       maxTokens: 2048,
     })
+
+    // Contract validation
+    const validation = validateContract(report as Record<string, unknown>, AGENT_CONTRACTS.QA)
+    if (validation.warnings.length > 0) {
+      console.warn("[QA] Contract warnings:", validation.warnings.join("; "))
+    }
 
     // Clamp score to valid range
     report.qaScore = Math.max(0, Math.min(100, report.qaScore))
