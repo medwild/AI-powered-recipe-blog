@@ -109,16 +109,18 @@ function tokenOverlap(a: string[], b: string[]): number {
 
 function inferIntent(keyword: string): string {
   const kw = keyword.toLowerCase()
-  if (kw.includes("easy") || kw.includes("quick")) return "quick solution"
-  if (kw.includes("beginner") || kw.includes("guide")) return "beginner guide"
-  if (kw.includes("diet") || kw.includes("fast")) return "beginner guide"
+  const words = kw.split(/\s+/)
+  if (words.includes("easy") || words.includes("quick")) return "quick solution"
+  if (words.includes("beginner") || words.includes("guide")) return "beginner guide"
+  if (words.includes("diet") || words.includes("fast")) return "beginner guide"
   return "step-by-step" // default for recipes
 }
 
 function inferBoard(keyword: string): string {
   const kw = keyword.toLowerCase()
+  const words = kw.split(/\s+/)
   for (const [token, category] of Object.entries(SEMANTIC_CATEGORIES)) {
-    if (kw.includes(token)) return category.board
+    if (words.includes(token)) return category.board
   }
   // Default: capitalize significant words
   const tokens = extractTokens(keyword)
