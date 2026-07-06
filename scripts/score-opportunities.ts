@@ -187,7 +187,14 @@ function main() {
     console.warn("⚠️  No --niche provided. PTRA Micro-Niche Lock not enforced.")
   }
 
-  const raw = JSON.parse(fs.readFileSync(inputPath, "utf-8")) as RawKeyword[]
+  let raw: RawKeyword[]
+  try {
+    raw = JSON.parse(fs.readFileSync(inputPath, "utf-8")) as RawKeyword[]
+  } catch (err) {
+    console.error(`Error: Could not parse ${inputPath} — invalid JSON.`)
+    console.error((err as Error).message)
+    process.exit(1)
+  }
   const scored = raw.map(calculateOpportunity)
 
   // Niche validation (PTRA: reject keywords outside micro-niche)

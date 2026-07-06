@@ -211,7 +211,14 @@ function main() {
     process.exit(1)
   }
 
-  const scored = JSON.parse(fs.readFileSync(inputPath, "utf-8")) as ScoredKeyword[]
+  let scored: ScoredKeyword[]
+  try {
+    scored = JSON.parse(fs.readFileSync(inputPath, "utf-8")) as ScoredKeyword[]
+  } catch (err) {
+    console.error(`Error: Could not parse ${inputPath} — invalid JSON.`)
+    console.error((err as Error).message)
+    process.exit(1)
+  }
   const microNiche = process.argv[3] ?? ""
 
   const { clusters, orphans } = buildClusters(scored)
