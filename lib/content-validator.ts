@@ -236,10 +236,10 @@ export function scrubBannedWords(markdown: string): { scrubbed: string; replacem
         log.push(`"${banned}" → "${replacement}" (${count}x)`)
       }
     } else {
-      // Single word — case-insensitive with word boundaries + suffix variants
-      // Matches word stem + common suffixes (e.g. "transform" catches "transforms", "transforming")
+      // Single word — case-insensitive with word boundaries, exact match only
+      // Suffix variants (e.g. "transforms", "transforming") are the Editor's job to handle
       const escaped = banned.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
-      const regex = new RegExp(`\\b${escaped}\\w*\\b`, "gi")
+      const regex = new RegExp(`\\b${escaped}\\b`, "gi")
       const newRegex = new RegExp(regex.source, "gi") // fresh for .test()
       if (newRegex.test(result)) {
         const count = (result.match(regex) || []).length
