@@ -25,10 +25,10 @@ interface ClustersOutput {
   clusters: Cluster[]
 }
 
-async function generateOne(keyword: string, clusterName: string, index: number, total: number) {
+async function generateOne(keyword: string, clusterName: string, index: number, total: number, cuisine: string) {
   const body = {
     keyword,
-    cuisine: "sourdough",
+    cuisine,
     mode: "pin-first",
   }
 
@@ -69,6 +69,9 @@ async function main() {
     process.exit(1)
   }
 
+  const cuisineIdx = process.argv.indexOf("--cuisine")
+  const cuisine = cuisineIdx >= 0 ? process.argv[cuisineIdx + 1] : "sourdough"
+
   const data = JSON.parse(await import("node:fs").then((fs) => fs.readFileSync(inputPath, "utf-8"))) as ClustersOutput
 
   const allKeywords: { keyword: string; cluster: string }[] = []
@@ -82,7 +85,7 @@ async function main() {
 
   const ids: number[] = []
   for (let i = 0; i < allKeywords.length; i++) {
-    const id = await generateOne(allKeywords[i].keyword, allKeywords[i].cluster, i, allKeywords.length)
+    const id = await generateOne(allKeywords[i].keyword, allKeywords[i].cluster, i, allKeywords.length, cuisine)
     if (id) ids.push(id)
 
     if (i < allKeywords.length - 1) {
