@@ -66,11 +66,15 @@ const KNOWN_BRANDS = [
 // Scoring functions (pure, deterministic)
 // ---------------------------------------------------------------------------
 
+function matches(domain: string, target: string): boolean {
+  return domain === target || domain.endsWith("." + target)
+}
+
 function scoreDomainBeatability(domain: string | null): { score: number; level: string } {
   if (!domain) return { score: 100, level: "Unknown" }
   const d = domain.toLowerCase()
-  if (UNBEATABLE_DOMAINS.some((u) => d.includes(u))) return { score: 0, level: "Unbeatable" }
-  if (VERY_HARD_DOMAINS.some((v) => d.includes(v))) return { score: 20, level: "Very Hard" }
+  if (UNBEATABLE_DOMAINS.some((u) => matches(d, u))) return { score: 0, level: "Unbeatable" }
+  if (VERY_HARD_DOMAINS.some((v) => matches(d, v))) return { score: 20, level: "Very Hard" }
   // Heuristic: known TLD but not in lists = medium; no TLD = weak
   if (d.includes(".")) return { score: 60, level: "Medium" }
   return { score: 90, level: "Weak" }
@@ -79,7 +83,7 @@ function scoreDomainBeatability(domain: string | null): { score: number; level: 
 function isKnownBrand(domain: string | null): boolean {
   if (!domain) return false
   const d = domain.toLowerCase()
-  return KNOWN_BRANDS.some((b) => d.includes(b))
+  return KNOWN_BRANDS.some((b) => matches(d, b))
 }
 
 function scoreEngagementGap(followers: number, isBrand: boolean): number {
