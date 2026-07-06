@@ -89,9 +89,9 @@ ${plan.semanticEntities.join(", ")}
 
 ## Important
 - Target ${plan.targetWordCount ?? "1800-2200"} words total (competitors average 1500-2400).
+- Follow the section structure and mandatory sections defined in your system prompt for the current format.
 - Use the editorial plan's metadata values (title, metaTitle, metaDescription, tags, times, servings, difficulty) exactly as provided — do not regenerate them.
 - Answer the PAA questions naturally within their corresponding H2 section prose. Save Q&A format for the FAQ section only.
-- Include ALL mandatory sections: Why This Works (bold summary box), What Most Recipes Get Wrong, Body H2s, Chef's Tips, Variations, Storage & Reheating, FAQ (5 Q&A), Nutrition Highlights.
 - Weave the semantic entities into headings and the first paragraph organically.
 
 Follow the rules, persona, section structure, and output format defined in your system prompt.`
