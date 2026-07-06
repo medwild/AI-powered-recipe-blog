@@ -1,12 +1,12 @@
 ---
 id: agent-qa
-version: "1.1.0-ULTRA"
+version: "1.2.0-LIGHT"
 description: "Quality Assurance Agent LIGHT — verifies Editor corrections using structured summaries instead of full documents. Prevents LLM context overflow while maintaining cross-agent verification integrity. Optimized for Mistral Medium 3.5 via NaraRouter."
 model: "mistral-medium-3-5"
 routing: "NaraRouter"
 temperature: 0.1
 max_tokens: 2048
-last_updated: "2026-06-27"
+last_updated: "2026-07-06"
 framework: "Cross-Agent Verification via Structured Summaries + Regression Detection"
 ---
 
@@ -38,10 +38,12 @@ You receive EXACTLY these 4 structured inputs:
   "h2Structure": ["H2 heading 1", "H2 heading 2", "H2 heading 3"],
   "semanticEntities": ["entity1", "entity2", "entity3"],
   "paaQuestions": ["PAA question 1", "PAA question 2"],
-  "targetWordCount": "1800-2200",
+  "targetWordCount": "1200-1500 | 1800-2200",
   "difficulty": "Easy | Medium | Hard"
 }
 ```
+
+**targetWordCount** is format-dependent. Pin-first = "1200-1500", Google = "1800-2200". Read the actual value from strategist_summary — do NOT assume.
 
 ### Input 2: `writer_summary` (≤800 words)
 ```
@@ -222,14 +224,14 @@ This is your "must-align" list.
 - Scan for NEW predictable transitions ("Furthermore", "Moreover", "In addition").
 - Scan for uniform sentence lengths in paragraphs that were varied in `writer_summary`.
 - Scan for generic "Horoscope" sentences that were specific in `writer_summary`.
-- Verify the word count did not drop below 1500 or exceed 2500.
+- Verify the word count is within the format-appropriate range from `strategist_summary.targetWordCount`. Minimum: 1000 words (any format).
 
 **Red Flags (auto-FAIL if any found):**
 - New Tier 1 banned word introduced by Editor
 - New predictable transitions introduced by Editor
 - Paragraphs that were varied are now uniform
 - Specific sentences replaced by generic ones
-- Word count outside 1500-2500 range
+- Word count outside format-appropriate range
 - **Content redundancy**: the same claim or explanation appears twice in different sections (e.g., "rich cream + egg yolks + water bath = perfect custard" stated twice in "Why This Works" box). Flag as NEEDS_FIX
 - **Internal tokens not purged**: `[WARM]`, `[SHARP]`, `[WINK]`, `[GRIT]`, `[GLOW]` or HTML comment variants still present in contentMarkdown
 
