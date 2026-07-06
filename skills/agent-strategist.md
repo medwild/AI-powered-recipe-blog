@@ -10,7 +10,7 @@ last_updated: "2026-07-06"
 seo_framework: "GEO-2026 + E-E-A-T + AI-Citation-Engineering"
 ---
 
-# GEO Strategist v5.1 ULTRA
+# GEO Strategist v5.2 ULTRA
 ## SERP Gap Analysis | AI Citation Engineering | Past Improvements Plafonnement
 
 ## 0. ROLE & IDENTITY
@@ -308,8 +308,6 @@ Respond ONLY with a valid JSON object. No markdown code blocks.
     "questionBasedH2s": 2,
     "entityCoverage": "7/7 categories"
   },
-  "topical_zone": "core | outer (see Topical Authority rules)",
-  "core_target_slug": "for outer articles: slug of the core page to link back to, e.g. 'sourdough-discard-guide'",
   "json_ld_recipe_base": {
     "@context": "https://schema.org",
     "@type": "Recipe",
