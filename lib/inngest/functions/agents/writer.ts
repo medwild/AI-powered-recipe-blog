@@ -110,7 +110,14 @@ ${formatRules}
 - Answer the PAA questions naturally within their corresponding H2 section prose. Save Q&A format for the FAQ section only.
 - Weave the semantic entities into headings and the first paragraph organically.
 
-Follow the rules, persona, section structure, and output format defined in your system prompt.`
+Follow the rules, persona, section structure, and output format defined in your system prompt.
+
+## HARD GATE — Auto-Rejection Triggers
+The ContentValidator will REJECT your article if ANY of these appear:
+- Banned AI-slop words: "game-changer", "delve", "unlock", "elevate", "transform", "embark", "robust", "holistic", "leverage", "utilize", "nestled", "bursting with flavor", "melts in your mouth"
+- Unsourced health claims: "probiotics", "gut health", "boosts immune", "detox", "anti-inflammatory", "fat-burning", "lowers cholesterol", "prevents cancer"
+- Vibe tokens: [WARM], [SHARP], [WINK], [GRIT], [GLOW] or HTML comments <!--...-->
+SCAN your final output for these BEFORE returning JSON. Remove every single one.`
 }
 
 // ---------------------------------------------------------------------------
