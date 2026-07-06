@@ -82,25 +82,33 @@ const SYNTHETIC_CRITERION_NAMES = [
 
 export function buildSyntheticAuditReport(): AuditReport {
   return {
-    overallScore: 60,
+    overallScore: 0,
     verdict: "NEEDS REVISION",
-    score_ia_estimation: 50,
+    score_ia_estimation: 80,
     factual_corrections: [],
-    summary: "Auditor unavailable — auto-pass with default scores.",
-    criteria: SYNTHETIC_CRITERION_NAMES.map((name) => ({
-      name,
-      score: 12,
-      issues: [],
-      recommendation: "Auditor unavailable — auto-pass",
-    })),
+    summary: "CRITICAL: Auditor agent unavailable — content was NOT quality-checked. Manual review required before publication.",
+    criteria: [
+      ...SYNTHETIC_CRITERION_NAMES.map((name) => ({
+        name,
+        score: 0,
+        issues: ["Auditor unavailable — no automated quality check was performed"],
+        recommendation: "Manual review required — all criteria bypassed due to agent failure",
+      })),
+      {
+        name: "CRITICAL: Auditor Unavailable",
+        score: 0,
+        issues: ["The Auditor agent failed to execute. This recipe has NOT been checked for food safety, factual accuracy, banned vocabulary, or E-E-A-T signals."],
+        recommendation: "Do NOT publish without manual human review of all content, especially temperatures, ingredient ratios, and food safety claims.",
+      },
+    ],
   }
 }
 
 export function buildSyntheticQAReport(): QAReport {
   return {
-    qaScore: 70,
-    verdict: "PASS",
-    summary: "QA skipped — Editor output accepted without cross-agent verification.",
+    qaScore: 0,
+    verdict: "CRITICAL",
+    summary: "CRITICAL: QA agent unavailable — cross-agent verification was NOT performed. Recipe requires manual verification before publication.",
     checks: [],
   }
 }
@@ -115,6 +123,20 @@ export function buildFallbackImagePrompt(title: string, tags: string[]): string 
     "styled with fresh herbs and ingredients.",
     "4K, shallow depth of field, warm color grading.",
   ].join(" ")
+}
+
+// ── HTML Comment Sanitization ──────────────────────────────────────────────────
+
+/**
+ * Strips ALL HTML comments from contentMarkdown.
+ * Fix: Writer v6.x occasionally leaks internal "vibe coding tokens"
+ * (<!--WARM-->, <!--SHARP-->, <!--WINK-->, <!--GRIT-->, <!--GLOW-->) despite
+ * skill instructions to purge them. This deterministic filter guarantees they
+ * never reach the final article.
+ */
+export function stripHtmlComments(text: string): string {
+  // Strip both multi-line (<!-- ... -->) and single-line variants
+  return text.replace(/<!--[\s\S]*?-->/g, "")
 }
 
 // ── Constants ────────────────────────────────────────────────────────────────

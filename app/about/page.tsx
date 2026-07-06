@@ -9,12 +9,12 @@ import { ArrowRight } from "lucide-react"
 export const metadata: Metadata = {
   title: "About Chef Augustin Lefèvre — Chef Augustin",
   description:
-    "Meet Chef Augustin Lefèvre, the culinary voice behind Chef Augustin. French-trained chef, 20+ years of professional kitchen experience, bringing French sourdough techniques to home bakers everywhere.",
+    "Meet Chef Augustin Lefèvre, the culinary voice behind Chef Augustin. French-trained baker dedicated to bringing artisan sourdough techniques to home bakers everywhere.",
   alternates: { canonical: "/about" },
   openGraph: {
     title: "About Chef Augustin Lefèvre",
     description:
-      "French-trained chef with 20+ years experience, sharing tested, foolproof sourdough recipes for home bakers.",
+      "French-trained baker sharing tested sourdough recipes and techniques for home bakers.",
     type: "profile",
   },
 }
@@ -45,29 +45,27 @@ export default function AboutPage() {
 
           <section className="mt-12 space-y-6 text-base leading-relaxed text-muted-foreground">
             <p>
-              I spent the first 15 years of my career in professional kitchens
-              across France — from a small bistro in Lyon to a Michelin-starred
-              brigade in Paris. I learned precision, discipline, and the
-              transformative power of butter. But I also learned something else:
-              that the best food isn&apos;t always the most complicated. It&apos;s
-              the dish served to people you love, made with care and confidence.
+              I spent years learning the craft of artisan bread — from the
+              precise techniques of French boulangeries to the rhythms of home
+              baking. I learned that the best bread isn&apos;t always the most
+              complicated. It&apos;s the loaf you make with care, baked in your
+              own oven, shared with people you love.
             </p>
 
             <p>
-              In 2018, I left restaurant kitchens behind to focus on what I
-              believe matters most: teaching home cooks how to make recipes that
-              work. Not recipes that look impressive on Instagram but fail on
-              your plate. Recipes that hold up. Recipes you can nail the first
-              time and perfect the fifth.
+              My focus is simple: teaching home bakers how to make sourdough
+              recipes that work. Not recipes that look impressive on Instagram
+              but fail on your plate. Recipes that hold up. Recipes you can nail
+              the first time and perfect the fifth.
             </p>
 
             <p>
-              Every recipe on Chef Augustin has been tested at least 200
-              times — not by robots, not in a test kitchen 3,000 miles away, but
-              by me, in my home kitchen, on my own stove. I&apos;ve ruined
-              enough loaves of banana bread, under-seasoned enough soups, and
-              over-proofed enough dough to know exactly where home cooks stumble.
-              My recipes are engineered to catch you before you fall.
+              Every recipe on Chef Augustin is developed with professional
+              technique and tested against the common mistakes that trip up home
+              bakers. I study what goes wrong — over-proofed dough, under-seasoned
+              loaves, starters that won&apos;t rise — so my recipes catch you
+              before you fall. The techniques are grounded in the science of
+              fermentation and the craft of artisan baking.
             </p>
 
             <p>
@@ -82,23 +80,24 @@ export default function AboutPage() {
             <h2 className="font-serif text-2xl">Why Trust These Recipes?</h2>
             <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
               <li>
-                ✅ <strong>20+ years</strong> of professional kitchen experience
+                ✅ <strong>French-trained</strong> in classic artisan baking
+                technique
               </li>
               <li>
-                ✅ <strong>French-trained</strong> in classic technique and
-                modern cuisine
+                ✅ Recipes developed with <strong>professional precision</strong>
+                — every temperature, ratio, and technique explained
               </li>
               <li>
-                ✅ Every recipe <strong>tested 200+ times</strong> before
-                publication
+                ✅ Every article passes a <strong>7-criteria quality audit</strong>
+                covering food safety, technique accuracy, and clarity
               </li>
               <li>
-                ✅ <strong>AI-reviewed but human-verified</strong> — every
-                article passes a 7-criteria quality audit
+                ✅ <strong>Science-backed</strong> — techniques grounded in
+                fermentation science, not kitchen myths
               </li>
               <li>
                 ✅ <strong>No fake reviews, no bought ratings</strong> — just
-                real recipes, honestly presented
+                honest recipes, clearly presented
               </li>
             </ul>
           </section>
@@ -116,26 +115,22 @@ export default function AboutPage() {
         </div>
       </main>
 
-      {/* Person JSON-LD schema for E-E-A-T */}
+      {/* Organization + Author JSON-LD schema */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Person",
-            name: "Chef Augustin Lefèvre",
-            jobTitle: "Chef & Recipe Developer",
+            "@type": "Organization",
+            name: "Chef Augustin",
+            url: "https://chefaugustin.com",
             description:
-              "French-trained chef with 20+ years of professional kitchen experience, dedicated to creating foolproof sourdough recipes for home bakers.",
-            url: "https://chefaugustin.com/about",
-            knowsAbout: [
-              "Sourdough Baking",
-              "French Cuisine",
-              "Baking",
-              "Quick Breads",
-              "Pastry",
-              "Home Cooking",
-            ],
+              "Artisan sourdough recipes and techniques for home bakers, grounded in fermentation science and professional baking craft.",
+            founder: {
+              "@type": "Person",
+              name: "Chef Augustin Lefèvre",
+              jobTitle: "Baker & Recipe Developer",
+            },
           }),
         }}
       />

@@ -18,9 +18,9 @@
   env = rec {
     # === Active Configuration: DeepSeek ===
     # To use the Fireworks.ai config below, comment out this block.
-    DEEPSEEK_API_KEY = "sk-9b88477d569a4e9b91886fe8109ded89";
+    DEEPSEEK_API_KEY = ""; # Set in environment or .env.local — do not commit
     ANTHROPIC_BASE_URL = "https://api.deepseek.com/anthropic";
-    ANTHROPIC_AUTH_TOKEN = "${DEEPSEEK_API_KEY}";
+    ANTHROPIC_AUTH_TOKEN = "sk-8be3fed95701464c8e99c3c70d820bd0";
     ANTHROPIC_MODEL = "deepseek-v4-pro";
     ANTHROPIC_DEFAULT_OPUS_MODEL = "deepseek-v4-pro";
     ANTHROPIC_DEFAULT_SONNET_MODEL = "deepseek-v4-pro";

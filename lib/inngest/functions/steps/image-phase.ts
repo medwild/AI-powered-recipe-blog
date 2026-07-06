@@ -67,8 +67,8 @@ export async function runImagePhase(
       const result = (await step.run(`generate-variant-${vi}`, async () => {
         await appendLog(recipeId, logEntry("Image Gen", "running", `Variant ${vi + 1}/${IMAGE_VARIANT_COUNT}`))
         let variantPrompt = imagePrompt
-        if (vi === 1) variantPrompt = imagePrompt.replace(/overhead/i, "45-degree angle")
-        if (vi === 2) variantPrompt = imagePrompt.replace(/overhead/i, "eye-level close-up")
+        if (vi === 1) variantPrompt = imagePrompt.replace(/overhead|top.down|bird.?s.?eye|flat.?lay/gi, "45-degree angle")
+        if (vi === 2) variantPrompt = imagePrompt.replace(/overhead|top.down|bird.?s.?eye|flat.?lay/gi, "eye-level close-up")
 
         const buffer = await runImage(variantPrompt)
         const url = await uploadImage(buffer, `recipe-${recipeId}-v${vi}`)

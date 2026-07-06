@@ -133,6 +133,7 @@ export async function persistFinalDraft(
   recipeId: number, finalRecipe: RecipeDraft, seoPlan: SeoPlan,
   heroImageUrl: string | null, imageVariants: ImageVariant[],
   keyword: string,
+  format: "google" | "pin-first" = "google",
 ) {
   await step.run("persist-draft-final", async () => {
     // SEO guards — flag oversize metadata for rewrite (do NOT mechanically truncate)
@@ -160,7 +161,7 @@ export async function persistFinalDraft(
 
     // Deterministic content validation — catches banned words, token leaks,
     // missing fields BEFORE publication. Runs regardless of LLM availability.
-    const validation = validateContent({ ...finalRecipe, contentType: "recipe" })
+    const validation = validateContent({ ...finalRecipe, contentType: "recipe", format })
     if (!validation.passed) {
       const errorList = validation.errors
         .filter((e) => e.severity === "error")

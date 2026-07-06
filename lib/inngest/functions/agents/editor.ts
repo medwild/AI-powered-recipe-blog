@@ -9,6 +9,7 @@
 
 import { loadSkillContent } from "@/lib/skills"
 import { runTextAndParseJson } from "@/lib/agents/nararouter"
+import { stripHtmlComments } from "../helpers"
 import type { RecipeDraft } from "./writer"
 import type { AuditReport } from "./auditor"
 
@@ -16,7 +17,8 @@ import type { AuditReport } from "./auditor"
 // Constants
 // ---------------------------------------------------------------------------
 
-export const MAX_HUMANIZATION_PASSES = 3
+/** Mirrors helpers.ts:MAX_EDITOR_PASSES — used only in the user prompt builder. */
+const MAX_HUMANIZATION_PASSES = 3
 
 // ---------------------------------------------------------------------------
 // User prompt builder
@@ -98,9 +100,11 @@ export async function agentEditor(
   draft: RecipeDraft,
   audit: AuditReport,
   humanizationPass: number,
+  format: "google" | "pin-first" = "google",
 ): Promise<RecipeDraft> {
   try {
-    const systemPrompt = await loadSkillContent("agent-editor")
+    const mergedReplacements = { format } as Record<string, string>
+    const systemPrompt = await loadSkillContent("agent-editor", mergedReplacements)
     const userPrompt = buildUserPrompt(keyword, draft, audit, humanizationPass)
 
     // maxTokens 6144: must regenerate the FULL article (1800-2200 words) + all metadata
@@ -109,6 +113,12 @@ export async function agentEditor(
       temperature: 0.8,
       maxTokens: 6144,
     })
+
+    // Safety net: strip any HTML comments that survived the Writer's sanitization
+    // (or were re-introduced during editing). Guarantees clean output.
+    if (result.contentMarkdown) {
+      result.contentMarkdown = stripHtmlComments(result.contentMarkdown)
+    }
 
     result.humanization_pass = humanizationPass
     result.changes_summary = `Pass ${humanizationPass}: ${audit.criteria.reduce((s, c) => s + c.issues.length, 0)} defects corrected${

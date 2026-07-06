@@ -22,6 +22,18 @@ export function SiteHeader() {
             Recipes
           </Link>
           <Link
+            href="/techniques"
+            className="rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+          >
+            Techniques
+          </Link>
+          <Link
+            href="/guides"
+            className="rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+          >
+            Guides
+          </Link>
+          <Link
             href="/dashboard"
             className="rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
           >

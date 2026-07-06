@@ -1,0 +1,11 @@
+{
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "framework": "nextjs",
+  "installCommand": "npm install",
+  "regions": ["cdg1"],
+  "env": {
+    "AUTO_APPROVE": "false",
+    "NEXT_PUBLIC_SITE_URL": "https://chefaugustin.com"
+  }
+}

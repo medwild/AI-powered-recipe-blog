@@ -2,38 +2,20 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, ArrowRight } from "lucide-react"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { RecipeCard } from "@/components/recipe-card"
 import { getArticleBySlug, getRelatedForArticle } from "@/lib/queries"
 import { FOOD_BLUR_PLACEHOLDER } from "@/lib/utils"
 import { MarkdownRenderer } from "@/components/markdown-renderer"
+import { CATEGORY_LABELS } from "@/components/category-listing"
 
-export const revalidate = 300
-export const dynamicParams = true
-
-const CATEGORY_LABELS: Record<string, string> = {
-  techniques: "Techniques",
-  guides: "Guides",
-  histoire: "Histoire",
-  equipement: "Équipement",
-}
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ category: string; slug: string }>
-}): Promise<Metadata> {
-  const { slug } = await params
-  const article = await getArticleBySlug(slug)
-  if (!article || article.status !== "published") {
-    return { title: "Article not found" }
-  }
+export function articleMetadata(article: NonNullable<Awaited<ReturnType<typeof getArticleBySlug>>>, category: string): Metadata {
   return {
     title: article.metaTitle || article.title,
     description: article.metaDescription || article.excerpt || undefined,
-    alternates: { canonical: `/${article.category}/${article.slug}` },
+    alternates: { canonical: `/${article.category ?? category}/${article.slug}` },
     openGraph: {
       title: article.metaTitle || article.title,
       description: article.metaDescription || article.excerpt || undefined,
@@ -60,7 +42,6 @@ function ArticleJsonLd({
 
   if (base["@graph"] && Array.isArray(base["@graph"])) {
     const graph = base["@graph"] as Record<string, unknown>[]
-    // Ensure BreadcrumbList is present
     const hasBreadcrumb = graph.some((n) => n["@type"] === "BreadcrumbList")
     const enrichedGraph = hasBreadcrumb
       ? graph
@@ -84,7 +65,6 @@ function ArticleJsonLd({
       />
     )
   }
-  // Fallback with BreadcrumbList
   return (
     <script
       type="application/ld+json"
@@ -115,12 +95,7 @@ function ArticleJsonLd({
   )
 }
 
-export default async function ArticlePage({
-  params,
-}: {
-  params: Promise<{ category: string; slug: string }>
-}) {
-  const { slug } = await params
+export async function ArticleDetail({ slug }: { slug: string }) {
   const article = await getArticleBySlug(slug)
 
   if (!article || article.status !== "published") {
@@ -145,7 +120,6 @@ export default async function ArticlePage({
         </div>
 
         <article className="mx-auto max-w-3xl px-4 py-8">
-          {/* Hero Image */}
           {article.heroImageUrl ? (
             <div className="relative mb-8 aspect-[16/9] overflow-hidden rounded-2xl">
               <Image
@@ -161,7 +135,6 @@ export default async function ArticlePage({
             </div>
           ) : null}
 
-          {/* Header */}
           <header className="mb-8">
             <div className="mb-2 flex items-center gap-2 text-sm text-muted-foreground">
               <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium">
@@ -182,7 +155,6 @@ export default async function ArticlePage({
             </h1>
           </header>
 
-          {/* Content */}
           <div className="prose prose-lg max-w-none">
             <MarkdownRenderer content={article.contentMarkdown ?? ""} />
           </div>
@@ -190,7 +162,6 @@ export default async function ArticlePage({
 
         <ArticleJsonLd article={article} />
 
-        {/* Related Recipes */}
         {relatedRecipes.length > 0 ? (
           <section className="mx-auto max-w-5xl px-4 py-14">
             <h2 className="mb-8 font-serif text-2xl text-balance">

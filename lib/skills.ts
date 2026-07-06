@@ -264,6 +264,3 @@ export function optimizeImagePrompt(source: PromptSource): string {
   // Sinon, construire un prompt à partir des données disponibles
   return buildDefaultPrompt(source)
 }
-
-/** Alias plus explicite */
-export { optimizeImagePrompt as ensureImagePrompt }

@@ -95,7 +95,8 @@
       "WebFetch(domain:nclpub.wipo.int)",
       "WebFetch(domain:chefaugustin.com)",
       "WebFetch(domain:rdap.verisign.com)",
-      "Bash(dig +short chefaugustin.com)"
+      "Bash(dig +short chefaugustin.com)",
+      "Bash(git *)"
     ]
   }
 }

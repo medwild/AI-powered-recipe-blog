@@ -75,7 +75,7 @@ export const generateRecipeWorkflow = inngest.createFunction(
       await step.sleep("sleep-after-approval", "30s")
 
       // ── Phase 5: Editor + QA loop ─────────────────────────────────────
-      let editResult = await runEditorQaLoop(step, recipeId, keyword, agentResult.draft, agentResult.audit, agentResult.seoPlan)
+      let editResult = await runEditorQaLoop(step, recipeId, keyword, agentResult.draft, agentResult.audit, agentResult.seoPlan, format)
       degraded = degraded || editResult.degraded
 
       // Writer retry: QA REJECT/CRITICAL means structural issues the Editor
@@ -90,7 +90,7 @@ export const generateRecipeWorkflow = inngest.createFunction(
           const retryAudit = await agentAuditor(keyword, retryDraft, agentResult.seoPlan.semanticEntities, format)
           await appendLog(recipeId, logEntry("Auditor", "done", `Retry score: ${retryAudit.overallScore}/100 | AI: ${retryAudit.score_ia_estimation}/100`))
 
-          const retryEditResult = await runEditorQaLoop(step, recipeId, keyword, retryDraft, retryAudit, agentResult.seoPlan)
+          const retryEditResult = await runEditorQaLoop(step, recipeId, keyword, retryDraft, retryAudit, agentResult.seoPlan, format)
           degraded = degraded || retryEditResult.degraded
 
           if (retryEditResult.needsRewrite) {
@@ -117,7 +117,7 @@ export const generateRecipeWorkflow = inngest.createFunction(
       await step.sleep("sleep-after-self-improvement", "2s")
 
       // ── Phase 8: Final persist ────────────────────────────────────────
-      await persistFinalDraft(step, recipeId, editResult.finalRecipe, agentResult.seoPlan, imageResult.heroImageUrl, imageResult.imageVariants as ImageVariant[], keyword)
+      await persistFinalDraft(step, recipeId, editResult.finalRecipe, agentResult.seoPlan, imageResult.heroImageUrl, imageResult.imageVariants as ImageVariant[], keyword, format)
 
       // ── Phase 9: A/B stats ────────────────────────────────────────────
       try {

@@ -67,12 +67,19 @@ export async function publishRecipe(id: number): Promise<{ ok: boolean; gate?: G
     .update(recipes)
     .set({ status: "published", publishedAt: new Date(), updatedAt: new Date() })
     .where(eq(recipes.id, id))
-    .returning({ slug: recipes.slug })
+    .returning({ slug: recipes.slug, content_type: recipes.content_type, category: recipes.category })
 
   revalidatePath("/")
   revalidatePath("/dashboard")
-  revalidatePath("/recettes")
-  if (row) revalidatePath(`/recettes/${row.slug}`)
+  if (row) {
+    if (row.content_type === "article") {
+      revalidatePath(`/${row.category}`)
+      revalidatePath(`/${row.category}/${row.slug}`)
+    } else {
+      revalidatePath("/recettes")
+      revalidatePath(`/recettes/${row.slug}`)
+    }
+  }
 
   return { ok: true, gate: gateResult }
 }
@@ -83,12 +90,19 @@ export async function unpublishRecipe(id: number) {
     .update(recipes)
     .set({ status: "draft", updatedAt: new Date() })
     .where(eq(recipes.id, id))
-    .returning({ slug: recipes.slug })
+    .returning({ slug: recipes.slug, content_type: recipes.content_type, category: recipes.category })
 
   revalidatePath("/")
   revalidatePath("/dashboard")
-  revalidatePath("/recettes")
-  if (row) revalidatePath(`/recettes/${row.slug}`)
+  if (row) {
+    if (row.content_type === "article") {
+      revalidatePath(`/${row.category}`)
+      revalidatePath(`/${row.category}/${row.slug}`)
+    } else {
+      revalidatePath("/recettes")
+      revalidatePath(`/recettes/${row.slug}`)
+    }
+  }
 }
 
 export async function deleteRecipe(id: number) {
@@ -96,11 +110,18 @@ export async function deleteRecipe(id: number) {
   const [row] = await db
     .delete(recipes)
     .where(eq(recipes.id, id))
-    .returning({ slug: recipes.slug })
+    .returning({ slug: recipes.slug, content_type: recipes.content_type, category: recipes.category })
 
   revalidatePath("/dashboard")
-  revalidatePath("/recettes")
-  if (row) revalidatePath(`/recettes/${row.slug}`)
+  if (row) {
+    if (row.content_type === "article") {
+      revalidatePath(`/${row.category}`)
+      revalidatePath(`/${row.category}/${row.slug}`)
+    } else {
+      revalidatePath("/recettes")
+      revalidatePath(`/recettes/${row.slug}`)
+    }
+  }
 }
 
 export async function approveRecipe(id: number) {
@@ -121,10 +142,16 @@ export async function approveRecipe(id: number) {
     .where(eq(recipes.id, id))
 
   // Envoi de l'événement à Inngest pour réveiller le workflow
-  await inngest.send({
-    name: "recipe/approved",
-    data: { recipeId: id },
-  })
+  try {
+    await inngest.send({
+      name: "recipe/approved",
+      data: { recipeId: id },
+    })
+  } catch (err) {
+    // Inngest may be temporarily unavailable — the recipe stays "approved"
+    // and the workflow will pick it up when Inngest recovers (event replay).
+    console.error(`[approveRecipe] Inngest send failed for recipe #${id}: ${(err as Error).message}`)
+  }
 
   revalidatePath("/dashboard")
 }

@@ -127,6 +127,8 @@ AUTO_APPROVE=false
 
 ## Règles globales
 
+- **Avant toute modification** : lire `.claude/rules/global.md` — 15 règles absolues NEVER + checklist
+- **Avant toute modification du routing** : lire `.claude/rules/routing-seo.md` — architecture, SEO, content_type, patterns intouchables
 - **Après toute modification du pipeline** : `npx tsc --noEmit` obligatoire
 - **Ne jamais renommer un step Inngest** existant (casse le versioning des workflows)
 - **Ne jamais modifier un skill Markdown** sans vérifier l'agent runtime correspondant

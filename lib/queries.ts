@@ -21,7 +21,10 @@ export async function getPublishedRecipes() {
 }
 
 export async function searchPublishedRecipes(query?: string, category?: string) {
-  const conditions = [eq(recipes.status, "published")]
+  const conditions = [
+    eq(recipes.status, "published"),
+    eq(recipes.content_type, "recipe"),
+  ]
 
   if (query) {
     const pattern = `%${query}%`
@@ -94,13 +97,29 @@ export async function getRelatedRecipes(currentId: number, tags: string[]): Prom
 }
 
 export async function getRecipeBySlug(slug: string) {
-  const [row] = await db.select().from(recipes).where(eq(recipes.slug, slug))
+  const [row] = await db
+    .select()
+    .from(recipes)
+    .where(and(eq(recipes.slug, slug), eq(recipes.content_type, "recipe")))
   return row ?? null
 }
 
 export async function getRecipeById(id: number) {
   const [row] = await db.select().from(recipes).where(eq(recipes.id, id))
   return row ?? null
+}
+
+export async function getPublishedArticles() {
+  return db
+    .select()
+    .from(recipes)
+    .where(
+      and(
+        eq(recipes.status, "published"),
+        eq(recipes.content_type, "article"),
+      ),
+    )
+    .orderBy(desc(recipes.publishedAt))
 }
 
 export async function getArticleBySlug(slug: string) {
@@ -110,6 +129,27 @@ export async function getArticleBySlug(slug: string) {
     .where(and(eq(recipes.slug, slug), eq(recipes.content_type, "article")))
     .limit(1)
   return rows[0] ?? null
+}
+
+/** Find the AOR article that links back to this recipe via linked_content_id. */
+export async function getLinkedArticle(recipeId: number) {
+  const [row] = await db
+    .select({
+      slug: recipes.slug,
+      title: recipes.title,
+      category: recipes.category,
+      excerpt: recipes.excerpt,
+    })
+    .from(recipes)
+    .where(
+      and(
+        eq(recipes.content_type, "article"),
+        eq(recipes.linked_content_id, recipeId),
+        eq(recipes.status, "published"),
+      ),
+    )
+    .limit(1)
+  return row ?? null
 }
 
 export async function getRelatedForArticle(linkedRecipeId: number | null) {

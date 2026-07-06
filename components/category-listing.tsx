@@ -1,30 +1,21 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import Image from "next/image"
-import { notFound } from "next/navigation"
 import { ArrowLeft } from "lucide-react"
 import { db } from "@/lib/db"
 import { recipes } from "@/lib/db/schema"
-import { and, eq } from "drizzle-orm"
+import { and, eq, desc } from "drizzle-orm"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 
-export const revalidate = 300
-
-const VALID_CATEGORIES = ["techniques", "guides", "histoire", "equipement"]
-const CATEGORY_LABELS: Record<string, string> = {
+export const CATEGORY_LABELS: Record<string, string> = {
   techniques: "Techniques",
   guides: "Guides",
   histoire: "Histoire",
   equipement: "Équipement",
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ category: string }>
-}): Promise<Metadata> {
-  const { category } = await params
+export function categoryMetadata(category: string): Metadata {
   const label = CATEGORY_LABELS[category] ?? category
   return {
     title: label,
@@ -38,17 +29,7 @@ export async function generateMetadata({
   }
 }
 
-export default async function CategoryPage({
-  params,
-}: {
-  params: Promise<{ category: string }>
-}) {
-  const { category } = await params
-
-  if (!VALID_CATEGORIES.includes(category)) {
-    notFound()
-  }
-
+export async function CategoryListing({ category }: { category: string }) {
   const articles = await db
     .select({
       slug: recipes.slug,
@@ -66,7 +47,7 @@ export default async function CategoryPage({
         eq(recipes.status, "published"),
       ),
     )
-    .orderBy(recipes.publishedAt)
+    .orderBy(desc(recipes.publishedAt))
 
   const label = CATEGORY_LABELS[category] ?? category
 

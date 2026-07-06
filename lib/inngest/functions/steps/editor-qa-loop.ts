@@ -22,6 +22,8 @@ export interface EditorQaLoopResult {
   qaReport: QAReport
   humanizationPass: number
   degraded: boolean
+  /** Signal to the orchestrator that the Writer should retry from scratch. */
+  needsRewrite?: boolean
 }
 
 export async function runEditorQaLoop(
@@ -31,6 +33,7 @@ export async function runEditorQaLoop(
   draft: RecipeDraft,
   initialAudit: AuditReport,
   seoPlan: SeoPlan,
+  format: "google" | "pin-first" = "google",
 ): Promise<EditorQaLoopResult> {
   let degraded = false
   let currentDraft = draft
@@ -48,7 +51,7 @@ export async function runEditorQaLoop(
       finalRecipe = (await step.run(`agent-4-editor-pass-${humanizationPass}`, async () => {
         await appendLog(recipeId, logEntry("Editor", "running",
           `Pass ${humanizationPass}/${MAX_EDITOR_PASSES} — Correction${currentAudit.verdict === "NEEDS REVISION" && currentAudit.score_ia_estimation >= 20 ? " + anti-AI humanization" : ""}`))
-        const corrected = await agentEditor(keyword, currentDraft, currentAudit, humanizationPass)
+        const corrected = await agentEditor(keyword, currentDraft, currentAudit, humanizationPass, format)
         await appendLog(recipeId, logEntry("Editor", "done",
           `Pass ${humanizationPass} complete — ${corrected.changes_summary}`))
         return corrected
@@ -70,7 +73,7 @@ export async function runEditorQaLoop(
     try {
       currentAudit = (await step.run(`agent-3-re-audit-pass-${humanizationPass}`, async () => {
         await appendLog(recipeId, logEntry("Auditor", "running", `Re-evaluation after pass ${humanizationPass}`))
-        const report = await agentAuditor(keyword, currentDraft, seoPlan.semanticEntities)
+        const report = await agentAuditor(keyword, currentDraft, seoPlan.semanticEntities, format)
         await appendLog(recipeId, logEntry("Auditor", "done",
           `Score: ${report.overallScore}/100 | AI: ${report.score_ia_estimation}/100 | Verdict: ${report.verdict}`))
         return report
@@ -100,7 +103,7 @@ export async function runEditorQaLoop(
   try {
     qaReport = (await step.run("agent-5-qa", async () => {
       await appendLog(recipeId, logEntry("QA", "running", "Cross-agent verification — 5 checks"))
-      const report = await agentQA(keyword, seoPlan, draft, currentAudit, finalRecipe!)
+      const report = await agentQA(keyword, seoPlan, draft, currentAudit, finalRecipe!, format)
       await appendLog(recipeId, logEntry("QA", report.verdict === "PASS" ? "done" : "error",
         `QA Score: ${report.qaScore}/100 | Verdict: ${report.verdict} | ${report.summary}`))
       return report
@@ -137,7 +140,7 @@ export async function runEditorQaLoop(
             issues: qaIssues ? [...c.issues, qaIssues] : c.issues,
           })),
         }
-        return await agentEditor(keyword, finalRecipe!, qaAudit, humanizationPass)
+        return await agentEditor(keyword, finalRecipe!, qaAudit, humanizationPass, format)
       })) as RecipeDraft
 
       if (qaFixedDraft) {
@@ -155,21 +158,23 @@ export async function runEditorQaLoop(
     try {
       qaReport = (await step.run("agent-5-qa-recheck", async () => {
         await appendLog(recipeId, logEntry("QA", "running", "Re-check after QA fix pass"))
-        return await agentQA(keyword, seoPlan, draft, currentAudit, finalRecipe!)
+        return await agentQA(keyword, seoPlan, draft, currentAudit, finalRecipe!, format)
       })) as QAReport
     } catch {
       degraded = true
       await appendLog(recipeId, logEntry("QA", "error", "QA re-check failed — continuing with previous verdict"))
     }
 
-    // HARD STOP on REJECT/CRITICAL
+    // Writer retry on REJECT/CRITICAL
+    // The Editor can patch surface issues, but structural problems (wrong H2s,
+    // banned vocabulary, missing sections) require a fresh Writer pass.
+    // Signal the orchestrator to re-run the Writer + Auditor + Editor loop.
     if (qaReport.verdict === "REJECT" || qaReport.verdict === "CRITICAL") {
-      await db.update(recipes).set({ status: "failed", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
       await appendLog(recipeId, logEntry("Workflow", "error",
-        `QA ${qaReport.verdict} — hard stop. Recipe marked as failed.`))
-      throw new Error(`QA_${qaReport.verdict}: ${qaReport.summary}`)
+        `QA ${qaReport.verdict} — signalling Writer retry. ${qaReport.summary}`))
+      return { finalRecipe: finalRecipe!, qaReport, humanizationPass, degraded, needsRewrite: true }
     }
   }
 
-  return { finalRecipe, qaReport, humanizationPass, degraded }
+  return { finalRecipe: finalRecipe!, qaReport, humanizationPass, degraded }
 }

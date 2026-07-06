@@ -16,7 +16,7 @@ async function generateRecipe(keyword: string, cuisine: string, aorCategory?: st
   const body: Record<string, unknown> = {
     keyword,
     cuisine,
-    ...(aorCategory ? { generateAorArticle: true, aorCategory } : {}),
+    ...(aorCategory ? { aorCategory } : {}),
   }
 
   const res = await fetch(`${API_BASE}/api/recipes/generate`, {

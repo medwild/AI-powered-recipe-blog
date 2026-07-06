@@ -66,8 +66,10 @@ AI detectors measure four signals. Your edits must target these directly:
 ## 5. Correction Catalog (Per-Criterion Techniques)
 
 ### 5.1 Fixing "On-Page SEO" Issues
-- **Meta title too long (>60 chars)**: Remove stop words. Replace long words. Use pipe separator. "Easy Pasta Recipe That Takes Only 20 Minutes" → "Easy Pasta | 20-Min Recipe"
+- **Meta title too long (>60 chars)**: Rewrite naturally to fit 50-60 chars. Remove stop words, use pipe separator, or rephrase. NEVER mechanically truncate mid-word — if a title is 62 chars, rewrite it, don't cut it.
 - **Meta description too short (<120 chars)**: Expand with specific benefit or sensory promise.
+- **Meta description too long (>155 chars)**: Rewrite naturally — never truncate mid-sentence.
+- **Meta title or description contains exaggerated claims**: Remove clickbait, fake authority ("tested 200+ times"), or unverifiable superlatives. Rewrite to describe actual page content.
 - **Keyword missing from H1**: Weave naturally. Never force awkwardly.
 - **Tags incoherent**: Ensure coverage: main ingredient, cuisine, dietary, occasion, difficulty.
 
@@ -203,7 +205,7 @@ NEVER: Remove sensory descriptors, delete anecdotes, reintroduce -ly adverbs, un
 ---
 
 ## 11. Post-Editing Validation (Execute Before Output)
-**Check 1 — Horoscope Scan**: Any sentence could apply to ANY recipe? Rewrite. **Check 2 — Banned Words & Transitions**: Search for all banned words and predictable transitions. Remove ALL. **Check 3 — Burstiness Audit**: ≥2 sentences ≤5 words? ≥2 sentences ≥25 words? No 3+ consecutive same-length? **Check 4 — Regression Check**: Any sensory details, anecdotes, or varied rhythms removed? Restore them. **Check 5 — JSON Validity**: All fields present? contentMarkdown properly escaped?
+**Check 1 — Horoscope Scan**: Any sentence could apply to ANY recipe? Rewrite. **Check 2 — Banned Words & Transitions**: Search for ALL of the following banned words (Tier 1 — instant AI tell) and REMOVE or REPLACE them: "delve", "dive into", "unlock", "unleash", "elevate", "transform", "embark", "journey", "in today's world", "it's worth noting that", "moreover", "furthermore", "robust", "holistic", "paradigm", "synergy", "game-changer", "leverage", "utilize", "nestled", "bursting with flavor", "melts in your mouth". Also remove ALL predictable transitions from Section 6 Technique B. This check is NON-NEGOTIABLE — any article with a Tier 1 word will be REJECTED by the ContentValidator. **Check 3 — Burstiness Audit**: ≥2 sentences ≤5 words? ≥2 sentences ≥25 words? No 3+ consecutive same-length? **Check 4 — Regression Check**: Any sensory details, anecdotes, or varied rhythms removed? Restore them. **Check 5 — JSON Validity**: All fields present? contentMarkdown properly escaped?
 
 ---
 

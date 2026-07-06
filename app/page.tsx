@@ -5,8 +5,9 @@ import { ArrowRight, Clock, ChefHat, Sparkles, TrendingUp } from "lucide-react"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { RecipeCard } from "@/components/recipe-card"
+import { ArticleCard } from "@/components/article-card"
 import { Button } from "@/components/ui/button"
-import { getPublishedRecipes, getRecipeCategories } from "@/lib/queries"
+import { getPublishedRecipes, getPublishedArticles, getRecipeCategories } from "@/lib/queries"
 import { FOOD_BLUR_PLACEHOLDER } from "@/lib/utils"
 
 export const metadata: Metadata = {
@@ -16,12 +17,14 @@ export const metadata: Metadata = {
 export const revalidate = 60
 
 export default async function HomePage() {
-  const [recipes, categories] = await Promise.all([
+  const [recipes, articles, categories] = await Promise.all([
     getPublishedRecipes(),
+    getPublishedArticles(),
     getRecipeCategories(),
   ])
   const featured = recipes.slice(0, 3)
   const recent = recipes.slice(0, 6)
+  const latestArticles = articles.slice(0, 3)
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -179,6 +182,34 @@ export default async function HomePage() {
             </>
           )}
         </section>
+
+        {/* Latest Articles */}
+        {latestArticles.length > 0 ? (
+          <section className="border-t border-border bg-secondary/20">
+            <div className="mx-auto max-w-5xl px-4 py-14">
+              <div className="mb-8 flex items-end justify-between">
+                <div>
+                  <h2 className="font-serif text-3xl">Techniques &amp; Guides</h2>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Deep dives into the science and craft of sourdough baking.
+                  </p>
+                </div>
+                <Link
+                  href="/techniques"
+                  className="flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+                >
+                  View all
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+              </div>
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {latestArticles.map((article) => (
+                  <ArticleCard key={article.id} article={article} />
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : null}
 
         {/* CTA */}
         <section className="border-t border-border bg-secondary/30">

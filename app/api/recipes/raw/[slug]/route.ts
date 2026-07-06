@@ -34,7 +34,7 @@ export async function GET(
   const [recipe] = await db
     .select(PUBLIC_FIELDS)
     .from(recipes)
-    .where(and(eq(recipes.slug, slug), eq(recipes.status, "published")))
+    .where(and(eq(recipes.slug, slug), eq(recipes.status, "published"), eq(recipes.content_type, "recipe")))
     .limit(1)
   if (!recipe) return NextResponse.json({ error: "not found" }, { status: 404 })
   return NextResponse.json(recipe)

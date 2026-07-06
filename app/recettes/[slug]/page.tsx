@@ -1,12 +1,12 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, ArrowRight } from "lucide-react"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { RecipeArticle } from "@/components/recipe-article"
 import { RecipeCard } from "@/components/recipe-card"
-import { getRecipeBySlug, getPublishedRecipes, getRelatedRecipes } from "@/lib/queries"
+import { getRecipeBySlug, getPublishedRecipes, getRelatedRecipes, getLinkedArticle } from "@/lib/queries"
 
 export const revalidate = 300
 export const dynamicParams = true
@@ -151,7 +151,10 @@ export default async function RecipePage({
     notFound()
   }
 
-  const relatedRecipes = await getRelatedRecipes(recipe.id, recipe.tags ?? [])
+  const [relatedRecipes, linkedArticle] = await Promise.all([
+    getRelatedRecipes(recipe.id, recipe.tags ?? []),
+    getLinkedArticle(recipe.id),
+  ])
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -168,6 +171,31 @@ export default async function RecipePage({
         </div>
         <RecipeArticle recipe={recipe} />
         <RecipeJsonLd recipe={recipe} />
+
+        {/* Linked AOR Article */}
+        {linkedArticle ? (
+          <section className="mx-auto max-w-3xl px-4 pb-8">
+            <Link
+              href={`/${linkedArticle.category ?? "techniques"}/${linkedArticle.slug}`}
+              className="group flex items-start gap-4 rounded-xl border border-border bg-secondary/20 p-5 transition-colors hover:border-primary/40 hover:bg-secondary/30"
+            >
+              <div className="flex-1">
+                <span className="text-xs font-medium text-primary uppercase tracking-wide">
+                  Read the Deep Dive
+                </span>
+                <h3 className="mt-1 font-serif text-lg leading-snug group-hover:text-primary">
+                  {linkedArticle.title}
+                </h3>
+                {linkedArticle.excerpt ? (
+                  <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
+                    {linkedArticle.excerpt}
+                  </p>
+                ) : null}
+              </div>
+              <ArrowRight className="mt-1 h-5 w-5 flex-shrink-0 text-muted-foreground transition-colors group-hover:text-primary" aria-hidden="true" />
+            </Link>
+          </section>
+        ) : null}
 
         {relatedRecipes.length > 0 ? (
           <section className="mx-auto max-w-5xl px-4 py-14">

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { recipes } from "@/lib/db/schema"
-import { eq, desc } from "drizzle-orm"
+import { and, eq, desc } from "drizzle-orm"
 import { buildRecipeMarkdown } from "@/lib/markdown"
 
 export const dynamic = "force-dynamic"
@@ -10,7 +10,7 @@ export async function GET() {
   const all = await db
     .select()
     .from(recipes)
-    .where(eq(recipes.status, "published"))
+    .where(and(eq(recipes.status, "published"), eq(recipes.content_type, "recipe")))
     .orderBy(desc(recipes.publishedAt))
 
   const raw = all.map((recipe) => ({

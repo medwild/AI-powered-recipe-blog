@@ -10,6 +10,7 @@
 
 import { loadSkillContent } from "@/lib/skills"
 import { runTextAndParseJson } from "@/lib/agents/nararouter"
+import { validateContract, AGENT_CONTRACTS } from "@/lib/agents/contract-validator"
 import type { SeoPlan } from "./strategist"
 
 // ---------------------------------------------------------------------------
@@ -65,7 +66,17 @@ function buildUserPrompt(input: AorWriterInput): string {
   URL : ${input.recipeUrl}
   Slug : ${input.recipeSlug}
 
-Mot-clé principal : ${input.keyword}
+Mot-clé de la recette : ${input.keyword}
+
+IMPORTANT — MOT-CLÉ DISTINCT POUR L'ARTICLE :
+L'article NE doit PAS cibler le même mot-clé que la recette ("${input.keyword}").
+Déduis un mot-clé INFORMATIONNEL distinct pour l'article, basé sur l'angle et la catégorie.
+Exemples :
+- Recette "sourdough discard flatbread" → Article "why bench rest matters for flatbread"
+- Recette "sourdough starter troubleshooting" → Article "sourdough starter fermentation science"
+- Recette "chocolate chip cookies" → Article "how brown sugar affects cookie texture"
+Le mot-clé de l'article doit refléter une intention de RECHERCHE ÉDUCATIVE, pas transactionnelle.
+Utilise ce mot-clé distinct dans le title, metaTitle, H1, et slug de l'article.
 
 ${angleLine}
 
@@ -98,6 +109,11 @@ export async function agentAorWriter(input: AorWriterInput): Promise<AorArticle>
     userPrompt,
     { temperature: 0.4, maxTokens: 6144 },
   )
+
+  const validation = validateContract(result as Record<string, unknown>, AGENT_CONTRACTS.AorWriter)
+  if (validation.warnings.length > 0) {
+    console.warn("[AOR Writer] Contract warnings:", validation.warnings.join("; "))
+  }
 
   return result
 }

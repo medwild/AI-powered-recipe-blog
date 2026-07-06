@@ -981,6 +981,7 @@ function buildStrategistPackage(
   topics: TopicCluster[],
   questions: UserQuestion[],
   opportunities: ContentOpportunity[],
+  availableModules: string[],
 ): StrategistInputPackage {
   // FAQ candidates from high+medium questions
   const faqCandidates = questions
@@ -1014,10 +1015,10 @@ function buildStrategistPackage(
     .join("; ")
 
   const mustVerify = [
-    dqContains("peopleAlsoAsk")
+    dqContains("peopleAlsoAsk", availableModules)
       ? "PAA data available — FAQ structure is grounded in real user questions"
       : "Re-run Serper.dev with People Also Ask module enabled — current PAA blind spot is the most significant data gap before FAQ finalization",
-    dqContains("recipes")
+    dqContains("recipes", availableModules)
       ? "Recipe rich results confirmed in SERP"
       : "Confirm recipe rich results exist on actual Google SERP — recipe cards absent from this Serper response (likely data capture issue, not SERP reality)",
     "Verify all baking times, temperatures, yields, and substitution ratios through actual recipe testing before providing to Writer agent",
@@ -1052,9 +1053,8 @@ function buildStrategistPackage(
   }
 }
 
-function dqContains(module: string): boolean {
-  // Placeholder — actual check happens in assessDataQuality
-  return false
+function dqContains(module: string, availableModules: string[]): boolean {
+  return availableModules.includes(module)
 }
 
 function buildSectionDirections(
@@ -1213,7 +1213,7 @@ export function structureSerpData(
   const eeat = prepareEEAT(options?.niche)
   const risks = assessRisks(dataQuality, features, competitors)
   const strategistPackage = buildStrategistPackage(
-    keyword, intent, competitors, topics, questions, opportunities,
+    keyword, intent, competitors, topics, questions, opportunities, dataQuality.available_modules,
   )
 
   return {

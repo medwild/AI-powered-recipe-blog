@@ -175,6 +175,7 @@ function buildSummaryPrompt(
   writerDraft: RecipeDraft,
   auditorReport: AuditReport,
   editorOutput: RecipeDraft,
+  format: "google" | "pin-first" = "google",
 ): string {
   // --- Strategist Summary (≤500 words) ---
   const h2Sections = strategistPlan.h2Sections ?? []
@@ -249,6 +250,11 @@ ${JSON.stringify(writerSummary, null, 2)}
 ${JSON.stringify(auditorSummary, null, 2)}
 
 ${editorBlock}
+Format: ${format} — ${
+    format === "pin-first"
+      ? "Pin-first (shorter, visual-focused). Expect 1200-1500 words, 3+ FAQ questions."
+      : "Google SEO (long-form). Expect 1800-2200 words, 5 FAQ questions minimum."
+  }
 Execute the 5 checks defined in your system prompt and return your QA report as JSON.`
 }
 
@@ -272,6 +278,7 @@ export async function agentQA(
   writerDraft: RecipeDraft,
   auditorReport: AuditReport,
   editorOutput: RecipeDraft,
+  format: "google" | "pin-first" = "google",
 ): Promise<QAReport> {
   try {
     const systemPrompt = await loadSkillContent("agent-qa")
@@ -281,6 +288,7 @@ export async function agentQA(
       writerDraft,
       auditorReport,
       editorOutput,
+      format,
     )
 
     // Temperature 0.1 for deterministic verification

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { recipes } from "@/lib/db/schema"
-import { desc, eq } from "drizzle-orm"
+import { desc, eq, and } from "drizzle-orm"
 
 export const dynamic = "force-dynamic"
 
@@ -19,12 +19,17 @@ export async function GET() {
       servings: recipes.servings,
       excerpt: recipes.excerpt,
       publishedAt: recipes.publishedAt,
+      content_type: recipes.content_type,
+      category: recipes.category,
     })
     .from(recipes)
     .where(eq(recipes.status, "published"))
     .orderBy(desc(recipes.publishedAt))
 
-  const recipeList = all
+  const publishedRecipes = all.filter((r) => r.content_type !== "article")
+  const publishedArticles = all.filter((r) => r.content_type === "article")
+
+  const recipeList = publishedRecipes
     .map(
       (r) =>
         `- ${r.title}
@@ -36,6 +41,16 @@ export async function GET() {
   Servings: ${r.servings ?? "N/A"}
   Tags: ${(r.tags ?? []).join(", ") || "None"}
   Summary: ${r.excerpt ?? "N/A"}`,
+    )
+    .join("\n\n")
+
+  const articleList = publishedArticles
+    .map(
+      (a) =>
+        `- ${a.title}
+  HTML page: https://chefaugustin.com/${a.category}/${a.slug}
+  Category: ${a.category ?? "N/A"}
+  Summary: ${a.excerpt ?? "N/A"}`,
     )
     .join("\n\n")
 
@@ -71,9 +86,13 @@ https://chefaugustin.com/api/recipes/raw/[slug]
 
 Format: JSON with all recipe fields (ingredients, instructions, contentMarkdown).
 
-## Published Recipes (${all.length})
+## Published Recipes (${publishedRecipes.length})
 
 ${recipeList}
+
+## Published Articles (${publishedArticles.length})
+
+${articleList}
 
 ---
 Last updated: ${new Date().toISOString().split("T")[0]}
