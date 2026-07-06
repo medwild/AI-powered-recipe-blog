@@ -62,7 +62,7 @@ You receive:
 - `ingredients` — recipe ingredients
 - `tags` — recipe tags
 - `seoPlan` — Strategist output (H2 sections, FAQ, semantic entities)
-- `microNiche` — always "Sourdough Discard Recipes"
+- `microNiche` — always "Easy Weeknight Dinners for Two"
 - `targetCountry` — target market (e.g., "us")
 
 If any field is missing, mark it as HYPOTHESIS and proceed — never refuse to generate.
@@ -96,10 +96,10 @@ Hooks MUST be incitative AND honest. Never use:
 - "The Only Method That Works"
 
 Use specific, verifiable hooks:
-- "[Number] + [Useful Outcome]" → "5-Minute Discard Flatbread"
-- "[Time] + [Specific Result]" → "20-Min Sourdough Flatbread"
-- "[Problem] + [Simple Solution]" → "No More Wasted Discard"
-- "[Beginner-Friendly] + [Desired Outcome]" → "Beginner Discard Flatbread"
+- "[Number] + [Useful Outcome]" → "15-Minute Chicken Dinner for Two"
+- "[Time] + [Specific Result]" → "30-Min One-Pan Salmon for Two"
+- "[Problem] + [Simple Solution]" → "No More Leftover Chaos"
+- "[Beginner-Friendly] + [Desired Outcome]" → "Beginner's Guide to Small-Batch Dinners"
 
 ---
 
@@ -133,7 +133,7 @@ Score each Pin on these 11 factors:
 
 | Factor | Points | What It Measures |
 |---|---|---|
-| Micro-Niche Focus | 10 | Strictly within "Sourdough Discard Recipes"? |
+| Micro-Niche Focus | 10 | Strictly within "Easy Weeknight Dinners for Two"? |
 | Problem-Solution Fit | 10 | Clear user problem + clear solution? |
 | Value-Added Fit | 10 | Does the destination provide real utility? |
 | Semantic Fit | 12 | Title, description, keywords aligned? |
@@ -265,22 +265,22 @@ Output a JSON array of exactly 5 PinDraft objects:
 ```json
 [
   {
-    "pin_title": "5-Minute Sourdough Discard Flatbread — No Yeast, No Wait",
-    "overlay_text": "5-Minute Flatbread",
-    "description": "Make soft, chewy sourdough discard flatbread in just 5 minutes with this no-yeast, no-rise recipe. Perfect for using up discard — save this for your next baking day.",
-    "image_prompt": "Vertical Pinterest food photography (2:3, 1000x1500px, safe zone 8%), sourdough discard flatbread stack on rustic wooden board, visible blisters and steam, golden brown crust, natural window light, appetizing homemade style, space for text overlay top third, no misleading garnishes.",
-    "board": "Sourdough Discard Flatbread",
+    "pin_title": "One-Pan Lemon Chicken for Two — Ready in 25 Minutes",
+    "overlay_text": "25-Min Lemon Chicken",
+    "description": "Juicy lemon chicken and roasted vegetables on a single sheet pan — ready in 25 minutes with minimal cleanup. Perfect for busy weeknights. Save this for your next dinner-for-two.",
+    "image_prompt": "Vertical Pinterest food photography (2:3, 1000x1500px, safe zone 8%), one-pan lemon chicken with roasted asparagus and cherry tomatoes on a sheet pan, golden-brown chicken thighs, glossy lemon glaze, natural overhead light, casual weeknight dinner styling, space for text overlay top third, no misleading garnishes.",
+    "board": "Easy Dinners for Two",
     "intent": "quick_solution",
-    "ptra_score": 85
+    "ptra_score": 87
   },
   {
-    "pin_title": "Beginner's Guide to Sourdough Discard Flatbread — Foolproof & Forgiving",
-    "overlay_text": "Beginner-Friendly Flatbread",
-    "description": "New to sourdough discard? Start here. This beginner-friendly flatbread recipe is foolproof and forgiving — no special skills needed. Save this for your first discard bake.",
-    "image_prompt": "Vertical Pinterest food photography (2:3, 1000x1500px, safe zone 8%), close-up of hands rolling sourdough discard flatbread dough on floured surface, step-by-step feel, natural light, warm kitchen setting, space for text overlay top third.",
-    "board": "Sourdough Discard Flatbread",
-    "intent": "beginner_guide",
-    "ptra_score": 82
+    "pin_title": "30-Minute Beef Stir-Fry for Two — Better Than Takeout",
+    "overlay_text": "30-Min Beef Stir-Fry",
+    "description": "Skip the takeout and make this quick beef stir-fry for two in just 30 minutes. Tender strips, crisp vegetables, and a savory sauce — all from one wok. Save this for your next weeknight dinner.",
+    "image_prompt": "Vertical Pinterest food photography (2:3, 1000x1500px, safe zone 8%), sizzling beef stir-fry in a black wok with bell peppers and snap peas, steam rising, glossy sauce coating the ingredients, dynamic overhead angle, bright kitchen lighting, space for text overlay top third.",
+    "board": "Easy Dinners for Two",
+    "intent": "quick_solution",
+    "ptra_score": 85
   }
 ]
 ```
@@ -295,14 +295,14 @@ Assign each Pin to ONE board. Boards follow the micro-niche structure:
 
 | Board | Role | Allowed Content |
 |---|---|---|
-| Sourdough Discard Flatbread | Flatbread variants | Flatbread recipes, flatbread techniques |
-| Sourdough Discard Crackers | Cracker variants | Cracker recipes, cracker tips |
-| Sourdough Discard Breads | Bread recipes | Loaf, roll, and bun recipes |
-| Sourdough Discard Sweet Bakes | Sweet recipes | Banana bread, pancakes, muffins |
-| Sourdough Discard Tips | Techniques & guides | Science articles, discard guides, troubleshooting |
-| Sourdough Discard Quick Recipes | Fast recipes (<30 min) | Any discard recipe under 30 minutes |
+| Easy Dinners for Two | Primary board for the whole niche | All dinner-for-two recipes, small-batch meals |
+| 30-Minute Meals for Two | Quick solution intent | Fast dinner recipes for two, quick one-pan meals |
+| Small-Batch Slow Cooker | Primary sub-cluster board | Mini crockpot recipes, 2-quart slow cooker meals |
+| Budget Meals for Two | Economic benefit angle | Affordable dinners for two, cheap weeknight meals |
+| Chicken Dinners for Two | Protein-specific subtopic | Chicken recipes for two, weeknight chicken dinners |
+| Asian-Inspired Dinners for Two | Secondary test cluster | Easy Asian-inspired meals for two |
 
-Derive the board name from the recipe's tags and content. If the recipe doesn't clearly fit one board, default to "Sourdough Discard Recipes".
+Derive the board name from the recipe's tags and content. If the recipe doesn't clearly fit one board, default to "Easy Dinners for Two".
 
 ---
 
