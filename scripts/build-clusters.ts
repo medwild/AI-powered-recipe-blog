@@ -119,7 +119,7 @@ function inferIntent(keyword: string): string {
 function inferBoard(keyword: string): string {
   const kw = keyword.toLowerCase()
   const words = kw.split(/\s+/)
-  for (const [token, category] of Object.entries(SEMANTIC_CATEGORIES)) {
+  for (const [token, category] of Object.entries(SEMANTIC_CATEGORIES).sort(([a], [b]) => b.length - a.length)) {
     if (words.includes(token)) return category.board
   }
   // Default: capitalize significant words
@@ -154,7 +154,9 @@ function buildClusters(keywords: ScoredKeyword[]): { clusters: Cluster[]; orphan
     // If no overlap found, try semantic category fallback
     if (group.length === 1) {
       const kw = highOnly[i].keyword.toLowerCase()
-      const category = Object.entries(SEMANTIC_CATEGORIES).find(([token]) => kw.includes(token))
+      const category = Object.entries(SEMANTIC_CATEGORIES)
+        .sort(([a], [b]) => b.length - a.length)
+        .find(([token]) => kw.includes(token))
       if (category) {
         // Find other keywords in the same category
         for (let j = i + 1; j < highOnly.length; j++) {
