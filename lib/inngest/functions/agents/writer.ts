@@ -9,6 +9,8 @@
 
 import { loadSkillContent } from "@/lib/skills"
 import { runTextAndParseJson } from "@/lib/agents/nararouter"
+import { validateContract, AGENT_CONTRACTS } from "@/lib/agents/contract-validator"
+import { stripHtmlComments } from "../helpers"
 import type { SeoPlan } from "./strategist"
 import type { Ingredient, Instruction } from "@/lib/db/schema"
 
@@ -109,19 +111,36 @@ export async function agentWriter(
   keyword: string,
   plan: SeoPlan,
   replacements?: Record<string, string>,
+  format: "google" | "pin-first" = "google",
 ): Promise<RecipeDraft> {
   try {
-    const systemPrompt = await loadSkillContent("agent-writer", replacements)
+    const mergedReplacements = { ...(replacements ?? {}), format } as Record<string, string>
+    const systemPrompt = await loadSkillContent("agent-writer", mergedReplacements)
     const userPrompt = buildUserPrompt(keyword, plan)
 
     // maxTokens 6144: the full article (1800-2200 words) + JSON metadata (title, meta,
     // ingredients, instructions, FAQ 5Q, whyThisWorks, nutritionHighlights, jsonLd)
     // needs more output space. 4096 was causing JSON truncation and triggering
     // the Cloudflare fallback instead of using NaraRouter Mistral 3.5 as intended.
-    return runTextAndParseJson<RecipeDraft>(systemPrompt, userPrompt, {
-      temperature: 0.9,
+    const result = await runTextAndParseJson<RecipeDraft>(systemPrompt, userPrompt, {
+      temperature: 0.6,
       maxTokens: 6144,
     })
+
+    // Contract validation — catches skill/code field name mismatches at runtime.
+    const validation = validateContract(result as Record<string, unknown>, AGENT_CONTRACTS.Writer)
+    if (validation.warnings.length > 0) {
+      console.warn("[Writer] Contract warnings:", validation.warnings.join("; "))
+    }
+
+    // Deterministic sanitization: strip any HTML comments (vibe coding tokens
+    // like <!--WARM-->, <!--GLOW--> that the LLM may fail to purge despite
+    // skill instructions). Applied BEFORE the content flows downstream.
+    if (result.contentMarkdown) {
+      result.contentMarkdown = stripHtmlComments(result.contentMarkdown)
+    }
+
+    return result
   } catch (err) {
     throw new Error(
       `[Writer] LLM call failed for "${keyword}": ${(err as Error).message}`,
