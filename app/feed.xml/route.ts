@@ -22,9 +22,9 @@ export async function GET() {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Chef Augustin -- The Sourdough Kitchen</title>
+    <title>Chef Augustin -- Easy Weeknight Dinners for Two</title>
     <link>${BASE_URL}</link>
-    <description>Tested sourdough bread recipes for home bakers by Chef Augustin Lefevre. From starter to discard, from crust to crumb.</description>
+    <description>Simple small-batch dinner recipes for two people, with practical weeknight meals, clear serving sizes, and Pinterest-friendly cooking inspiration.</description>
     <language>en</language>
     <atom:link href="${BASE_URL}/feed.xml" rel="self" type="application/rss+xml" />
     ${itemsXml}

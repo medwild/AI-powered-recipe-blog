@@ -57,10 +57,11 @@ export async function GET() {
   const content = `# Chef Augustin — LLM Guide
 
 ## About
-Chef Augustin is a sourdough baking blog by Chef Augustin Lefèvre, a French-trained chef.
-All recipes are tested, SEO-optimized, and written by a professional chef.
-The blog covers everything sourdough — from starter care and troubleshooting to artisan loaves,
-flavored breads, and discard recipes. Content spans 6 clusters: Starter, Technique, Discard, Breads, Dishes, and Storage.
+Chef Augustin is a Pinterest-first recipe blog focused exclusively on Easy Weeknight Dinners for Two.
+
+The blog covers small-batch dinner recipes designed for two people — from one-pan meals and
+mini slow cooker recipes to budget-friendly options and quick 30-minute dinners. Content spans
+5 clusters: Slow Cooker, One-Pan Dinners, Budget Meals, Chicken Dinners, and Asian-Inspired.
 
 ## Site Structure
 - Homepage: https://chefaugustin.com/
