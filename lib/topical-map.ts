@@ -15,11 +15,11 @@ export interface EAVTriple {
 
 export interface TopicNode {
   title: string
-  keyword: string          // Primary SEO keyword
-  volume: number           // Monthly search volume (from Semrush)
-  kd: number               // Keyword Difficulty (0-100)
+  keyword: string
+  volume: number
+  kd: number
   intent: "informational" | "commercial" | "transactional"
-  requiredEntities: string[] // E-A-V attributes this page must cover
+  requiredEntities: string[]
   wordCountRange: { min: number; max: number }
   type: "pillar" | "spoke" | "article"
 }
@@ -31,7 +31,7 @@ export interface Cluster {
   section: "core" | "outer"
   pillarPage: TopicNode
   spokes: TopicNode[]
-  coverageContribution: number // % of total topical coverage
+  coverageContribution: number
   kdAvg: number
   totalVolume: number
 }
@@ -45,375 +45,213 @@ export interface CoverageReport {
   gaps: TopicNode[]
 }
 
-// ---- Sourdough Preset ----
+// ---- Dinners-for-Two Preset ----
 
-export const SOURDOUGH_PRESET = {
-  name: "Sourdough",
-  ingredients: "bread flour, rye flour, whole wheat flour, sourdough starter, salt, water, olive oil, honey, butter, milk, eggs",
-  techniques: "autolyse, stretch and fold, coil fold, bulk fermentation, cold retard, bench rest, scoring, steam baking (dutch oven), lamination, preferments (poolish/biga)",
+export const DINNERS_FOR_TWO_PRESET = {
+  name: "Easy Weeknight Dinners for Two",
+  ingredients: "chicken breast, ground beef, pasta, rice, garlic, onion, olive oil, butter, canned tomatoes, frozen vegetables, eggs, cheese, soy sauce, ginger, bell peppers",
+  techniques: "searing, deglazing, one-pan cooking, sheet-pan roasting, slow cooking, quick sauces, batch prep, portion scaling, stir-frying, pan-roasting",
 }
 
-// ---- Sourdough Clusters ----
+// ---- Dinners-for-Two Clusters ----
 
-export const STARTER_CLUSTER: Cluster = {
-  id: "sourdough-starter-care",
-  name: "Starter Care & Troubleshooting",
-  cuisine: "Sourdough Starter",
+export const SLOW_COOKER_CLUSTER: Cluster = {
+  id: "small-batch-slow-cooker",
+  name: "Small-Batch Slow Cooker Dinners for Two",
+  cuisine: "Small-Batch Slow Cooker",
   section: "core",
-  kdAvg: 4,
-  totalVolume: 5_650,
-  coverageContribution: 12,
-  pillarPage: {
-    title: "The Complete Guide to Sourdough Starter — Creation, Care & Troubleshooting",
-    keyword: "sourdough starter guide",
-    volume: 590,
-    kd: 4,
-    intent: "informational",
-    requiredEntities: ["sourdough_starter", "fermentation", "feeding_ratio", "troubleshooting"],
-    wordCountRange: { min: 2200, max: 3000 },
-    type: "pillar",
-  },
-  spokes: [
-    {
-      title: "Why Does My Starter Smell Like Acetone?",
-      keyword: "why does my sourdough starter smell like acetone",
-      volume: 390, kd: 4, intent: "informational",
-      requiredEntities: ["sourdough_starter", "acetone", "hooch", "feeding_schedule"],
-      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
-    },
-    {
-      title: "My Sourdough Starter Is Runny — Here's the Fix",
-      keyword: "my sourdough starter is runny",
-      volume: 590, kd: 3, intent: "informational",
-      requiredEntities: ["sourdough_starter", "hydration", "starter_consistency"],
-      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
-    },
-    {
-      title: "Can You Overfeed Sourdough Starter?",
-      keyword: "can you overfeed sourdough starter",
-      volume: 320, kd: 2, intent: "informational",
-      requiredEntities: ["sourdough_starter", "feeding_ratio", "overfeeding"],
-      wordCountRange: { min: 1000, max: 1500 }, type: "spoke",
-    },
-    {
-      title: "White Mold on Sourdough Starter — Safe or Toss?",
-      keyword: "white mold on sourdough starter",
-      volume: 260, kd: 5, intent: "informational",
-      requiredEntities: ["sourdough_starter", "mold", "food_safety", "starter_care"],
-      wordCountRange: { min: 1000, max: 1500 }, type: "spoke",
-    },
-    {
-      title: "Did I Kill My Sourdough Starter?",
-      keyword: "did i kill my sourdough starter",
-      volume: 210, kd: 3, intent: "informational",
-      requiredEntities: ["sourdough_starter", "dead_starter", "reviving_starter"],
-      wordCountRange: { min: 1000, max: 1500 }, type: "spoke",
-    },
-  ],
-}
-
-export const TECHNIQUE_CLUSTER: Cluster = {
-  id: "sourdough-technique",
-  name: "Baking Techniques & How-To",
-  cuisine: "Sourdough Technique",
-  section: "core",
-  kdAvg: 4,
-  totalVolume: 13_860,
+  kdAvg: 5,
+  totalVolume: 12_500,
   coverageContribution: 25,
   pillarPage: {
-    title: "Sourdough Baking: The Complete Technique Guide",
-    keyword: "sourdough baking techniques",
-    volume: 720,
+    title: "Small-Batch Slow Cooker Dinners for Two — The Complete Guide",
+    keyword: "slow cooker recipes for two",
+    volume: 2400,
+    kd: 8,
+    intent: "informational",
+    requiredEntities: ["slow_cooker", "small_batch", "dinner_for_two", "meal_prep"],
+    wordCountRange: { min: 2000, max: 2800 },
+    type: "pillar",
+  },
+  spokes: [
+    {
+      title: "2-Quart Slow Cooker vs 6-Quart — What You Actually Need for Two",
+      keyword: "2 quart slow cooker recipes",
+      volume: 1600, kd: 4, intent: "informational",
+      requiredEntities: ["slow_cooker", "small_kitchen_appliance", "portion_size"],
+      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
+    },
+    {
+      title: "Mini Crockpot Chicken Dinners for Two",
+      keyword: "mini crockpot chicken recipes",
+      volume: 2100, kd: 5, intent: "informational",
+      requiredEntities: ["slow_cooker", "chicken", "small_batch"],
+      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
+    },
+    {
+      title: "Small-Batch Slow Cooker Beef Stew for Two",
+      keyword: "slow cooker beef stew for two",
+      volume: 1300, kd: 4, intent: "informational",
+      requiredEntities: ["slow_cooker", "beef_stew", "small_batch", "comfort_food"],
+      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
+    },
+  ],
+}
+
+export const ONE_PAN_CLUSTER: Cluster = {
+  id: "one-pan-dinners-for-two",
+  name: "One-Pan Dinners for Two",
+  cuisine: "One-Pan Dinners",
+  section: "core",
+  kdAvg: 5,
+  totalVolume: 18_200,
+  coverageContribution: 25,
+  pillarPage: {
+    title: "One-Pan Dinners for Two — Minimal Cleanup, Maximum Flavor",
+    keyword: "one pan dinners for two",
+    volume: 3600,
+    kd: 6,
+    intent: "informational",
+    requiredEntities: ["one_pan_cooking", "sheet_pan", "easy_cleanup", "weeknight_dinner"],
+    wordCountRange: { min: 2000, max: 2800 },
+    type: "pillar",
+  },
+  spokes: [
+    {
+      title: "Sheet Pan Chicken and Vegetables for Two",
+      keyword: "sheet pan chicken dinner for two",
+      volume: 2900, kd: 5, intent: "informational",
+      requiredEntities: ["sheet_pan", "chicken", "roasted_vegetables"],
+      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
+    },
+    {
+      title: "One-Skillet Ground Beef Dinner for Two",
+      keyword: "one skillet ground beef dinner for two",
+      volume: 1400, kd: 4, intent: "informational",
+      requiredEntities: ["skillet", "ground_beef", "one_pan_meal"],
+      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
+    },
+    {
+      title: "One-Pan Lemon Garlic Salmon with Asparagus for Two",
+      keyword: "one pan salmon dinner for two",
+      volume: 2200, kd: 5, intent: "informational",
+      requiredEntities: ["salmon", "asparagus", "sheet_pan", "healthy_dinner"],
+      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
+    },
+  ],
+}
+
+export const BUDGET_CLUSTER: Cluster = {
+  id: "budget-meals-for-two",
+  name: "Budget Meals for Two",
+  cuisine: "Budget Dinners",
+  section: "core",
+  kdAvg: 4,
+  totalVolume: 9_800,
+  coverageContribution: 20,
+  pillarPage: {
+    title: "Budget-Friendly Dinners for Two — Eat Well for Less",
+    keyword: "budget dinners for two",
+    volume: 2900,
     kd: 5,
     intent: "informational",
-    requiredEntities: ["sourdough_baking", "fermentation", "scoring", "steam_baking", "proofing"],
-    wordCountRange: { min: 2500, max: 3500 },
-    type: "pillar",
-  },
-  spokes: [
-    {
-      title: "How to Make Sourdough More Sour",
-      keyword: "how to make sourdough bread more sour",
-      volume: 480, kd: 5, intent: "informational",
-      requiredEntities: ["sourdough", "fermentation", "sour_flavor", "acetic_acid"],
-      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
-    },
-    {
-      title: "Bake Sourdough Without a Dutch Oven — 5 Methods",
-      keyword: "can you bake sourdough without a dutch oven",
-      volume: 390, kd: 5, intent: "informational",
-      requiredEntities: ["sourdough_baking", "steam", "dutch_oven_alternative", "oven_spring"],
-      wordCountRange: { min: 1500, max: 2000 }, type: "spoke",
-    },
-    {
-      title: "Sourdough Proofing: The Complete Visual Guide",
-      keyword: "proofing sourdough",
-      volume: 720, kd: 5, intent: "informational",
-      requiredEntities: ["sourdough", "proofing", "fermentation", "poke_test"],
-      wordCountRange: { min: 1500, max: 2200 }, type: "spoke",
-    },
-    {
-      title: "How Many Stretch and Folds Do You Need?",
-      keyword: "how many stretches and folds for sourdough",
-      volume: 260, kd: 2, intent: "informational",
-      requiredEntities: ["sourdough", "stretch_and_fold", "gluten_development"],
-      wordCountRange: { min: 1000, max: 1500 }, type: "spoke",
-    },
-    {
-      title: "Slow Fermented Sourdough vs Fast — What's the Difference?",
-      keyword: "slow fermented sourdough bread",
-      volume: 480, kd: 4, intent: "informational",
-      requiredEntities: ["sourdough", "long_fermentation", "flavor_development", "digestibility"],
-      wordCountRange: { min: 1500, max: 2000 }, type: "spoke",
-    },
-  ],
-}
-
-export const DISCARD_CLUSTER: Cluster = {
-  id: "sourdough-discard",
-  name: "Sourdough Discard Recipes",
-  cuisine: "Sourdough Discard",
-  section: "core",
-  kdAvg: 4,
-  totalVolume: 78_080,
-  coverageContribution: 30,
-  pillarPage: {
-    title: "Sourdough Discard Recipes: 20+ Ways to Never Waste Starter",
-    keyword: "sourdough discard recipes",
-    volume: 74_000,
-    kd: 29,
-    intent: "informational",
-    requiredEntities: ["sourdough_discard", "zero_waste", "discard_recipes", "starter_maintenance"],
-    wordCountRange: { min: 2500, max: 3500 },
-    type: "pillar",
-  },
-  spokes: [
-    {
-      title: "Sourdough Discard Pretzel Bites",
-      keyword: "sourdough discard pretzel bites recipe",
-      volume: 390, kd: 4, intent: "informational",
-      requiredEntities: ["sourdough_discard", "pretzel", "snack"],
-      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
-    },
-    {
-      title: "Sourdough Discard Garlic Bread",
-      keyword: "sourdough discard garlic bread",
-      volume: 320, kd: 4, intent: "informational",
-      requiredEntities: ["sourdough_discard", "garlic_bread", "side_dish"],
-      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
-    },
-    {
-      title: "Sourdough Discard Dutch Baby Pancake",
-      keyword: "sourdough discard dutch baby",
-      volume: 390, kd: 5, intent: "informational",
-      requiredEntities: ["sourdough_discard", "dutch_baby", "breakfast"],
-      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
-    },
-    {
-      title: "Sourdough Discard Chocolate Cupcakes",
-      keyword: "sourdough discard chocolate cupcakes",
-      volume: 320, kd: 5, intent: "informational",
-      requiredEntities: ["sourdough_discard", "cupcake", "dessert"],
-      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
-    },
-    {
-      title: "Sourdough Discard Scallion Pancakes",
-      keyword: "sourdough discard scallion pancakes",
-      volume: 260, kd: 3, intent: "informational",
-      requiredEntities: ["sourdough_discard", "scallion_pancake", "savory"],
-      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
-    },
-    {
-      title: "Sourdough Discard Cast Iron Pizza",
-      keyword: "sourdough discard pizza cast iron",
-      volume: 170, kd: 3, intent: "informational",
-      requiredEntities: ["sourdough_discard", "pizza", "cast_iron"],
-      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
-    },
-    {
-      title: "Sourdough Discard French Bread",
-      keyword: "sourdough discard french bread",
-      volume: 480, kd: 4, intent: "informational",
-      requiredEntities: ["sourdough_discard", "french_bread", "baguette"],
-      wordCountRange: { min: 1500, max: 2000 }, type: "spoke",
-    },
-    {
-      title: "Sourdough Discard Apple Fritters",
-      keyword: "sourdough discard apple fritters",
-      volume: 210, kd: 3, intent: "informational",
-      requiredEntities: ["sourdough_discard", "apple_fritter", "dessert"],
-      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
-    },
-  ],
-}
-
-export const BREADS_CLUSTER: Cluster = {
-  id: "sourdough-flavored-breads",
-  name: "Flavored & Specialty Breads",
-  cuisine: "Sourdough Breads",
-  section: "core",
-  kdAvg: 4,
-  totalVolume: 5_750,
-  coverageContribution: 15,
-  pillarPage: {
-    title: "Flavored Sourdough Breads: 20+ Variations to Try",
-    keyword: "flavored sourdough bread recipes",
-    volume: 0,
-    kd: 0,
-    intent: "informational",
-    requiredEntities: ["sourdough_bread", "flavored_bread", "inclusions"],
+    requiredEntities: ["budget_cooking", "affordable_meals", "meal_planning", "grocery_savings"],
     wordCountRange: { min: 2000, max: 2800 },
     type: "pillar",
   },
   spokes: [
     {
-      title: "Roasted Garlic Rosemary Sourdough Bread",
-      keyword: "roasted garlic and rosemary sourdough bread",
-      volume: 170, kd: 5, intent: "informational",
-      requiredEntities: ["sourdough", "roasted_garlic", "rosemary", "savory_bread"],
+      title: "$5 Ground Beef Dinners for Two",
+      keyword: "cheap ground beef dinners for two",
+      volume: 1800, kd: 4, intent: "informational",
+      requiredEntities: ["ground_beef", "budget_meal", "affordable_protein"],
       wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
     },
     {
-      title: "Cranberry Walnut Sourdough Bread",
-      keyword: "cranberry walnut sourdough bread",
-      volume: 260, kd: 5, intent: "informational",
-      requiredEntities: ["sourdough", "cranberry", "walnut", "fruit_bread"],
-      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
-    },
-    {
-      title: "Jalapeño Cheddar Sourdough Bagels",
-      keyword: "jalapeno cheddar sourdough bagels",
-      volume: 170, kd: 5, intent: "informational",
-      requiredEntities: ["sourdough", "jalapeno", "cheddar", "bagel"],
-      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
-    },
-    {
-      title: "San Francisco Style Sourdough Bread",
-      keyword: "san francisco style sourdough bread",
-      volume: 590, kd: 4, intent: "informational",
-      requiredEntities: ["sourdough", "san_francisco", "classic_sourdough", "lactobacillus"],
-      wordCountRange: { min: 1500, max: 2000 }, type: "spoke",
-    },
-    {
-      title: "Strawberry Sourdough Bread",
-      keyword: "strawberry sourdough bread",
-      volume: 590, kd: 4, intent: "informational",
-      requiredEntities: ["sourdough", "strawberry", "sweet_bread"],
+      title: "Pantry Staple Dinners for Two — No Extra Grocery Trip",
+      keyword: "pantry staple dinners for two",
+      volume: 1200, kd: 3, intent: "informational",
+      requiredEntities: ["pantry_cooking", "shelf_stable", "emergency_meals"],
       wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
     },
   ],
 }
 
-export const DISHES_CLUSTER: Cluster = {
-  id: "sourdough-dishes",
-  name: "Sourdough-Based Dishes & Meals",
-  cuisine: "Sourdough Dishes",
+export const CHICKEN_CLUSTER: Cluster = {
+  id: "chicken-dinners-for-two",
+  name: "Chicken Dinners for Two",
+  cuisine: "Chicken Dinners",
   section: "core",
-  kdAvg: 4,
-  totalVolume: 13_680,
-  coverageContribution: 12,
+  kdAvg: 5,
+  totalVolume: 15_600,
+  coverageContribution: 20,
   pillarPage: {
-    title: "Beyond the Loaf: Sourdough in Every Meal",
-    keyword: "sourdough recipes beyond bread",
-    volume: 0,
-    kd: 0,
+    title: "Chicken Dinners for Two — Practical Recipes for Small Households",
+    keyword: "chicken dinners for two",
+    volume: 4400,
+    kd: 7,
     intent: "informational",
-    requiredEntities: ["sourdough", "cooking_with_sourdough", "sourdough_dishes"],
+    requiredEntities: ["chicken", "small_batch_cooking", "weeknight_dinner", "poultry"],
     wordCountRange: { min: 2000, max: 2800 },
     type: "pillar",
   },
   spokes: [
     {
-      title: "Sourdough Focaccia Pizza",
-      keyword: "sourdough focaccia pizza",
-      volume: 880, kd: 5, intent: "informational",
-      requiredEntities: ["sourdough", "focaccia", "pizza"],
+      title: "Pan-Seared Chicken Breast for Two — Juicy Every Time",
+      keyword: "pan seared chicken breast for two",
+      volume: 2400, kd: 5, intent: "informational",
+      requiredEntities: ["chicken_breast", "pan_searing", "cooking_technique"],
       wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
     },
     {
-      title: "Sourdough Crumpets — Easy English Classic",
-      keyword: "sourdough crumpets",
-      volume: 720, kd: 5, intent: "informational",
-      requiredEntities: ["sourdough", "crumpet", "english"],
+      title: "Chicken Thigh Sheet Pan Dinner for Two",
+      keyword: "chicken thigh sheet pan dinner for two",
+      volume: 1800, kd: 4, intent: "informational",
+      requiredEntities: ["chicken_thighs", "sheet_pan", "roasted_vegetables"],
       wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
     },
     {
-      title: "French Toast with Sourdough Bread",
-      keyword: "can you make french toast with sourdough bread",
-      volume: 720, kd: 5, intent: "informational",
-      requiredEntities: ["sourdough", "french_toast", "breakfast"],
-      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
-    },
-    {
-      title: "Sourdough Bread Stuffing",
-      keyword: "sourdough bread stuffing",
-      volume: 880, kd: 5, intent: "informational",
-      requiredEntities: ["sourdough", "stuffing", "holiday"],
-      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
-    },
-    {
-      title: "Sourdough Mac and Cheese",
-      keyword: "sourdough mac and cheese",
-      volume: 210, kd: 4, intent: "informational",
-      requiredEntities: ["sourdough", "mac_and_cheese", "comfort_food"],
-      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
-    },
-    {
-      title: "Sourdough Pumpkin Cinnamon Rolls",
-      keyword: "sourdough pumpkin cinnamon rolls",
-      volume: 1000, kd: 5, intent: "informational",
-      requiredEntities: ["sourdough", "cinnamon_roll", "pumpkin", "fall_baking"],
+      title: "15-Minute Chicken Stir-Fry for Two",
+      keyword: "quick chicken stir fry for two",
+      volume: 3200, kd: 6, intent: "informational",
+      requiredEntities: ["chicken", "stir_fry", "quick_meal", "wok"],
       wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
     },
   ],
 }
 
-export const STORAGE_CLUSTER: Cluster = {
-  id: "sourdough-storage",
-  name: "Storage, Shelf Life & Leftovers",
-  cuisine: "Sourdough Storage",
+export const ASIAN_CLUSTER: Cluster = {
+  id: "asian-inspired-dinners",
+  name: "Asian-Inspired Dinners for Two",
+  cuisine: "Asian-Inspired Dinners",
   section: "outer",
-  kdAvg: 3,
-  totalVolume: 3_810,
-  coverageContribution: 6,
+  kdAvg: 5,
+  totalVolume: 8_400,
+  coverageContribution: 10,
   pillarPage: {
-    title: "Sourdough Storage: Keep Every Loaf Fresh",
-    keyword: "how to store sourdough bread",
-    volume: 0,
-    kd: 0,
+    title: "Asian-Inspired Dinners for Two — Easy Weeknight Favorites",
+    keyword: "easy asian dinners for two",
+    volume: 2400,
+    kd: 6,
     intent: "informational",
-    requiredEntities: ["sourdough", "bread_storage", "freezing", "shelf_life"],
+    requiredEntities: ["asian_cooking", "stir_fry", "rice_dishes", "quick_sauces"],
     wordCountRange: { min: 1800, max: 2500 },
     type: "pillar",
   },
   spokes: [
     {
-      title: "How Long Does Sourdough Bread Last?",
-      keyword: "sourdough bread how long does it last",
-      volume: 1000, kd: 2, intent: "informational",
-      requiredEntities: ["sourdough", "shelf_life", "freshness"],
-      wordCountRange: { min: 1000, max: 1500 }, type: "spoke",
+      title: "Better-Than-Takeout Beef and Broccoli for Two",
+      keyword: "beef and broccoli for two",
+      volume: 2900, kd: 5, intent: "informational",
+      requiredEntities: ["beef", "broccoli", "stir_fry", "asian_sauce"],
+      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
     },
     {
-      title: "How to Reheat Sourdough Bread",
-      keyword: "how to reheat sourdough bread",
-      volume: 880, kd: 3, intent: "informational",
-      requiredEntities: ["sourdough", "reheating", "bread"],
-      wordCountRange: { min: 1000, max: 1500 }, type: "spoke",
-    },
-    {
-      title: "What to Do with Stale Sourdough Bread",
-      keyword: "what to do with stale sourdough bread",
-      volume: 210, kd: 4, intent: "informational",
-      requiredEntities: ["sourdough", "stale_bread", "leftovers", "zero_waste"],
-      wordCountRange: { min: 1000, max: 1500 }, type: "spoke",
-    },
-    {
-      title: "Can You Freeze Sourdough Dough?",
-      keyword: "can i freeze sourdough dough",
-      volume: 210, kd: 4, intent: "informational",
-      requiredEntities: ["sourdough", "freezing", "dough"],
-      wordCountRange: { min: 1000, max: 1500 }, type: "spoke",
+      title: "Quick Teriyaki Chicken Rice Bowls for Two",
+      keyword: "teriyaki chicken rice bowl for two",
+      volume: 1800, kd: 4, intent: "informational",
+      requiredEntities: ["chicken_teriyaki", "rice_bowl", "japanese_inspired"],
+      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
     },
   ],
 }
@@ -423,12 +261,11 @@ export const STORAGE_CLUSTER: Cluster = {
  * Add new clusters here as we expand to new cuisines.
  */
 export const TOPICAL_MAP: Cluster[] = [
-  DISCARD_CLUSTER,    // Priority 1 — 74K vol head term
-  TECHNIQUE_CLUSTER,  // Priority 2 — 13.8K vol
-  DISHES_CLUSTER,     // Priority 3 — 13.6K vol
-  BREADS_CLUSTER,     // Priority 4 — 5.7K vol
-  STARTER_CLUSTER,    // Priority 5 — 5.6K vol
-  STORAGE_CLUSTER,    // Priority 6 — 3.8K vol
+  SLOW_COOKER_CLUSTER,   // Priority 1 — 12.5K vol
+  ONE_PAN_CLUSTER,       // Priority 2 — 18.2K vol (head term)
+  BUDGET_CLUSTER,        // Priority 3 — 9.8K vol
+  CHICKEN_CLUSTER,       // Priority 4 — 15.6K vol
+  ASIAN_CLUSTER,         // Priority 5 — 8.4K vol
 ]
 
 /**
@@ -447,19 +284,18 @@ export function getCuisineConfig(cuisine: string): {
   cuisine_techniques: string
 } {
   const presets: Record<string, { name: string; ingredients: string; techniques: string }> = {
-    sourdough: SOURDOUGH_PRESET,
-    "sourdough starter": SOURDOUGH_PRESET,
-    "sourdough technique": SOURDOUGH_PRESET,
-    "sourdough discard": SOURDOUGH_PRESET,
-    "sourdough breads": SOURDOUGH_PRESET,
-    "sourdough dishes": SOURDOUGH_PRESET,
-    "sourdough storage": SOURDOUGH_PRESET,
+    "dinners-for-two": DINNERS_FOR_TWO_PRESET,
+    "small-batch slow cooker": DINNERS_FOR_TWO_PRESET,
+    "one-pan dinners": DINNERS_FOR_TWO_PRESET,
+    "budget dinners": DINNERS_FOR_TWO_PRESET,
+    "chicken dinners": DINNERS_FOR_TWO_PRESET,
+    "asian-inspired dinners": DINNERS_FOR_TWO_PRESET,
   }
 
-  const preset = presets[cuisine.toLowerCase()] ?? presets["sourdough"]
+  const preset = presets[cuisine.toLowerCase()] ?? presets["dinners-for-two"]
   return {
-    cuisine: preset?.name ?? "Sourdough",
-    cuisine_ingredients: preset?.ingredients ?? SOURDOUGH_PRESET.ingredients,
-    cuisine_techniques: preset?.techniques ?? SOURDOUGH_PRESET.techniques,
+    cuisine: preset?.name ?? "Easy Weeknight Dinners for Two",
+    cuisine_ingredients: preset?.ingredients ?? DINNERS_FOR_TWO_PRESET.ingredients,
+    cuisine_techniques: preset?.techniques ?? DINNERS_FOR_TWO_PRESET.techniques,
   }
 }
