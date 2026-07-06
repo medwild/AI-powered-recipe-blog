@@ -129,7 +129,7 @@ function inferBoard(keyword: string): string {
 // Clustering
 // ---------------------------------------------------------------------------
 
-function buildClusters(keywords: ScoredKeyword[]): { clusters: Cluster[]; orphans: Cluster["keywords"] } {
+function buildClusters(keywords: ScoredKeyword[]): { clusters: Cluster[]; orphans: { keyword: string; score: number; reason: string }[] } {
   const highOnly = keywords.filter((k) => k.status === "high")
   const assigned = new Set<number>()
   const clusters: Cluster[] = []
@@ -167,7 +167,7 @@ function buildClusters(keywords: ScoredKeyword[]): { clusters: Cluster[]; orphan
 
     if (group.length >= 2) {
       assigned.add(i)
-      const clusterName = group[0].keyword.toLowerCase().replace(/[^a-z0-9\s]/g, "").split(/\s+/).filter((t) => !STOP_WORDS.has(t)).slice(0, 3).join("-").replace(/\s+/g, "-")
+      const clusterName = group[0].keyword.toLowerCase().replace(/[^a-z0-9\s]/g, "").split(/\s+/).filter((t) => !STOP_WORDS.has(t)).slice(0, 3).join("-")
       clusters.push({
         cluster_name: clusterName,
         micro_niche: "",
@@ -213,11 +213,7 @@ function main() {
     micro_niche: microNiche,
     generated_at: new Date().toISOString().split("T")[0],
     clusters,
-    orphans: orphans.map((o) => ({
-      keyword: o.keyword,
-      score: o.score,
-      reason: o.reason,
-    })),
+    orphans,
     summary: {
       total_keywords_scored: scored.length,
       high_priority: scored.filter((k) => k.status === "high").length,
