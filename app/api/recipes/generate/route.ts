@@ -83,8 +83,8 @@ export async function POST(req: Request) {
   let aorAngle: string | undefined
 
   const rawAorCategory = body?.aorCategory?.toString().trim()
-  if (rawAorCategory) {
-    if (!validAorCategories.includes(rawAorCategory)) {
+  if (body?.generateAorArticle === true || rawAorCategory) {
+    if (!rawAorCategory || !validAorCategories.includes(rawAorCategory)) {
       return NextResponse.json(
         {
           error: `aorCategory invalide. Valeurs acceptées : ${validAorCategories.join(", ")}`,
