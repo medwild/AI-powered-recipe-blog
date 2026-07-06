@@ -161,7 +161,41 @@ export async function persistFinalDraft(
 
     // Deterministic content validation — catches banned words, token leaks,
     // missing fields BEFORE publication. Runs regardless of LLM availability.
-    const validation = validateContent({ ...finalRecipe, contentType: "recipe", format })
+    let validation = validateContent({ ...finalRecipe, contentType: "recipe", format })
+
+    // Auto-remediate: if ContentValidator found recoverable errors (banned words,
+    // health claims), re-scrub more aggressively and re-validate before giving up.
+    if (!validation.passed) {
+      const fixableErrors = validation.errors.filter(e =>
+        e.severity === "error" &&
+        (e.message.includes("Banned word") || e.message.includes("Unsourced health claim"))
+      )
+
+      if (fixableErrors.length > 0) {
+        // Aggressive remediation: for each failing word, force-replace all occurrences
+        let md = finalRecipe.contentMarkdown ?? ""
+        for (const err of fixableErrors) {
+          const wordMatch = err.message.match(/"([^"]+)"/)
+          if (wordMatch) {
+            const word = wordMatch[1]
+            // Case-insensitive global replace of the banned word
+            const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+            const regex = new RegExp(escaped.replace(/\s+/g, '\\s+'), 'gi')
+            const before = md
+            md = md.replace(regex, '[...]')
+            if (md !== before) {
+              await appendLog(recipeId, logEntry("Workflow", "error",
+                `Auto-scrubbed "${word}" → removed (ContentValidator remediation)`))
+            }
+          }
+        }
+        finalRecipe.contentMarkdown = md
+
+        // Re-validate after aggressive scrubbing
+        validation = validateContent({ ...finalRecipe, contentType: "recipe", format })
+      }
+    }
+
     if (!validation.passed) {
       const errorList = validation.errors
         .filter((e) => e.severity === "error")
