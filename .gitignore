@@ -9,6 +9,10 @@ __v0_jsx-dev-runtime.ts
 # Environment variables
 .env*.local
 
+# Pinterest Discovery — generated files
+data/pinterest-scored.json
+data/pinterest-clusters.json
+
 # Common ignores
 node_modules
 .next/
