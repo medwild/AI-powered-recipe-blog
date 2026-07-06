@@ -169,7 +169,10 @@ function buildClusters(keywords: ScoredKeyword[]): { clusters: Cluster[]; orphan
 
     if (group.length >= 2) {
       assigned.add(i)
-      const clusterName = group[0].keyword.toLowerCase().replace(/[^a-z0-9\s]/g, "").split(/\s+/).filter((t) => !STOP_WORDS.has(t)).slice(0, 3).join("-")
+      let clusterName = group[0].keyword.toLowerCase().replace(/[^a-z0-9\s]/g, "").split(/\s+/).filter((t) => !STOP_WORDS.has(t)).slice(0, 3).join("-")
+      if (!clusterName) {
+        clusterName = "cluster-" + (clusters.length + 1)
+      }
       clusters.push({
         cluster_name: clusterName,
         micro_niche: "",
