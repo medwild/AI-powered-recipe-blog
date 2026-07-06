@@ -76,13 +76,15 @@ export async function POST(req: Request) {
   }
 
   // Aor article params (Step 13 — optional)
+  // generateAorArticle is now implicit: providing a valid aorCategory is sufficient.
+  // The explicit generateAorArticle flag is retained for backward compatibility.
   const validAorCategories = ["techniques", "guides", "histoire", "equipement"]
   let aorCategory: string | undefined
   let aorAngle: string | undefined
 
-  if (body?.generateAorArticle === true) {
-    aorCategory = body?.aorCategory?.toString().trim()
-    if (!aorCategory || !validAorCategories.includes(aorCategory)) {
+  const rawAorCategory = body?.aorCategory?.toString().trim()
+  if (rawAorCategory) {
+    if (!validAorCategories.includes(rawAorCategory)) {
       return NextResponse.json(
         {
           error: `aorCategory invalide. Valeurs acceptées : ${validAorCategories.join(", ")}`,
@@ -90,7 +92,22 @@ export async function POST(req: Request) {
         { status: 400 },
       )
     }
+    aorCategory = rawAorCategory
     aorAngle = body?.aorAngle?.toString().trim() || undefined
+  }
+
+  // Mode: content format — "google" (default, 1800-2200 words) or "pin-first" (1200-1500 words, Pinterest-optimized)
+  const validModes = ["google", "pin-first"]
+  let mode: string | undefined
+  const rawMode = body?.mode?.toString().trim()
+  if (rawMode) {
+    if (!validModes.includes(rawMode)) {
+      return NextResponse.json(
+        { error: `mode invalide. Valeurs acceptées : ${validModes.join(", ")}` },
+        { status: 400 },
+      )
+    }
+    mode = rawMode
   }
 
   // Cuisine focus — makes the pipeline cuisine-agnostic
@@ -137,6 +154,7 @@ export async function POST(req: Request) {
       cuisineIngredients,
       cuisineTechniques,
       ...(aorCategory ? { aorCategory, aorAngle } : {}),
+      ...(mode ? { mode } : {}),
     },
   })
 
