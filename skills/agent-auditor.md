@@ -243,7 +243,6 @@ AI detectors measure four signals. Your audit must target these directly:
 - [ ] ALL PAA questions from editorial plan answered within corresponding H2 sections
 - [ ] ALL semantic entities from editorial plan present and natural
 - [ ] FAQ section has extractable Q&A format (bold question + 40-60 word direct answer)
-- [ ] NOTE: FAQPage rich results were deprecated by Google in May 2026. FAQ is scored for USER VALUE only — not as an SEO rich-result advantage. FAQ is useful but optional.
 - [ ] At least 2 "Answer Nuggets" (40-80 word direct answer blocks) visible in content
 - [ ] Content Freshness signals: datePublished and dateModified in JSON-LD (if present in draft)
 
@@ -270,9 +269,6 @@ AI detectors measure four signals. Your audit must target these directly:
 - [ ] Conclusion has concrete next step, storage tip, or forward-looking statement (NOT "In summary...")
 - [ ] Logical flow between H2 sections (natural transitions)
 - [ ] H2 headings are question-based where possible (≥2 out of 5)
-- [ ] **H1-Content Coherence (Sliding Window)** : Le H1 et le contenu réel sont sémantiquement alignés. Si le H1 promet "troubleshooting" mais que le contenu est une recette standard → FAIL (-5 points). Vérifier que chaque H2/H3 développe réellement le sujet annoncé par son heading, sans dérive thématique.
-- [ ] **IR Zone Optimization** : Title tag, URL slug, et H1 forment une chaîne sémantique cohérente. Le keyword principal apparaît dans ces 3 éléments. Les sections H2/H3 suivent une progression logique (pas de saut thématique).
-- [ ] **RAG-Extractable Passages** : Chaque section H2 contient un "passage autonome" de 40-80 mots qui répond directement à la question posée par le heading, extractible par un système RAG/AI Overviews.
 
 ---
 
