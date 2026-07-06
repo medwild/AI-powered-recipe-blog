@@ -9,6 +9,7 @@
 
 import { loadSkillContent } from "@/lib/skills"
 import { runTextAndParseJson } from "@/lib/agents/nararouter"
+import { stripHtmlComments } from "../helpers"
 import type { SeoPlan } from "./strategist"
 import type { Ingredient, Instruction } from "@/lib/db/schema"
 
@@ -49,7 +50,7 @@ export type RecipeDraft = {
 // User prompt builder
 // ---------------------------------------------------------------------------
 
-function buildUserPrompt(keyword: string, plan: SeoPlan): string {
+function buildUserPrompt(keyword: string, plan: SeoPlan, format: "google" | "pin-first" = "google"): string {
   const h2Plan = plan.h2Sections
     .map(
       (s, i) =>
@@ -66,9 +67,25 @@ Secondary exploit (format differentiator): ${plan.competitorWeaknessExploitation
     : ""
 
   const faqBlock = plan.faqItems?.length
-    ? `\n## FAQ Questions to Answer (5 required)
+    ? `\n## FAQ Questions to Answer (${format === "pin-first" ? "3" : "5"} required)
 ${plan.faqItems.map((q, i) => `Q${i + 1}: ${q.question} → ${q.answer}`).join("\n")}`
     : ""
+
+  const formatRules = format === "pin-first"
+    ? `PIN-FIRST FORMAT RULES (NON-NEGOTIABLE — follow these exactly):
+- Word count: ${plan.targetWordCount ?? "1200-1500"} words STRICT.
+- Recipe card (ingredients + instructions) MUST appear IMMEDIATELY after the intro (50-80 words) — BEFORE any H2 section. This is the #1 rule.
+- FAQ: EXACTLY 3 questions, no more. 40-60 word answers each.
+- OMIT THESE SECTIONS ENTIRELY — do NOT include them:
+  * "Why This Works" summary box
+  * "Nutrition Highlights"
+  * "What Most Recipes Get Wrong"
+- KEEP THESE SECTIONS: Chef's Tips, Variations, Storage & Reheating, FAQ (3 Q&A only).
+- JSON-LD: Recipe + BlogPosting + BreadcrumbList ONLY. NO FAQPage.
+- Image: 2:3 vertical aspect ratio food photography prompt.`
+    : `GOOGLE FORMAT RULES:
+- Word count: ${plan.targetWordCount ?? "1800-2200"} words STRICT.
+- Include ALL mandatory sections: Why This Works (bold summary box), What Most Recipes Get Wrong, Body H2s, Chef's Tips, Variations, Storage & Reheating, FAQ (5 Q&A), Nutrition Highlights.`
 
   return `Write recipe "${keyword}" as Chef Augustin Lefèvre.
 
@@ -78,18 +95,17 @@ Meta: ${plan.metaTitle} | Desc: ${plan.metaDescription}
 Tags: ${plan.tags.join(", ")} | Difficulty: ${plan.difficulty} | Time: ${plan.totalTime}
 Target word count: ${plan.targetWordCount ?? "1800-2200"}
 
-## Why This Recipe Works (summary box)
+${format === "google" ? `## Why This Recipe Works (summary box)
 ${plan.whyThisWorks ?? "Explain the science/principles behind this recipe's success in a bold 60-80 word summary."}
-${competitorBlock}
+${competitorBlock}` : ""}
 ## H2 Structure with PAA Questions
 ${h2Plan}
 ${faqBlock}
 ## Semantic Entities to Weave Naturally
 ${plan.semanticEntities.join(", ")}
 
-## Important
-- Target ${plan.targetWordCount ?? "1800-2200"} words total (competitors average 1500-2400).
-- Follow the section structure and mandatory sections defined in your system prompt for the current format.
+## CRITICAL — Format-Specific Instructions
+${formatRules}
 - Use the editorial plan's metadata values (title, metaTitle, metaDescription, tags, times, servings, difficulty) exactly as provided — do not regenerate them.
 - Answer the PAA questions naturally within their corresponding H2 section prose. Save Q&A format for the FAQ section only.
 - Weave the semantic entities into headings and the first paragraph organically.
@@ -114,16 +130,23 @@ export async function agentWriter(
   try {
     const mergedReplacements = { ...(replacements ?? {}), format } as Record<string, string>
     const systemPrompt = await loadSkillContent("agent-writer", mergedReplacements)
-    const userPrompt = buildUserPrompt(keyword, plan)
+    const userPrompt = buildUserPrompt(keyword, plan, format)
 
-    // maxTokens 6144: the full article (1800-2200 words) + JSON metadata (title, meta,
-    // ingredients, instructions, FAQ 5Q, whyThisWorks, nutritionHighlights, jsonLd)
-    // needs more output space. 4096 was causing JSON truncation and triggering
-    // the Cloudflare fallback instead of using NaraRouter Mistral 3.5 as intended.
-    return runTextAndParseJson<RecipeDraft>(systemPrompt, userPrompt, {
+    // maxTokens 6144: the full article + JSON metadata needs more output space.
+    // 4096 was causing JSON truncation and triggering the Cloudflare fallback.
+    const result = await runTextAndParseJson<RecipeDraft>(systemPrompt, userPrompt, {
       temperature: 0.9,
       maxTokens: 6144,
     })
+
+    // Deterministic sanitization: strip any HTML comments (vibe coding tokens
+    // like <!--WARM-->, <!--GLOW--> that the LLM may fail to purge despite
+    // skill instructions). Applied BEFORE the content flows downstream.
+    if (result.contentMarkdown) {
+      result.contentMarkdown = stripHtmlComments(result.contentMarkdown)
+    }
+
+    return result
   } catch (err) {
     throw new Error(
       `[Writer] LLM call failed for "${keyword}": ${(err as Error).message}`,
