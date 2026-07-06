@@ -26,6 +26,7 @@ export async function runAgentPhase(
   keyword: string,
   structuredSerp: StructuredSerp,
   cuisineReplacements: Record<string, string>,
+  format: "google" | "pin-first" = "google",
 ): Promise<AgentPhaseResult> {
   let degraded = false
 
@@ -75,7 +76,7 @@ export async function runAgentPhase(
 
       await appendLog(recipeId, logEntry("SEO Strategist", "running",
         `SERP analysis + ${improvements.length} past lessons + calibration data → editorial plan`))
-      const plan = await agentStrategistV2(keyword, structuredSerp, improvements, cuisineReplacements)
+      const plan = await agentStrategistV2(keyword, structuredSerp, improvements, cuisineReplacements, format)
       await appendLog(recipeId, logEntry("SEO Strategist", "done",
         `Editorial plan: ${plan.h2Sections.length} H2 sections, ${plan.semanticEntities.length} semantic entities`))
       return plan
@@ -96,7 +97,7 @@ export async function runAgentPhase(
   try {
     draft = (await step.run("agent-2-writer", async () => {
       await appendLog(recipeId, logEntry("Writer", "running", "Writing as Chef Augustin Lefèvre"))
-      const result = await agentWriter(keyword, seoPlan, cuisineReplacements)
+      const result = await agentWriter(keyword, seoPlan, cuisineReplacements, format)
       await appendLog(recipeId, logEntry("Writer", "done",
         `Article "${result.title}" written — ${result.ingredients.length} ingredients, ${result.instructions.length} steps`))
       return result

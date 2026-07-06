@@ -41,9 +41,10 @@ export const generateRecipeWorkflow = inngest.createFunction(
     cancelOn: [{ event: "recipe/cancel", match: "data.recipeId" }],
   },
   async ({ event, step }) => {
-    const { recipeId, keyword, aorCategory, aorAngle, cuisine, cuisineIngredients, cuisineTechniques } = event.data as {
+    const { recipeId, keyword, aorCategory, aorAngle, cuisine, cuisineIngredients, cuisineTechniques, mode } = event.data as {
       recipeId: number; keyword: string; aorCategory?: string; aorAngle?: string;
       cuisine?: string; cuisineIngredients?: string; cuisineTechniques?: string;
+      mode?: string;
     }
 
     const cuisineReplacements = {
@@ -51,6 +52,8 @@ export const generateRecipeWorkflow = inngest.createFunction(
       cuisine_ingredients: cuisineIngredients || "bread flour, rye flour, whole wheat flour, sourdough starter, salt, water, olive oil, honey, butter",
       cuisine_techniques: cuisineTechniques || "autolyse, stretch and fold, coil fold, bulk fermentation, cold retard, bench rest, scoring, steam baking (dutch oven), lamination",
     }
+
+    const format = (mode === "pin-first" ? "pin-first" : "google") as "google" | "pin-first"
 
     let degraded = false
 
@@ -60,7 +63,7 @@ export const generateRecipeWorkflow = inngest.createFunction(
       degraded = degraded || serpResult.degraded
 
       // ── Phase 2: Agents ───────────────────────────────────────────────
-      const agentResult = await runAgentPhase(step, recipeId, keyword, serpResult.structuredSerp, cuisineReplacements)
+      const agentResult = await runAgentPhase(step, recipeId, keyword, serpResult.structuredSerp, cuisineReplacements, format)
       degraded = degraded || agentResult.degraded
 
       // ── Phase 3: Persist draft for review ─────────────────────────────
