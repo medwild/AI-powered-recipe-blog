@@ -13,6 +13,7 @@
 
 import { loadSkillContent } from "@/lib/skills"
 import { runTextAndParseJson } from "@/lib/agents/nararouter"
+import { validateContract, AGENT_CONTRACTS } from "@/lib/agents/contract-validator"
 import type { SerpResult } from "@/lib/agents/serp"
 import type { StructuredSerp } from "@/lib/agents/serp-structurer"
 
@@ -61,6 +62,11 @@ export type SeoPlan = {
     questionBasedH2s?: number
     entityCoverage?: string
   }
+  // v6.0 Koray GÜBÜR — Topical Authority: Historical Data First
+  /** "core" = monetizable/central topic, "outer" = peripheral authority-building */
+  topical_zone?: "core" | "outer"
+  /** For outer articles: slug of the core page to link back to (outer→core flow) */
+  core_target_slug?: string
 }
 
 // ---------------------------------------------------------------------------
@@ -211,14 +217,22 @@ export async function agentStrategistV2(
   structuredSerp: StructuredSerp,
   pastImprovements: string[],
   replacements?: Record<string, string>,
+  format: "google" | "pin-first" = "google",
 ): Promise<SeoPlan> {
   try {
-    const systemPrompt = await loadSkillContent("agent-strategist", replacements)
+    // Merge format into replacements so {{format}} resolves in skill template
+    const mergedReplacements = { ...(replacements ?? {}), format } as Record<string, string>
+    const systemPrompt = await loadSkillContent("agent-strategist", mergedReplacements)
     const userPrompt = buildUserPromptV2(keyword, structuredSerp, pastImprovements)
-    return runTextAndParseJson<SeoPlan>(systemPrompt, userPrompt, {
+    const result = await runTextAndParseJson<SeoPlan>(systemPrompt, userPrompt, {
       maxTokens: 4096,
       temperature: 0.3,
     })
+    const validation = validateContract(result as Record<string, unknown>, AGENT_CONTRACTS.Strategist)
+    if (validation.warnings.length > 0) {
+      console.warn("[Strategist] Contract warnings:", validation.warnings.join("; "))
+    }
+    return result
   } catch (err) {
     throw new Error(
       `[Strategist V2] LLM call failed for "${keyword}": ${(err as Error).message}`,
