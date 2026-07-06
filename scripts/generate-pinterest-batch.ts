@@ -70,7 +70,7 @@ async function main() {
   }
 
   const cuisineIdx = process.argv.indexOf("--cuisine")
-  const cuisine = cuisineIdx >= 0 ? process.argv[cuisineIdx + 1] : "sourdough"
+  const cuisine = cuisineIdx >= 0 ? process.argv[cuisineIdx + 1] : "dinners-for-two"
 
   const data = JSON.parse(await import("node:fs").then((fs) => fs.readFileSync(inputPath, "utf-8"))) as ClustersOutput
 

@@ -48,9 +48,9 @@ export const generateRecipeWorkflow = inngest.createFunction(
     }
 
     const cuisineReplacements = {
-      cuisine: cuisine || "Sourdough",
-      cuisine_ingredients: cuisineIngredients || "bread flour, rye flour, whole wheat flour, sourdough starter, salt, water, olive oil, honey, butter",
-      cuisine_techniques: cuisineTechniques || "autolyse, stretch and fold, coil fold, bulk fermentation, cold retard, bench rest, scoring, steam baking (dutch oven), lamination",
+      cuisine: cuisine || "Easy Weeknight Dinners for Two",
+      cuisine_ingredients: cuisineIngredients || "chicken breast, ground beef, pasta, rice, garlic, onion, olive oil, butter, canned tomatoes, frozen vegetables, eggs",
+      cuisine_techniques: cuisineTechniques || "searing, deglazing, one-pan cooking, sheet-pan roasting, slow cooking, quick sauces, portion scaling",
     }
 
     const format = (mode === "pin-first" ? "pin-first" : "google") as "google" | "pin-first"
