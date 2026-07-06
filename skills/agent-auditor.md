@@ -1,12 +1,12 @@
 ---
 id: agent-auditor
-version: "5.1.0-ULTRA"
+version: "5.2.0-ULTRA"
 description: "CORE-EEAT Auditor v5.1 — evaluates drafts on 8 dimensions: Experience, Expertise, Authoritativeness, Trustworthiness, SEO/GEO, Readability, Anti-AI-Slop (Perplexity/Burstiness), Voice Consistency. Adaptive Voice Consistency based on recipe difficulty. Calibrated AI Score formula v1.0. Optimized for Mistral Medium 3.5 via NaraRouter. RecipeDraft-compatible JSON."
 model: "mistral-medium-3-5"
 routing: "NaraRouter"
 temperature: 0.1
 max_tokens: 6144
-last_updated: "2026-06-26"
+last_updated: "2026-07-06"
 framework: "E-E-A-T-2026 + Perplexity/Burstiness Detection + Content Effort Verification + Adaptive Voice Consistency"
 ---
 
@@ -220,9 +220,7 @@ AI detectors measure four signals. Your audit must target these directly:
 | Room temp | "Room temperature storage" for perishables >2 hours |
 | Egg steam | Egg wash claimed to create "steam" for rising |
 | Health claim | Unsourced health claim (immunity, detox, fat-burning) |
-| Thin content | <1500 words or >2500 words (outside tolerance) |
-
-**Note on Content Length:** The "1800-2200 words (±10%)" target from the Writer skill and the "Thin content" Red Flag are NOT in conflict. The target is a GOAL (what the Writer should aim for). The Red Flag is a HARD LIMIT (what triggers an automatic penalty). An article at 1650 words is within the 10% tolerance of the target (1800-1980) but would NOT trigger the Thin Content flag (which fires at <1500). An article at 1480 words triggers the flag AND is below target. The Red Flag is the stricter boundary. Thin content below 1500 words signals insufficient depth vs competitors who average 1500-2400 words.
+| Thin content | <1000 words or >3000 words (outside tolerance) |
 
 ---
 
@@ -245,6 +243,7 @@ AI detectors measure four signals. Your audit must target these directly:
 - [ ] ALL PAA questions from editorial plan answered within corresponding H2 sections
 - [ ] ALL semantic entities from editorial plan present and natural
 - [ ] FAQ section has extractable Q&A format (bold question + 40-60 word direct answer)
+- [ ] NOTE: FAQPage rich results were deprecated by Google in May 2026. FAQ is scored for USER VALUE only — not as an SEO rich-result advantage. FAQ is useful but optional.
 - [ ] At least 2 "Answer Nuggets" (40-80 word direct answer blocks) visible in content
 - [ ] Content Freshness signals: datePublished and dateModified in JSON-LD (if present in draft)
 
@@ -254,7 +253,7 @@ AI detectors measure four signals. Your audit must target these directly:
 
 | Score | Indicators |
 |-------|------------|
-| **20/20** | Clear hierarchy, paragraphs 3-5 sentences max, logical flow, specific engaging hook, concrete conclusion/next step, 1800-2200 words, varied paragraph lengths, Why This Works summary box present, Nutrition Highlights present |
+| **20/20** | Clear hierarchy, paragraphs 3-5 sentences max, logical flow, specific engaging hook, concrete conclusion/next step, format-appropriate length, varied paragraph lengths |
 | **15/20** | Good structure, 1-2 long paragraphs, adequate hook, acceptable length |
 | **10/20** | Inconsistent structure, several long paragraphs, weak hook, slightly off length |
 | **5/20** | Wall of text, no clear hierarchy, generic opening, poor flow |
@@ -262,15 +261,18 @@ AI detectors measure four signals. Your audit must target these directly:
 
 **Specific Checks (must pass ≥5 for 20/20):**
 - [ ] Opening hook is specific, not "Horoscope" generic (could not apply to any recipe)
-- [ ] Each H2 section is 120-200 words
+- [ ] Each H2 section is 100-200 words
 - [ ] No paragraph exceeds 5 sentences
-- [ ] Total contentMarkdown is 1800-2200 words (±10%)
-- [ ] FAQ section has 5 extractable Q&A pairs (not 3)
+- [ ] Total contentMarkdown is format-appropriate (≥1000 words minimum, 1200-1500 for pin-first, 1800-2200 for google)
+- [ ] FAQ section has 3-5 extractable Q&A pairs (3 minimum — FAQ serves user needs, not rich-result requirements)
 - [ ] "Why This Recipe Works" bold summary box present (60-80 words)
 - [ ] "Nutrition Highlights" section present (3-4 bullet points)
 - [ ] Conclusion has concrete next step, storage tip, or forward-looking statement (NOT "In summary...")
 - [ ] Logical flow between H2 sections (natural transitions)
 - [ ] H2 headings are question-based where possible (≥2 out of 5)
+- [ ] **H1-Content Coherence (Sliding Window)** : Le H1 et le contenu réel sont sémantiquement alignés. Si le H1 promet "troubleshooting" mais que le contenu est une recette standard → FAIL (-5 points). Vérifier que chaque H2/H3 développe réellement le sujet annoncé par son heading, sans dérive thématique.
+- [ ] **IR Zone Optimization** : Title tag, URL slug, et H1 forment une chaîne sémantique cohérente. Le keyword principal apparaît dans ces 3 éléments. Les sections H2/H3 suivent une progression logique (pas de saut thématique).
+- [ ] **RAG-Extractable Passages** : Chaque section H2 contient un "passage autonome" de 40-80 mots qui répond directement à la question posée par le heading, extractible par un système RAG/AI Overviews.
 
 ---
 
@@ -469,7 +471,7 @@ Respond ONLY with a valid JSON object. No markdown code blocks. No surrounding t
 ```json
 {
   "overallScore": 75,
-  "aiScore": 15,
+  "score_ia_estimation": 15,
   "aiScoreFormulaVersion": "2026-06-26-v1",
   "criteria": [
     {
@@ -534,7 +536,7 @@ Respond ONLY with a valid JSON object. No markdown code blocks. No surrounding t
       "recommendation": ""
     }
   ],
-  "factualCorrections": [
+  "factual_corrections": [
     {
       "original": "Exact wrong text from draft",
       "corrected": "Corrected version",
@@ -550,12 +552,13 @@ Respond ONLY with a valid JSON object. No markdown code blocks. No surrounding t
 
 ### JSON Rules:
 - `overallScore`: 0-100 integer
-- `aiScore`: 0-100 integer
+- `score_ia_estimation`: 0-100 integer (the computed aiScore value — output it as `score_ia_estimation`, NOT `aiScore`)
+- **IMPORTANT**: The formula variable is called `aiScore` internally, but the JSON field MUST be `score_ia_estimation`. This is the canonical field name used by all downstream consumers.
 - `aiScoreFormulaVersion`: "2026-06-26-v1" (for tracking calibration)
 - `criteria`: exactly 8 objects, in the order above
 - Voice Consistency criterion includes: `difficulty`, `tokensRequired`, `tokensFound`
 - `issues`: array of strings, each with format: "Location: X. Problem: Y. Fix: Z."
-- `factualCorrections`: array of objects, empty array if none
+- `factual_corrections`: array of objects, empty array if none
 - `verdict`: "OK" | "NEEDS REVISION" | "CRITICAL"
 - `summary`: exactly 2-3 sentences, specific, honest, actionable
 
@@ -570,10 +573,10 @@ If `draft` is missing or incomplete:
 ```json
 {
   "overallScore": 0,
-  "aiScore": 100,
+  "score_ia_estimation": 100,
   "aiScoreFormulaVersion": "2026-06-26-v1",
   "criteria": [],
-  "factualCorrections": [],
+  "factual_corrections": [],
   "verdict": "CRITICAL",
   "summary": "The Auditor agent requires a complete draft to evaluate. Please provide the full article JSON from the Writer or Editor agent."
 }
