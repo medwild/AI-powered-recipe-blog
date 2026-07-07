@@ -55,6 +55,10 @@ export const generateRecipeWorkflow = inngest.createFunction(
 
     const format = (mode === "pin-first" ? "pin-first" : "google") as "google" | "pin-first"
 
+    // Feature flag: set USE_AUTHENTICITY_AUDITOR=false to revert to legacy Auditor+QA
+    // Default: true (enhanced auditor v6.1 with pin-first awareness)
+    const useAuthenticityAuditor = process.env.USE_AUTHENTICITY_AUDITOR !== "false"
+
     let degraded = false
 
     try {
@@ -88,7 +92,7 @@ export const generateRecipeWorkflow = inngest.createFunction(
 
           await appendLog(recipeId, logEntry("Auditor", "running", "Re-evaluating retry draft"))
           const retryAudit = await agentAuditor(keyword, retryDraft, agentResult.seoPlan.semanticEntities, format)
-          await appendLog(recipeId, logEntry("Auditor", "done", `Retry score: ${retryAudit.overallScore}/100 | AI: ${retryAudit.score_ia_estimation}/100`))
+          await appendLog(recipeId, logEntry("Auditor", "done", `Retry readiness: ${retryAudit.publication_readiness_score}/100 | Decision: ${retryAudit.decision}`))
 
           const retryEditResult = await runEditorQaLoop(step, recipeId, keyword, retryDraft, retryAudit, agentResult.seoPlan, format)
           degraded = degraded || retryEditResult.degraded
