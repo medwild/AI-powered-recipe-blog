@@ -5,6 +5,7 @@ import {
   text,
   jsonb,
   timestamp,
+  numeric,
   index,
 } from "drizzle-orm/pg-core"
 
@@ -129,6 +130,48 @@ export const pinDrafts = pgTable(
 
 export type PinDraft = typeof pinDrafts.$inferSelect
 export type NewPinDraft = typeof pinDrafts.$inferInsert
+
+export const pinAnalytics = pgTable(
+  "pin_analytics",
+  {
+    id: serial("id").primaryKey(),
+    recipeId: integer("recipe_id").notNull(),
+    pinDraftId: integer("pin_draft_id"),
+    pinterestPinUrl: text("pinterest_pin_url"),
+    pinterestPinId: text("pinterest_pin_id"),
+    board: text("board").notNull(),
+    boardSlug: text("board_slug").notNull(),
+    pinIndex: integer("pin_index").notNull(),
+    pinTitle: text("pin_title").notNull(),
+    overlayHook: text("overlay_hook"),
+    visualType: text("visual_type"),
+    intent: text("intent").notNull(),
+    utmSource: text("utm_source").default("pinterest"),
+    utmMedium: text("utm_medium").default("pin"),
+    utmCampaign: text("utm_campaign"),
+    utmContent: text("utm_content"),
+    publishStatus: text("publish_status").default("draft"),
+    publishedAt: timestamp("published_at", { withTimezone: true }),
+    impressions: integer("impressions").default(0),
+    saves: integer("saves").default(0),
+    pinClicks: integer("pin_clicks").default(0),
+    outboundClicks: integer("outbound_clicks").default(0),
+    outboundClickRate: numeric("outbound_click_rate", { precision: 5, scale: 2 }),
+    saveRate: numeric("save_rate", { precision: 5, scale: 2 }),
+    lastMetricsSyncAt: timestamp("last_metrics_sync_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => ({
+    recipeIdx: index("idx_pa_recipe").on(table.recipeId),
+    boardSlugIdx: index("idx_pa_board_slug").on(table.boardSlug),
+    publishStatusIdx: index("idx_pa_publish_status").on(table.publishStatus),
+    publishedAtIdx: index("idx_pa_published_at").on(table.publishedAt),
+  }),
+)
+
+export type PinAnalytic = typeof pinAnalytics.$inferSelect
+export type NewPinAnalytic = typeof pinAnalytics.$inferInsert
 
 export const recipes = pgTable(
   "recipes",
