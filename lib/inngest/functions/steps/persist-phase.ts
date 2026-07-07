@@ -55,7 +55,7 @@ export async function persistDraftForReview(
       status: "draft_review", updatedAt: new Date(),
     }).where(eq(recipes.id, recipeId))
     await appendLog(recipeId, logEntry("Human Review", "running",
-      `Awaiting approval — audit score: ${audit.overallScore}/100 | AI: ${audit.score_ia_estimation}/100 | Verdict: ${audit.verdict}`))
+      `Awaiting approval — readiness: ${audit.publication_readiness_score}/100 | LLM Sig: ${audit.scores.signature_llm}/100 | Decision: ${audit.decision}`))
   })
 }
 
@@ -96,15 +96,52 @@ export async function runSelfImprovement(
   await step.run("self-improvement", async () => {
     const tagList = finalRecipe.tags ?? []
     const lessons: NewSelfImprovementLog[] = []
-    for (const c of audit.criteria) {
-      if (c.score < 16) lessons.push({ keyword, criterion: c.name, score: String(c.score), recommendation: c.recommendation, tags: tagList, source: "auditor" })
+    // Normal dimensions (high = good): record lesson if score < 60
+    // Inverted dimensions (high = bad): record lesson if score >= 60
+    const normalCriteria: (keyof typeof audit.scores)[] = [
+      "factualite", "originalite", "utilite", "experience",
+      "coherence_interne", "eeat_trust",
+    ]
+    for (const key of normalCriteria) {
+      const score = audit.scores[key]
+      if (typeof score === "number" && score < 60) {
+        lessons.push({
+          keyword, criterion: key, score: String(score),
+          recommendation: audit.required_fixes
+            .filter(f => f.description.toLowerCase().includes(key.replace(/_/g, " ")))
+            .map(f => f.description)
+            .join("; ") || audit.final_recommendation,
+          tags: tagList, source: "auditor",
+        })
+      }
     }
-    if (audit.score_ia_estimation != null) {
+    // validite_recette: only if present and low
+    if (audit.scores.validite_recette != null && audit.scores.validite_recette < 60) {
       lessons.push({
-        keyword, criterion: "ai_score", score: String(audit.score_ia_estimation),
-        recommendation: audit.score_ia_estimation < 20 ? "AI detection score below 20 — anti-AI techniques working well." :
-          audit.score_ia_estimation < 40 ? `AI score ${audit.score_ia_estimation}/100 — moderate risk.` :
-            `AI score ${audit.score_ia_estimation}/100 — high detection risk.`,
+        keyword, criterion: "validite_recette", score: String(audit.scores.validite_recette),
+        recommendation: audit.required_fixes
+          .filter(f => f.description.toLowerCase().includes("recipe") || f.description.toLowerCase().includes("ratio"))
+          .map(f => f.description)
+          .join("; ") || audit.final_recommendation,
+        tags: tagList, source: "auditor",
+      })
+    }
+    // Inverted scores: record if risk is high (>= 60)
+    if (audit.scores.signature_llm >= 60) {
+      lessons.push({
+        keyword, criterion: "llm_signature", score: String(audit.scores.signature_llm),
+        recommendation: audit.scores.signature_llm >= 80
+          ? `LLM signature risk ${audit.scores.signature_llm}/100 — very high. Strong anti-pattern signals detected.`
+          : `LLM signature risk ${audit.scores.signature_llm}/100 — elevated. Review vocabulary, transitions, and structure.`,
+        tags: tagList, source: "auditor",
+      })
+    }
+    if (audit.scores.sur_optimisation_seo >= 60) {
+      lessons.push({
+        keyword, criterion: "seo_overoptimization", score: String(audit.scores.sur_optimisation_seo),
+        recommendation: audit.scores.sur_optimisation_seo >= 80
+          ? `SEO over-optimization risk ${audit.scores.sur_optimisation_seo}/100 — very high. Visible keyword stuffing or artificial structure.`
+          : `SEO over-optimization risk ${audit.scores.sur_optimisation_seo}/100 — elevated. Review keyword density and section relevance.`,
         tags: tagList, source: "auditor",
       })
     }
@@ -123,7 +160,7 @@ export async function runSelfImprovement(
     })
     if (lessons.length > 0) await db.insert(selfImprovementLogs).values(lessons)
     await appendLog(recipeId, logEntry("Self-Improvement", "done",
-      `${lessons.length} lessons saved | Final pass: ${humanizationPass} | AI Score: ${audit.score_ia_estimation}/100 | QA: ${qaReport.verdict}`))
+      `${lessons.length} lessons saved | Final pass: ${humanizationPass} | LLM Sig: ${audit.scores.signature_llm}/100 | QA: ${qaReport.verdict}`))
   })
 }
 
@@ -149,6 +186,15 @@ export async function persistFinalDraft(
     }
 
     const wordCount = (finalRecipe.contentMarkdown ?? "").split(/\s+/).filter(Boolean).length
+
+    // Pin-first IMAGE placeholder validation (warning-only)
+    if (format === "pin-first") {
+      const imagePlaceholders = ((finalRecipe.contentMarkdown ?? "").match(/\[IMAGE:/gi) ?? []).length
+      if (imagePlaceholders < 4) {
+        await appendLog(recipeId, logEntry("Workflow", "error",
+          `Pin-First: Only ${imagePlaceholders} [IMAGE:] placeholders found (expected 4-6). Process shots may be incomplete.`))
+      }
+    }
 
     // Deterministic banned-word scrubbing — LAST-RESORT safety net.
     // The Editor should already have removed these; this catches what slips through.
