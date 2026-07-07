@@ -42,15 +42,16 @@ export async function runEditorQaLoop(
   let qaFixApplied = false
   let finalRecipe: RecipeDraft = draft
 
-  // ── Step 7: Editor loop (max 3 passes) ─────────────────────────────────
-  while (humanizationPass < MAX_EDITOR_PASSES) {
-    if (currentAudit.verdict === "OK") break
+  // ── Step 7: Editor loop (max 3 passes for google, 2 for pin-first) ─────
+  const effectiveMaxPasses = format === "pin-first" ? 2 : MAX_EDITOR_PASSES
+  while (humanizationPass < effectiveMaxPasses) {
+    if (currentAudit.decision === "PASS") break
     humanizationPass++
 
     try {
       finalRecipe = (await step.run(`agent-4-editor-pass-${humanizationPass}`, async () => {
         await appendLog(recipeId, logEntry("Editor", "running",
-          `Pass ${humanizationPass}/${MAX_EDITOR_PASSES} — Correction${currentAudit.verdict === "NEEDS REVISION" && currentAudit.score_ia_estimation >= 20 ? " + anti-AI humanization" : ""}`))
+          `Pass ${humanizationPass}/${MAX_EDITOR_PASSES} — Correction${currentAudit.decision !== "PASS" && currentAudit.scores.signature_llm >= 30 ? " + anti-AI humanization" : ""}`))
         const corrected = await agentEditor(keyword, currentDraft, currentAudit, humanizationPass, format)
         await appendLog(recipeId, logEntry("Editor", "done",
           `Pass ${humanizationPass} complete — ${corrected.changes_summary}`))
@@ -75,7 +76,7 @@ export async function runEditorQaLoop(
         await appendLog(recipeId, logEntry("Auditor", "running", `Re-evaluation after pass ${humanizationPass}`))
         const report = await agentAuditor(keyword, currentDraft, seoPlan.semanticEntities, format)
         await appendLog(recipeId, logEntry("Auditor", "done",
-          `Score: ${report.overallScore}/100 | AI: ${report.score_ia_estimation}/100 | Verdict: ${report.verdict}`))
+          `Readiness: ${report.publication_readiness_score}/100 | LLM Sig: ${report.scores.signature_llm}/100 | Decision: ${report.decision}`))
         return report
       })) as AuditReport
     } catch (err) {
@@ -134,11 +135,11 @@ export async function runEditorQaLoop(
         await appendLog(recipeId, logEntry("Editor", "running", `QA fix pass — ${qaIssues.substring(0, 120)}`))
         const qaAudit: typeof currentAudit = {
           ...currentAudit,
-          verdict: "NEEDS REVISION" as const,
-          criteria: currentAudit.criteria.map((c) => ({
-            ...c,
-            issues: qaIssues ? [...c.issues, qaIssues] : c.issues,
-          })),
+          decision: "MAJOR_REWRITE" as const,
+          critical_issues: [
+            ...currentAudit.critical_issues,
+            { criterion: "qa", issue: qaIssues || "QA flagged issues requiring fix" },
+          ],
         }
         return await agentEditor(keyword, finalRecipe!, qaAudit, humanizationPass, format)
       })) as RecipeDraft
