@@ -1,5 +1,5 @@
 import { db } from "@/lib/db"
-import { recipes, selfImprovementLogs } from "@/lib/db/schema"
+import { recipes, selfImprovementLogs, pinDrafts } from "@/lib/db/schema"
 import type { Recipe } from "@/lib/db/schema"
 import { desc, eq, and, ne, ilike, or, sql } from "drizzle-orm"
 
@@ -347,4 +347,13 @@ export async function logPipelineError(params: {
   severity: "warning" | "degraded" | "critical"
 }) {
   return db.insert(pipelineErrors).values(params as NewPipelineError)
+}
+
+/** Get all pin drafts for a recipe, ordered by PTRA score descending. */
+export async function getPinDraftsForRecipe(recipeId: number) {
+  return db
+    .select()
+    .from(pinDrafts)
+    .where(eq(pinDrafts.recipeId, recipeId))
+    .orderBy(desc(pinDrafts.ptraScore))
 }
