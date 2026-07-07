@@ -1,9 +1,10 @@
-# Pinterest SERP Opportunity Engine — Design Complet v2
+# Pinterest SERP Opportunity Engine — Design Complet v3
 
 > **Date** : 2026-07-07
-> **Status** : Design approuvé, révisé après review (v2)
-> **Sessions** : 2026-07-05 (Sections 1), 2026-07-07 (Sections 2-6 + révisions)
-> **Review** : ChatGPT — 15 points, 10 bloquants corrigés
+> **Status** : Final — prêt pour implémentation
+> **Score** : 91/100 (ChatGPT review v2: 86 → v3: 91)
+> **Sessions** : 2026-07-05 (Sections 1), 2026-07-07 (Sections 2-6 + v2 + v3)
+> **Reviews** : ChatGPT v1 (15 points, 10 corrigés) + v2 (7 points, 7 corrigés)
 
 ---
 
@@ -17,7 +18,49 @@
 
 **Micro-niche** : Easy Weeknight Dinners for Two.
 
-**Legacy** : Le cleanup sourdough est déjà terminé (session 2026-07-06 — 16 fichiers, zéro référence restante).
+**Legacy** : Le cleanup sourdough est déjà terminé (session 2026-07-06 — 16 fichiers). Vérification obligatoire avant exécution (voir Pre-flight Audit).
+
+---
+
+## Pre-flight Audit — Obligatoire avant toute modification
+
+Avant la Phase 0, Claude Code doit exécuter ces vérifications :
+
+### 1. Vérifier l'absence de l'ancienne niche
+```bash
+rg -n "sourdough|discard|starter discard|sourdough flatbread|sourdough crackers|sourdough muffins" .
+```
+Le résultat doit être vide (ou uniquement dans l'historique git/docs).
+
+### 2. Confirmer la présence de la nouvelle niche
+```bash
+rg -n "Easy Weeknight Dinners for Two|dinners for two|DINNERS_FOR_TWO" .
+```
+
+### 3. Identifier la stack réelle
+```bash
+cat package.json | jq '{scripts: .scripts, dependencies: .dependencies | keys}'
+```
+Confirmer : Next.js, Drizzle ORM, TypeScript, Inngest.
+
+### 4. Identifier la route recette réelle
+```bash
+find app -name "page.tsx" | grep -E "recette|recipe|slug"
+```
+Ne pas créer de route dupliquée. Modifier la route existante.
+
+### 5. Vérifier les scripts disponibles
+```bash
+npm run typecheck 2>/dev/null || npx tsc --noEmit --version
+npm run lint 2>/dev/null || echo "no lint script"
+npm run build --version 2>/dev/null || echo "check package.json for build"
+```
+
+### 6. Règles absolues
+- Ne pas inventer de commandes absentes du `package.json`
+- Ne pas créer de route dupliquée si une route recette existe déjà
+- `npx tsc --noEmit` après chaque phase
+- Commit atomique par phase
 
 ---
 
@@ -33,7 +76,7 @@ Serper "pinterest.com"       SERP Structurer v2.1           Pinterest (manuel v1
 Pin Designer (intake)       Strategist v6.0                 5 launch + 5 planned
         ↓                          ↓                        Rich Pins (Schema.org)
 Pin Designer (scan)         Writer v6.3                     UTM tracking complet
-        ↓                          ↓                        pin_analytics (19 colonnes)
+        ↓                          ↓                        pin_analytics (table complète)
 Pin Designer (plan)         Authenticity Auditor v1.0
         ↓                          ↓
 Top keywords scorés         Editor v6.0 (correctif)
@@ -266,7 +309,7 @@ interface RichPinReadiness {
 }
 ```
 
-Vérification basée sur Schema.org Recipe (pas seulement OG). Les champs obligatoires Pinterest pour les Recipe Rich Pins : `name`, `image`, `ingredients`, `instructions`, `prepTime` ou `cookTime`.
+Vérification basée sur Schema.org Recipe (pas seulement OG). Champs requis par notre gate qualité interne pour la cohérence du schema Recipe : `name`, `image`, `recipeIngredient`, `recipeInstructions`, `prepTime` ou `cookTime`. Ces champs sont exigés par notre projet comme gate de readiness — ils ne constituent pas une liste officielle exhaustive de Pinterest.
 
 ### Tracking — Table `pin_analytics` (19 colonnes)
 
@@ -342,8 +385,9 @@ Publication ou draft
 
 | Check | Type | Seuil |
 |---|---|---|
-| Aspect ratio | Bloquant | Pas 2:3 (1000x1500px) |
-| Image dimensions réelles | Bloquant | <1000px width ou <1500px height |
+| Aspect ratio | Bloquant | Pas 2:3 (±1% tolérance) |
+| Dimensions minimales | Bloquant | <1000px width ou <1500px height |
+| Cible recommandée | — | 1000×1500px (2:3). 1200×1800, 2000×3000 = valides |
 | Alt text présent | Warning | Vide |
 | Format supporté | Bloquant | Pas JPEG/PNG/WebP |
 | URL accessible | Bloquant | HTTP status ≠ 200 |
@@ -435,24 +479,36 @@ Si `false` → pipeline legacy (google). Si `true` (défaut) → Authenticity Au
 | Fichier | Action |
 |---|---|
 | `scripts/discover.ts` | Créer |
-| `lib/db/schema.ts` | Modifier — table `pin_analytics` (19 colonnes) |
+| `lib/db/schema.ts` | Modifier — table `pin_analytics` |
 | `lib/inngest/functions/steps/pin-phase.ts` | Modifier — UTM complets |
 | `app/dashboard/page.tsx` | Modifier — affichage Pins |
-| `app/recettes/[slug]/page.tsx` | Modifier — Rich Pins gate (Schema.org Recipe) |
+| Route recette existante | Modifier — Rich Pins gate (Schema.org Recipe). Trouver la route réelle via le pre-flight audit, ne pas en créer de nouvelle |
 
 ### Migration DB
 
+**Avant toute modification :**
+1. Vérifier si le projet utilise Drizzle ou Prisma (`package.json`)
+2. Si Drizzle migrations sont configurées, préférer `drizzle-kit generate` pour créer une migration nommée
+3. Ne pas exécuter de commande destructive automatiquement (`DROP TABLE` uniquement documenté comme rollback manuel)
+
 ```bash
-# Dev
+# Dev — vérifier la stack d'abord
+cat package.json | grep -E "drizzle|prisma"
+
+# Si Drizzle avec push (développement uniquement)
 npx drizzle-kit push
 
-# Vérification pré-prod
-npx tsc --noEmit
-npm run test:e2e
+# Si Drizzle avec migrations (production)
+npx drizzle-kit generate
+npx drizzle-kit migrate
 
-# Rollback DB (si nécessaire)
-# La table pin_analytics est additive — pas de DROP nécessaire
-# Supprimer la table si rollback : DROP TABLE IF EXISTS pin_analytics;
+# Vérification post-migration
+npx tsc --noEmit
+npm run build
+
+# Rollback DB (manuel — si nécessaire)
+# La table pin_analytics est additive — pas de DROP automatique
+# DROP TABLE IF EXISTS pin_analytics; -- uniquement si rollback manuel
 ```
 
 ### Récapitulatif
@@ -476,3 +532,72 @@ npm run test:e2e
 - Aucun fichier supprimé → git revert sans perte
 - Table `pin_analytics` additive → DROP si nécessaire, pas de corruption des données existantes
 - Skills modifiés backward-compatible (google reste le défaut)
+
+---
+
+## Opportunity Score v2 — Calcul Déterministe
+
+La formule pondérée est appliquée par le code (pas par le LLM) :
+
+```typescript
+function computeOpportunityScore(o: OpportunityScoreInput): number {
+  let score =
+    o.domain_beatability.score * 0.35 +
+    o.engagement_gap.score * 0.30 +
+    o.specialization_gap.score * 0.20 +
+    o.url_type.score * 0.15
+
+  // Pénalité si données manquantes et policy = score_penalty
+  if (o.engagement_gap.confidence === "low" && o.engagement_gap.missing_data_policy === "score_penalty") {
+    score -= 10
+  }
+
+  return Math.max(0, Math.min(100, Math.round(score)))
+}
+```
+
+Le Pin Designer (mode `serp_opportunity_scan`) fournit les scores par dimension. Le script `discover.ts` applique la formule et trie les résultats. Le LLM ne fait pas le calcul — il ne fait que qualifier chaque dimension.
+
+---
+
+## Definition of Done
+
+La migration est réussie uniquement si :
+
+- [ ] `npm run build` passe
+- [ ] `npx tsc --noEmit` passe
+- [ ] `npm run lint` passe (si disponible)
+- [ ] Aucun contenu sourdough visible ne reste (`rg` pre-flight clean)
+- [ ] Le mode `format: "google"` fonctionne encore (backward compat)
+- [ ] Le mode `format: "pin-first"` génère une recette complète
+- [ ] Le feature flag `USE_AUTHENTICITY_AUDITOR=false` restaure le pipeline legacy
+- [ ] Une recette test génère :
+  - Article pin-first (1200-1500 mots)
+  - Recipe card dans les 300 premiers caractères
+  - 4 à 6 placeholders `[IMAGE: ...]`
+  - 5 pin drafts avec `visual_uniqueness` distincte
+  - UTM avec `utm_content` (pin_index)
+- [ ] Aucun Pin ne passe si `destination_quality_status = unknown` en mode publication
+- [ ] Les images réelles sont validées après génération par ImageValidator
+- [ ] La table `pin_analytics` est créée sans migration destructive
+
+---
+
+## Test Scénario Minimal
+
+Créer une recette test : **"Garlic Butter Chicken Skillet for Two"**
+
+Étapes :
+
+1. Discovery désactivée ou mockée
+2. Pipeline lancé en `format: "pin-first"`
+3. **Strategist** produit un brief pin-first (1200-1500 mots cible, 3 FAQ, 50-80 mots intro)
+4. **Writer** produit l'article — recipe card dans les 300 premiers caractères
+5. **Authenticity Auditor** retourne `PASS` ou `MINOR_FIX` (pas `MAJOR_REWRITE` ni `REJECT`)
+6. **Editor** applique uniquement les `rewrite_instructions` si `MINOR_FIX`
+7. **Image Optimizer** produit hero + 4-6 process shots en 2:3
+8. **Pin Designer** produit 5 Pins avec `visual_uniqueness` et `ptra_coherence_score ≥ 70`
+9. **ContentValidator** passe tous les gates
+10. **ImageValidator** passe après génération (ratio 2:3, dimensions ≥1000×1500)
+11. Les 5 Pin drafts apparaissent dans le dashboard
+12. La table `pin_analytics` reçoit 5 records avec `publish_status = 'ready'`
