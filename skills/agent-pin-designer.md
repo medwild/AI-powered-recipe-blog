@@ -1,7 +1,7 @@
 ---
 id: agent-pin-designer
-version: "1.0.0"
-description: "PTRA Pin Designer — generates 5 Pinterest Pin drafts per recipe using the PTRA (Pinterest Topical Resonance Authority) framework. Produces pin titles, overlay hooks, SEO descriptions, FLUX image prompts, board assignments, Pinterest intents, and PTRA coherence scores /100. One recipe = 5 Pins with distinct angles."
+version: "1.1.0"
+description: "PTRA Pin Designer v1.1 — generates 5 Pinterest Pin drafts per recipe using the PTRA V2.1 framework. Produces pin titles, overlay hooks, SEO descriptions, image prompts, board assignments, Pinterest intents, PTRA coherence scores /100 with 6-subdimension breakdown, micro-niche validation, destination quality status, visual uniqueness, Fresh Pin Rule compliance, and board fit status. One recipe = 5 Pins with distinct angles."
 model: "mistral-medium-3-5"
 routing: "NaraRouter"
 temperature: 0.5
@@ -271,21 +271,25 @@ Output a JSON array of exactly 5 PinDraft objects:
     "image_prompt": "Vertical Pinterest food photography (2:3, 1000x1500px, safe zone 8%), one-pan lemon chicken with roasted asparagus and cherry tomatoes on a sheet pan, golden-brown chicken thighs, glossy lemon glaze, natural overhead light, casual weeknight dinner styling, space for text overlay top third, no misleading garnishes.",
     "board": "Easy Dinners for Two",
     "intent": "quick_solution",
-    "ptra_score": 87
-  },
-  {
-    "pin_title": "30-Minute Beef Stir-Fry for Two — Better Than Takeout",
-    "overlay_text": "30-Min Beef Stir-Fry",
-    "description": "Skip the takeout and make this quick beef stir-fry for two in just 30 minutes. Tender strips, crisp vegetables, and a savory sauce — all from one wok. Save this for your next weeknight dinner.",
-    "image_prompt": "Vertical Pinterest food photography (2:3, 1000x1500px, safe zone 8%), sizzling beef stir-fry in a black wok with bell peppers and snap peas, steam rising, glossy sauce coating the ingredients, dynamic overhead angle, bright kitchen lighting, space for text overlay top third.",
-    "board": "Easy Dinners for Two",
-    "intent": "quick_solution",
-    "ptra_score": 85
+    "ptra_score": 87,
+    "micro_niche_validated": true,
+    "destination_quality_status": "good",
+    "visual_uniqueness": 82,
+    "ptra_coherence_breakdown": {
+      "keyword_alignment": 90,
+      "board_fit": 85,
+      "visual_quality": 88,
+      "freshness": 80,
+      "destination_quality": 90,
+      "engagement_potential": 85
+    },
+    "fresh_pin_rule_status": "fresh",
+    "board_fit_status": "excellent"
   }
 ]
 ```
 
-Each Pin needs: `pin_title`, `overlay_text`, `description`, `image_prompt`, `board`, `intent`, `ptra_score`. Hashtags are optional (empty array — Pinterest deprioritizes them).
+Each Pin needs: `pin_title`, `overlay_text`, `description`, `image_prompt`, `board`, `intent`, `ptra_score` (core fields, required). PTRA V2.1 fields: `micro_niche_validated`, `destination_quality_status`, `visual_uniqueness` (0-100), `ptra_coherence_breakdown` (6 sub-scores), `fresh_pin_rule_status`, `board_fit_status`. Hashtags are optional (empty array — Pinterest deprioritizes them).
 
 ---
 

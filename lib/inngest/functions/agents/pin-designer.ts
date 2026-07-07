@@ -32,6 +32,7 @@ export interface PinDesignerInput {
 }
 
 export interface PinDraftOutput {
+  // Core fields (unchanged)
   pin_title: string
   overlay_text: string
   description: string
@@ -40,6 +41,27 @@ export interface PinDraftOutput {
   intent: string
   ptra_score: number
   hashtags: string[]
+
+  // PTRA V2.1 fields
+  /** Whether the keyword is validated as belonging to the micro-niche. */
+  micro_niche_validated?: boolean
+  /** Destination page quality assessment. */
+  destination_quality_status?: "good" | "unknown" | "poor"
+  /** How visually distinct this Pin is from the other 4 Pins (0-100). */
+  visual_uniqueness?: number
+  /** Breakdown of the PTRA coherence score across 6 sub-dimensions. */
+  ptra_coherence_breakdown?: {
+    keyword_alignment: number
+    board_fit: number
+    visual_quality: number
+    freshness: number
+    destination_quality: number
+    engagement_potential: number
+  }
+  /** Fresh Pin Rule compliance status. */
+  fresh_pin_rule_status?: "fresh" | "refresh" | "unknown"
+  /** How well this Pin fits its assigned board. */
+  board_fit_status?: "excellent" | "good" | "poor"
 }
 
 // ---------------------------------------------------------------------------
