@@ -207,6 +207,7 @@ export function validateContent(draft: ValidatableDraft): ValidationResult {
 
   // 7. Pin-First structural rules (only when format is specified)
   if (draft.format === "pin-first") {
+    // 7a. Prohibited sections
     const prohibitedSections = [
       "## Nutrition Highlights",
       "## What Most Recipes Get Wrong",
@@ -220,6 +221,53 @@ export function validateContent(draft: ValidatableDraft): ValidationResult {
           message: `Pin-First format prohibits section: "${section}". Remove it.`,
         })
       }
+    }
+
+    // 7b. Recipe card position — must appear within 300 chars of content start
+    const first300 = md.substring(0, 300).toLowerCase()
+    const hasRecipeCardEarly =
+      first300.includes("ingredient") ||
+      first300.includes("## ingredient") ||
+      (draft.ingredients && draft.ingredients.length > 0 &&
+       (first300.includes("cup") || first300.includes("tablespoon") || first300.includes("teaspoon")))
+    if (!hasRecipeCardEarly) {
+      errors.push({
+        field: "contentMarkdown",
+        severity: "error",
+        message: "Pin-First format requires recipe card (ingredients) within the first 300 characters.",
+      })
+    }
+
+    // 7c. Intro length — warn if >80 words before the recipe card
+    const recipeCardMatch = md.match(/## Ingredients|## ingredients|INGREDIENTS/)
+    const introEnd = recipeCardMatch ? recipeCardMatch.index! : 80
+    const introText = md.substring(0, introEnd)
+    const introWords = introText.split(/\s+/).filter(w => w.length > 0).length
+    if (introWords > 80) {
+      errors.push({
+        field: "contentMarkdown",
+        severity: "warning",
+        message: `Pin-First intro is ${introWords} words (target: 50-80 words). Consider shortening.`,
+      })
+    }
+
+    // 7d. Process shot placeholders — warn if <4 [IMAGE: markers
+    const imagePlaceholders = (md.match(/\[IMAGE:/gi) ?? []).length
+    if (imagePlaceholders < 4) {
+      errors.push({
+        field: "contentMarkdown",
+        severity: "warning",
+        message: `Pin-First format expects 4-6 [IMAGE:] placeholders. Found ${imagePlaceholders}.`,
+      })
+    }
+
+    // 7e. Pin-First word count floor: 1000 (vs 1500 for google)
+    if (wordCount < 1000) {
+      errors.push({
+        field: "contentMarkdown",
+        severity: "error",
+        message: `Pin-First article is ${wordCount} words — minimum is 1000.`,
+      })
     }
   }
 
