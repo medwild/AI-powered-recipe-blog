@@ -142,6 +142,7 @@ function buildUserPromptV2(
   keyword: string,
   s: StructuredSerp,
   pastImprovements: string[],
+  opportunityScore?: { score: number; status: string; keyword: string },
 ): string {
   const pkg = s.strategist_agent_input_package
 
@@ -169,6 +170,26 @@ Recommended direction: ${pkg.recommended_article_direction}
 Primary gap: ${pkg.gap_analysis_input?.primary_gap ?? "unknown"} — ${pkg.gap_analysis_input?.competitor_aggregated_weakness ?? ""}
 Secondary gap: ${pkg.gap_analysis_input?.secondary_gap ?? "unknown"}
 
+${pkg.pinterest_intel ? `## Pinterest SERP Intelligence (Hijacking Layer)
+The Google SERP for "${keyword}" contains Pinterest URLs. Analyze this data to plan a content hijacking strategy.
+
+- SERP dominated by Pinterest: ${pkg.pinterest_intel.serp_dominated_by_pinterest ? "YES — " + Math.round(pkg.pinterest_intel.density * 100) + "% of page 1 is Pinterest" : "No"}
+- Total pins: ${pkg.pinterest_intel.total_pins} | Total boards: ${pkg.pinterest_intel.total_boards}
+- Highest-ranking Pinterest: position #${pkg.pinterest_intel.dominant_position}${pkg.pinterest_intel.dominant_account ? ` (${pkg.pinterest_intel.dominant_account})` : ""}
+- Pins with empty snippet: ${pkg.pinterest_intel.empty_snippets}/${pkg.pinterest_intel.total_pins + pkg.pinterest_intel.total_boards} (Google ranks these on title/visual alone)
+- Most beatable pin: position #${pkg.pinterest_intel.most_beatable_pin_position ?? "n/a"} (beatability score in normalized_competitors)
+- User intent signal: ${pkg.pinterest_intel.user_intent_signal}
+- Content gaps vs Pinterest: ${pkg.pinterest_intel.content_gaps_vs_pins.join("; ")}
+- Recommended hijack strategy: ${pkg.pinterest_intel.hijack_strategy}
+
+**Pin-First Content Rules:**
+When Pinterest dominates the SERP, apply these rules:
+1. Match the visual hook that made the pin rank (the pin's title IS the user intent signal)
+2. Add what the pin structurally CANNOT offer: FAQ, technique depth, internal links, long-form explanations
+3. Use 1200-1500 word pin-first format (recipe card above fold, 3 FAQ, no Nutrition Highlights)
+4. Target 2:3 vertical images (Pinterest-optimized aspect ratio)
+` : ""}
+
 ### Competitor weaknesses to exploit:
 ${s.normalized_competitors.filter(c => c.potential_weakness).map(c => `- #${c.position} ${c.domain}: ${c.potential_weakness}`).join("\n")}
 
@@ -194,6 +215,22 @@ ${
       : "No lessons yet. This is the first recipe."
 }
 
+${
+    opportunityScore
+      ? `## Opportunity Score Data (Pre-Scored from Discovery)
+This keyword was pre-scored during the discovery phase:
+- Opportunity Score: ${opportunityScore.score}/100 (${opportunityScore.status})
+- Keyword: ${opportunityScore.keyword}
+
+Use this to calibrate your effort:
+- **high_priority (≥75)**: Full treatment — comprehensive sections, deep FAQ, detailed competitor exploitation.
+- **medium_priority (65-74)**: Focused coverage — cover the most promising angle, standard FAQ.
+- **revisit_later (<65)**: Light coverage — essential sections only, minimal FAQ.
+
+`
+      : ""
+}
+
 Respond with the EXACT JSON structure defined in your system prompt.`
 }
 
@@ -212,12 +249,21 @@ export async function agentStrategistV2(
   pastImprovements: string[],
   replacements?: Record<string, string>,
   format: "google" | "pin-first" = "google",
+  /** Optional pre-scored opportunity data from discovery phase. */
+  opportunityScore?: { score: number; status: string; keyword: string },
 ): Promise<SeoPlan> {
   try {
     // Merge format into replacements so {{format}} resolves in skill template
     const mergedReplacements = { ...(replacements ?? {}), format } as Record<string, string>
+
+    // If opportunity score is available, inject it as a template variable
+    if (opportunityScore) {
+      mergedReplacements["opportunity_score"] = String(opportunityScore.score)
+      mergedReplacements["opportunity_status"] = opportunityScore.status
+    }
+
     const systemPrompt = await loadSkillContent("agent-strategist", mergedReplacements)
-    const userPrompt = buildUserPromptV2(keyword, structuredSerp, pastImprovements)
+    const userPrompt = buildUserPromptV2(keyword, structuredSerp, pastImprovements, opportunityScore)
     return runTextAndParseJson<SeoPlan>(systemPrompt, userPrompt, {
       maxTokens: 4096,
       temperature: 0.3,
