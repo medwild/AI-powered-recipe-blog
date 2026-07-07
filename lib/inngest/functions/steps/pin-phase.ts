@@ -4,7 +4,7 @@
  */
 
 import { db } from "@/lib/db"
-import { pinDrafts } from "@/lib/db/schema"
+import { pinDrafts, pinAnalytics } from "@/lib/db/schema"
 import type { ImageVariant } from "@/lib/db/schema"
 import { slugify } from "@/lib/slug"
 import { agentPinDesigner } from "../agents/pin-designer"
@@ -58,6 +58,25 @@ export async function generatePins(
 
     await db.insert(pinDrafts).values(rows)
 
+    // Insert pin_analytics records with UTM tracking
+    const analyticsRows = rows.map((row, idx) => ({
+      recipeId,
+      board: row.board,
+      boardSlug: slugify(row.board),
+      pinIndex: idx,
+      pinTitle: row.pinTitle,
+      overlayHook: row.overlayText,
+      intent: row.intent,
+      utmSource: "pinterest",
+      utmMedium: "pin",
+      utmCampaign: slugify(row.board),
+      utmContent: `pin_${idx}`,
+      publishStatus: "draft" as const,
+      createdAt: now,
+      updatedAt: now,
+    }))
+    await db.insert(pinAnalytics).values(analyticsRows)
+
     const avgScore = Math.round(
       pins.reduce((sum, p) => sum + p.ptra_score, 0) / pins.length,
     )
@@ -67,7 +86,7 @@ export async function generatePins(
       logEntry(
         "Pin Designer",
         "done",
-        `${pins.length} Pins generated | Avg PTRA: ${avgScore}/100 | Intents: ${pins.map(p => p.intent).join(", ")}`,
+        `${pins.length} Pins generated | Avg PTRA: ${avgScore}/100 | Intents: ${pins.map(p => p.intent).join(", ")} | UTM tracking active`,
       ),
     )
   })
