@@ -50,6 +50,14 @@ export type NormalizedCompetitor = {
   potential_weakness: string | null
   writer_usefulness: string
   confidence: number
+  /** 0-100 — only set for Pinterest domains. Higher = easier to outrank. */
+  pinterest_beatable_score?: number
+  /** Pinterest URL type classification: pin detail, board, profile, search page, or other. */
+  pinterest_url_type?: "pin" | "board" | "profile" | "search_page" | "other" | "none"
+  /** Estimated follower count extracted from snippet text, or null if unavailable. */
+  pinterest_follower_estimate?: number | null
+  /** Account classification: personal account, known brand, or unknown. */
+  pinterest_account_type?: "personal" | "brand" | "unknown"
 }
 
 export type TopicCluster = {
@@ -83,6 +91,30 @@ export type EEATSignal = {
   confidence: number
 }
 
+/** Pinterest SERP intelligence — injected when Pinterest domains are detected in the top 10. */
+export type PinterestIntel = {
+  /** ≥30% of organic results are Pinterest = SERP dominated by visual platform. */
+  serp_dominated_by_pinterest: boolean
+  total_pins: number
+  total_boards: number
+  /** Position (1-10) of the highest-ranking Pinterest result, or null if none. */
+  dominant_position: number | null
+  /** Fraction of organic results that are Pinterest (0.0–1.0). */
+  density: number
+  /** Pinterest account name extracted from the highest-ranking pin URL. */
+  dominant_account: string | null
+  /** How many Pinterest results have an empty snippet (Google ranks them on title alone). */
+  empty_snippets: number
+  /** Position of the pin with the highest beatability score, or null. */
+  most_beatable_pin_position: number | null
+  /** Structural content gaps vs Pinterest that our article can exploit. */
+  content_gaps_vs_pins: string[]
+  /** Inferred user intent based on Pinterest SERP presence. */
+  user_intent_signal: "visual_discovery" | "hybrid" | "textual"
+  /** One-line hijack strategy summary for the Strategist. */
+  hijack_strategy: string
+}
+
 export type StrategistInputPackage = {
   intent_summary: string
   recommended_article_direction: string
@@ -100,6 +132,8 @@ export type StrategistInputPackage = {
     secondary_gap: string
     competitor_aggregated_weakness: string
   }
+  /** Present only when Pinterest URLs are detected in the Google top 10. */
+  pinterest_intel?: PinterestIntel
 }
 
 export type StructuredSerp = {
@@ -137,10 +171,14 @@ function extractDomain(url: string): string {
   }
 }
 
-function inferFormat(title: string, snippet: string, domain: string): string {
+function inferFormat(title: string, snippet: string, domain: string, url: string): string {
   const t = title.toLowerCase()
   const s = snippet.toLowerCase()
   if (domain === "youtube.com") return "video_tutorial"
+  if (domain.includes("pinterest.com")) {
+    if (url.includes("/pin/")) return "pinterest_pin"
+    return "pinterest_board"
+  }
   if (t.includes("(video)") || s.includes("watch how")) return "recipe_with_video"
   if (t.includes("best") || t.includes("favorite")) return "editorial_recipe"
   if (domain.includes("allrecipes")) return "community_recipe_with_video"
@@ -367,12 +405,12 @@ function classifyIntent(
 function normalizeCompetitors(serp: SerpResult): NormalizedCompetitor[] {
   return serp.organic.map((o, _i) => {
     const domain = extractDomain(o.link ?? "")
-    const format = inferFormat(o.title, o.snippet ?? "", domain)
+    const format = inferFormat(o.title, o.snippet ?? "", domain, o.link ?? "")
     const angle = extractAngle(o.title, o.snippet ?? "")
     const promise = extractPromise(o.title, o.snippet ?? "")
     const weakness = detectWeakness(o.snippet ?? "", o.title, format)
 
-    return {
+    const result: NormalizedCompetitor = {
       position: o.position,
       title: o.title,
       url: o.link ?? "",
@@ -385,6 +423,16 @@ function normalizeCompetitors(serp: SerpResult): NormalizedCompetitor[] {
       writer_usefulness: buildCompetitorNote(o.position, domain, format, weakness, o.snippet ?? ""),
       confidence: inferConfidence("snippet"),
     }
+
+    // Attach beatability score and Pinterest signals for Pinterest domains
+    if (domain.includes("pinterest.com")) {
+      result.pinterest_beatable_score = scorePinterestBeatability(result)
+      result.pinterest_url_type = classifyPinterestUrl(result.url)
+      result.pinterest_follower_estimate = extractFollowerEstimate(o.snippet ?? "")
+      result.pinterest_account_type = classifyPinterestAccount(o.title, domain)
+    }
+
+    return result
   })
 }
 
@@ -971,7 +1019,210 @@ function assessRisks(
 }
 
 // ---------------------------------------------------------------------------
-// Step 10 — Strategist Input Package Assembly
+// Step 10 — Pinterest SERP Intelligence (Hijacking Layer)
+// ---------------------------------------------------------------------------
+
+/**
+ * Scores how easily a Pinterest pin/board can be outranked.
+ * Higher score = easier to hijack. Only called for pinterest.com domains.
+ */
+function scorePinterestBeatability(competitor: NormalizedCompetitor): number {
+  let score = 50 // neutral baseline
+
+  const snippet = competitor.snippet
+  const title = competitor.title.toLowerCase()
+  const url = competitor.url
+
+  // Empty snippet = Google ranks the pin on title/visual alone → textually weak (+30)
+  if (!snippet || snippet.trim().length < 20) score += 30
+
+  // Not a Rich Pin (no article metadata behind it) → no long-form content (+25)
+  if (!title.includes("rich pin") && !snippet.includes("article")) score += 25
+
+  // Generic pin title patterns → not optimized for this specific keyword (+15)
+  const genericPatterns = ["best", "ultimate", "top", "ideas", "recipes", "easy"]
+  const matchCount = genericPatterns.filter(p => title.includes(p)).length
+  if (matchCount >= 2) score += 15
+
+  // URL-based: pin detail page (/pin/) is beatable; board pages have more authority (-10)
+  if (url.includes("/pin/")) score += 10
+  else score -= 10
+
+  // Account type weighting: brands have higher authority (-15)
+  const accountType = classifyPinterestAccount(competitor.title, competitor.domain)
+  if (accountType === "brand") score -= 15
+
+  // Cap at 0-100
+  return Math.max(0, Math.min(100, score))
+}
+
+/**
+ * Classify a Pinterest URL into its resource type.
+ * /pin/ → pin detail, /board/ or /<user>/<board>/ → board,
+ * /<user>/ → profile, /search/ → search, else other.
+ */
+function classifyPinterestUrl(url: string): NormalizedCompetitor["pinterest_url_type"] {
+  try {
+    const pathname = new URL(url).pathname.toLowerCase()
+    if (pathname.startsWith("/pin/")) return "pin"
+    if (pathname.includes("/board/") || pathname.split("/").filter(Boolean).length >= 2) return "board"
+    if (pathname.split("/").filter(Boolean).length === 1) return "profile"
+    if (pathname.includes("/search/")) return "search_page"
+    return "other"
+  } catch {
+    return "none"
+  }
+}
+
+/**
+ * Extract a follower count estimate from the SERP snippet.
+ * Matches patterns like "X followers", "Xk followers", "XK followers".
+ * Returns null if no follower information is available.
+ */
+function extractFollowerEstimate(snippet: string): number | null {
+  if (!snippet) return null
+
+  // Pattern: "123 followers", "1.2K followers", "12k followers"
+  const followerMatch = snippet.match(/([\d,.]+)\s*[kK]?\s*followers?/i)
+  if (!followerMatch) return null
+
+  const raw = followerMatch[1].replace(/,/g, "")
+  const num = parseFloat(raw)
+  if (isNaN(num)) return null
+
+  // Check if it's a "K" (thousands) suffix
+  if (/[kK]\s*followers?/i.test(followerMatch[0])) {
+    return Math.round(num * 1000)
+  }
+
+  return Math.round(num)
+}
+
+/**
+ * Classify a Pinterest account as personal, brand, or unknown
+ * based on the SERP title and domain.
+ *
+ * Brand signals: known food brands, multi-word business names,
+ * ".com" in title (cross-domain brand), all-caps title segments.
+ */
+function classifyPinterestAccount(title: string, _domain: string): NormalizedCompetitor["pinterest_account_type"] {
+  if (!title) return "unknown"
+
+  const t = title.toLowerCase()
+
+  // Known brand keywords (food media, publishers, large recipe sites)
+  const brandKeywords = [
+    "allrecipes", "delish", "food network", "bon appétit", "bon appetit",
+    "tasty", "buzzfeed", "epicurious", "serious eats", "food52",
+    "skinnytaste", "gimme some oven", "well plated", "cookie and kate",
+    "half baked harvest", "smitten kitchen", "minimalist baker",
+  ]
+  if (brandKeywords.some(kw => t.includes(kw))) return "brand"
+
+  // Multi-word title with proper capitalization suggests brand/entity
+  const words = title.trim().split(/\s+/)
+  if (words.length >= 3 && /[A-Z]/.test(title[0] ?? "")) return "brand"
+
+  // Single name or generic account → likely personal
+  if (words.length <= 2) return "personal"
+
+  return "unknown"
+}
+
+/**
+ * Detects Pinterest presence in the Google SERP top 10 and builds a Pinterest
+ * intelligence report for the Strategist. Returns null if no Pinterest URLs found.
+ */
+function detectPinterestPresence(
+  competitors: NormalizedCompetitor[],
+): PinterestIntel | null {
+  const pinterestResults = competitors.filter(
+    c => c.domain.includes("pinterest.com"),
+  )
+
+  if (pinterestResults.length === 0) return null
+
+  const totalPins = pinterestResults.filter(c => c.url.includes("/pin/")).length
+  const totalBoards = pinterestResults.length - totalPins
+  const density = pinterestResults.length / Math.max(competitors.length, 1)
+  const dominant = pinterestResults[0]
+  const emptySnippets = pinterestResults.filter(
+    c => !c.snippet || c.snippet.trim().length < 20,
+  ).length
+
+  // Extract account name from highest-ranking pin URL
+  // URL pattern: pinterest.com/pin/<id>/ or pinterest.com/<username>/<board>/
+  let dominantAccount: string | null = null
+  try {
+    const pathParts = new URL(dominant.url).pathname.split("/").filter(Boolean)
+    if (pathParts[0] === "pin" && pathParts.length >= 2) {
+      // Pin detail pages don't expose username in URL — use domain label
+      dominantAccount = dominant.title
+        .toLowerCase()
+        .replace("pinterest", "")
+        .replace("—", "")
+        .replace("-", "")
+        .trim()
+        .substring(0, 40) || null
+    } else if (pathParts.length >= 1) {
+      dominantAccount = pathParts[0]
+    }
+  } catch {
+    dominantAccount = null
+  }
+
+  // Most beatable pin
+  const pinsWithScores = pinterestResults.filter(
+    c => typeof c.pinterest_beatable_score === "number",
+  )
+  const mostBeatable = pinsWithScores.length > 0
+    ? pinsWithScores.reduce((a, b) =>
+        (a.pinterest_beatable_score! > b.pinterest_beatable_score!) ? a : b,
+      )
+    : null
+
+  // Content gaps: what our article can offer that Pinterest pins can't
+  const gaps: string[] = []
+  if (pinterestResults.every(c => !c.snippet || c.snippet.length < 100)) {
+    gaps.push("Long-form technique explanations (pins lack searchable text)")
+  }
+  gaps.push("FAQ section with structured Q&A (pins have no FAQ capability)")
+  gaps.push("Internal links to related recipes (pins are isolated pages)")
+  if (totalPins > 0 && totalBoards === 0) {
+    gaps.push("Curated collection hub (individual pins have no article context)")
+  }
+
+  // User intent signal
+  let intentSignal: PinterestIntel["user_intent_signal"] = "hybrid"
+  if (density >= 0.4 && emptySnippets >= 2) {
+    intentSignal = "visual_discovery" // User likely wants visual inspiration
+  } else if (density < 0.3) {
+    intentSignal = "textual" // Pinterest is present but not dominant
+  }
+
+  return {
+    serp_dominated_by_pinterest: density >= 0.3,
+    total_pins: totalPins,
+    total_boards: totalBoards,
+    dominant_position: dominant.position,
+    density: Math.round(density * 100) / 100,
+    dominant_account: dominantAccount,
+    empty_snippets: emptySnippets,
+    most_beatable_pin_position: mostBeatable?.position ?? null,
+    content_gaps_vs_pins: gaps,
+    user_intent_signal: intentSignal,
+    hijack_strategy:
+      density >= 0.3
+        ? `Pinterest dominates ${Math.round(density * 100)}% of page 1. ` +
+          `Create long-form content with FAQ, technique depth, and internal links ` +
+          `— all structurally impossible for pins. Target: position #${dominant.position}.`
+        : `Pinterest presence at position #${dominant.position}. ` +
+          `Outrank with richer content structure while matching the visual hook that made the pin rank.`,
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Step 11 — Strategist Input Package Assembly
 // ---------------------------------------------------------------------------
 
 function buildStrategistPackage(
@@ -982,6 +1233,7 @@ function buildStrategistPackage(
   questions: UserQuestion[],
   opportunities: ContentOpportunity[],
   availableModules: string[],
+  pinterestIntel?: PinterestIntel | null,
 ): StrategistInputPackage {
   // FAQ candidates from high+medium questions
   const faqCandidates = questions
@@ -1050,6 +1302,7 @@ function buildStrategistPackage(
       secondary_gap: findSecondaryGap(gapScores),
       competitor_aggregated_weakness: aggregatedWeakness,
     },
+    ...(pinterestIntel ? { pinterest_intel: pinterestIntel } : {}),
   }
 }
 
@@ -1212,8 +1465,9 @@ export function structureSerpData(
   const opportunities = detectOpportunities(serp, competitors, topics)
   const eeat = prepareEEAT(options?.niche)
   const risks = assessRisks(dataQuality, features, competitors)
+  const pinterestIntel = detectPinterestPresence(competitors)
   const strategistPackage = buildStrategistPackage(
-    keyword, intent, competitors, topics, questions, opportunities, dataQuality.available_modules,
+    keyword, intent, competitors, topics, questions, opportunities, dataQuality.available_modules, pinterestIntel,
   )
 
   return {
