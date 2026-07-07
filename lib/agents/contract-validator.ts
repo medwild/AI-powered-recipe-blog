@@ -84,12 +84,19 @@ export const AGENT_CONTRACTS = {
   Auditor: {
     agent: "Auditor",
     fields: [
-      { name: "overallScore", required: "critical" },
-      { name: "score_ia_estimation", required: "critical", aliases: ["aiScore"] },
-      { name: "criteria", required: "critical" },
-      { name: "factual_corrections", required: "yes", aliases: ["factualCorrections"] },
-      { name: "verdict", required: "critical" },
+      { name: "decision", required: "critical" },
+      { name: "publication_readiness_score", required: "critical", aliases: ["overallScore"] },
+      { name: "confidence_level", required: "critical" },
+      { name: "content_type", required: "yes" },
+      { name: "scores", required: "critical" },
+      { name: "final_recommendation", required: "yes" },
       { name: "summary", required: "yes" },
+      { name: "critical_issues", required: "yes" },
+      { name: "major_issues", required: "yes" },
+      { name: "minor_issues", required: "yes" },
+      { name: "required_fixes", required: "yes" },
+      { name: "evidence", required: "no" },
+      { name: "rewrite_instructions", required: "no" },
     ],
   } satisfies AgentContract,
 
@@ -125,6 +132,20 @@ export const AGENT_CONTRACTS = {
     agent: "Image Prompt Optimizer",
     fields: [
       { name: "prompt", required: "critical" },
+    ],
+  } satisfies AgentContract,
+
+  PinDesigner: {
+    agent: "Pin Designer",
+    fields: [
+      { name: "pin_title", required: "critical" },
+      { name: "overlay_text", required: "critical" },
+      { name: "description", required: "critical" },
+      { name: "image_prompt", required: "critical" },
+      { name: "board", required: "critical" },
+      { name: "intent", required: "critical" },
+      { name: "ptra_score", required: "critical" },
+      { name: "hashtags", required: "yes" },
     ],
   } satisfies AgentContract,
 } as const satisfies Record<string, AgentContract>
