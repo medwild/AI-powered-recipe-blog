@@ -9,9 +9,11 @@
 
 import { loadSkillContent } from "@/lib/skills"
 import { runTextAndParseJson } from "@/lib/agents/nararouter"
-import { stripHtmlComments } from "../helpers"
+import { validateContract, AGENT_CONTRACTS } from "@/lib/agents/contract-validator"
+import { stripHtmlComments, logAgentTrace } from "../helpers"
 import type { SeoPlan } from "./strategist"
 import type { Ingredient, Instruction } from "@/lib/db/schema"
+import type { LinkTarget } from "../steps/link-suggester"
 
 // ---------------------------------------------------------------------------
 // Types
@@ -50,7 +52,7 @@ export type RecipeDraft = {
 // User prompt builder
 // ---------------------------------------------------------------------------
 
-function buildUserPrompt(keyword: string, plan: SeoPlan, format: "google" | "pin-first" = "google"): string {
+function buildUserPrompt(keyword: string, plan: SeoPlan, format: "google" | "pin-first" = "google", linkTargets: LinkTarget[] = []): string {
   const h2Plan = plan.h2Sections
     .map(
       (s, i) =>
@@ -117,7 +119,18 @@ The ContentValidator will REJECT your article if ANY of these appear:
 - Banned AI-slop words: "game-changer", "delve", "unlock", "elevate", "transform", "embark", "robust", "holistic", "leverage", "utilize", "nestled", "bursting with flavor", "melts in your mouth"
 - Unsourced health claims: "probiotics", "gut health", "boosts immune", "detox", "anti-inflammatory", "fat-burning", "lowers cholesterol", "prevents cancer"
 - Vibe tokens: [WARM], [SHARP], [WINK], [GRIT], [GLOW] or HTML comments <!--...-->
-SCAN your final output for these BEFORE returning JSON. Remove every single one.`
+SCAN your final output for these BEFORE returning JSON. Remove every single one.
+  ${linkTargets.length > 0 ? `## Internal Linking Targets
+Insert 2-3 contextual links within the body text using natural, descriptive anchor text.
+Rules:
+- Anchor text MUST be descriptive and specific — NEVER use "click here", "read more", "here", "this recipe", "this article"
+- Max 1 link per H2 section
+- Each link must add real value for the reader at that specific point in the text
+- Use standard markdown syntax: [descriptive text](/path)
+- Choose targets where the connection feels natural — skip any that don"t fit
+
+Recommended targets (choose 2-3 that fit most naturally):
+${linkTargets.slice(0, 7).map(t => `- /${t.slug} | "${t.title}" | ${t.contentType} | score: ${t.score} | ${t.reason}`).join("\n")}` : ""}`
 }
 
 // ---------------------------------------------------------------------------
@@ -133,17 +146,30 @@ export async function agentWriter(
   plan: SeoPlan,
   replacements?: Record<string, string>,
   format: "google" | "pin-first" = "google",
+  linkTargets: LinkTarget[] = [],
 ): Promise<RecipeDraft> {
   try {
     const mergedReplacements = { ...(replacements ?? {}), format } as Record<string, string>
     const systemPrompt = await loadSkillContent("agent-writer", mergedReplacements)
-    const userPrompt = buildUserPrompt(keyword, plan, format)
+    const userPrompt = buildUserPrompt(keyword, plan, format, linkTargets)
 
+    logAgentTrace("Writer", "input", { chars: systemPrompt.length + userPrompt.length })
     // maxTokens 6144: the full article + JSON metadata needs more output space.
     // 4096 was causing JSON truncation and triggering the Cloudflare fallback.
     const result = await runTextAndParseJson<RecipeDraft>(systemPrompt, userPrompt, {
       temperature: 0.9,
       maxTokens: 6144,
+      model: "claude",
+    })
+
+    // Contract validation (before sanitization — validate raw LLM output)
+    const validation = validateContract(result as Record<string, unknown>, AGENT_CONTRACTS.Writer)
+    if (validation.warnings.length > 0) {
+      console.warn("[Writer] Contract warnings:", validation.warnings.join("; "))
+    }
+    logAgentTrace("Writer", "output", {
+      chars: (result.contentMarkdown ?? "").length + JSON.stringify(result).length,
+      fields: Object.keys(result).length,
     })
 
     // Deterministic sanitization: strip any HTML comments (vibe coding tokens
