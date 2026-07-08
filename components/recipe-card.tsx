@@ -7,9 +7,9 @@ export function RecipeCard({ recipe }: { recipe: Recipe }) {
   return (
     <Link
       href={`/recettes/${recipe.slug}`}
-      className="card-hover group flex flex-col overflow-hidden rounded-xl border border-border bg-card"
+      className="card-hover group flex flex-col overflow-hidden rounded-2xl border border-border bg-card"
     >
-      <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+      <div className="relative aspect-[2/3] overflow-hidden bg-muted">
         {recipe.heroImageUrl ? (
           <Image
             src={recipe.heroImageUrl || "/placeholder.svg"}
@@ -24,7 +24,7 @@ export function RecipeCard({ recipe }: { recipe: Recipe }) {
           </div>
         )}
         {recipe.difficulty ? (
-          <span className="absolute left-3 top-3 rounded-full bg-background/90 px-2.5 py-1 text-xs font-medium text-foreground">
+          <span className="absolute left-3 top-3 rounded-full bg-background/90 backdrop-blur px-2.5 py-1 text-xs font-medium text-foreground">
             {recipe.difficulty}
           </span>
         ) : null}

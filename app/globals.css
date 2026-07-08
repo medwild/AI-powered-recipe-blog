@@ -170,3 +170,62 @@ html.theme-transition *::after {
 .animate-fade-in-up-delay-1 { animation-delay: 0.1s; opacity: 0; }
 .animate-fade-in-up-delay-2 { animation-delay: 0.2s; opacity: 0; }
 .animate-fade-in-up-delay-3 { animation-delay: 0.3s; opacity: 0; }
+
+/* Scroll-triggered reveal — animation starts when element enters viewport */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.animate-on-scroll.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-on-scroll {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Print stylesheet — clean recipe printing without UI chrome */
+@media print {
+  .card-hover:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  nav,
+  header,
+  .sticky,
+  [class*="backdrop-blur"],
+  [class*="sticky"],
+  button,
+  .site-footer,
+  .recipe-action-bar {
+    display: none !important;
+  }
+
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  h1, h2, h3, h4 {
+    page-break-after: avoid;
+  }
+
+  ul, ol, li {
+    page-break-inside: avoid;
+  }
+
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #000;
+    background: #fff;
+  }
+}
