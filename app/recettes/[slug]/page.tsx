@@ -5,7 +5,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { RecipeArticle } from "@/components/recipe-article"
-import { RecipeCard } from "@/components/recipe-card"
+import { RecipeRelated } from "@/components/recipe-related"
 import { getRecipeBySlug, getPublishedRecipes, getRelatedRecipes, getLinkedArticle } from "@/lib/queries"
 
 export const revalidate = 300
@@ -212,18 +212,7 @@ export default async function RecipePage({
           </section>
         ) : null}
 
-        {relatedRecipes.length > 0 ? (
-          <section className="mx-auto max-w-5xl px-4 py-14">
-            <h2 className="mb-8 font-serif text-2xl text-balance">
-              More Recipes You'll Love
-            </h2>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {relatedRecipes.map((r) => (
-                <RecipeCard key={r.id} recipe={r} />
-              ))}
-            </div>
-          </section>
-        ) : null}
+        <RecipeRelated recipes={relatedRecipes} />
       </main>
       <SiteFooter />
     </div>
