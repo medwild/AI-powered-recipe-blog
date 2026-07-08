@@ -24,13 +24,13 @@ const BANNED_ANCHORS = [
 ]
 
 export async function runLinkBackfill(
-  step: { run: (name: string, fn: () => Promise<void>) => Promise<void> },
+  step: { run: (name: string, fn: () => Promise<unknown>) => Promise<unknown> },
   recipeId: number,
   slug: string,
   title: string,
   tags: string[],
   contentType: "recipe" | "article",
-): Promise<void> {
+): Promise<unknown> {
   return step.run("link-backfill", async () => {
     try {
       await appendLog(recipeId, logEntry("Link Backfill", "running",

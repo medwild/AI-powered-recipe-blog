@@ -11,7 +11,8 @@ import { agentWriter, type RecipeDraft } from "../agents/writer"
 import { agentAuditor, type AuditReport } from "../agents/auditor"
 import type { StructuredSerp } from "@/lib/agents/serp-structurer"
 import type { SeoPlan } from "../agents/strategist"
-import { appendLog, logEntry, isRecoverableError, buildSyntheticAuditReport } from "../helpers"
+import type { LinkTarget } from "./link-suggester"
+import { appendLog, logEntry, isRecoverableError, buildSyntheticAuditReport, buildSyntheticSeoPlan } from "../helpers"
 
 export interface AgentPhaseResult {
   seoPlan: SeoPlan
@@ -27,6 +28,7 @@ export async function runAgentPhase(
   structuredSerp: StructuredSerp,
   cuisineReplacements: Record<string, string>,
   format: "google" | "pin-first" = "google",
+  linkTargets?: LinkTarget[],
 ): Promise<AgentPhaseResult> {
   let degraded = false
 
@@ -85,10 +87,15 @@ export async function runAgentPhase(
     if (!isRecoverableError(err as Error)) {
       await logPipelineError({
         recipeId, stepName: "agent-1-strategist",
-        errorType: "llm_unavailable", message: (err as Error).message, severity: "critical",
+        errorType: "llm_unavailable", message: (err as Error).message, severity: "degraded",
       })
     }
-    throw err
+    // Degraded mode: produce synthetic plan so the pipeline can continue.
+    // The Writer can still produce content from a generic scaffold.
+    degraded = true
+    seoPlan = buildSyntheticSeoPlan(keyword)
+    await appendLog(recipeId, logEntry("SEO Strategist", "error",
+      `Degraded — LLM unavailable, using synthetic plan. ${(err as Error).message.substring(0, 150)}`))
   }
   await step.sleep("sleep-after-strategist", "25s")
 
@@ -97,7 +104,7 @@ export async function runAgentPhase(
   try {
     draft = (await step.run("agent-2-writer", async () => {
       await appendLog(recipeId, logEntry("Writer", "running", "Writing as Chef Augustin Lefèvre"))
-      const result = await agentWriter(keyword, seoPlan, cuisineReplacements, format)
+      const result = await agentWriter(keyword, seoPlan, cuisineReplacements, format, linkTargets ?? [])
       await appendLog(recipeId, logEntry("Writer", "done",
         `Article "${result.title}" written — ${result.ingredients.length} ingredients, ${result.instructions.length} steps`))
       return result
@@ -117,10 +124,10 @@ export async function runAgentPhase(
   let audit: AuditReport
   try {
     audit = (await step.run("agent-3-auditor", async () => {
-      await appendLog(recipeId, logEntry("Auditor", "running", "7-criteria evaluation + anti-AI score"))
-      const report = await agentAuditor(keyword, draft, seoPlan.semanticEntities, format)
+      await appendLog(recipeId, logEntry("Auditor", "running", "9-dimension pre-publication quality evaluation"))
+      const report = await agentAuditor(keyword, draft, seoPlan.semanticEntities, format, linkTargets)
       await appendLog(recipeId, logEntry("Auditor", "done",
-        `Score: ${report.overallScore}/100 | AI: ${report.score_ia_estimation}/100 | Verdict: ${report.verdict}`))
+        `Readiness: ${report.publication_readiness_score}/100 | LLM Sig: ${report.scores.signature_llm}/100 | Decision: ${report.decision}`))
       return report
     })) as AuditReport
   } catch (err) {
@@ -132,7 +139,7 @@ export async function runAgentPhase(
     degraded = true
     audit = buildSyntheticAuditReport()
     await appendLog(recipeId, logEntry("Auditor", "error",
-      `Degraded — using synthetic audit (score: ${audit.overallScore}/100)`))
+      `Degraded — LLM call failed: ${(err as Error).message.substring(0, 150)}. Using synthetic audit (decision: ${audit.decision})`))
   }
   await step.sleep("sleep-after-auditor", "2s")
 

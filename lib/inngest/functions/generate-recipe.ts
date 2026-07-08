@@ -12,7 +12,9 @@
  *   editor-qa-loop → Steps 7 + 7.5  (Editor feedback loop + QA)
  *   image-phase   → Steps 8 + 9     (Image prompt + generation)
  *   pin-phase     → Step 11         (Pin Designer — 5 Pin drafts per recipe)
+ *   link-suggester → Step 1.5       (Internal link target suggestions)
  *   aor-phase     → Step 13         (AOR article generation)
+ *   link-backfill → Step 14         (Link backfill to existing content)
  */
 
 import { db } from "@/lib/db"
@@ -29,6 +31,8 @@ import { runEditorQaLoop } from "./steps/editor-qa-loop"
 import { runImagePhase } from "./steps/image-phase"
 import { generateAorArticle } from "./steps/aor-phase"
 import { generatePins } from "./steps/pin-phase"
+import { runLinkSuggester, type LinkTarget } from "./steps/link-suggester"
+import { runLinkBackfill } from "./steps/link-backfill"
 import { appendLog, logEntry, isRecoverableError } from "./helpers"
 
 export const generateRecipeWorkflow = inngest.createFunction(
@@ -66,8 +70,21 @@ export const generateRecipeWorkflow = inngest.createFunction(
       const serpResult = await runSerpPhase(step, recipeId, keyword)
       degraded = degraded || serpResult.degraded
 
+      // ── Phase 1.5: Link Suggester ────────────────────────────────────────
+      let linkTargets: LinkTarget[] = []
+      try {
+        linkTargets = await runLinkSuggester(
+          step, recipeId, keyword,
+          serpResult.structuredSerp?.topic_clusters?.flatMap(c => c.items) ?? [keyword],
+          "recipe",
+        )
+      } catch (err) {
+        await appendLog(recipeId, logEntry("Link Suggester", "error", (err as Error).message))
+        // Non-blocking — continue without link targets
+      }
+
       // ── Phase 2: Agents ───────────────────────────────────────────────
-      const agentResult = await runAgentPhase(step, recipeId, keyword, serpResult.structuredSerp, cuisineReplacements, format)
+      const agentResult = await runAgentPhase(step, recipeId, keyword, serpResult.structuredSerp, cuisineReplacements, format, linkTargets)
       degraded = degraded || agentResult.degraded
 
       // ── Phase 3: Persist draft for review ─────────────────────────────
@@ -85,13 +102,15 @@ export const generateRecipeWorkflow = inngest.createFunction(
       // Writer retry: QA REJECT/CRITICAL means structural issues the Editor
       // can't fix. Re-run the Writer (fresh LLM sample) + Auditor + Editor loop.
       if (editResult.needsRewrite) {
+        await appendLog(recipeId, logEntry("Workflow", "running",
+          `Writer retry triggered: QA ${editResult.qaReport.verdict} (score: ${editResult.qaReport.qaScore}/100) — ${editResult.qaReport.summary.substring(0, 200)}`))
         await step.run("agent-2-writer-retry", async () => {
           await appendLog(recipeId, logEntry("Writer", "running", "Retry — QA rejected content, regenerating from scratch"))
-          const retryDraft = await agentWriter(keyword, agentResult.seoPlan, cuisineReplacements, format)
+          const retryDraft = await agentWriter(keyword, agentResult.seoPlan, cuisineReplacements, format, linkTargets)
           await appendLog(recipeId, logEntry("Writer", "done", `Retry draft: "${retryDraft.title}"`))
 
           await appendLog(recipeId, logEntry("Auditor", "running", "Re-evaluating retry draft"))
-          const retryAudit = await agentAuditor(keyword, retryDraft, agentResult.seoPlan.semanticEntities, format)
+          const retryAudit = await agentAuditor(keyword, retryDraft, agentResult.seoPlan.semanticEntities, format, linkTargets)
           await appendLog(recipeId, logEntry("Auditor", "done", `Retry readiness: ${retryAudit.publication_readiness_score}/100 | Decision: ${retryAudit.decision}`))
 
           const retryEditResult = await runEditorQaLoop(step, recipeId, keyword, retryDraft, retryAudit, agentResult.seoPlan, format)
@@ -152,6 +171,21 @@ export const generateRecipeWorkflow = inngest.createFunction(
           if (isRecoverableError(err as Error)) throw err
           await logPipelineError({ recipeId, stepName: "agent-6-aor-article", errorType: "unknown", message: (err as Error).message, severity: "warning" })
         }
+      }
+
+      // ── Phase 14: Link Backfill ───────────────────────────────────────────
+      try {
+        // Fetch the slug that was persisted
+        const published = await db.query.recipes.findFirst({
+          where: eq(recipes.id, recipeId),
+          columns: { slug: true, title: true, tags: true },
+        })
+        if (published?.slug && published?.title) {
+          await runLinkBackfill(step, recipeId, published.slug, published.title, published.tags ?? [], "recipe")
+        }
+      } catch (err) {
+        await appendLog(recipeId, logEntry("Link Backfill", "error", (err as Error).message))
+        // Non-blocking — backfill failure doesn't fail the recipe
       }
 
     } catch (err) {
