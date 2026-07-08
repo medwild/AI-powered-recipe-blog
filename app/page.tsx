@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight, Clock, ChefHat, Sparkles, TrendingUp } from "lucide-react"
+import { ArrowRight, Clock, ChefHat, Sparkles } from "lucide-react"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { RecipeCard } from "@/components/recipe-card"
@@ -57,14 +57,6 @@ export default async function HomePage() {
                   Browse recipes
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Button>
-                <Button
-                  render={<Link href="/dashboard" />}
-                  nativeButton={false}
-                  size="lg"
-                  variant="outline"
-                >
-                  Editorial Studio
-                </Button>
               </div>
             </div>
             <div className="relative overflow-hidden rounded-3xl border border-border shadow-2xl shadow-primary/10 aspect-[2/3]">
@@ -82,7 +74,7 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* Stats */}
+        {/* Benefits */}
         <section className="border-b border-border bg-secondary/30">
           <div className="mx-auto grid max-w-5xl grid-cols-2 gap-6 px-4 py-10 md:grid-cols-3">
             <div className="flex items-center gap-3">
@@ -90,17 +82,8 @@ export default async function HomePage() {
                 <ChefHat className="h-5 w-5 text-primary" aria-hidden="true" />
               </div>
               <div>
-                <div className="text-2xl font-bold">{recipes.length}</div>
-                <div className="text-xs text-muted-foreground">Published recipes</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                <TrendingUp className="h-5 w-5 text-primary" aria-hidden="true" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold">{categories.length}</div>
-                <div className="text-xs text-muted-foreground">Categories</div>
+                <div className="text-2xl font-bold">Small-batch</div>
+                <div className="text-xs text-muted-foreground">Recipes for two</div>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -108,8 +91,17 @@ export default async function HomePage() {
                 <Clock className="h-5 w-5 text-primary" aria-hidden="true" />
               </div>
               <div>
-                <div className="text-2xl font-bold">30min</div>
+                <div className="text-2xl font-bold">~30 min</div>
                 <div className="text-xs text-muted-foreground">Start to table</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                <Sparkles className="h-5 w-5 text-primary" aria-hidden="true" />
+              </div>
+              <div>
+                <div className="text-2xl font-bold">Tested</div>
+                <div className="text-xs text-muted-foreground">French technique</div>
               </div>
             </div>
           </div>
@@ -118,9 +110,12 @@ export default async function HomePage() {
         {/* Categories */}
         {categories.length > 0 ? (
           <section className="mx-auto max-w-5xl px-4 py-14">
-            <h2 className="mb-6 font-serif text-2xl">Explore by category</h2>
+            <h2 className="mb-2 font-serif text-2xl">Explore by category</h2>
+            <p className="mb-5 text-sm text-muted-foreground">
+              Find exactly what you&apos;re in the mood for.
+            </p>
             <div className="flex flex-wrap gap-2">
-              {categories.map((cat) => (
+              {categories.slice(0, 15).map((cat) => (
                 <Link
                   key={cat}
                   href={`/recettes?cat=${encodeURIComponent(cat)}`}
@@ -129,6 +124,14 @@ export default async function HomePage() {
                   {cat}
                 </Link>
               ))}
+              {categories.length > 15 ? (
+                <Link
+                  href="/recettes"
+                  className="rounded-full border border-primary/30 bg-primary/5 px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/10"
+                >
+                  View all {categories.length} categories →
+                </Link>
+              ) : null}
             </div>
           </section>
         ) : null}
@@ -153,7 +156,12 @@ export default async function HomePage() {
           ) : (
             <>
               <div className="mb-8 flex items-end justify-between">
-                <h2 className="font-serif text-3xl">Featured</h2>
+                <div>
+                  <h2 className="font-serif text-3xl">Featured</h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Start with these — they&apos;re worth it.
+                  </p>
+                </div>
                 <Link
                   href="/recettes"
                   className="flex items-center gap-1 text-sm font-medium text-primary hover:underline"
@@ -162,8 +170,13 @@ export default async function HomePage() {
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
               </div>
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {featured.map((recipe) => (
+              <div className="grid gap-6 lg:grid-cols-2">
+                {/* First card — spans full left column */}
+                <div className="lg:row-span-2">
+                  <RecipeCard recipe={featured[0]} />
+                </div>
+                {/* Cards 2-3 — stacked in right column */}
+                {featured.slice(1, 3).map((recipe) => (
                   <RecipeCard key={recipe.id} recipe={recipe} />
                 ))}
               </div>
@@ -216,10 +229,11 @@ export default async function HomePage() {
         <section className="border-t border-border bg-secondary/30">
           <div className="mx-auto max-w-5xl px-4 py-16 text-center">
             <h2 className="font-serif text-3xl text-balance">
-              Ready to cook?
+              Find your next dinner tonight
             </h2>
             <p className="mx-auto mt-3 max-w-lg text-muted-foreground">
-              Browse our dinner-for-two collection and start your weeknight revolution.
+              Simple recipes, real ingredients, scaled for two. No leftovers, no
+              waste, no stress.
             </p>
             <div className="mt-6 flex justify-center gap-3">
               <Button
@@ -227,7 +241,7 @@ export default async function HomePage() {
                 nativeButton={false}
                 size="lg"
               >
-                View all recipes
+                Browse all recipes
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Button>
             </div>
