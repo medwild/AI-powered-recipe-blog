@@ -220,5 +220,27 @@ export const recipes = pgTable(
   }),
 )
 
+export const internalLinkLogs = pgTable(
+  "internal_link_logs",
+  {
+    id: serial("id").primaryKey(),
+    sourceContentId: integer("source_content_id").notNull(),
+    targetSlug: text("target_slug").notNull(),
+    targetContentId: integer("target_content_id"),
+    anchorText: text("anchor_text").notNull(),
+    action: text("action").notNull(),
+    source: text("source").notNull(),
+    score: integer("score"),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  },
+  (table) => [
+    index("idx_ill_source_content_id").on(table.sourceContentId),
+    index("idx_ill_target_slug").on(table.targetSlug),
+    index("idx_ill_action").on(table.action),
+  ],
+)
+
 export type Recipe = typeof recipes.$inferSelect
 export type NewRecipe = typeof recipes.$inferInsert
+
+export type InternalLinkLog = typeof internalLinkLogs.$inferSelect
