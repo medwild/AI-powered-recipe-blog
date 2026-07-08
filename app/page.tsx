@@ -67,7 +67,7 @@ export default async function HomePage() {
                 </Button>
               </div>
             </div>
-            <div className="relative overflow-hidden rounded-2xl border border-border aspect-[4/3]">
+            <div className="relative overflow-hidden rounded-3xl border border-border shadow-2xl shadow-primary/10 aspect-[2/3]">
               <Image
                 src="/hero-kitchen.png"
                 alt="Kitchen counter with fresh ingredients"
