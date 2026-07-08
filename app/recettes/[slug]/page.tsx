@@ -1,11 +1,12 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, ArrowRight } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { RecipeArticle } from "@/components/recipe-article"
 import { RecipeRelated } from "@/components/recipe-related"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 import { getRecipeBySlug, getPublishedRecipes, getRelatedRecipes, getLinkedArticle } from "@/lib/queries"
 
 export const revalidate = 300
@@ -175,15 +176,13 @@ export default async function RecipePage({
     <div className="flex min-h-screen flex-col">
       <SiteHeader />
       <main className="flex-1">
-        <div className="mx-auto max-w-3xl px-4 pt-8">
-          <Link
-            href="/recettes"
-            className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-          >
-            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-            All recipes
-          </Link>
-        </div>
+        <Breadcrumbs
+          crumbs={[
+            { label: "Home", href: "/" },
+            { label: "Recipes", href: "/recettes" },
+            { label: recipe.title, href: `/recettes/${recipe.slug}` },
+          ]}
+        />
         <RecipeArticle recipe={recipe} />
         <RecipeJsonLd recipe={recipe} />
 

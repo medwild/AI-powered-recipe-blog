@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowLeft, ArrowRight } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { RecipeCard } from "@/components/recipe-card"
@@ -11,6 +11,7 @@ import { FOOD_BLUR_PLACEHOLDER } from "@/lib/utils"
 import { MarkdownRenderer } from "@/components/markdown-renderer"
 import { CATEGORY_LABELS } from "@/components/category-listing"
 import { PinButton } from "@/components/pin-button"
+import { Breadcrumbs } from "@/components/breadcrumbs"
 
 export function articleMetadata(article: NonNullable<Awaited<ReturnType<typeof getArticleBySlug>>>, category: string): Metadata {
   return {
@@ -110,17 +111,15 @@ export async function ArticleDetail({ slug }: { slug: string }) {
     <div className="flex min-h-screen flex-col">
       <SiteHeader />
       <main className="flex-1">
-        <div className="mx-auto max-w-3xl px-4 pt-8">
-          <Link
-            href={`/${article.category}`}
-            className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-          >
-            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-            {categoryLabel}
-          </Link>
-        </div>
+        <Breadcrumbs
+          crumbs={[
+            { label: "Home", href: "/" },
+            { label: categoryLabel, href: `/${article.category}` },
+            { label: article.title, href: `/${article.category}/${article.slug}` },
+          ]}
+        />
 
-        <article className="mx-auto max-w-3xl px-4 py-8">
+        <article className="mx-auto max-w-3xl px-4 py-8 pt-2">
           {article.heroImageUrl ? (
             <div className="relative mb-8 aspect-[2/3] overflow-hidden rounded-3xl border border-border shadow-2xl shadow-primary/10">
               <Image
