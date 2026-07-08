@@ -12,6 +12,7 @@ import { MarkdownRenderer } from "@/components/markdown-renderer"
 import { CATEGORY_LABELS } from "@/components/category-listing"
 import { PinButton } from "@/components/pin-button"
 import { Breadcrumbs } from "@/components/breadcrumbs"
+import { ArticleJsonLd } from "@/components/article/article-jsonld"
 
 export function articleMetadata(article: NonNullable<Awaited<ReturnType<typeof getArticleBySlug>>>, category: string): Metadata {
   return {
@@ -31,70 +32,6 @@ export function articleMetadata(article: NonNullable<Awaited<ReturnType<typeof g
       images: article.heroImageUrl ? [article.heroImageUrl] : undefined,
     },
   }
-}
-
-function ArticleJsonLd({
-  article,
-}: {
-  article: NonNullable<Awaited<ReturnType<typeof getArticleBySlug>>>
-}) {
-  const base = (article.jsonLd as Record<string, unknown>) ?? {}
-  const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com"
-  const categoryLabel = CATEGORY_LABELS[article.category ?? ""] ?? article.category ?? "Blog"
-
-  if (base["@graph"] && Array.isArray(base["@graph"])) {
-    const graph = base["@graph"] as Record<string, unknown>[]
-    const hasBreadcrumb = graph.some((n) => n["@type"] === "BreadcrumbList")
-    const enrichedGraph = hasBreadcrumb
-      ? graph
-      : [
-          ...graph,
-          {
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
-              { "@type": "ListItem", position: 2, name: categoryLabel, item: `${SITE}/${article.category}` },
-              { "@type": "ListItem", position: 3, name: article.title },
-            ],
-          },
-        ]
-    return (
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({ ...base, "@graph": enrichedGraph }),
-        }}
-      />
-    )
-  }
-  return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{
-        __html: JSON.stringify({
-          "@context": "https://schema.org",
-          "@graph": [
-            {
-              "@type": "Article",
-              headline: article.title,
-              description: article.metaDescription || article.excerpt,
-              author: { "@type": "Person", name: "Chef Augustin Lefevre" },
-              datePublished: article.publishedAt?.toISOString(),
-              image: article.heroImageUrl,
-            },
-            {
-              "@type": "BreadcrumbList",
-              itemListElement: [
-                { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
-                { "@type": "ListItem", position: 2, name: categoryLabel, item: `${SITE}/${article.category}` },
-                { "@type": "ListItem", position: 3, name: article.title },
-              ],
-            },
-          ],
-        }),
-      }}
-    />
-  )
 }
 
 export async function ArticleDetail({ slug }: { slug: string }) {
@@ -165,8 +102,6 @@ export async function ArticleDetail({ slug }: { slug: string }) {
           </div>
         </article>
 
-        <ArticleJsonLd article={article} />
-
         {relatedRecipes.length > 0 ? (
           <section className="mx-auto max-w-5xl px-4 py-14">
             <h2 className="mb-8 font-serif text-2xl text-balance">
@@ -180,6 +115,7 @@ export async function ArticleDetail({ slug }: { slug: string }) {
           </section>
         ) : null}
       </main>
+      <ArticleJsonLd article={article} />
       <SiteFooter />
     </div>
   )
