@@ -1,6 +1,6 @@
 
 # AI AutoBlog — CLAUDE.md
-> MàJ : 2026-06-27 — Sprint 5 SEO/GEO terminé
+> MàJ : 2026-07-08 — Migration LLM Claude Sonnet 4.6 + Ideogram v4 Turbo
 
 ## Stack
 
@@ -15,8 +15,10 @@
 | Drizzle Kit | 0.31.10 | Push de schéma |
 | Neon (PostgreSQL) | serverless | Base de données |
 | Inngest | 4.7.0 | Background job engine |
-| Cloudflare Workers AI | — | Génération texte (GPT-OSS-120B) + image (FLUX-1-Schnell) |
-| NaraRouter | — | LLM primaire (Mistral Medium 3.5, fallback Cloudflare) |
+| Anthropic (Claude Sonnet 4.6) | — | LLM premium — Writer + Editor (qualité SEO) |
+| NaraRouter | — | LLM standard — Strategist, Auditor, QA, AOR (Mistral Medium 3.5) |
+| Cloudflare Workers AI | — | Fallback texte (GPT-OSS-120B) + image (FLUX-1-Schnell) |
+| Ideogram v4 Turbo | — | Génération image food photography 2:3 (fallback Cloudflare) |
 | Serper.dev | — | Analyse SERP Google |
 | Cloudinary | 2.10.0 | Hébergement CDN images |
 | React Markdown | 10.1.0 | Rendu Markdown → HTML |
