@@ -29,7 +29,7 @@ export function RecipeArticleBody({
     <section
       id="article-body"
       aria-labelledby="article-body-heading"
-      className="mx-auto max-w-3xl px-4 pt-12"
+      className="mx-auto max-w-3xl px-4 pt-12 scroll-mt-20"
     >
       <h2 id="article-body-heading" className="sr-only">
         Article and tips

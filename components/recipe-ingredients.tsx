@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useCallback } from "react"
-import { Check } from "lucide-react"
+import { Check, ChefHat } from "lucide-react"
 import type { Ingredient } from "@/lib/db/schema"
 
 function IngredientRow({ ingredient }: { ingredient: Ingredient }) {
@@ -11,7 +11,7 @@ function IngredientRow({ ingredient }: { ingredient: Ingredient }) {
 
   return (
     <li
-      className="flex items-center gap-3 cursor-pointer select-none group"
+      className="flex items-center gap-3.5 cursor-pointer select-none group border-b border-dashed border-border/40 pb-3 last:border-0 last:pb-0"
       onClick={toggle}
       role="checkbox"
       aria-checked={checked}
@@ -24,14 +24,14 @@ function IngredientRow({ ingredient }: { ingredient: Ingredient }) {
       }}
     >
       <span
-        className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-200 ${
+        className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-200 ${
           checked
             ? "border-primary bg-primary text-primary-foreground"
-            : "border-border group-hover:border-primary/40"
+            : "border-muted-foreground/25 group-hover:border-primary/40"
         }`}
       >
         {checked ? (
-          <Check className="h-3.5 w-3.5" aria-hidden="true" />
+          <Check className="h-4 w-4" aria-hidden="true" />
         ) : (
           <span className="h-2 w-2 rounded-full bg-transparent" />
         )}
@@ -47,7 +47,7 @@ function IngredientRow({ ingredient }: { ingredient: Ingredient }) {
       </span>
       {ingredient.quantity ? (
         <span
-          className={`ml-auto shrink-0 text-sm font-medium transition-all duration-200 ${
+          className={`ml-auto shrink-0 text-sm font-medium tabular-nums transition-all duration-200 ${
             checked
               ? "line-through text-muted-foreground/30"
               : "text-muted-foreground"
@@ -71,16 +71,33 @@ export function RecipeIngredients({
     <section
       id="ingredients-section"
       aria-labelledby="ingredients-heading"
-      className="mx-auto max-w-3xl px-4 pt-12"
+      className="mx-auto max-w-3xl px-4 pt-12 scroll-mt-20"
     >
-      <div className="rounded-3xl border border-border bg-card p-6 sm:p-8">
-        <h2
-          id="ingredients-heading"
-          className="font-serif text-2xl text-foreground"
-        >
-          Ingredients
-        </h2>
-        <ul className="mt-6 flex flex-col gap-3.5" role="list">
+      <div
+        className="rounded-3xl border border-border/80 p-6 sm:p-8"
+        style={{
+          backgroundImage: `
+            repeating-linear-gradient(
+              0deg,
+              transparent,
+              transparent 28px,
+              oklch(0.6 0.16 41 / 0.03) 28px,
+              oklch(0.6 0.16 41 / 0.03) 29px
+            )
+          `,
+          backgroundColor: "oklch(1 0.004 85 / 0.7)",
+        }}
+      >
+        <div className="flex items-center gap-2 mb-6">
+          <ChefHat className="h-5 w-5 text-primary/60" aria-hidden="true" />
+          <h2
+            id="ingredients-heading"
+            className="font-serif text-2xl text-foreground"
+          >
+            Ingredients
+          </h2>
+        </div>
+        <ul className="flex flex-col gap-3.5" role="list">
           {ingredients.map((ing, i) => (
             <IngredientRow key={i} ingredient={ing} />
           ))}

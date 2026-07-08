@@ -84,7 +84,13 @@ export function RecipeHero({ recipe }: { recipe: Recipe }) {
           />
           <figcaption className="sr-only">Photo: {recipe.title}</figcaption>
         </figure>
-      ) : null}
+      ) : (
+        <div className="mt-8 flex aspect-[2/3] items-center justify-center rounded-3xl border border-dashed border-border bg-secondary/20">
+          <p className="text-sm text-muted-foreground/60 font-serif">
+            Photo coming soon
+          </p>
+        </div>
+      )}
     </header>
   )
 }

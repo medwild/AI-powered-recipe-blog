@@ -1,6 +1,7 @@
 "use client"
 
 import { ArrowDown, Printer, Share2 } from "lucide-react"
+import { toast } from "sonner"
 
 function PinterestIcon({ className }: { className?: string }) {
   return (
@@ -55,6 +56,7 @@ export function RecipeActionBar({ title }: { title: string }) {
               navigator.share({ title, url: window.location.href })
             } else {
               navigator.clipboard.writeText(window.location.href)
+              toast.success("Link copied to clipboard")
             }
           }}
           className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-3 text-sm font-medium transition-all hover:bg-secondary hover:border-primary/30"
