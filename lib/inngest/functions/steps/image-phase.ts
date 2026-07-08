@@ -2,7 +2,7 @@
  * Steps 8 + 9 — Image prompt optimization + generation with A/B variants.
  */
 
-import { runImage } from "@/lib/agents/cloudflare"
+import { runImage } from "@/lib/agents/ideogram"
 import { uploadImage } from "@/lib/agents/cloudinary"
 import { agentImagePromptOptimizer } from "../agents/image-prompt-optimizer"
 import type { RecipeDraft } from "../agents/writer"
