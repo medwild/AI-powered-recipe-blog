@@ -121,7 +121,7 @@ export async function ArticleDetail({ slug }: { slug: string }) {
 
         <article className="mx-auto max-w-3xl px-4 py-8">
           {article.heroImageUrl ? (
-            <div className="relative mb-8 aspect-[16/9] overflow-hidden rounded-2xl">
+            <div className="relative mb-8 aspect-[2/3] overflow-hidden rounded-3xl border border-border shadow-2xl shadow-primary/10">
               <Image
                 src={article.heroImageUrl}
                 alt={article.title}
@@ -137,7 +137,7 @@ export async function ArticleDetail({ slug }: { slug: string }) {
 
           <header className="mb-8">
             <div className="mb-2 flex items-center gap-2 text-sm text-muted-foreground">
-              <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium">
+              <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
                 {categoryLabel}
               </span>
               {article.publishedAt ? (

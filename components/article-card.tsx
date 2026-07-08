@@ -16,9 +16,9 @@ export function ArticleCard({ article }: { article: Recipe }) {
   return (
     <Link
       href={`/${article.category ?? "techniques"}/${article.slug}`}
-      className="card-hover group flex flex-col overflow-hidden rounded-xl border border-border bg-card"
+      className="card-hover group flex flex-col overflow-hidden rounded-2xl border border-border bg-card"
     >
-      <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+      <div className="relative aspect-[2/3] overflow-hidden bg-muted">
         {article.heroImageUrl ? (
           <Image
             src={article.heroImageUrl}
@@ -33,7 +33,7 @@ export function ArticleCard({ article }: { article: Recipe }) {
           </div>
         )}
         {article.category ? (
-          <span className="absolute left-3 top-3 rounded-full bg-primary/90 px-2.5 py-1 text-xs font-medium text-primary-foreground">
+          <span className="absolute left-3 top-3 rounded-full bg-primary/90 backdrop-blur px-2.5 py-1 text-xs font-medium text-primary-foreground">
             {categoryLabel}
           </span>
         ) : null}
