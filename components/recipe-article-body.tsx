@@ -1,22 +1,6 @@
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
-
-/**
- * Supprime les balises HTML dangereuses ou non desirables (<script>, <style>)
- * que le LLM peut inserer dans contentMarkdown (ex : JSON-LD genere par erreur).
- * Le JSON-LD est deja genere separement par le composant RecipeJsonLd.
- */
-function sanitizeMarkdown(md: string): string {
-  return md
-    .replace(/<script[\s\S]*?<\/script>/gi, "")
-    .replace(/<style[\s\S]*?<\/style>/gi, "")
-    .replace(/<\/?meta\s[^>]*\/?>/gi, "")
-    .replace(/<\/?link\s[^>]*\/?>/gi, "")
-    .replace(/<img\s[^>]*\/?>/gi, "")
-    .replace(/<(?:br|hr|input|source|col|area|base|embed|wbr)\s*\/?>/gi, "")
-    .replace(/\n{3,}/g, "\n\n")
-    .trim()
-}
+import { sanitizeMarkdown } from "@/lib/utils/sanitize"
 
 export function RecipeArticleBody({
   contentMarkdown,
