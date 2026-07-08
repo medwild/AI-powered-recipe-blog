@@ -26,7 +26,7 @@ export function SiteFooter() {
   return (
     <footer className="mt-20 border-t border-border bg-secondary/30">
       <div className="mx-auto max-w-5xl px-4 py-14">
-        <div className="grid gap-10 sm:grid-cols-3">
+        <div className="grid gap-10 sm:grid-cols-4">
           {/* Brand */}
           <div className="flex flex-col gap-3">
             <p className="font-serif text-lg text-foreground">Chef Augustin</p>
@@ -64,6 +64,31 @@ export function SiteFooter() {
               className="text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
               About
+            </Link>
+          </div>
+
+          {/* Legal */}
+          <div className="flex flex-col gap-2">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Legal
+            </p>
+            <Link
+              href="/privacy"
+              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              href="/terms"
+              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Terms &amp; Disclaimer
+            </Link>
+            <Link
+              href="/contact"
+              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Contact
             </Link>
           </div>
 
