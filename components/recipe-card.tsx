@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Clock, Users } from "lucide-react"
 import type { Recipe } from "@/lib/db/schema"
+import { PinButton } from "@/components/pin-button"
 
 export function RecipeCard({ recipe }: { recipe: Recipe }) {
   return (
@@ -11,13 +12,20 @@ export function RecipeCard({ recipe }: { recipe: Recipe }) {
     >
       <div className="relative aspect-[2/3] overflow-hidden bg-muted">
         {recipe.heroImageUrl ? (
-          <Image
-            src={recipe.heroImageUrl || "/placeholder.svg"}
-            alt={recipe.title}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          />
+          <>
+            <Image
+              src={recipe.heroImageUrl || "/placeholder.svg"}
+              alt={recipe.title}
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            />
+            <PinButton
+              imageUrl={recipe.heroImageUrl}
+              pageUrl={`${process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com"}/recettes/${recipe.slug}`}
+              title={recipe.title}
+            />
+          </>
         ) : (
           <div className="flex h-full w-full items-center justify-center font-serif text-sm text-muted-foreground">
             Sans illustration

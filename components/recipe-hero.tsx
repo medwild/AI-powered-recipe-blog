@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import type { Recipe } from "@/lib/db/schema"
 import { FOOD_BLUR_PLACEHOLDER } from "@/lib/utils"
+import { PinButton } from "@/components/pin-button"
 
 export function RecipeHero({ recipe }: { recipe: Recipe }) {
   const tags = recipe.tags ?? []
@@ -75,6 +76,11 @@ export function RecipeHero({ recipe }: { recipe: Recipe }) {
             sizes="(max-width: 768px) 100vw, 768px"
             placeholder="blur"
             blurDataURL={FOOD_BLUR_PLACEHOLDER}
+          />
+          <PinButton
+            imageUrl={recipe.heroImageUrl}
+            pageUrl={`${process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com"}/recettes/${recipe.slug}`}
+            title={recipe.title}
           />
           <figcaption className="sr-only">Photo: {recipe.title}</figcaption>
         </figure>

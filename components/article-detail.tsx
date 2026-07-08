@@ -10,6 +10,7 @@ import { getArticleBySlug, getRelatedForArticle } from "@/lib/queries"
 import { FOOD_BLUR_PLACEHOLDER } from "@/lib/utils"
 import { MarkdownRenderer } from "@/components/markdown-renderer"
 import { CATEGORY_LABELS } from "@/components/category-listing"
+import { PinButton } from "@/components/pin-button"
 
 export function articleMetadata(article: NonNullable<Awaited<ReturnType<typeof getArticleBySlug>>>, category: string): Metadata {
   return {
@@ -131,6 +132,11 @@ export async function ArticleDetail({ slug }: { slug: string }) {
                 className="object-cover"
                 placeholder="blur"
                 blurDataURL={FOOD_BLUR_PLACEHOLDER}
+              />
+              <PinButton
+                imageUrl={article.heroImageUrl}
+                pageUrl={`${process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com"}/${article.category}/${article.slug}`}
+                title={article.title}
               />
             </div>
           ) : null}

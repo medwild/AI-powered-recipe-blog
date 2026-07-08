@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { BookOpen } from "lucide-react"
 import type { Recipe } from "@/lib/db/schema"
+import { PinButton } from "@/components/pin-button"
 
 const CATEGORY_LABELS: Record<string, string> = {
   techniques: "Technique",
@@ -20,13 +21,20 @@ export function ArticleCard({ article }: { article: Recipe }) {
     >
       <div className="relative aspect-[2/3] overflow-hidden bg-muted">
         {article.heroImageUrl ? (
-          <Image
-            src={article.heroImageUrl}
-            alt={article.title}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          />
+          <>
+            <Image
+              src={article.heroImageUrl}
+              alt={article.title}
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            />
+            <PinButton
+              imageUrl={article.heroImageUrl}
+              pageUrl={`${process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com"}/${article.category ?? "techniques"}/${article.slug}`}
+              title={article.title}
+            />
+          </>
         ) : (
           <div className="flex h-full w-full items-center justify-center font-serif text-sm text-muted-foreground">
             <BookOpen className="h-8 w-8 opacity-30" aria-hidden="true" />
