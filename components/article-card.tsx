@@ -36,8 +36,8 @@ export function ArticleCard({ article }: { article: Recipe }) {
             />
           </>
         ) : (
-          <div className="flex h-full w-full items-center justify-center font-serif text-sm text-muted-foreground">
-            <BookOpen className="h-8 w-8 opacity-30" aria-hidden="true" />
+          <div className="flex h-full w-full items-center justify-center bg-secondary/30">
+            <BookOpen className="h-8 w-8 text-muted-foreground/30" aria-hidden="true" />
           </div>
         )}
         {article.category ? (

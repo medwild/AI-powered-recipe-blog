@@ -28,6 +28,15 @@ export function RecipeActionBar({ title }: { title: string }) {
           <ArrowDown className="h-4 w-4" aria-hidden="true" />
         </a>
 
+        {/* Jump to Tips & FAQ */}
+        <a
+          href="#article-body"
+          className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-3 text-sm font-medium transition-all hover:bg-secondary hover:border-primary/30"
+        >
+          Tips &amp; FAQ
+          <ArrowDown className="h-4 w-4" aria-hidden="true" />
+        </a>
+
         {/* Print */}
         <button
           type="button"

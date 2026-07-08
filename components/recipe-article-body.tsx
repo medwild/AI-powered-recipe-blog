@@ -27,6 +27,7 @@ export function RecipeArticleBody({
 
   return (
     <section
+      id="article-body"
       aria-labelledby="article-body-heading"
       className="mx-auto max-w-3xl px-4 pt-12"
     >

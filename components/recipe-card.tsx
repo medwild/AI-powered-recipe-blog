@@ -27,8 +27,10 @@ export function RecipeCard({ recipe }: { recipe: Recipe }) {
             />
           </>
         ) : (
-          <div className="flex h-full w-full items-center justify-center font-serif text-sm text-muted-foreground">
-            Sans illustration
+          <div className="flex h-full w-full items-center justify-center bg-secondary/30">
+            <span className="font-serif text-sm text-muted-foreground/60">
+              Coming soon
+            </span>
           </div>
         )}
         {recipe.difficulty ? (
