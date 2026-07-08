@@ -1,7 +1,5 @@
 "use client"
 
-import { useState } from "react"
-
 function PinterestIcon({ className }: { className?: string }) {
   return (
     <svg
@@ -16,8 +14,9 @@ function PinterestIcon({ className }: { className?: string }) {
 }
 
 /**
- * Bouton "Save to Pinterest" qui apparaît au survol d'une image.
- * Stratégie PTRA : chaque photo du blog doit permettre le Pin direct.
+ * Bouton "Save to Pinterest" toujours visible sur les photos du blog.
+ * Stratégie PTRA : chaque photo doit permettre le Pin direct.
+ * Couleurs officielles Pinterest : rouge #E60023 + blanc.
  */
 export function PinButton({
   imageUrl,
@@ -28,8 +27,6 @@ export function PinButton({
   pageUrl: string
   title: string
 }) {
-  const [visible, setVisible] = useState(false)
-
   const pinUrl = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(
     pageUrl
   )}&media=${encodeURIComponent(imageUrl)}&description=${encodeURIComponent(title)}`
@@ -41,22 +38,14 @@ export function PinButton({
   }
 
   return (
-    <div
-      className="absolute inset-0 z-10"
-      onMouseEnter={() => setVisible(true)}
-      onMouseLeave={() => setVisible(false)}
+    <button
+      type="button"
+      onClick={handlePin}
+      className="absolute top-3 right-3 z-10 inline-flex items-center gap-1.5 rounded-full bg-[#E60023] px-3 py-1.5 text-xs font-bold text-white shadow-lg shadow-[#E60023]/25 transition-all duration-200 hover:bg-[#BD081C] hover:scale-105 hover:shadow-xl hover:shadow-[#E60023]/30"
+      aria-label={`Save "${title}" to Pinterest`}
     >
-      <button
-        type="button"
-        onClick={handlePin}
-        className={`absolute top-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-background/90 backdrop-blur px-3 py-1.5 text-xs font-semibold text-foreground shadow-lg transition-all duration-200 hover:bg-primary hover:text-primary-foreground hover:scale-105 ${
-          visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1 pointer-events-none"
-        }`}
-        aria-label={`Save "${title}" to Pinterest`}
-      >
-        <PinterestIcon className="h-3.5 w-3.5" />
-        Save
-      </button>
-    </div>
+      <PinterestIcon className="h-3.5 w-3.5" />
+      Save
+    </button>
   )
 }
