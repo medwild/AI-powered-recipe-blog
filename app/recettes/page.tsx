@@ -32,14 +32,18 @@ export default async function RecipesPage({
     getRecipeCategories(),
   ])
 
+  // Only show recipes with images in the public grid
+  const displayRecipes = recipes.filter((r) => r.heroImageUrl)
+
   return (
     <div className="flex min-h-screen flex-col">
       <SiteHeader />
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-14">
-        <header className="mb-10">
+        <header className="mb-8">
           <h1 className="font-serif text-4xl text-balance">All recipes</h1>
-          <p className="mt-2 text-muted-foreground">
-            {recipes.length} recipe{recipes.length !== 1 ? "s" : ""} to discover.
+          <p className="mt-2 max-w-lg text-muted-foreground">
+            Simple, small-batch recipes for real weeknights and practical home
+            cooking. Browse by search or filter.
           </p>
         </header>
 
@@ -53,7 +57,7 @@ export default async function RecipesPage({
           </Suspense>
         </div>
 
-        {recipes.length === 0 ? (
+        {displayRecipes.length === 0 ? (
           <div className="rounded-xl border border-dashed border-border bg-card p-12 text-center">
             <p className="text-muted-foreground">
               {q || cat
@@ -63,7 +67,7 @@ export default async function RecipesPage({
           </div>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {recipes.map((recipe) => (
+            {displayRecipes.map((recipe) => (
               <RecipeCard key={recipe.id} recipe={recipe} />
             ))}
           </div>

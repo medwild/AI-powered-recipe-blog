@@ -1,8 +1,11 @@
 "use client"
 
+import { useState } from "react"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import { useCallback, useTransition } from "react"
 import { Search, X } from "lucide-react"
+
+const VISIBLE_CATEGORIES = 12
 
 export function RecipeSearch({
   categories,
@@ -17,6 +20,11 @@ export function RecipeSearch({
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const [, startTransition] = useTransition()
+  const [showAll, setShowAll] = useState(false)
+
+  const visibleCategories = showAll
+    ? categories
+    : categories.slice(0, VISIBLE_CATEGORIES)
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -32,49 +40,61 @@ export function RecipeSearch({
   )
 
   return (
-    <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-      <div className="relative flex-1">
+    <div className="flex flex-col gap-5">
+      {/* Search bar — prominent */}
+      <div className="relative">
         <Search
-          className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+          className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground"
           aria-hidden="true"
         />
         <input
           type="search"
-          placeholder="Search for a recipe..."
+          placeholder='Search by ingredient, meal, or keyword…'
           defaultValue={currentSearch}
           onChange={(e) => {
             startTransition(() => {
-              router.push(`${pathname}?${createQueryString("q", e.target.value)}`, { scroll: false })
+              router.push(
+                `${pathname}?${createQueryString("q", e.target.value)}`,
+                { scroll: false },
+              )
             })
           }}
-          className="w-full rounded-lg border border-border bg-card py-2.5 pl-10 pr-10 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-primary focus:ring-1 focus:ring-primary"
-          aria-label="Search for a recipe"
+          className="w-full rounded-xl border border-border bg-card py-3 pl-12 pr-12 text-base outline-none transition-colors placeholder:text-muted-foreground/60 focus:border-primary focus:ring-2 focus:ring-primary/20"
+          aria-label="Search recipes"
         />
         {currentSearch ? (
           <button
             type="button"
             onClick={() => {
               startTransition(() => {
-                router.push(`${pathname}?${createQueryString("q", "")}`, { scroll: false })
+                router.push(
+                  `${pathname}?${createQueryString("q", "")}`,
+                  { scroll: false },
+                )
               })
             }}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
             aria-label="Clear search"
           >
-            <X className="h-4 w-4" />
+            <X className="h-5 w-5" />
           </button>
         ) : null}
       </div>
+
+      {/* Category pills — limited + expandable */}
       {categories.length > 0 ? (
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
             onClick={() => {
               startTransition(() => {
-                router.push(`${pathname}?${createQueryString("cat", "")}`, { scroll: false })
+                router.push(
+                  `${pathname}?${createQueryString("cat", "")}`,
+                  { scroll: false },
+                )
               })
             }}
-            className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+            className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
               !currentCategory
                 ? "bg-primary text-primary-foreground"
                 : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
@@ -82,16 +102,22 @@ export function RecipeSearch({
           >
             All
           </button>
-          {categories.map((cat) => (
+          {visibleCategories.map((cat) => (
             <button
               key={cat}
               type="button"
               onClick={() => {
                 startTransition(() => {
-                  router.push(`${pathname}?${createQueryString("cat", cat === currentCategory ? "" : cat)}`, { scroll: false })
+                  router.push(
+                    `${pathname}?${createQueryString(
+                      "cat",
+                      cat === currentCategory ? "" : cat,
+                    )}`,
+                    { scroll: false },
+                  )
                 })
               }}
-              className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+              className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
                 cat === currentCategory
                   ? "bg-primary text-primary-foreground"
                   : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
@@ -100,6 +126,24 @@ export function RecipeSearch({
               {cat}
             </button>
           ))}
+          {categories.length > VISIBLE_CATEGORIES && !showAll ? (
+            <button
+              type="button"
+              onClick={() => setShowAll(true)}
+              className="rounded-full border border-primary/30 bg-primary/5 px-3.5 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/10"
+            >
+              +{categories.length - VISIBLE_CATEGORIES} more filters
+            </button>
+          ) : null}
+          {showAll && categories.length > VISIBLE_CATEGORIES ? (
+            <button
+              type="button"
+              onClick={() => setShowAll(false)}
+              className="rounded-full border border-border bg-card px-3.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Show less
+            </button>
+          ) : null}
         </div>
       ) : null}
     </div>
