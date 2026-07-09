@@ -14,7 +14,7 @@
 // reconstruit programmatiquement via buildDefaultPrompt() (lib/skills.ts).
 
 import { loadSkillContent, buildDefaultPrompt } from "@/lib/skills"
-import { runText } from "@/lib/agents/nararouter"
+import { runText } from "@/lib/agents/anthropic"
 import { validateContract, AGENT_CONTRACTS } from "@/lib/agents/contract-validator"
 import type { Ingredient } from "@/lib/db/schema"
 

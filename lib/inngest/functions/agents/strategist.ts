@@ -12,7 +12,7 @@
 //        for reduced LLM cognitive load + faster inference.
 
 import { loadSkillContent } from "@/lib/skills"
-import { runTextAndParseJson } from "@/lib/agents/nararouter"
+import { runTextAndParseJson } from "@/lib/agents/anthropic"
 import { validateContract, AGENT_CONTRACTS } from "@/lib/agents/contract-validator"
 import { logAgentTrace } from "../helpers"
 import { getRelevantSources, formatSourcesForPrompt, type ExternalSource } from "@/lib/external-sources"

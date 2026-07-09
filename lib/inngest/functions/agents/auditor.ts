@@ -10,7 +10,7 @@
 //   User prompt   ← buildUserPrompt()                   (draft, keyword, entités)
 
 import { loadSkillContent } from "@/lib/skills"
-import { runTextAndParseJson } from "@/lib/agents/nararouter"
+import { runTextAndParseJson } from "@/lib/agents/anthropic"
 import { validateContract, AGENT_CONTRACTS } from "@/lib/agents/contract-validator"
 import type { RecipeDraft } from "./writer"
 import type { LinkTarget } from "../steps/link-suggester"

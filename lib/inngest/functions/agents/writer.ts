@@ -8,7 +8,7 @@
 //   User prompt   ← buildUserPrompt()                  (plan SEO, structure H2, entités)
 
 import { loadSkillContent } from "@/lib/skills"
-import { runTextAndParseJson } from "@/lib/agents/nararouter"
+import { runTextAndParseJson } from "@/lib/agents/anthropic"
 import { validateContract, AGENT_CONTRACTS } from "@/lib/agents/contract-validator"
 import { stripHtmlComments, logAgentTrace } from "../helpers"
 import type { SeoPlan } from "./strategist"
@@ -162,7 +162,6 @@ export async function agentWriter(
     const result = await runTextAndParseJson<RecipeDraft>(systemPrompt, userPrompt, {
       temperature: 0.9,
       maxTokens: 8192,
-      model: "claude",
     })
 
     // Contract validation (before sanitization — validate raw LLM output)

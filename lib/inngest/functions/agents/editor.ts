@@ -8,7 +8,7 @@
 //   User prompt   ← buildUserPrompt()                  (draft, audit, numéro de passe)
 
 import { loadSkillContent } from "@/lib/skills"
-import { runTextAndParseJson } from "@/lib/agents/nararouter"
+import { runTextAndParseJson } from "@/lib/agents/anthropic"
 import { validateContract, AGENT_CONTRACTS } from "@/lib/agents/contract-validator"
 import { stripHtmlComments, stripBracketTokens } from "../helpers"
 import type { RecipeDraft } from "./writer"
@@ -137,7 +137,6 @@ export async function agentEditor(
     const result = await runTextAndParseJson<RecipeDraft>(systemPrompt, userPrompt, {
       temperature: 0.8,
       maxTokens: 8192,
-      model: "claude",
     })
 
     // Contract validation (Editor outputs a RecipeDraft — reuse Writer contract)
