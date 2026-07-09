@@ -84,6 +84,11 @@ export async function generateAorArticle(
       await appendLog(recipeId, logEntry("AOR GEO Validator", "error",
         `Citability WARNING: score ${aorCitability.score}/100. ` +
         aorCitability.feedback))
+    } else {
+      await appendLog(recipeId, logEntry("AOR GEO Validator", "done",
+        `Citability PASSED — score ${aorCitability.score}/100. ` +
+        `Claims: ${aorCitability.claims.count}, Attributions: ${aorCitability.attributions.count}, ` +
+        `Nuggets: ${aorCitability.nuggets.count}.`))
     }
 
     // Unique slug

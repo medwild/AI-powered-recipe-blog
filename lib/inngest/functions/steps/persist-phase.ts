@@ -265,6 +265,11 @@ export async function persistFinalDraft(
         `Claims: ${citability.claims.count}/${citability.claims.minRequired}, ` +
         `Attributions: ${citability.attributions.count}/${citability.attributions.minRequired}. ` +
         citability.feedback))
+    } else {
+      await appendLog(recipeId, logEntry("GEO Validator", "done",
+        `Citability PASSED — score ${citability.score}/100. ` +
+        `Claims: ${citability.claims.count}, Attributions: ${citability.attributions.count}, ` +
+        `Nuggets: ${citability.nuggets.count}.`))
     }
 
     // Deterministic content validation — catches banned words, token leaks,

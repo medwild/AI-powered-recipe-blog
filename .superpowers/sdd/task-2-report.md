@@ -1,21 +1,25 @@
-# Task 2 — Strategist skill fixes
+# Task 2 Report — Integrate GEO Validator into ContentValidator
 
-**Date**: 2026-07-06
-**Status**: DONE
+**Status:** Done
 
-## Changes Made
+## Changes
 
-### 1. H1 version bump (line 13)
-- **Old**: `# GEO Strategist v5.1 ULTRA`
-- **New**: `# GEO Strategist v5.2 ULTRA`
-- **Reason**: Align H1 with frontmatter `version: "5.2.0-ULTRA"`
-
-### 2. Removed unrequested output fields (lines 311-312)
-- Removed `"topical_zone"` and `"core_target_slug"` from the Output Schema JSON.
-- **Reason**: These fields were added without a requirement and violated Rule 14 (chirurgical changes only).
-
-## Verification
-- `npx tsc --noEmit` — passed (no errors)
+- **File:** `lib/content-validator.ts`
+- **Import:** Added `import { checkCitability } from "@/lib/geo-validator"` after the INTERNAL_TOKENS constant definition.
+- **Check:** Added GEO citability check as section `// 3.5` in `validateContent()` — runs after the word count block and before metadata length checks. Non-blocking (warning) for scores 60-69; blocking (error) for scores below 60.
 
 ## Commit
-`fix(strategist): remove unrequested output fields, bump H1 to v5.2`
+
+```
+a0a9731 feat: integrate GEO citability check into ContentValidator
+```
+
+## Verification
+
+- `npx tsc --noEmit` — passed with no errors.
+- No `// @ts-ignore`, `as any`, or `eslint-disable` added.
+- Matches existing code style (error/warning severity pattern, same `errors.push(...)` convention).
+
+## Concerns
+
+- None. The integration is a clean additive change — the citability check appends to the existing `errors` array and follows the same severity pattern used by all other validation rules.

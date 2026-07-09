@@ -176,7 +176,7 @@ function countAnswerNuggets(markdown: string): { count: number; matches: string[
  *   claimsScore (40%)       = min(claims.count / 5, 1.0) × 100
  *   attributionsScore (25%) = min(attributions.count / 6, 1.0) × 100
  *   nuggetsScore (20%)      = min(nuggets.count / 4, 1.0) × 100
- *   densityScore (15%)      = min((claims + attributions + nuggets) / wordCount × 1000, 1.0) × 100
+ *   densityScore (15%)      = min((claims + attributions + nuggets) / wordCount × 1000 / 3, 1.0) × 100
  *
  * Attribution match only counts if a claim is present in the same paragraph.
  * No empty name-dropping.
@@ -206,7 +206,7 @@ export function checkCitability(markdown: string, wordCount: number): Citability
   for (const attr of allAttrMatches) {
     const parentParagraph = paragraphs.find(p => p.includes(attr))
     if (!parentParagraph) {
-      validAttrMatches.push(attr)
+      // Paragraph not found — skip (do not count unattributed claims)
       continue
     }
     const hasClaim = CLAIM_PATTERNS.some(pattern => {
@@ -232,8 +232,11 @@ export function checkCitability(markdown: string, wordCount: number): Citability
   const claimsScore = Math.min(claimsCount / minClaims, 1.0) * 100
   const attributionsScore = Math.min(attributionsCount / minAttributions, 1.0) * 100
   const nuggetsScore = Math.min(nuggetsCount / minNuggets, 1.0) * 100
+  // Target: 3 combined items per 1000 words for max density score.
+  // With the 5+6+4=15 minimum items in a 2000-word article → 7.5/1000 words,
+  // comfortably hitting the cap while giving genuine discrimination.
   const densityScore = wordCount > 0
-    ? Math.min((claimsCount + attributionsCount + nuggetsCount) / wordCount * 1000, 1.0) * 100
+    ? Math.min((claimsCount + attributionsCount + nuggetsCount) / wordCount * 1000 / 3, 1.0) * 100
     : 0
 
   const score = Math.round(

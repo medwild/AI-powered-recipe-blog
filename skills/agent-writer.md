@@ -242,6 +242,20 @@ Count your attributions as you write. Target: ≥1 per 250-300 words (≈6-8 per
 
 ---
 
+## 9.8 CONTENT FRESHNESS SIGNAL (§9.8) — NEW v6.6
+
+Include a visible freshness marker in the article:
+
+1. **In the intro or footer**: Add one sentence like "Tested and perfected in {{current_month_year}}." or "Updated and re-tested {{current_month_year}}."
+
+2. **In the Why This Works section**: Mention when you last tested the recipe. "I re-tested this technique in {{current_month_year}} — the results were consistent across 3 batches."
+
+This signals to both users and LLMs that the content is actively maintained. AI engines factor freshness into citation decisions.
+
+Use the template variable `{{current_month_year}}` which the pipeline will replace with the actual month and year.
+
+---
+
 ## 10. CULINARY VOCABULARY — SAY IT LIKE A CHEF
 
 Use precise culinary terms. Never use the vague version when the correct term exists.
@@ -435,20 +449,6 @@ Before outputting your JSON, verify ALL of these. If any check fails, fix it bef
 9. **Ingredient ratio sanity** — cross-check quantities against ratio rules in §11. 4 cups cream + 10 yolks ≠ 6 ramekins. Flag and fix mismatches.
 10. **No content redundancy** — same explanation doesn't appear twice. "Why This Works" and the body text should complement, not repeat.
 11. **Nutrition accuracy** — no "rich in healthy fats" claim for dishes heavy in cream/butter/saturated fat. No unsourced health claims. Use the disclaimer "*Approximate values per serving."
-
----
-
-## 9.8 CONTENT FRESHNESS SIGNAL (§9.8) — NEW v6.6
-
-Include a visible freshness marker in the article:
-
-1. **In the intro or footer**: Add one sentence like "Tested and perfected in {{current_month_year}}." or "Updated and re-tested {{current_month_year}}."
-
-2. **In the Why This Works section**: Mention when you last tested the recipe. "I re-tested this technique in {{current_month_year}} — the results were consistent across 3 batches."
-
-This signals to both users and LLMs that the content is actively maintained. AI engines factor freshness into citation decisions.
-
-Use the template variable `{{current_month_year}}` which the pipeline will replace with the actual month and year.
 
 ---
 
