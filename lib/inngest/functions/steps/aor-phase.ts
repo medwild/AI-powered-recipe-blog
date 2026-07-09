@@ -70,6 +70,13 @@ export async function generateAorArticle(
         `Content validation FAILED: ${errorList}. Saving as draft.`))
     }
 
+    // Replace Writer template variables with actual values.
+    const freshnessDate = new Date()
+    const currentMonthYear = freshnessDate.toLocaleDateString("en-US", { month: "long", year: "numeric" })
+    if (aorResult.contentMarkdown?.includes("{{current_month_year}}")) {
+      aorResult.contentMarkdown = aorResult.contentMarkdown.replace(/\{\{current_month_year\}\}/g, currentMonthYear)
+    }
+
     // GEO Citability check — articles share the same thresholds as recipes
     const aorWordCount = (aorResult.contentMarkdown ?? "").split(/\s+/).filter(Boolean).length
     const aorCitability = checkCitability(aorResult.contentMarkdown ?? "", aorWordCount)

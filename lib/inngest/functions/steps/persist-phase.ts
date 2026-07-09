@@ -247,6 +247,15 @@ export async function persistFinalDraft(
         `Content similarity WARNING: ${similarityResult.matches.map(m => `${m.similarity}% → ${m.title}`).join("; ")}`))
     }
 
+    // Replace Writer template variables with actual values.
+    // The Writer outputs {{current_month_year}} as a placeholder; the pipeline
+    // fills it so the published content carries a real freshness signal.
+    const freshnessDate = new Date()
+    const currentMonthYear = freshnessDate.toLocaleDateString("en-US", { month: "long", year: "numeric" })
+    if (finalRecipe.contentMarkdown?.includes("{{current_month_year}}")) {
+      finalRecipe.contentMarkdown = finalRecipe.contentMarkdown.replace(/\{\{current_month_year\}\}/g, currentMonthYear)
+    }
+
     // GEO Citability check — ensure content has enough specific claims
     // and source attributions for LLM extraction. Block if score < 60.
     const citability = checkCitability(finalRecipe.contentMarkdown ?? "", wordCount)

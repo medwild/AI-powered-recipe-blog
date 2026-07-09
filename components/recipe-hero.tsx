@@ -53,8 +53,23 @@ export function RecipeHero({ recipe }: { recipe: Recipe }) {
         </span>
         {recipe.publishedAt ? (
           <span>
+            Published{" "}
             <time dateTime={recipe.publishedAt.toISOString().split("T")[0]}>
               {recipe.publishedAt.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </time>
+          </span>
+        ) : null}
+        {/* Show "Updated" only if updatedAt is at least 7 days after publishedAt — signals content freshness to users and LLMs */}
+        {recipe.updatedAt && recipe.publishedAt &&
+          (recipe.updatedAt.getTime() - recipe.publishedAt.getTime()) > 7 * 24 * 60 * 60 * 1000 ? (
+          <span>
+            · Updated{" "}
+            <time dateTime={recipe.updatedAt.toISOString().split("T")[0]}>
+              {recipe.updatedAt.toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "long",
                 day: "numeric",

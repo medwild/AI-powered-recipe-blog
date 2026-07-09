@@ -91,6 +91,19 @@ export async function ArticleDetail({ slug }: { slug: string }) {
                   })}
                 </time>
               ) : null}
+              {article.updatedAt && article.publishedAt &&
+                (new Date(article.updatedAt).getTime() - new Date(article.publishedAt).getTime()) > 7 * 24 * 60 * 60 * 1000 ? (
+                <span className="text-muted-foreground/70">
+                  · Mis à jour le{" "}
+                  <time dateTime={new Date(article.updatedAt).toISOString()}>
+                    {new Date(article.updatedAt).toLocaleDateString("fr-FR", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </time>
+                </span>
+              ) : null}
             </div>
             <h1 className="font-serif text-3xl font-bold tracking-tight text-balance md:text-4xl">
               {article.title}
