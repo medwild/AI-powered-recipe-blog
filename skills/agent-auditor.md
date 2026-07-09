@@ -616,7 +616,7 @@ Respond ONLY with a valid JSON object. No markdown code blocks. No surrounding t
 - `publication_readiness_score`: 0-100 integer
 - `confidence_level`: "low" | "medium" | "high"
 - `content_type`: "recipe" | "article"
-- `scores`: all keys required. `validite_recette` = null for articles. `citation_quality` = null for articles (no attribution expectations). All others 0-100 integers.
+- `scores`: all keys required. `validite_recette` = null for articles. `citation_quality`: 0-100 for both recipes and articles — evaluates specific claims, source attributions, and inverted pyramid structure. All others 0-100 integers.
 - `critical_issues`, `major_issues`, `minor_issues`: arrays of objects with `criterion`, `issue`, `quote` (optional for minor), `location` (optional)
 - `evidence`: objects with `criterion`, `observation`, `quote`, `impact` ("positive" | "negative")
 - `required_fixes`: objects with `priority` ("must_fix" | "should_fix" | "optional"), `description`, `location` (optional), `original` (optional), `corrected` (optional)
