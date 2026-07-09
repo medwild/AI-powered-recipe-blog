@@ -31,6 +31,8 @@ export type FieldDef = {
    * or a camelCase/snake_case variant). These are mapped silently.
    */
   aliases?: string[]
+  /** Optional numeric range constraint. Validates that field values fall within [min, max]. */
+  range?: { min?: number; max?: number }
 }
 
 export type AgentContract = {
@@ -85,7 +87,7 @@ export const AGENT_CONTRACTS = {
     agent: "Auditor",
     fields: [
       { name: "decision", required: "critical" },
-      { name: "publication_readiness_score", required: "critical", aliases: ["overallScore"] },
+      { name: "publication_readiness_score", required: "critical", aliases: ["overallScore"], range: { min: 0, max: 100 } },
       { name: "confidence_level", required: "critical" },
       { name: "content_type", required: "yes" },
       { name: "scores", required: "critical" },
@@ -103,7 +105,7 @@ export const AGENT_CONTRACTS = {
   QA: {
     agent: "QA",
     fields: [
-      { name: "qaScore", required: "critical" },
+      { name: "qaScore", required: "critical", range: { min: 0, max: 100 } },
       { name: "verdict", required: "critical" },
       { name: "checks", required: "critical" },
       { name: "summary", required: "yes" },
@@ -144,7 +146,7 @@ export const AGENT_CONTRACTS = {
       { name: "image_prompt", required: "critical" },
       { name: "board", required: "critical" },
       { name: "intent", required: "critical" },
-      { name: "ptra_score", required: "critical" },
+      { name: "ptra_score", required: "critical", range: { min: 0, max: 100 } },
       { name: "hashtags", required: "yes" },
     ],
   } satisfies AgentContract,
@@ -227,6 +229,25 @@ export function validateContract<T extends Record<string, unknown>>(
         `may indicate a skill Output Schema that has diverged from the TS type. ` +
         `Update either the skill or the AgentContract.`,
       )
+    }
+  }
+
+  // 4. Validate numeric ranges
+  for (const field of contract.fields) {
+    if (field.range) {
+      const value = raw[field.name]
+      if (typeof value === "number" && !isNaN(value)) {
+        if (field.range.min !== undefined && value < field.range.min) {
+          warnings.push(
+            `[${contract.agent}] Field "${field.name}" = ${value} is below minimum ${field.range.min}`
+          )
+        }
+        if (field.range.max !== undefined && value > field.range.max) {
+          warnings.push(
+            `[${contract.agent}] Field "${field.name}" = ${value} exceeds maximum ${field.range.max}`
+          )
+        }
+      }
     }
   }
 

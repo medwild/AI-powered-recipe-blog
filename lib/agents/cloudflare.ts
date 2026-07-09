@@ -2,6 +2,8 @@
 // - runText: chat/instruct models for content generation (returns string)
 // - runImage: text-to-image models (returns a PNG Buffer)
 
+import { isCircuitOpen, recordSuccess, recordFailure } from "@/lib/circuit-breaker"
+
 // Cloudflare Workers AI models
 // - Primary: Gemma 4 26B A4B (Google, 256k context, Intelligence 26/30).
 //   ~290 neurones/recipe — fits comfortably in the 10K free daily quota.
@@ -32,14 +34,20 @@ const TEXT_TIMEOUT_MS = 300_000
 export async function runText(
   systemPrompt: string,
   userPrompt: string,
-  options?: { temperature?: number; model?: string; maxTokens?: number },
+  options?: { temperature?: number; model?: string; maxTokens?: number; timeout?: number },
 ): Promise<string> {
+  // Circuit breaker — skip call if Cloudflare is in failure state
+  if (isCircuitOpen("cloudflare")) {
+    throw new Error("Cloudflare circuit OPEN — skipping call, use fallback")
+  }
+
   const { accountId, apiToken } = cfConfig()
   const model = options?.model ?? TEXT_MODEL
   const url = `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/${model}`
 
+  const timeoutMs = options?.timeout ?? TEXT_TIMEOUT_MS
   const controller = new AbortController()
-  const timer = setTimeout(() => controller.abort(), TEXT_TIMEOUT_MS)
+  const timer = setTimeout(() => controller.abort(), timeoutMs)
 
   try {
     const res = await fetch(url, {
@@ -61,6 +69,7 @@ export async function runText(
 
     if (!res.ok) {
       const text = await res.text()
+      recordFailure("cloudflare")
       throw new Error(`Cloudflare text run failed (${res.status}): ${text}`)
     }
 
@@ -74,6 +83,7 @@ export async function runText(
       data?.result?.response
 
     if (typeof out !== "string" || out.trim().length === 0) {
+      recordFailure("cloudflare")
       throw new Error(
         "Cloudflare text run returned no response. " +
           `Result keys: ${Object.keys(data?.result ?? {}).join(", ")}`,
@@ -81,7 +91,14 @@ export async function runText(
     }
     // Structured log: provider + model used — grep-friendly for production monitoring
     console.log(`[provider] Cloudflare ${model} — success`)
+    recordSuccess("cloudflare")
     return out
+  } catch (err) {
+    const msg = (err as Error).message
+    if (!msg.includes("circuit OPEN")) {
+      recordFailure("cloudflare")
+    }
+    throw err
   } finally {
     clearTimeout(timer)
   }
@@ -99,9 +116,10 @@ export async function runText(
 export async function runTextAndParseJson<T>(
   systemPrompt: string,
   userPrompt: string,
-  options?: { temperature?: number; maxTokens?: number },
+  options?: { temperature?: number; maxTokens?: number; model?: string },
 ): Promise<T> {
   // Helpers
+  // NOTE: keep in sync with helpers.ts isRecoverableError() and nararouter.ts isRecoverable()
   const isRecoverable = (msg: string): boolean =>
     msg.includes("No JSON object") ||
     msg.includes("Failed to parse JSON") ||
@@ -109,6 +127,7 @@ export async function runTextAndParseJson<T>(
     msg.includes("returned no response") ||
     msg.includes("timed out") ||
     msg.includes("timeout") ||
+    msg.includes("403") ||
     msg.includes("408") ||
     msg.includes("429") ||
     msg.includes("500") ||
@@ -163,46 +182,68 @@ export async function runImage(prompt: string): Promise<Buffer> {
   const { accountId, apiToken } = cfConfig()
   const url = `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/${IMAGE_MODEL}`
 
-  const controller = new AbortController()
-  const timer = setTimeout(() => controller.abort(), IMAGE_TIMEOUT_MS)
+  const isRecoverable = (msg: string): boolean =>
+    msg.includes("408") || msg.includes("429") ||
+    msg.includes("500") || msg.includes("502") ||
+    msg.includes("503") || msg.includes("504") ||
+    msg.includes("timed out") || msg.includes("timeout") ||
+    msg.includes("aborted")
 
-  try {
-    const res = await fetch(url, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ prompt, num_steps: 4 }),
-      signal: controller.signal,
-    })
+  let lastError: Error | null = null
 
-    if (!res.ok) {
-      const text = await res.text()
-      throw new Error(`Cloudflare image run failed (${res.status}): ${text}`)
-    }
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), IMAGE_TIMEOUT_MS)
 
-    const contentType = res.headers.get("content-type") ?? ""
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt, num_steps: 4 }),
+        signal: controller.signal,
+      })
 
-    // FLUX-1-Schnell returns JSON with the image as base64
-    // (legacy format: raw binary — in case the model changes)
-    if (contentType.includes("json")) {
-      const json = await res.json()
-      const b64 = json?.result?.image
-      if (typeof b64 !== "string") {
-        throw new Error(
-          "Cloudflare image: no result.image in JSON response. " +
-            `Result keys: ${Object.keys(json?.result ?? {}).join(", ")}`,
-        )
+      if (!res.ok) {
+        const text = await res.text()
+        throw new Error(`Cloudflare image run failed (${res.status}): ${text}`)
       }
-      return Buffer.from(b64, "base64")
-    }
 
-    const arrayBuffer = await res.arrayBuffer()
-    return Buffer.from(arrayBuffer)
-  } finally {
-    clearTimeout(timer)
+      const contentType = res.headers.get("content-type") ?? ""
+
+      // FLUX-1-Schnell returns JSON with the image as base64
+      // (legacy format: raw binary — in case the model changes)
+      if (contentType.includes("json")) {
+        const json = await res.json()
+        const b64 = json?.result?.image
+        if (typeof b64 !== "string") {
+          throw new Error(
+            "Cloudflare image: no result.image in JSON response. " +
+              `Result keys: ${Object.keys(json?.result ?? {}).join(", ")}`,
+          )
+        }
+        return Buffer.from(b64, "base64")
+      }
+
+      const arrayBuffer = await res.arrayBuffer()
+      return Buffer.from(arrayBuffer)
+    } catch (err) {
+      lastError = err as Error
+      const msg = (err as Error).message
+      if (attempt < 3 && isRecoverable(msg)) {
+        console.warn(`[Cloudflare] Image attempt ${attempt}/3 failed: ${msg} — retrying in ${attempt * 5}s`)
+        await new Promise((r) => setTimeout(r, attempt * 5000))
+      } else {
+        throw lastError
+      }
+    } finally {
+      clearTimeout(timer)
+    }
   }
+
+  throw lastError ?? new Error("Cloudflare image generation failed after 3 attempts")
 }
 
 /**

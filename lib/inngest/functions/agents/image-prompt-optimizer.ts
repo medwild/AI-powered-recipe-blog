@@ -15,6 +15,7 @@
 
 import { loadSkillContent, buildDefaultPrompt } from "@/lib/skills"
 import { runText } from "@/lib/agents/nararouter"
+import { validateContract, AGENT_CONTRACTS } from "@/lib/agents/contract-validator"
 import type { Ingredient } from "@/lib/db/schema"
 
 // ---------------------------------------------------------------------------
@@ -100,6 +101,12 @@ export async function agentImagePromptOptimizer(
     if (fenceMatch) cleaned = fenceMatch[1].trim()
     // Remove common prefixes like "Prompt:" or "Here is the prompt:"
     cleaned = cleaned.replace(/^(?:Prompt|Here is the optimized prompt|Output):\s*/i, "").trim()
+
+    // Contract validation — wrap string in object for the { prompt } contract
+    const contractValidation = validateContract({ prompt: cleaned }, AGENT_CONTRACTS.ImagePromptOptimizer)
+    if (contractValidation.warnings.length > 0) {
+      console.warn("[ImagePromptOptimizer] Contract warnings:", contractValidation.warnings.join("; "))
+    }
 
     // Validate: must be a non-empty string of reasonable length
     if (cleaned.length >= 50) {

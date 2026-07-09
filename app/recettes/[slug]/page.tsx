@@ -184,7 +184,6 @@ export default async function RecipePage({
           ]}
         />
         <RecipeArticle recipe={recipe} />
-        <RecipeJsonLd recipe={recipe} />
 
         {/* Linked AOR Article */}
         {linkedArticle ? (
@@ -213,6 +212,7 @@ export default async function RecipePage({
 
         <RecipeRelated recipes={relatedRecipes} />
       </main>
+      <RecipeJsonLd recipe={recipe} />
       <SiteFooter />
     </div>
   )

@@ -80,6 +80,11 @@ export interface ValidatableDraft {
   format?: "google" | "pin-first"  // optional — pin-first adds structural rules
 }
 
+export interface Ingredient {
+  name?: string
+  quantity?: string
+}
+
 // ---------------------------------------------------------------------------
 // Validator
 // ---------------------------------------------------------------------------
@@ -188,6 +193,17 @@ export function validateContent(draft: ValidatableDraft): ValidationResult {
 
   // 6. Required fields (recipes only — articles are exempt from ingredient/instruction requirements)
   const isRecipe = !draft.contentType || draft.contentType === "recipe"
+
+  // 5.5 Ingredient-content cross-match (recipes only)
+  if (isRecipe && draft.ingredients?.length && md) {
+    const ingredientErrors = validateIngredientContentMatch(draft.ingredients as Ingredient[], md)
+    errors.push(...ingredientErrors)
+  }
+
+  // 5.6 Food safety — USDA temperature validation (warning-only)
+  const safetyErrors = validateFoodSafety(md)
+  errors.push(...safetyErrors)
+
   if (isRecipe) {
     if (!draft.ingredients?.length) {
       errors.push({
@@ -320,6 +336,59 @@ export function scrubBannedWords(markdown: string): { scrubbed: string; replacem
 }
 
 // ---------------------------------------------------------------------------
+// Content Similarity — Cross-recipe duplicate detection
+// ---------------------------------------------------------------------------
+
+/**
+ * Computes Jaccard similarity between a new markdown document and existing
+ * published content, using bigram overlap. Returns matches with >50% similarity.
+ *
+ * This catches near-duplicate content (e.g., "chicken stir fry for two" vs
+ * "quick chicken stir fry for two") before publication.
+ */
+export function checkContentSimilarity(
+  newMarkdown: string,
+  existingContent: { id: number; slug: string; title: string; contentMarkdown: string | null }[],
+): { similar: boolean; matches: { id: number; slug: string; title: string; similarity: number }[] } {
+  const newBigrams = extractBigrams(newMarkdown)
+  if (newBigrams.size === 0) return { similar: false, matches: [] }
+
+  const matches: { id: number; slug: string; title: string; similarity: number }[] = []
+
+  for (const existing of existingContent) {
+    if (!existing.contentMarkdown) continue
+    const existingBigrams = extractBigrams(existing.contentMarkdown)
+    if (existingBigrams.size === 0) continue
+
+    // Jaccard similarity: |A ∩ B| / |A ∪ B|
+    let intersection = 0
+    for (const bigram of newBigrams) {
+      if (existingBigrams.has(bigram)) intersection++
+    }
+    const union = newBigrams.size + existingBigrams.size - intersection
+    const similarity = intersection / union
+
+    if (similarity > 0.5) {
+      matches.push({ id: existing.id, slug: existing.slug, title: existing.title, similarity: Math.round(similarity * 100) })
+    }
+  }
+
+  matches.sort((a, b) => b.similarity - a.similarity)
+  const similar = matches.some((m) => m.similarity > 60)
+  return { similar, matches: matches.slice(0, 5) }
+}
+
+function extractBigrams(text: string): Set<string> {
+  const cleaned = text.toLowerCase().replace(/[^a-z0-9\s]/g, " ")
+  const words = cleaned.split(/\s+/).filter(Boolean)
+  const bigrams = new Set<string>()
+  for (let i = 0; i < words.length - 1; i++) {
+    bigrams.add(`${words[i]} ${words[i + 1]}`)
+  }
+  return bigrams
+}
+
+// ---------------------------------------------------------------------------
 // Originality Score — Koray GÜBÜR §6 / Pavel Klimanov
 // ---------------------------------------------------------------------------
 
@@ -358,4 +427,102 @@ export function computeOriginalityScore(markdown: string): number {
   const lengthFactor = Math.min(1, words.length / 1200)
 
   return Math.round(uniqueness * lengthFactor)
+}
+
+// ---------------------------------------------------------------------------
+// Ingredient ↔ Content Cross-Validation
+// ---------------------------------------------------------------------------
+
+/**
+ * Validates that ingredients listed in the JSON array appear in the markdown
+ * content, and vice versa. Prevents "phantom ingredients" (in list but not
+ * mentioned in content) and "orphan ingredients" (mentioned in content but
+ * missing from the list).
+ *
+ * Returns validation errors for critical mismatches.
+ */
+export function validateIngredientContentMatch(
+  ingredients: Ingredient[] | null | undefined,
+  contentMarkdown: string | null | undefined,
+): ValidationError[] {
+  const errors: ValidationError[] = []
+  if (!ingredients?.length || !contentMarkdown) return errors
+
+  const md = contentMarkdown.toLowerCase()
+  let matchedCount = 0
+
+  for (const ing of ingredients) {
+    const name = ing.name?.toLowerCase().trim()
+    if (!name || name.length < 2) continue
+    if (md.includes(name)) {
+      matchedCount++
+    }
+    // Common ingredient aliases: "chicken breasts" in content vs "chicken breast" in list
+    // Simple singular/plural check
+    else if (name.endsWith("s") && md.includes(name.slice(0, -1))) {
+      matchedCount++
+    } else if (!name.endsWith("s") && md.includes(name + "s")) {
+      matchedCount++
+    }
+  }
+
+  const matchRate = matchedCount / ingredients.length
+  if (matchRate < 0.5) {
+    errors.push({
+      field: "ingredients",
+      severity: "error",
+      message: `Only ${matchedCount}/${ingredients.length} ingredients mentioned in content (${Math.round(matchRate * 100)}%). Minimum 50% required.`,
+    })
+  } else if (matchRate < 0.8) {
+    errors.push({
+      field: "ingredients",
+      severity: "warning",
+      message: `Only ${matchedCount}/${ingredients.length} ingredients mentioned in content (${Math.round(matchRate * 100)}%). Target: 80%+.`,
+    })
+  }
+
+  return errors
+}
+
+// ---------------------------------------------------------------------------
+// Food Safety Validation — USDA minimum internal temperatures
+// ---------------------------------------------------------------------------
+
+const FOOD_SAFETY_RULES: { pattern: RegExp; food: string; minTempF: number; message: string }[] = [
+  { pattern: /\b(chicken|poultry|turkey|duck)\b.*?(\d{3})\s*°?\s*F/gi, food: "poultry", minTempF: 165, message: "USDA minimum for poultry is 165°F" },
+  { pattern: /\b(ground\s*(beef|meat|pork|chicken|turkey)|burger)\b.*?(\d{3})\s*°?\s*F/gi, food: "ground meat", minTempF: 160, message: "USDA minimum for ground meat is 160°F" },
+  { pattern: /\b(steak|roast|chop)\b.*?(\d{3})\s*°?\s*F/gi, food: "steak/roast", minTempF: 145, message: "USDA minimum for whole cuts (beef, pork, lamb) is 145°F" },
+  { pattern: /\b(pork)\b.*?(\d{3})\s*°?\s*F/gi, food: "pork", minTempF: 145, message: "USDA minimum for pork is 145°F" },
+  { pattern: /\b(fish|salmon|tuna|tilapia|cod)\b.*?(\d{3})\s*°?\s*F/gi, food: "fish", minTempF: 145, message: "USDA minimum for fish is 145°F" },
+  { pattern: /\b(reheat|leftover)\b.*?(\d{3})\s*°?\s*F/gi, food: "reheated", minTempF: 165, message: "USDA minimum for reheating leftovers is 165°F" },
+]
+
+/**
+ * Scans markdown content for cooking temperature mentions and flags any
+ * that fall below USDA minimum safe temperatures. Warning-only — the LLM
+ * may be referring to a different context (ambient temp, water temp, etc.).
+ */
+export function validateFoodSafety(contentMarkdown: string | null | undefined): ValidationError[] {
+  const errors: ValidationError[] = []
+  if (!contentMarkdown) return errors
+
+  for (const rule of FOOD_SAFETY_RULES) {
+    // Create a fresh regex for each rule (global regex has state)
+    const regex = new RegExp(rule.pattern.source, rule.pattern.flags)
+    let match: RegExpExecArray | null
+    while ((match = regex.exec(contentMarkdown)) !== null) {
+      // match[2] or match[3] is the temperature depending on groups
+      const tempStr = match[match.length - 1]
+      const temp = parseInt(tempStr, 10)
+      if (!isNaN(temp) && temp < rule.minTempF && temp > 50) { // >50 to skip non-temperature numbers
+        errors.push({
+          field: "contentMarkdown",
+          severity: "warning",
+          message: `Food safety: "${match[0].trim()}" — ${rule.message}. Found ${temp}°F.`,
+        })
+      }
+    }
+  }
+
+  return errors
 }

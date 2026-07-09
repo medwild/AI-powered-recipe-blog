@@ -101,19 +101,25 @@ Ton : expert pédagogique qui explique le "pourquoi", pas de "moi je" narratif.`
 // ---------------------------------------------------------------------------
 
 export async function agentAorWriter(input: AorWriterInput): Promise<AorArticle> {
-  const systemPrompt = await loadSkillContent("agent-aor-writer")
-  const userPrompt = buildUserPrompt(input)
+  try {
+    const systemPrompt = await loadSkillContent("agent-aor-writer")
+    const userPrompt = buildUserPrompt(input)
 
-  const result = await runTextAndParseJson<AorArticle>(
-    systemPrompt,
-    userPrompt,
-    { temperature: 0.4, maxTokens: 6144 },
-  )
+    const result = await runTextAndParseJson<AorArticle>(
+      systemPrompt,
+      userPrompt,
+      { temperature: 0.4, maxTokens: 6144 },
+    )
 
-  const validation = validateContract(result as Record<string, unknown>, AGENT_CONTRACTS.AorWriter)
-  if (validation.warnings.length > 0) {
-    console.warn("[AOR Writer] Contract warnings:", validation.warnings.join("; "))
+    const validation = validateContract(result as Record<string, unknown>, AGENT_CONTRACTS.AorWriter)
+    if (validation.warnings.length > 0) {
+      console.warn("[AOR Writer] Contract warnings:", validation.warnings.join("; "))
+    }
+
+    return result
+  } catch (err) {
+    const msg = (err as Error).message
+    console.error(`[AOR Writer] Failed: ${msg}`)
+    throw new Error(`[AOR Writer] Generation failed: ${msg}`, { cause: err })
   }
-
-  return result
 }

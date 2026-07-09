@@ -23,6 +23,8 @@ export type LinkTarget = {
   slug: string
   title: string
   contentType: "recipe" | "article"
+  /** Article category — needed to build correct URL (/{category}/{slug} vs /{slug}) */
+  category: string | null
   score: number
   reason: string
 }
@@ -88,6 +90,7 @@ export async function runLinkSuggester(
         slug: c.slug,
         title: c.title,
         contentType: (c.contentType as "recipe" | "article") ?? "recipe",
+        category: c.category ?? null,
         score,
         reason: tagScore > 0
           ? `${Math.round(tagScore / 50 * 100)}% tag overlap`
@@ -112,7 +115,7 @@ export async function runLinkSuggester(
     }
 
     const oppositeCount = selected.filter((s) => s.contentType === oppositeType).length
-    if (oppositeCount < 2 && scored.length > 7) {
+    if (oppositeCount < 2 && selected.length >= 7) {
       const extras = scored
         .filter((s) => s.contentType === oppositeType && !selected.includes(s))
         .slice(0, 2 - oppositeCount)

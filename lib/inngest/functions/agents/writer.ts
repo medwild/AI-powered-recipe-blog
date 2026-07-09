@@ -130,7 +130,10 @@ Rules:
 - Choose targets where the connection feels natural — skip any that don"t fit
 
 Recommended targets (choose 2-3 that fit most naturally):
-${linkTargets.slice(0, 7).map(t => `- /${t.slug} | "${t.title}" | ${t.contentType} | score: ${t.score} | ${t.reason}`).join("\n")}` : ""}`
+${linkTargets.slice(0, 7).map(t => {
+    const path = t.contentType === "article" && t.category ? `/${t.category}/${t.slug}` : `/${t.slug}`
+    return `- ${path} | "${t.title}" | ${t.contentType} | score: ${t.score} | ${t.reason}`
+  }).join("\n")}` : ""}`
 }
 
 // ---------------------------------------------------------------------------
@@ -177,6 +180,19 @@ export async function agentWriter(
     // skill instructions). Applied BEFORE the content flows downstream.
     if (result.contentMarkdown) {
       result.contentMarkdown = stripHtmlComments(result.contentMarkdown)
+    }
+
+    // Structural validation: catch obviously broken drafts early (before
+    // expensive Editor passes). Non-blocking — the Editor will fix issues.
+    const structuralIssues: string[] = []
+    const md = result.contentMarkdown ?? ""
+    const h2Count = (md.match(/^## /gm) ?? []).length
+    if (h2Count < 3) structuralIssues.push(`Only ${h2Count} H2 headings (target: 5-8)`)
+    if ((result.ingredients ?? []).length < 3) structuralIssues.push(`Only ${result.ingredients?.length ?? 0} ingredients (target: 5+)`)
+    if ((result.instructions ?? []).length < 3) structuralIssues.push(`Only ${result.instructions?.length ?? 0} instructions (target: 4+)`)
+    if (result.metaTitle && result.metaTitle.length > 60) structuralIssues.push(`Meta title ${result.metaTitle.length} chars (max: 60)`)
+    if (structuralIssues.length > 0) {
+      console.warn(`[Writer] Structural issues for "${keyword}": ${structuralIssues.join("; ")}`)
     }
 
     return result

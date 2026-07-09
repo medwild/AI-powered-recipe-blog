@@ -106,6 +106,32 @@ If `format` is "pin-first", apply these constraints to your editorial plan:
 
 If `format` is "google" (default), use the standard 1800-2200 word target with 5 FAQ, Nutrition Highlights, and full JSON-LD.
 
+### Step 7.5 — PINTEREST SERP HIJACKING (v1.0)
+
+When the user prompt contains a "Pinterest SERP Intelligence" block, Pinterest URLs are present in the Google top 10. This triggers a hijacking strategy.
+
+**How to interpret the Pinterest intel:**
+
+1. **`serp_dominated_by_pinterest: true`** → This keyword is a visual discovery query. Google users are looking for visual inspiration, not text. Your content must deliver BOTH the visual hook AND the textual depth the pins lack.
+
+2. **`empty_snippets`** → Pins with empty Google snippets are textually weak. Google ranks them purely on title + domain authority. This is the hijack opportunity: create content with richer meta (title + meta description optimized for both Google and Pinterest).
+
+3. **`content_gaps_vs_pins`** → These are structural advantages your content has over pins. Exploit EVERY gap listed. Example: if pins lack FAQ, your FAQ section becomes a differentiator that can push you above the pin in rankings.
+
+4. **`most_beatable_pin_position`** → This pin has the highest beatability score. Study its title (the hook that made it rank) and build a better version of that hook as your H1.
+
+5. **`user_intent_signal`**:
+   - `visual_discovery` → Use pin-first format (1200-1500 words, recipe card above fold, 2:3 images). The user wants visual inspiration first, details second.
+   - `hybrid` → Use pin-first format but closer to 1500 words. Add 1-2 extra FAQ.
+   - `textual` → Pinterest is present but not dominant. Use standard Google format (1800-2200 words).
+
+**Hijacking Strategy Checklist:**
+- [ ] Match the visual hook of the top-ranking pin in your H1 and meta title
+- [ ] Add every content type the pin CANNOT structurally offer (FAQ, technique depth, internal links, long-form intro)
+- [ ] Plan 2:3 vertical hero image (Pinterest-optimized)
+- [ ] Position recipe card immediately after intro (above-fold visual confirmation)
+- [ ] Target the structural weaknesses: no internal links (your site has them), no FAQ schema (you have it), no technique explanations (you have them)
+
 ---
 
 ## 5. PHASE 1 — INTENT CLASSIFICATION (v2.0)

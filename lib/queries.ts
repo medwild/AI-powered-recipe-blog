@@ -346,7 +346,13 @@ export async function logPipelineError(params: {
   message: string
   severity: "warning" | "degraded" | "critical"
 }) {
-  return db.insert(pipelineErrors).values(params as NewPipelineError)
+  return db.insert(pipelineErrors).values({
+    recipeId: params.recipeId,
+    stepName: params.stepName,
+    errorType: params.errorType,
+    message: params.message,
+    severity: params.severity,
+  })
 }
 
 /** Get all pin drafts for a recipe, ordered by PTRA score descending. */

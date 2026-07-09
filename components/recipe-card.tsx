@@ -6,11 +6,12 @@ import { PinButton } from "@/components/pin-button"
 
 export function RecipeCard({ recipe }: { recipe: Recipe }) {
   return (
-    <Link
-      href={`/recettes/${recipe.slug}`}
-      className="card-hover group flex flex-col overflow-hidden rounded-2xl border border-border bg-card"
-    >
-      <div className="relative aspect-[2/3] overflow-hidden bg-muted">
+    <article className="card-hover group flex flex-col overflow-hidden rounded-2xl border border-border bg-card">
+      <Link
+        href={`/recettes/${recipe.slug}`}
+        className="relative aspect-[2/3] overflow-hidden bg-muted block"
+        tabIndex={-1}
+      >
         {recipe.heroImageUrl ? (
           <>
             <Image
@@ -38,10 +39,15 @@ export function RecipeCard({ recipe }: { recipe: Recipe }) {
             {recipe.difficulty}
           </span>
         ) : null}
-      </div>
+      </Link>
       <div className="flex flex-1 flex-col gap-3 p-5">
-        <h3 className="font-serif text-xl leading-snug text-balance group-hover:text-primary">
-          {recipe.title}
+        <h3 className="font-serif text-xl leading-snug text-balance">
+          <Link
+            href={`/recettes/${recipe.slug}`}
+            className="group-hover:text-primary"
+          >
+            {recipe.title}
+          </Link>
         </h3>
         {recipe.excerpt ? (
           <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
@@ -63,6 +69,6 @@ export function RecipeCard({ recipe }: { recipe: Recipe }) {
           ) : null}
         </div>
       </div>
-    </Link>
+    </article>
   )
 }

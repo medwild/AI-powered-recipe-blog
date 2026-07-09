@@ -13,6 +13,8 @@
 
 import { loadSkillContent } from "@/lib/skills"
 import { runTextAndParseJson } from "@/lib/agents/nararouter"
+import { validateContract, AGENT_CONTRACTS } from "@/lib/agents/contract-validator"
+import { logAgentTrace } from "../helpers"
 import type { SerpResult } from "@/lib/agents/serp"
 import type { StructuredSerp } from "@/lib/agents/serp-structurer"
 
@@ -122,10 +124,15 @@ export async function agentStrategist(
     const userPrompt = buildUserPrompt(keyword, serp, pastImprovements)
     // NOTE: V1 is deprecated — V2 is the production path. Keeping V1 aligned
     // with V2 defaults to prevent silent regressions if V1 is ever called.
-    return runTextAndParseJson<SeoPlan>(systemPrompt, userPrompt, {
+    const result = await runTextAndParseJson<SeoPlan>(systemPrompt, userPrompt, {
       maxTokens: 4096,
       temperature: 0.3,
     })
+    const validation = validateContract(result as Record<string, unknown>, AGENT_CONTRACTS.Strategist)
+    if (validation.warnings.length > 0) {
+      console.warn("[Strategist V1] Contract warnings:", validation.warnings.join("; "))
+    }
+    return result
   } catch (err) {
     throw new Error(
       `[Strategist V1] LLM call failed for "${keyword}": ${(err as Error).message}`,
@@ -264,10 +271,17 @@ export async function agentStrategistV2(
 
     const systemPrompt = await loadSkillContent("agent-strategist", mergedReplacements)
     const userPrompt = buildUserPromptV2(keyword, structuredSerp, pastImprovements, opportunityScore)
-    return runTextAndParseJson<SeoPlan>(systemPrompt, userPrompt, {
+    logAgentTrace("Strategist", "input", { chars: systemPrompt.length + userPrompt.length })
+    const result = await runTextAndParseJson<SeoPlan>(systemPrompt, userPrompt, {
       maxTokens: 4096,
       temperature: 0.3,
     })
+    logAgentTrace("Strategist", "output", { chars: JSON.stringify(result).length, fields: Object.keys(result).length })
+    const validation = validateContract(result as Record<string, unknown>, AGENT_CONTRACTS.Strategist)
+    if (validation.warnings.length > 0) {
+      console.warn("[Strategist V2] Contract warnings:", validation.warnings.join("; "))
+    }
+    return result
   } catch (err) {
     throw new Error(
       `[Strategist V2] LLM call failed for "${keyword}": ${(err as Error).message}`,

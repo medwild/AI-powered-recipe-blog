@@ -15,11 +15,12 @@ export function ArticleCard({ article }: { article: Recipe }) {
   const categoryLabel = CATEGORY_LABELS[article.category ?? ""] ?? article.category ?? "Article"
 
   return (
-    <Link
-      href={`/${article.category ?? "techniques"}/${article.slug}`}
-      className="card-hover group flex flex-col overflow-hidden rounded-2xl border border-border bg-card"
-    >
-      <div className="relative aspect-[2/3] overflow-hidden bg-muted">
+    <article className="card-hover group flex flex-col overflow-hidden rounded-2xl border border-border bg-card">
+      <Link
+        href={`/${article.category ?? "techniques"}/${article.slug}`}
+        className="relative aspect-[2/3] overflow-hidden bg-muted block"
+        tabIndex={-1}
+      >
         {article.heroImageUrl ? (
           <>
             <Image
@@ -45,10 +46,15 @@ export function ArticleCard({ article }: { article: Recipe }) {
             {categoryLabel}
           </span>
         ) : null}
-      </div>
+      </Link>
       <div className="flex flex-1 flex-col gap-3 p-5">
-        <h3 className="font-serif text-xl leading-snug text-balance group-hover:text-primary">
-          {article.title}
+        <h3 className="font-serif text-xl leading-snug text-balance">
+          <Link
+            href={`/${article.category ?? "techniques"}/${article.slug}`}
+            className="group-hover:text-primary"
+          >
+            {article.title}
+          </Link>
         </h3>
         {article.excerpt ? (
           <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
@@ -65,6 +71,6 @@ export function ArticleCard({ article }: { article: Recipe }) {
           </div>
         ) : null}
       </div>
-    </Link>
+    </article>
   )
 }

@@ -140,7 +140,7 @@ export const generateRecipeWorkflow = inngest.createFunction(
       await step.sleep("sleep-after-self-improvement", "2s")
 
       // ── Phase 8: Final persist ────────────────────────────────────────
-      await persistFinalDraft(step, recipeId, editResult.finalRecipe, agentResult.seoPlan, imageResult.heroImageUrl, imageResult.imageVariants as ImageVariant[], keyword, format)
+      await persistFinalDraft(step, recipeId, editResult.finalRecipe, agentResult.seoPlan, imageResult.heroImageUrl, imageResult.imageVariants as ImageVariant[], keyword, format, degraded)
 
       // ── Phase 9: A/B stats ────────────────────────────────────────────
       try {

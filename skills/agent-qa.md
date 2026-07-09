@@ -67,17 +67,18 @@ You receive EXACTLY these 4 structured inputs:
 ### Input 3: `auditor_summary` (≤600 words)
 ```
 {
-  "verdict": "OK | NEEDS_REVISION | CRITICAL",
-  "overallScore": 75,
-  "aiScore": 15,
-  "factualCorrections": [
-    {"original": "bake at 350°F", "corrected": "bake at 375°F", "location": "Instructions"}
-  ],
-  "issuesByCriterion": [
-    {"criterion": "Experience", "issues": ["Anecdote too generic"]},
-    {"criterion": "SEO", "issues": ["Meta title too long"]}
-  ],
-  "mustFix": ["Critical issue that MUST be fixed before publication"]
+  "decision": "PASS | MINOR_FIX | MAJOR_REWRITE | REJECT",
+  "publication_readiness_score": 68,
+  "confidence": "medium",
+  "llm_signature_risk": 45,
+  "seo_overoptimization_risk": 30,
+  "factualite": 72,
+  "validite_recette": 78,
+  "overall_assessment": "Solid foundation with minor originality issues...",
+  "critical_issues": ["[originalite] FAQ section is generic..."],
+  "major_issues": ["[experience] No concrete testing claim..."],
+  "minor_issues": ["[signature_llm] Two mechanical transitions detected..."],
+  "must_fix": ["Fix missing personal testing note in intro", "Fix generic FAQ answers"]
 }
 ```
 
@@ -97,14 +98,14 @@ Follow these 5 steps IN ORDER.
 - Verify `editor_output` is valid JSON with all RecipeDraft fields.
 - If any input is missing → STOP. Output error JSON.
 
-### Step 2 — AUDITOR VERDICT LOCK
-- Read `auditor_summary.verdict`.
-- If verdict is "CRITICAL" → STOP. Output error JSON.
-- If verdict is "NEEDS_REVISION" but `auditor_summary.mustFix` is empty → STOP. Output error JSON.
-- If verdict is "OK" or "NEEDS_REVISION" with fixes → proceed.
+### Step 2 — AUDITOR DECISION LOCK
+- Read `auditor_summary.decision`.
+- If decision is "REJECT" → STOP. Output error JSON.
+- If decision is "MAJOR_REWRITE" but `auditor_summary.must_fix` is empty → STOP. Output error JSON.
+- If decision is "PASS" or "MINOR_FIX" or "MAJOR_REWRITE" with fixes → proceed.
 
 ### Step 3 — CORRECTION INVENTORY
-List ALL corrections from `auditor_summary.factualCorrections` and `auditor_summary.mustFix`.
+List ALL corrections from `auditor_summary.must_fix`.
 This is your "must-verify" list.
 
 ### Step 4 — WRITER PRESERVATION LOCK
@@ -131,7 +132,7 @@ This is your "must-align" list.
 ## 4. VERIFICATION PROTOCOL (5 Checks)
 
 ### CHECK 1 — Factual Corrections Applied (20 pts)
-**What to verify**: Every correction in `auditor_summary.factualCorrections` has been applied in `editor_output`.
+**What to verify**: Every `must_fix` item in `auditor_summary` has been addressed in `editor_output`.
 
 **Method:**
 - For each correction, extract `original` and `corrected` from the Auditor summary.
@@ -357,19 +358,19 @@ If any of the 4 required inputs is missing:
 }
 ```
 
-### Auditor Verdict CRITICAL
-If `auditor_summary.verdict` is "CRITICAL":
+### Auditor Decision REJECT
+If `auditor_summary.decision` is "REJECT":
 ```json
 {
   "qaScore": 0,
   "verdict": "REJECT",
   "checks": [],
-  "summary": "Auditor verdict is CRITICAL (food safety issue). Article cannot proceed to QA. Return to Writer for full rewrite."
+  "summary": "Auditor decision is REJECT (critical quality issues). Article cannot proceed to QA. Return to Writer for full rewrite."
 }
 ```
 
 ### Editor Did Not Revise
-If `auditor_summary.verdict` is "NEEDS_REVISION" but `auditor_summary.mustFix` is empty:
+If `auditor_summary.decision` is "MAJOR_REWRITE" but `auditor_summary.must_fix` is empty:
 ```json
 {
   "qaScore": 0,
@@ -385,7 +386,7 @@ If `auditor_summary.verdict` is "NEEDS_REVISION" but `auditor_summary.mustFix` i
 
 ### Where QA Fits
 ```
-Strategist(v5) → Writer(v5.1) → Auditor(v5.1) → Editor(v5) → QA(v1.1) → FoodPhoto(v2.1) → Publish
+Strategist(v5) → Writer(v5.1) → Auditor(v6.0 Pre-Pub) → Editor(v5) → QA(v1.1) → FoodPhoto(v2.1) → Publish
                                               ↑                    ↑
                                          If NEEDS_REVISION    If PASS → generate images
                                          If OK → skip Editor  If NEEDS_FIX → return to Editor

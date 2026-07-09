@@ -4,14 +4,15 @@
 
 import { db } from "@/lib/db"
 import { recipes, selfImprovementLogs, imageVariantStats, type NewSelfImprovementLog, type ImageVariant } from "@/lib/db/schema"
-import { eq } from "drizzle-orm"
+import { eq, desc } from "drizzle-orm"
 import { slugify } from "@/lib/slug"
 import type { RecipeDraft } from "../agents/writer"
 import type { SeoPlan } from "../agents/strategist"
 import type { AuditReport } from "../agents/auditor"
 import type { QAReport } from "../agents/qa"
-import { validateContent, computeOriginalityScore, scrubBannedWords } from "@/lib/content-validator"
-import { appendLog, logEntry, SITE_URL } from "../helpers"
+import { validateContent, computeOriginalityScore, scrubBannedWords, checkContentSimilarity } from "@/lib/content-validator"
+import { appendLog, logEntry, SITE_URL, stripHtmlComments, stripBracketTokens } from "../helpers"
+import { runSeoGate } from "@/lib/seo/gate"
 
 // ── Duration formatting for JSON-LD ──────────────────────────────────────────
 
@@ -171,6 +172,7 @@ export async function persistFinalDraft(
   heroImageUrl: string | null, imageVariants: ImageVariant[],
   keyword: string,
   format: "google" | "pin-first" = "google",
+  degraded = false,
 ) {
   await step.run("persist-draft-final", async () => {
     // SEO guards — flag oversize metadata for rewrite (do NOT mechanically truncate)
@@ -196,6 +198,17 @@ export async function persistFinalDraft(
       }
     }
 
+    // Strip HTML comments and bracket tokens — last-resort safety net.
+    // Writer and Editor should already have stripped these; this catches
+    // what slips through both agents.
+    let sanitizedMarkdown = stripHtmlComments(finalRecipe.contentMarkdown ?? "")
+    sanitizedMarkdown = stripBracketTokens(sanitizedMarkdown)
+    if (sanitizedMarkdown !== (finalRecipe.contentMarkdown ?? "")) {
+      finalRecipe.contentMarkdown = sanitizedMarkdown
+      await appendLog(recipeId, logEntry("Workflow", "error",
+        "HTML comments or bracket tokens stripped at persist — Writer/Editor missed them"))
+    }
+
     // Deterministic banned-word scrubbing — LAST-RESORT safety net.
     // The Editor should already have removed these; this catches what slips through.
     const scrubbed = scrubBannedWords(finalRecipe.contentMarkdown ?? "")
@@ -203,6 +216,34 @@ export async function persistFinalDraft(
       finalRecipe.contentMarkdown = scrubbed.scrubbed
       await appendLog(recipeId, logEntry("Workflow", "error",
         `Banned words scrubbed (Editor missed): ${scrubbed.replacements.join("; ")}`))
+    }
+
+    // Content similarity check — catch near-duplicate content before publication.
+    // Fetch the 50 most recently published recipes for bigram comparison.
+    const recentPublished = await db
+      .select({
+        id: recipes.id,
+        slug: recipes.slug,
+        title: recipes.title,
+        contentMarkdown: recipes.contentMarkdown,
+      })
+      .from(recipes)
+      .where(eq(recipes.status, "published"))
+      .orderBy(desc(recipes.publishedAt))
+      .limit(50)
+
+    const similarityResult = checkContentSimilarity(finalRecipe.contentMarkdown ?? "", recentPublished)
+    if (similarityResult.similar) {
+      const topMatch = similarityResult.matches[0]
+      await appendLog(recipeId, logEntry("Workflow", "error",
+        `Content similarity BLOCKED: ${topMatch.similarity}% similar to "${topMatch.title}" (/${topMatch.slug}). ` +
+        similarityResult.matches.map(m => `${m.similarity}% → ${m.title}`).join("; ")))
+      await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
+      return
+    }
+    if (similarityResult.matches.length > 0) {
+      await appendLog(recipeId, logEntry("Workflow", "error",
+        `Content similarity WARNING: ${similarityResult.matches.map(m => `${m.similarity}% → ${m.title}`).join("; ")}`))
     }
 
     // Deterministic content validation — catches banned words, token leaks,
@@ -254,6 +295,33 @@ export async function persistFinalDraft(
     const warnList = validation.errors.filter((e) => e.severity === "warning")
     if (warnList.length > 0) {
       await appendLog(recipeId, logEntry("Workflow", "error", `ContentValidator warnings: ${warnList.map((w) => w.message).join("; ")}`))
+    }
+
+    // SEO Gate — deterministic pre-publication checks (schema, meta, cannibalization, etc.)
+    const recipeSlug = slugify(keyword)
+    const seoGateResult = await runSeoGate({
+      recipeId, title: finalRecipe.title,
+      metaTitle: finalRecipe.metaTitle ?? null,
+      metaDescription: finalRecipe.metaDescription ?? null,
+      slug: recipeSlug,
+      focusKeyphrase: keyword,
+      contentMarkdown: finalRecipe.contentMarkdown ?? null,
+      heroImageUrl: heroImageUrl,
+      jsonLd: null, // JSON-LD not yet built at this point; schema checks run on the stored data later
+      content_type: "recipe",
+    })
+
+    if (seoGateResult.status === "BLOCK") {
+      const blockReasons = seoGateResult.blockingIssues.map(i => `${i.code}: ${i.message}`).join("; ")
+      await appendLog(recipeId, logEntry("SEO Gate", "error", `BLOCKED — ${blockReasons}`))
+      await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
+      return
+    }
+    if (seoGateResult.warnings.length > 0) {
+      await appendLog(recipeId, logEntry("SEO Gate", "error",
+        `${seoGateResult.warnings.length} warnings: ${seoGateResult.warnings.map(w => `${w.code}: ${w.message}`).join("; ")}`))
+    } else {
+      await appendLog(recipeId, logEntry("SEO Gate", "done", `PASS — score: ${seoGateResult.score}/100`))
     }
 
     // Parse FAQ from markdown
@@ -320,11 +388,12 @@ export async function persistFinalDraft(
       "@graph": [
         recipeBase,
         { "@type": "BlogPosting", headline: finalRecipe.title, description: finalRecipe.metaDescription || finalRecipe.excerpt || undefined, author: { "@type": "Person", name: "Chef Augustin Lefèvre", url: `${SITE_URL}/about`, description: "French-trained baker and recipe developer" }, datePublished: now, dateModified: now, keywords: (finalRecipe.tags ?? []).join(", ") },
-        ...(faqItems.length > 0 ? [{ "@type": "FAQPage" as const, mainEntity: faqItems.map(f => ({ "@type": "Question" as const, name: f.question, acceptedAnswer: { "@type": "Answer" as const, text: f.answer } })) }] : []),
-        { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` }, { "@type": "ListItem", position: 2, name: "Recipes", item: `${SITE_URL}/recettes` }, { "@type": "ListItem", position: 3, name: finalRecipe.title }] },
+        ...(faqItems.length > 0 && format !== "pin-first" ? [{ "@type": "FAQPage" as const, mainEntity: faqItems.map(f => ({ "@type": "Question" as const, name: f.question, acceptedAnswer: { "@type": "Answer" as const, text: f.answer } })) }] : []),
+        { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` }, { "@type": "ListItem", position: 2, name: "Recipes", item: `${SITE_URL}/recettes` }, { "@type": "ListItem", position: 3, name: finalRecipe.title, item: `${SITE_URL}/recettes/${slugify(keyword)}` }] },
       ],
     }
 
+    const publishStatus = degraded ? "degraded" : "published"
     await db.update(recipes).set({
       title: finalRecipe.title, metaTitle: finalRecipe.metaTitle, metaDescription: finalRecipe.metaDescription,
       excerpt: finalRecipe.excerpt, contentMarkdown: finalRecipe.contentMarkdown,
@@ -332,10 +401,11 @@ export async function persistFinalDraft(
       servings: finalRecipe.servings, difficulty: finalRecipe.difficulty,
       ingredients: finalRecipe.ingredients, instructions: finalRecipe.instructions, tags: finalRecipe.tags,
       heroImageUrl, imageVariants, jsonLd: jsonLd as Record<string, unknown>,
-      status: "published", publishedAt: new Date(), updatedAt: new Date(),
+      status: publishStatus, publishedAt: degraded ? null : new Date(), updatedAt: new Date(),
     }).where(eq(recipes.id, recipeId))
 
-    await appendLog(recipeId, logEntry("Workflow", "done", `Published — ${wordCount} words, ${(finalRecipe.ingredients ?? []).length} ingredients, ${(finalRecipe.instructions ?? []).length} steps, JSON-LD @graph with ${jsonLd["@graph"].length} nodes`))
+    await appendLog(recipeId, logEntry("Workflow", degraded ? "error" : "done",
+      `${degraded ? "Degraded" : "Published"} — ${wordCount} words, ${(finalRecipe.ingredients ?? []).length} ingredients, ${(finalRecipe.instructions ?? []).length} steps, JSON-LD @graph with ${jsonLd["@graph"].length} nodes${degraded ? " — REQUIRES MANUAL REVIEW before publishing" : ""}`))
   })
 }
 

@@ -85,11 +85,11 @@ export async function CategoryListing({ category }: { category: string }) {
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {articles.map((article) => (
-              <Link
-                key={article.slug}
-                href={`/${article.category}/${article.slug}`}
-                className="group rounded-xl border border-border bg-card overflow-hidden transition-colors hover:border-primary/50"
-              >
+              <article key={article.slug}>
+                <Link
+                  href={`/${article.category}/${article.slug}`}
+                  className="group rounded-xl border border-border bg-card overflow-hidden transition-colors hover:border-primary/50 block"
+                >
                 {article.heroImageUrl ? (
                   <div className="relative aspect-[16/9] overflow-hidden">
                     <Image
@@ -118,6 +118,7 @@ export async function CategoryListing({ category }: { category: string }) {
                   ) : null}
                 </div>
               </Link>
+              </article>
             ))}
           </div>
         )}

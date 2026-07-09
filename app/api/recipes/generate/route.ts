@@ -75,6 +75,30 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Le mot-clé est requis." }, { status: 400 })
   }
 
+  // Keyword deduplication — prevent SEO cannibalization
+  const existingPublished = await db.query.recipes.findFirst({
+    where: (r, { eq, and }) => and(
+      eq(r.keyword, keyword),
+      eq(r.status, "published"),
+    ),
+    columns: { id: true, slug: true, title: true },
+  })
+  if (existingPublished) {
+    return NextResponse.json({
+      error: `Ce mot-clé est déjà publié : "${existingPublished.title}" (/${existingPublished.slug}). Le contenu dupliqué causerait une cannibalisation SEO.`,
+      existingId: existingPublished.id,
+    }, { status: 409 })
+  }
+
+  // Check for existing draft/failed — allow regeneration with warning
+  const existingDraft = await db.query.recipes.findFirst({
+    where: (r, { eq, and }) => and(
+      eq(r.keyword, keyword),
+      eq(r.status, "draft"),
+    ),
+    columns: { id: true, slug: true },
+  })
+
   // Aor article params (Step 13 — optional)
   // generateAorArticle is now implicit: providing a valid aorCategory is sufficient.
   // The explicit generateAorArticle flag is retained for backward compatibility.

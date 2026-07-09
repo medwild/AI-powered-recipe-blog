@@ -18,6 +18,7 @@
 import { loadSkillContent } from "@/lib/skills"
 import { runTextAndParseJson } from "@/lib/agents/nararouter"
 import { validateContract, AGENT_CONTRACTS } from "@/lib/agents/contract-validator"
+import { logAgentTrace } from "../helpers"
 import type { SeoPlan } from "./strategist"
 import type { RecipeDraft } from "./writer"
 import type { AuditReport } from "./auditor"
@@ -203,24 +204,37 @@ function buildSummaryPrompt(
   }
 
   // --- Auditor Summary (≤600 words) ---
-  const factualCorrections = auditorReport.factual_corrections ?? []
-  const criteria = auditorReport.criteria ?? []
+  const scores = auditorReport.scores ?? {
+    factualite: 0, validite_recette: null, originalite: 0, utilite: 0,
+    experience: 0, coherence_interne: 0, eeat_trust: 0,
+    sur_optimisation_seo: 100, signature_llm: 100,
+  }
   const auditorSummary = {
-    verdict: auditorReport.verdict,
-    overallScore: auditorReport.overallScore,
-    aiScore: auditorReport.score_ia_estimation,
-    factualCorrections: factualCorrections.map((c) => ({
-      original: c.original,
-      corrected: c.corrected,
-      location: c.source,
-    })),
-    issuesByCriterion: criteria.map((c) => ({
-      criterion: c.name,
-      issues: c.issues,
-    })),
-    mustFix: factualCorrections.map(
-      (c) => `Fix "${c.original}" → "${c.corrected}" because: ${c.reason}`,
+    decision: auditorReport.decision,
+    publication_readiness_score: auditorReport.publication_readiness_score,
+    confidence: auditorReport.confidence_level,
+    llm_signature_risk: scores.signature_llm,
+    seo_overoptimization_risk: scores.sur_optimisation_seo,
+    factualite: scores.factualite,
+    validite_recette: scores.validite_recette,
+    overall_assessment: auditorReport.final_recommendation,
+    critical_issues: (auditorReport.critical_issues ?? []).map(i =>
+      `[${i.criterion}] ${i.issue}${i.location ? ` (${i.location})` : ""}`
     ),
+    major_issues: (auditorReport.major_issues ?? []).map(i =>
+      `[${i.criterion}] ${i.issue}${i.location ? ` (${i.location})` : ""}`
+    ),
+    minor_issues: (auditorReport.minor_issues ?? []).map(i =>
+      `[${i.criterion}] ${i.issue}`
+    ),
+    must_fix: (auditorReport.required_fixes ?? [])
+      .filter(f => f.priority === "must_fix")
+      .map(f => {
+        const originalPart = f.original ? `Fix "${f.original}"` : ""
+        const correctedPart = f.corrected ? ` → "${f.corrected}"` : ""
+        const actionText = originalPart ? `${originalPart}${correctedPart} because: ${f.description}` : f.description
+        return actionText
+      }),
   }
 
   // --- Editor Output (full JSON — the only complete document) ---
@@ -291,11 +305,14 @@ export async function agentQA(
       format,
     )
 
-    // Temperature 0.1 for deterministic verification
+    // Temperature 0.1 for deterministic verification — fast model for structured checks
+    logAgentTrace("QA", "input", { chars: systemPrompt.length + userPrompt.length })
     const report = await runTextAndParseJson<QAReport>(systemPrompt, userPrompt, {
       temperature: 0.1,
       maxTokens: 2048,
+      model: "@cf/google/gemma-4-26b-a4b-it",
     })
+    logAgentTrace("QA", "output", { chars: JSON.stringify(report).length, fields: report.checks?.length })
 
     // Contract validation
     const validation = validateContract(report as Record<string, unknown>, AGENT_CONTRACTS.QA)

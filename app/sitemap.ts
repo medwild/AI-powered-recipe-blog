@@ -1,10 +1,13 @@
 import type { MetadataRoute } from "next"
-import { eq } from "drizzle-orm"
+import { eq, and } from "drizzle-orm"
 import { db } from "@/lib/db"
 import { recipes } from "@/lib/db/schema"
 import { getPublishedRecipes } from "@/lib/queries"
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com"
+
+const CATEGORY_PAGES = ["techniques", "guides", "histoire", "equipement"]
+const STATIC_PAGES = ["privacy", "terms"]
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [allRecipes, articles] = await Promise.all([
@@ -12,7 +15,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     db
       .select({ slug: recipes.slug, category: recipes.category, updatedAt: recipes.updatedAt })
       .from(recipes)
-      .where(eq(recipes.content_type, "article")),
+      .where(and(
+        eq(recipes.content_type, "article"),
+        eq(recipes.status, "published"),
+      )),
   ])
 
   const recipeEntries: MetadataRoute.Sitemap = allRecipes.map((recipe) => ({
@@ -27,6 +33,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: a.updatedAt ?? new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.7,
+  }))
+
+  const categoryEntries: MetadataRoute.Sitemap = CATEGORY_PAGES.map((cat) => ({
+    url: `${BASE_URL}/${cat}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.7,
+  }))
+
+  const staticEntries: MetadataRoute.Sitemap = STATIC_PAGES.map((page) => ({
+    url: `${BASE_URL}/${page}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.5,
   }))
 
   return [
@@ -48,6 +68,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.6,
     },
+    ...categoryEntries,
+    ...staticEntries,
     ...recipeEntries,
     ...articleEntries,
   ]

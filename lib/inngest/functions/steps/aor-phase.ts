@@ -13,6 +13,7 @@ import { agentAorWriter, type AorCategory } from "../agents/aor-writer"
 import type { RecipeDraft } from "../agents/writer"
 import type { SeoPlan } from "../agents/strategist"
 import type { StructuredSerp } from "@/lib/agents/serp-structurer"
+import { validateContent, scrubBannedWords } from "@/lib/content-validator"
 import { appendLog, logEntry, SITE_URL } from "../helpers"
 
 export async function generateAorArticle(
@@ -42,6 +43,31 @@ export async function generateAorArticle(
       seoPlan, serp: structuredSerp as Record<string, unknown>,
       aorCategory: category as AorCategory, aorAngle: aorAngle ?? null,
     })
+
+    // ── Content Validation (same safety net as recipe persist-phase) ─────
+    let aorContentValid = true
+    const scrubbed = scrubBannedWords(aorResult.contentMarkdown ?? "")
+    if (scrubbed.replacements.length > 0) {
+      aorResult.contentMarkdown = scrubbed.scrubbed
+      await appendLog(recipeId, logEntry("AOR ContentValidator", "error",
+        `Banned words scrubbed: ${scrubbed.replacements.join("; ")}`))
+    }
+
+    const aorValidation = validateContent({
+      contentMarkdown: aorResult.contentMarkdown,
+      metaTitle: aorResult.metaTitle,
+      metaDescription: aorResult.metaDescription,
+      title: aorResult.title,
+      contentType: "article",
+    })
+    if (!aorValidation.passed) {
+      aorContentValid = false
+      const errorList = aorValidation.errors
+        .filter(e => e.severity === "error")
+        .map(e => e.message).join("; ")
+      await appendLog(recipeId, logEntry("AOR ContentValidator", "error",
+        `Content validation FAILED: ${errorList}. Saving as draft.`))
+    }
 
     // Unique slug
     let articleSlug = slugify(aorResult.slug) || slugify(aorResult.title) || "article"
@@ -83,7 +109,7 @@ export async function generateAorArticle(
       metaTitle: aorResult.metaTitle, metaDescription: aorResult.metaDescription,
       excerpt: aorResult.excerpt, contentMarkdown: aorResult.contentMarkdown,
       tags: aorResult.tags, heroImageUrl: imageUrl, jsonLd: enrichedJsonLd,
-      status: "published", publishedAt: new Date(),
+      status: aorContentValid ? "published" : "draft", publishedAt: new Date(),
       content_type: "article", category, linked_content_id: recipeId,
     })
 

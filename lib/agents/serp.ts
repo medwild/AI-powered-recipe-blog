@@ -41,6 +41,11 @@ export async function fetchSerp(keyword: string): Promise<SerpResult> {
     )
   }
 
+  const SERP_TIMEOUT_MS = 15_000
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), SERP_TIMEOUT_MS)
+
+  try {
   const res = await fetch("https://google.serper.dev/search", {
     method: "POST",
     headers: {
@@ -53,61 +58,65 @@ export async function fetchSerp(keyword: string): Promise<SerpResult> {
       hl: process.env.SERP_HL ?? "en",
       num: 10,
     }),
+    signal: controller.signal,
   })
 
-  if (!res.ok) {
-    const text = await res.text()
-    throw new Error(`Serper request failed (${res.status}): ${text}`)
-  }
+    if (!res.ok) {
+      const text = await res.text()
+      throw new Error(`Serper request failed (${res.status}): ${text}`)
+    }
 
-  const data = await res.json()
+    const data = await res.json()
 
-  return {
-    organic: (data.organic ?? []).slice(0, 10).map((o: any, i: number) => ({
-      position: i + 1,
-      title: o.title,
-      snippet: o.snippet,
-      link: o.link,
-    })),
-    relatedQuestions: (data.peopleAlsoAsk ?? []).map((q: any) => ({
-      question: q.question,
-      snippet: q.snippet || undefined,
-      sourceUrl: q.sourceUrl || q.link || undefined,
-    })),
-    relatedSearches: (data.relatedSearches ?? []).map((s: any) => s.query),
-    answerBox: data.answerBox
-      ? {
-          content:
-            data.answerBox.content ||
-            data.answerBox.snippet ||
-            data.answerBox.answer ||
-            "",
-          source: data.answerBox.source || data.answerBox.link,
-          type: data.answerBox.type || "featured_snippet",
-        }
-      : undefined,
-    knowledgeGraph: data.knowledgeGraph
-      ? {
-          title: data.knowledgeGraph.title,
-          type: data.knowledgeGraph.type,
-          description: data.knowledgeGraph.description,
-          attributes: data.knowledgeGraph.attributes,
-        }
-      : undefined,
-    videos: (data.videos ?? []).slice(0, 5).map((v: any) => ({
-      title: v.title,
-      link: v.link,
-      source: v.source,
-    })),
-    recipes: (data.recipes ?? []).slice(0, 5).map((r: any) => ({
-      title: r.title,
-      link: r.link,
-      source: r.source,
-    })),
-    images: (data.images ?? []).slice(0, 5).map((img: any) => ({
-      title: img.title,
-      link: img.link,
-      source: img.source,
-    })),
+    return {
+      organic: (data.organic ?? []).slice(0, 10).map((o: any, i: number) => ({
+        position: i + 1,
+        title: o.title,
+        snippet: o.snippet,
+        link: o.link,
+      })),
+      relatedQuestions: (data.peopleAlsoAsk ?? []).map((q: any) => ({
+        question: q.question,
+        snippet: q.snippet || undefined,
+        sourceUrl: q.sourceUrl || q.link || undefined,
+      })),
+      relatedSearches: (data.relatedSearches ?? []).map((s: any) => s.query),
+      answerBox: data.answerBox
+        ? {
+            content:
+              data.answerBox.content ||
+              data.answerBox.snippet ||
+              data.answerBox.answer ||
+              "",
+            source: data.answerBox.source || data.answerBox.link,
+            type: data.answerBox.type || "featured_snippet",
+          }
+        : undefined,
+      knowledgeGraph: data.knowledgeGraph
+        ? {
+            title: data.knowledgeGraph.title,
+            type: data.knowledgeGraph.type,
+            description: data.knowledgeGraph.description,
+            attributes: data.knowledgeGraph.attributes,
+          }
+        : undefined,
+      videos: (data.videos ?? []).slice(0, 5).map((v: any) => ({
+        title: v.title,
+        link: v.link,
+        source: v.source,
+      })),
+      recipes: (data.recipes ?? []).slice(0, 5).map((r: any) => ({
+        title: r.title,
+        link: r.link,
+        source: r.source,
+      })),
+      images: (data.images ?? []).slice(0, 5).map((img: any) => ({
+        title: img.title,
+        link: img.link,
+        source: img.source,
+      })),
+    }
+  } finally {
+    clearTimeout(timer)
   }
 }

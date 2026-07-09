@@ -5,6 +5,8 @@
 // Falls back to Cloudflare Workers AI if NARAROUTER_API_KEY is not set.
 
 import { runText as cfRunText, runTextAndParseJson as cfRunTextAndParseJson, TEXT_MODEL_FALLBACK } from "./cloudflare"
+import { runTextAndParseJson as anthropicRunTextAndParseJson } from "./anthropic"
+import { isCircuitOpen, recordSuccess, recordFailure } from "@/lib/circuit-breaker"
 
 const BASE_URL = "https://router.bynara.id/v1"
 const TEXT_MODEL = process.env.NARAROUTER_TEXT_MODEL ?? "mistral-medium-3.5"
@@ -19,18 +21,29 @@ function isNaraConfigured(): boolean {
 export async function runText(
   systemPrompt: string,
   userPrompt: string,
-  options?: { temperature?: number; model?: string; maxTokens?: number },
+  options?: { temperature?: number; model?: string; maxTokens?: number; timeout?: number },
 ): Promise<string> {
+  // Route directly to Cloudflare if model starts with @cf/
+  if (options?.model?.startsWith("@cf/")) {
+    return cfRunText(systemPrompt, userPrompt, options)
+  }
+
   // Fallback to Cloudflare if NaraRouter not configured
   if (!isNaraConfigured()) {
     return cfRunText(systemPrompt, userPrompt, options)
   }
 
+  // Circuit breaker — skip call if NaraRouter is in failure state
+  if (isCircuitOpen("nararouter")) {
+    throw new Error("NaraRouter circuit OPEN — skipping call, use fallback")
+  }
+
   const model = options?.model ?? TEXT_MODEL
   const url = `${BASE_URL}/chat/completions`
 
+  const timeoutMs = options?.timeout ?? TEXT_TIMEOUT_MS
   const controller = new AbortController()
-  const timer = setTimeout(() => controller.abort(), TEXT_TIMEOUT_MS)
+  const timer = setTimeout(() => controller.abort(), timeoutMs)
 
   try {
     const res = await fetch(url, {
@@ -53,6 +66,7 @@ export async function runText(
 
     if (!res.ok) {
       const text = await res.text()
+      recordFailure("nararouter")
       throw new Error(`NaraRouter text run failed (${res.status}): ${text}`)
     }
 
@@ -62,6 +76,7 @@ export async function runText(
     const out = data?.choices?.[0]?.message?.content
 
     if (typeof out !== "string" || out.trim().length === 0) {
+      recordFailure("nararouter")
       throw new Error(
         "NaraRouter text run returned no response. " +
           `Response keys: ${Object.keys(data ?? {}).join(", ")}`,
@@ -69,7 +84,15 @@ export async function runText(
     }
     // Structured log: provider + model used — grep-friendly for production monitoring
     console.log(`[provider] NaraRouter ${model} — success`)
+    recordSuccess("nararouter")
     return out
+  } catch (err) {
+    // Only record failure for actual API errors, not circuit-open or abort
+    const msg = (err as Error).message
+    if (!msg.includes("circuit OPEN")) {
+      recordFailure("nararouter")
+    }
+    throw err
   } finally {
     clearTimeout(timer)
   }
@@ -104,8 +127,25 @@ const isRecoverable = (msg: string): boolean =>
 export async function runTextAndParseJson<T>(
   systemPrompt: string,
   userPrompt: string,
-  options?: { temperature?: number; maxTokens?: number },
+  options?: { temperature?: number; maxTokens?: number; model?: string; timeout?: number },
 ): Promise<T> {
+  // Route to Claude if explicitly requested
+  if (options?.model === "claude") {
+    return anthropicRunTextAndParseJson<T>(systemPrompt, userPrompt, {
+      temperature: options.temperature,
+      maxTokens: options.maxTokens,
+    })
+  }
+
+  // Route directly to Cloudflare if model starts with @cf/
+  if (options?.model?.startsWith("@cf/")) {
+    return cfRunTextAndParseJson<T>(systemPrompt, userPrompt, {
+      temperature: options.temperature,
+      maxTokens: options.maxTokens,
+      model: options.model,
+    })
+  }
+
   // ---- Attempt 1: NaraRouter primary model ----
   try {
     const raw = await runText(systemPrompt, userPrompt, options)

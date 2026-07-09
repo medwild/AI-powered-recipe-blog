@@ -45,8 +45,21 @@ export async function runEditorQaLoop(
   // ── Step 7: Editor loop (max 3 passes for google, 2 for pin-first) ─────
   const effectiveMaxPasses = format === "pin-first" ? 2 : MAX_EDITOR_PASSES
   while (humanizationPass < effectiveMaxPasses) {
-    if (currentAudit.decision === "PASS") break
+    if (currentAudit.decision === "PASS") {
+      await appendLog(recipeId, logEntry("Editor Loop", "done",
+        `PASS after ${humanizationPass} pass${humanizationPass !== 1 ? "es" : ""} — audit approved, content ready`))
+      break
+    }
     humanizationPass++
+
+    // Log WHY the loop continues
+    const reason = currentAudit.scores.signature_llm >= 30
+      ? "structural fix + humanization needed"
+      : currentAudit.decision === "MINOR_FIX"
+        ? "minor corrections needed"
+        : "structural revision needed"
+    await appendLog(recipeId, logEntry("Editor Loop", "running",
+      `Pass ${humanizationPass}/${effectiveMaxPasses}: decision="${currentAudit.decision}" LLM-sig=${currentAudit.scores.signature_llm}/100 — ${reason}`))
 
     try {
       finalRecipe = (await step.run(`agent-4-editor-pass-${humanizationPass}`, async () => {
@@ -93,10 +106,55 @@ export async function runEditorQaLoop(
     await step.sleep("sleep-after-re-audit", "2s")
   }
 
+  // Log if max passes exhausted without PASS
+  if (humanizationPass >= effectiveMaxPasses && currentAudit.decision !== "PASS") {
+    await appendLog(recipeId, logEntry("Editor Loop", "error",
+      `Max passes (${effectiveMaxPasses}) exhausted — best effort. Final audit: ${currentAudit.decision}, score: ${currentAudit.publication_readiness_score}/100`))
+  }
+
   // Content integrity check
   if (!finalRecipe!.contentMarkdown || finalRecipe!.contentMarkdown.trim().length < 200) {
     await appendLog(recipeId, logEntry("Workflow", "error", "Final contentMarkdown is truncated or empty (< 200 chars)"))
     throw new Error("CONTENT_TRUNCATED: Final contentMarkdown is too short after editorial loop.")
+  }
+
+  // ── Deterministic Pre-Checks (before QA LLM call) ──────────────────────
+  // Catch issues that don't need LLM reasoning, so QA can focus on
+  // cross-agent semantic verification. 0ms cost, 0 tokens.
+  const preCheckIssues: string[] = []
+  const preMd = finalRecipe!.contentMarkdown ?? ""
+
+  const wc = preMd.split(/\s+/).filter(Boolean).length
+  if (wc < 800) {
+    preCheckIssues.push(`Word count: ${wc} (minimum 800)`)
+  } else if (wc < 1200) {
+    preCheckIssues.push(`Word count: ${wc} below target 1200+`)
+  }
+
+  const faqMatches = preMd.match(/\*\*(.+?\?)\*\*/g)
+  const faqCount = faqMatches?.length ?? 0
+  const requiredFaq = format === "pin-first" ? 3 : 5
+  if (faqCount < requiredFaq) {
+    preCheckIssues.push(`FAQ count: ${faqCount} (need ${requiredFaq} for ${format} format)`)
+  }
+
+  const h2Headings = preMd.match(/^##\s+(.+)/gm) ?? []
+  const requiredSections = format === "pin-first"
+    ? ["ingredients", "instructions"]
+    : ["why this works", "ingredients", "instructions", "tips", "faq"]
+  for (const section of requiredSections) {
+    if (!h2Headings.some(h => h.toLowerCase().includes(section))) {
+      preCheckIssues.push(`Missing required section: "${section}"`)
+    }
+  }
+
+  if (finalRecipe!.metaTitle && finalRecipe!.metaTitle.length > 60) {
+    preCheckIssues.push(`Meta title ${finalRecipe!.metaTitle.length} chars (max 60)`)
+  }
+
+  if (preCheckIssues.length > 0) {
+    await appendLog(recipeId, logEntry("QA Pre-Check", "error",
+      `Deterministic issues (${preCheckIssues.length}): ${preCheckIssues.join("; ")}`))
   }
 
   // ── Step 7.5: QA ──────────────────────────────────────────────────────

@@ -1,7 +1,7 @@
 // Agent 4 — Editor & Humanizer
 //
 // Charge son skill depuis skills/agent-editor.md et applique les corrections
-// chirurgicales de l'audit + humanisation anti-détection IA (max 3 passes).
+// chirurgicales de l'audit + humanisation (max 3 passes).
 //
 // Architecture :
 //   System prompt ← loadSkillContent("agent-editor")  (rôle, techniques d'humanisation)
@@ -9,9 +9,11 @@
 
 import { loadSkillContent } from "@/lib/skills"
 import { runTextAndParseJson } from "@/lib/agents/nararouter"
-import { stripHtmlComments } from "../helpers"
+import { validateContract, AGENT_CONTRACTS } from "@/lib/agents/contract-validator"
+import { stripHtmlComments, stripBracketTokens } from "../helpers"
 import type { RecipeDraft } from "./writer"
 import type { AuditReport } from "./auditor"
+import { formatCriterionDisplayName } from "./auditor"
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -30,26 +32,38 @@ function buildUserPrompt(
   audit: AuditReport,
   humanizationPass: number,
 ): string {
+  const needsRewrite = audit.decision === "MAJOR_REWRITE" || audit.decision === "REJECT"
   const needsHumanization =
-    audit.verdict === "NEEDS REVISION" && audit.score_ia_estimation >= 20
+    needsRewrite && audit.scores.signature_llm >= 30
 
-  const auditSummary = audit.criteria
-    .map(
-      (c) =>
-        `- [${c.name}] ${c.score}/20\n` +
-        `  Issues : ${c.issues.join("; ") || "none"}\n` +
-        `  Recommendation : ${c.recommendation || "none"}`,
-    )
+  // Build scores summary from the scores object
+  const scoreLines = (Object.entries(audit.scores) as [string, number | null][])
+    .filter(([key]) => key !== "validite_recette" || audit.scores.validite_recette !== null)
+    .map(([key, value]) => `- [${formatCriterionDisplayName(key)}] ${value}/100`)
     .join("\n")
 
-  const factCorrections = audit.factual_corrections.length
-    ? "\n## MANDATORY FACTUAL CORRECTIONS\n" +
-      audit.factual_corrections
-        .map(
-          (c) =>
-            `- "${c.original}" → "${c.corrected}" (reason : ${c.reason})`,
-        )
-        .join("\n")
+  // Collect all issues (critical first, then major, then minor)
+  const allIssues = [
+    ...audit.critical_issues.map(i => `[CRITICAL] [${i.criterion}] ${i.issue}${i.location ? ` (${i.location})` : ""}`),
+    ...audit.major_issues.map(i => `[MAJOR] [${i.criterion}] ${i.issue}${i.location ? ` (${i.location})` : ""}`),
+    ...audit.minor_issues.map(i => `[MINOR] [${i.criterion}] ${i.issue}${i.location ? ` (${i.location})` : ""}`),
+  ].join("\n")
+
+  // Extract must-fix items from required_fixes
+  const mustFixes = audit.required_fixes
+    .filter(f => f.priority === "must_fix")
+    .map(f => {
+      const originalPart = f.original ? `"${f.original}" → ` : ""
+      const correctedPart = f.corrected ? `"${f.corrected}"` : ""
+      const actionText = originalPart || correctedPart
+        ? `${originalPart}${correctedPart} — ${f.description}`
+        : f.description
+      return `- ${actionText}${f.location ? ` [Location: ${f.location}]` : ""}`
+    })
+    .join("\n")
+
+  const mustFixBlock = mustFixes
+    ? `\n## MANDATORY FIXES\n${mustFixes}`
     : ""
 
   const humanizationBlock = needsHumanization
@@ -57,12 +71,21 @@ function buildUserPrompt(
 Apply ONLY the techniques defined in your system prompt for Pass ${humanizationPass} (see Multi-Pass Escalation). Do not exceed the technique budget for this pass.`
     : ""
 
-  return `Fix "${keyword}" audit defects.
-${audit.verdict === "OK" ? "VERDICT OK — factual corrections only." : "VERDICT NEEDS REVISION — fix + humanize."}
+  const decisionLabel =
+    audit.decision === "PASS" ? "DECISION: PASS — polish only, no structural changes needed." :
+    audit.decision === "MINOR_FIX" ? "DECISION: MINOR_FIX — limited corrections, keep changes minimal." :
+    audit.decision === "MAJOR_REWRITE" ? "DECISION: MAJOR_REWRITE — significant revision required. Fix structural issues." :
+    "DECISION: REJECT — content needs fundamental rewriting. Focus on the most critical issues first."
 
-## Audit (score: ${audit.overallScore}/100, AI: ${audit.score_ia_estimation}/100)
-${auditSummary}
-${factCorrections}${humanizationBlock}
+  return `Fix "${keyword}" audit defects.
+${decisionLabel}
+
+## Pre-Publication Audit (readiness: ${audit.publication_readiness_score}/100)
+${scoreLines}
+
+## Issues Detected
+${allIssues || "No issues detected."}
+${mustFixBlock}${humanizationBlock}
 
 ## Draft Metadata
 ${JSON.stringify({
@@ -83,6 +106,8 @@ ${JSON.stringify({
 ## Draft contentMarkdown (FULL — edit the complete content)
 ${draft.contentMarkdown ?? ""}
 
+${audit.rewrite_instructions.length ? `## Rewrite Instructions from Auditor\n${audit.rewrite_instructions.map((ri, i) => `${i + 1}. ${ri}`).join("\n")}` : ""}
+
 Respond with the EXACT JSON structure defined in your system prompt — COMPLETE recipe, all fields.`
 }
 
@@ -91,8 +116,8 @@ Respond with the EXACT JSON structure defined in your system prompt — COMPLETE
 // ---------------------------------------------------------------------------
 
 /**
- * Fixes defects flagged by the Auditor. When verdict is "NEEDS REVISION"
- * with a high AI score, applies a humanization anti-detection pass.
+ * Fixes defects flagged by the Pre-Publication Auditor. When the decision is
+ * MAJOR_REWRITE/REJECT with high LLM signature risk, applies a humanization pass.
  * Produces the final version ready for image generation and publication.
  */
 export async function agentEditor(
@@ -112,17 +137,33 @@ export async function agentEditor(
     const result = await runTextAndParseJson<RecipeDraft>(systemPrompt, userPrompt, {
       temperature: 0.8,
       maxTokens: 6144,
+      model: "claude",
     })
+
+    // Contract validation (Editor outputs a RecipeDraft — reuse Writer contract)
+    const validation = validateContract(result as Record<string, unknown>, AGENT_CONTRACTS.Writer)
+    if (validation.warnings.length > 0) {
+      console.warn("[Editor] Contract warnings:", validation.warnings.join("; "))
+    }
 
     // Safety net: strip any HTML comments that survived the Writer's sanitization
     // (or were re-introduced during editing). Guarantees clean output.
     if (result.contentMarkdown) {
-      result.contentMarkdown = stripHtmlComments(result.contentMarkdown)
+      result.contentMarkdown = stripBracketTokens(stripHtmlComments(result.contentMarkdown))
     }
 
+    const totalIssues =
+      audit.critical_issues.length + audit.major_issues.length + audit.minor_issues.length
+
     result.humanization_pass = humanizationPass
-    result.changes_summary = `Pass ${humanizationPass}: ${audit.criteria.reduce((s, c) => s + c.issues.length, 0)} defects corrected${
-      audit.verdict === "NEEDS REVISION" && audit.score_ia_estimation >= 20 ? " + anti-AI humanization" : ""
+    result.changes_summary = `Pass ${humanizationPass}: ${totalIssues} issues addressed${
+      audit.decision === "MAJOR_REWRITE" || audit.decision === "REJECT"
+        ? audit.scores.signature_llm >= 30
+          ? " + anti-AI humanization"
+          : " + structural revision"
+        : audit.decision === "MINOR_FIX"
+          ? " — minor corrections"
+          : " — polish only"
     }`
     return result
   } catch (err) {

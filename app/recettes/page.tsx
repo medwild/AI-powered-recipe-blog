@@ -12,17 +12,27 @@ import { searchPublishedRecipes, getRecipeCategories, getPublishedArticles } fro
 
 export const revalidate = 60
 
-export const metadata: Metadata = {
-  title: "All recipes",
-  description:
-    "Browse our collection of French cooking recipes, optimized and explained step by step.",
-  alternates: { canonical: "/recettes" },
-  openGraph: {
-    title: "All recipes | Chef Augustin",
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string; cat?: string }>
+}): Promise<Metadata> {
+  const { q, cat } = await searchParams
+  const isFiltered = !!(q || cat)
+
+  return {
+    title: "All recipes",
     description:
       "Browse our collection of French cooking recipes, optimized and explained step by step.",
-    type: "website",
-  },
+    alternates: { canonical: "/recettes" },
+    robots: isFiltered ? { index: false, follow: true } : undefined,
+    openGraph: {
+      title: "All recipes | Chef Augustin",
+      description:
+        "Browse our collection of French cooking recipes, optimized and explained step by step.",
+      type: "website",
+    },
+  }
 }
 
 export default async function RecipesPage({
