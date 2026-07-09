@@ -24,6 +24,11 @@ export type CitabilityReport = {
     minRequired: number   // 6 per article (≈1/250-300 words)
     matches: string[]
   }
+  nuggets: {
+    count: number
+    minRequired: number   // 4 per article (validated question→answer pairs)
+    matches: string[]
+  }
   passed: boolean         // score ≥ 60
   feedback: string
 }
@@ -106,6 +111,60 @@ function extractMatches(regex: RegExp, text: string): string[] {
 }
 
 // ---------------------------------------------------------------------------
+// Answer Nugget Detection
+// ---------------------------------------------------------------------------
+
+/**
+ * Detects Answer Nuggets — question-based H2s followed by a direct answer
+ * paragraph of 40-80 words containing at least one specific fact (number
+ * or named entity). These are blocks that LLMs can extract as standalone
+ * answers.
+ *
+ * Detection rules:
+ * 1. Find a heading line matching `## ...?` (question-based H2)
+ * 2. Take the first text block after it (until next heading or double newline)
+ * 3. Validate: 25-120 words, contains a number OR a capitalized proper noun
+ *
+ * Target: ≥4 validated nuggets per article (Strategist plans 6/1000 words).
+ */
+function countAnswerNuggets(markdown: string): { count: number; matches: string[] } {
+  const matches: string[] = []
+  const lines = markdown.split("\n")
+  const headingRegex = /^##\s+.+\?$/    // H2 ending with ?
+  const numberRegex = /\d/              // Contains a number
+  const entityRegex = /\b[A-Z][a-z]+\s+[A-Z][a-z]+\b/ // Capitalized multi-word entity
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim()
+    if (!headingRegex.test(line)) continue
+
+    // Collect the text block after this heading (until next heading or blank line group)
+    const blockLines: string[] = []
+    let j = i + 1
+    while (j < lines.length) {
+      const nextLine = lines[j]
+      // Stop at next heading
+      if (/^#{1,3}\s/.test(nextLine)) break
+      // Stop at double blank line (end of section)
+      if (nextLine.trim() === "" && j + 1 < lines.length && lines[j + 1].trim() === "") break
+      if (nextLine.trim()) blockLines.push(nextLine.trim())
+      j++
+    }
+
+    const block = blockLines.join(" ")
+    const wordCount = block.split(/\s+/).filter(Boolean).length
+
+    // Validate: 25-120 words, contains a number or a named entity
+    if (wordCount >= 25 && wordCount <= 120 && (numberRegex.test(block) || entityRegex.test(block))) {
+      const preview = block.substring(0, 100).trim() + (block.length > 100 ? "…" : "")
+      matches.push(`[${line.replace(/^##\s+/, "")}] ${preview}`)
+    }
+  }
+
+  return { count: matches.length, matches }
+}
+
+// ---------------------------------------------------------------------------
 // Main API
 // ---------------------------------------------------------------------------
 
@@ -114,9 +173,10 @@ function extractMatches(regex: RegExp, text: string): string[] {
  * will extract and cite specific claims from this content.
  *
  * Scoring:
- *   claimsScore (50%)       = min(claims.count / 5, 1.0) × 100
- *   attributionsScore (30%) = min(attributions.count / 6, 1.0) × 100
- *   densityScore (20%)      = min((claims + attributions) / wordCount × 1000, 1.0) × 100
+ *   claimsScore (40%)       = min(claims.count / 5, 1.0) × 100
+ *   attributionsScore (25%) = min(attributions.count / 6, 1.0) × 100
+ *   nuggetsScore (20%)      = min(nuggets.count / 4, 1.0) × 100
+ *   densityScore (15%)      = min((claims + attributions + nuggets) / wordCount × 1000, 1.0) × 100
  *
  * Attribution match only counts if a claim is present in the same paragraph.
  * No empty name-dropping.
@@ -158,36 +218,44 @@ export function checkCitability(markdown: string, wordCount: number): Citability
     }
   }
 
-  // 4. Compute scores
+  // 4. Count answer nuggets (question→answer pairs)
+  const nuggets = countAnswerNuggets(markdown)
+
+  // 5. Compute scores
   const claimsCount = allClaimMatches.length
   const attributionsCount = validAttrMatches.length
+  const nuggetsCount = nuggets.count
   const minClaims = 5
   const minAttributions = 6
+  const minNuggets = 4
 
   const claimsScore = Math.min(claimsCount / minClaims, 1.0) * 100
   const attributionsScore = Math.min(attributionsCount / minAttributions, 1.0) * 100
+  const nuggetsScore = Math.min(nuggetsCount / minNuggets, 1.0) * 100
   const densityScore = wordCount > 0
-    ? Math.min((claimsCount + attributionsCount) / wordCount * 1000, 1.0) * 100
+    ? Math.min((claimsCount + attributionsCount + nuggetsCount) / wordCount * 1000, 1.0) * 100
     : 0
 
   const score = Math.round(
-    claimsScore * 0.50 +
-    attributionsScore * 0.30 +
-    densityScore * 0.20
+    claimsScore * 0.40 +
+    attributionsScore * 0.25 +
+    nuggetsScore * 0.20 +
+    densityScore * 0.15
   )
 
-  // 5. Build feedback
+  // 6. Build feedback
   const passed = score >= 60
   let feedback: string
   if (score >= 70) {
-    feedback = `Strong citability (${score}/100). Content has enough specific claims and source attributions for LLM extraction.`
+    feedback = `Strong citability (${score}/100). Claims: ${claimsCount}, Attributions: ${attributionsCount}, Nuggets: ${nuggetsCount}.`
   } else if (score >= 60) {
-    feedback = `Marginal citability (${score}/100). Consider adding more specific claims (numbers, temperatures, ratios) or source attributions (Chef Augustin recommends, I tested).`
+    feedback = `Marginal citability (${score}/100). Claims: ${claimsCount}/${minClaims}, Attributions: ${attributionsCount}/${minAttributions}, Nuggets: ${nuggetsCount}/${minNuggets}.`
   } else {
     const missing: string[] = []
     if (minClaims - claimsCount > 0) missing.push(`${minClaims - claimsCount} more specific claims`)
     if (minAttributions - attributionsCount > 0) missing.push(`${minAttributions - attributionsCount} more source attributions`)
-    feedback = `Low citability (${score}/100). Content needs: ${missing.join(" and ")}. Add numbered facts, testing claims, and Chef Augustin attributions.`
+    if (minNuggets - nuggetsCount > 0) missing.push(`${minNuggets - nuggetsCount} more answer nuggets (question H2 + 25-120 word answer)`)
+    feedback = `Low citability (${score}/100). Content needs: ${missing.join("; ")}.`
   }
 
   return {
@@ -201,6 +269,11 @@ export function checkCitability(markdown: string, wordCount: number): Citability
       count: attributionsCount,
       minRequired: minAttributions,
       matches: validAttrMatches.slice(0, 10),
+    },
+    nuggets: {
+      count: nuggetsCount,
+      minRequired: minNuggets,
+      matches: nuggets.matches.slice(0, 10),
     },
     passed,
     feedback,

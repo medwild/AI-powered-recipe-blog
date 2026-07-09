@@ -148,7 +148,7 @@ export function validateContent(draft: ValidatableDraft): ValidationResult {
     errors.push({
       field: "contentMarkdown",
       severity: citability.score < 60 ? "error" : "warning",
-      message: `GEO Citability: ${citability.feedback} (Claims: ${citability.claims.count}/${citability.claims.minRequired}, Attributions: ${citability.attributions.count}/${citability.attributions.minRequired})`,
+      message: `GEO Citability: ${citability.feedback}`,
     })
   }
 
