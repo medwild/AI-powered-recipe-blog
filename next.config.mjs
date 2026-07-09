@@ -45,6 +45,14 @@ const nextConfig = {
       },
     ]
   },
+  async rewrites() {
+    return [
+      {
+        source: "/llms.txt",
+        destination: "/llm.txt",
+      },
+    ]
+  },
 }
 
 export default nextConfig
