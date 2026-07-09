@@ -126,7 +126,7 @@ export async function agentStrategist(
     // NOTE: V1 is deprecated — V2 is the production path. Keeping V1 aligned
     // with V2 defaults to prevent silent regressions if V1 is ever called.
     const result = await runTextAndParseJson<SeoPlan>(systemPrompt, userPrompt, {
-      maxTokens: 4096,
+      maxTokens: 6144,
       temperature: 0.3,
     })
     const validation = validateContract(result as Record<string, unknown>, AGENT_CONTRACTS.Strategist)
@@ -290,7 +290,7 @@ export async function agentStrategistV2(
     const userPrompt = buildUserPromptV2(keyword, structuredSerp, pastImprovements, opportunityScore, externalSources)
     logAgentTrace("Strategist", "input", { chars: systemPrompt.length + userPrompt.length })
     const result = await runTextAndParseJson<SeoPlan>(systemPrompt, userPrompt, {
-      maxTokens: 4096,
+      maxTokens: 6144,
       temperature: 0.3,
     })
     logAgentTrace("Strategist", "output", { chars: JSON.stringify(result).length, fields: Object.keys(result).length })

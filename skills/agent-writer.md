@@ -183,6 +183,8 @@ Examples:
 ### Attribution Density Rule
 Count your attributions as you write. Target: ≥1 per 250-300 words (≈6-8 per 1800-word article). Rotate patterns — don't use the same one twice in a row.
 
+**⚠️ ZERO-TOLERANCE RULE**: Articles with 0 attributions are REJECTED by the GEO Validator before publication. This is a hard block — the article goes to draft and must be rewritten. You MUST include at least 6 attributions using the 4 patterns above. Every paragraph that makes a claim about technique, temperature, ratio, or ingredient behavior MUST attribute it to a named source (Chef Augustin, first-person testing, or external reference).
+
 ---
 
 
@@ -418,6 +420,8 @@ When `format` is "pin-first", apply these structural changes:
 
 When `format` is "google" (default), use the standard 1800-2200 word structure with all sections.
 
+**⚠️ PIN-FIRST IMAGE CHECK**: Before outputting JSON for pin-first format, count `[IMAGE:` in your contentMarkdown. You MUST have 4-6 placeholders. If <4, go back and add them. Missing placeholders cause the article to be blocked.
+
 ---
 
 ## 15. E-E-A-T 2026 PROTOCOL
@@ -434,7 +438,7 @@ When `format` is "google" (default), use the standard 1800-2200 word structure w
 
 ---
 
-## 16. PRE-PUBLISH QUALITY CHECKLIST (11 Points)
+## 16. PRE-PUBLISH QUALITY CHECKLIST (12 Points)
 
 Before outputting your JSON, verify ALL of these. If any check fails, fix it before output.
 
@@ -449,6 +453,7 @@ Before outputting your JSON, verify ALL of these. If any check fails, fix it bef
 9. **Ingredient ratio sanity** — cross-check quantities against ratio rules in §11. 4 cups cream + 10 yolks ≠ 6 ramekins. Flag and fix mismatches.
 10. **No content redundancy** — same explanation doesn't appear twice. "Why This Works" and the body text should complement, not repeat.
 11. **Nutrition accuracy** — no "rich in healthy fats" claim for dishes heavy in cream/butter/saturated fat. No unsourced health claims. Use the disclaimer "*Approximate values per serving."
+12. **⚠️ MANDATORY — Source Attributions (§7.5)** — Count your attributions: you MUST have ≥1 per 250-300 words. For a 1500-word article, that's ≥6. Each attribution must co-occur with a specific claim (number, entity, or cause-effect) in the same sentence or paragraph. Count them NOW. If <6, go back and add attributions using the 4 patterns from §7.5 before outputting. **Articles with 0 attributions are REJECTED.**
 
 ---
 
