@@ -6,9 +6,6 @@
 import { db } from "@/lib/db"
 import { recipes, type WorkflowLogEntry } from "@/lib/db/schema"
 import { eq, sql } from "drizzle-orm"
-import type { AuditReport } from "./agents/auditor"
-import type { QAReport } from "./agents/qa"
-import type { SeoPlan } from "./agents/strategist"
 
 // ── Logging ──────────────────────────────────────────────────────────────────
 
@@ -73,79 +70,6 @@ export function isRecoverableError(err: Error): boolean {
     msg.includes("503") ||
     msg.includes("504")
   )
-}
-
-// ── Synthetic Fallbacks ──────────────────────────────────────────────────────
-
-export function buildSyntheticAuditReport(): AuditReport {
-  return {
-    decision: "REJECT",
-    publication_readiness_score: 0,
-    confidence_level: "low",
-    content_type: "recipe",
-    scores: {
-      factualite: 0,
-      validite_recette: null,
-      originalite: 0,
-      utilite: 0,
-      experience: 0,
-      coherence_interne: 0,
-      eeat_trust: 0,
-      sur_optimisation_seo: 100,
-      signature_llm: 100,
-    },
-    critical_issues: [{
-      criterion: "system",
-      issue: "Auditor agent unavailable — no automated quality check was performed. This recipe has NOT been checked for food safety, factual accuracy, or content quality.",
-    }],
-    major_issues: [],
-    minor_issues: [],
-    evidence: [],
-    required_fixes: [],
-    rewrite_instructions: [],
-    final_recommendation: "CRITICAL: Auditor agent unavailable. Content was NOT quality-checked. Manual review required before publication.",
-    summary: "CRITICAL: Auditor agent unavailable — content was NOT quality-checked. Manual review required before publication.",
-  }
-}
-
-export function buildSyntheticQAReport(): QAReport {
-  return {
-    qaScore: 0,
-    verdict: "CRITICAL",
-    summary: "CRITICAL: QA agent unavailable — cross-agent verification was NOT performed. Recipe requires manual verification before publication.",
-    checks: [],
-  }
-}
-
-/**
- * Builds a minimal editorial plan when the Strategist agent is unavailable.
- * Provides enough structure for the Writer to produce acceptable content
- * in degraded mode. No SERP intelligence — just a generic scaffold.
- */
-export function buildSyntheticSeoPlan(keyword: string): SeoPlan {
-  const titleCase = keyword.charAt(0).toUpperCase() + keyword.slice(1)
-  return {
-    title: titleCase,
-    metaTitle: `${titleCase} Recipe | Chef Augustin`,
-    metaDescription: `Learn how to make ${keyword} at home with this easy, step-by-step recipe. Perfect for any occasion.`,
-    excerpt: `A delicious ${keyword} recipe that's easy to make and packed with flavor.`,
-    prepTime: "15 minutes",
-    cookTime: "30 minutes",
-    totalTime: "45 minutes",
-    servings: "4",
-    difficulty: "Medium",
-    tags: [keyword, "easy", "homemade"],
-    h2Sections: [
-      { heading: "Why This Works", subheadings: [], coverPaa: [] },
-      { heading: "Ingredients", subheadings: [], coverPaa: [] },
-      { heading: "Step-by-Step Instructions", subheadings: [], coverPaa: [] },
-      { heading: "Chef's Tips", subheadings: [], coverPaa: [] },
-      { heading: "Variations", subheadings: [], coverPaa: [] },
-      { heading: "Storage and Reheating", subheadings: [], coverPaa: [] },
-      { heading: "Frequently Asked Questions", subheadings: [], coverPaa: [] },
-    ],
-    semanticEntities: [keyword, "easy recipe", "homemade"],
-  }
 }
 
 // ── Retry Escalation ──────────────────────────────────────────────────────────

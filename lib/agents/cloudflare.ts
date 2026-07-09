@@ -2,8 +2,6 @@
 // - runText: chat/instruct models for content generation (returns string)
 // - runImage: text-to-image models (returns a PNG Buffer)
 
-import { isCircuitOpen, recordSuccess, recordFailure } from "@/lib/circuit-breaker"
-
 // Cloudflare Workers AI models
 // - Primary: Gemma 4 26B A4B (Google, 256k context, Intelligence 26/30).
 //   ~290 neurones/recipe — fits comfortably in the 10K free daily quota.
@@ -37,9 +35,7 @@ export async function runText(
   options?: { temperature?: number; model?: string; maxTokens?: number; timeout?: number },
 ): Promise<string> {
   // Circuit breaker — skip call if Cloudflare is in failure state
-  if (isCircuitOpen("cloudflare")) {
-    throw new Error("Cloudflare circuit OPEN — skipping call, use fallback")
-  }
+  // Circuit breaker removed in v10 — Cloudflare is text fallback only
 
   const { accountId, apiToken } = cfConfig()
   const model = options?.model ?? TEXT_MODEL
@@ -69,7 +65,7 @@ export async function runText(
 
     if (!res.ok) {
       const text = await res.text()
-      recordFailure("cloudflare")
+      // recordFailure removed in v10
       throw new Error(`Cloudflare text run failed (${res.status}): ${text}`)
     }
 
@@ -83,7 +79,7 @@ export async function runText(
       data?.result?.response
 
     if (typeof out !== "string" || out.trim().length === 0) {
-      recordFailure("cloudflare")
+      // recordFailure removed in v10
       throw new Error(
         "Cloudflare text run returned no response. " +
           `Result keys: ${Object.keys(data?.result ?? {}).join(", ")}`,
@@ -91,12 +87,12 @@ export async function runText(
     }
     // Structured log: provider + model used — grep-friendly for production monitoring
     console.log(`[provider] Cloudflare ${model} — success`)
-    recordSuccess("cloudflare")
+    // recordSuccess removed in v10
     return out
   } catch (err) {
     const msg = (err as Error).message
     if (!msg.includes("circuit OPEN")) {
-      recordFailure("cloudflare")
+      // recordFailure removed in v10
     }
     throw err
   } finally {

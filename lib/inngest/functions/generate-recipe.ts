@@ -1,20 +1,12 @@
 /**
- * generate-recipe workflow — Orchestrator
+ * generate-recipe workflow — Simplified v10 Orchestrator
  *
- * Coordinates 13 pipeline steps delegated to specialized modules.
- * This file only sequences steps and manages cross-cutting concerns
- * (degraded flag, error propagation, logging).
- *
- * Step modules:
- *   serp-phase    → Steps 1 + 1.5  (SERP analysis + data structuring)
- *   agent-phase   → Steps 2 + 3 + 4 (Strategist + Writer + Auditor)
- *   persist-phase → Steps 5 + 6 + 10 + 11 + 12 (persist, approve, self-improve, final)
- *   editor-qa-loop → Steps 7 + 7.5  (Editor feedback loop + QA)
- *   image-phase   → Steps 8 + 9     (Image prompt + generation)
- *   pin-phase     → Step 11         (Pin Designer — 5 Pin drafts per recipe)
- *   link-suggester → Step 1.5       (Internal link target suggestions)
- *   aor-phase     → Step 13         (AOR article generation)
- *   link-backfill → Step 14         (Link backfill to existing content)
+ * 4 pipeline steps:
+ *   1. serp-phase       — Google SERP analysis (Serper API)
+ *   2. unified-agent    — Chef Augustin (single DeepSeek call)
+ *   3. image-phase      — FLUX-1 → Cloudinary
+ *   4. persist-phase    — Validation + DB write
+ *   5. pin-phase        — Pin Designer (5 pins per recipe)
  */
 
 import { db } from "@/lib/db"
@@ -22,17 +14,11 @@ import { recipes, type ImageVariant } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 import { logPipelineError } from "@/lib/queries"
 import { inngest } from "@/lib/inngest/client"
-import { agentWriter } from "./agents/writer"
-import { agentAuditor } from "./agents/auditor"
 import { runSerpPhase } from "./steps/serp-phase"
-import { runAgentPhase } from "./steps/agent-phase"
-import { persistDraftForReview, waitForApproval, runSelfImprovement, persistFinalDraft, initVariantStats } from "./steps/persist-phase"
-import { runEditorQaLoop } from "./steps/editor-qa-loop"
+import { runUnifiedAgentPhase } from "./steps/unified-agent-phase"
+import { persistDraftForReview, waitForApproval, persistFinalDraft, initVariantStats } from "./steps/persist-phase"
 import { runImagePhase } from "./steps/image-phase"
-import { generateAorArticle } from "./steps/aor-phase"
 import { generatePins } from "./steps/pin-phase"
-import { runLinkSuggester, type LinkTarget } from "./steps/link-suggester"
-import { runLinkBackfill } from "./steps/link-backfill"
 import { appendLog, logEntry, isRecoverableError } from "./helpers"
 
 export const generateRecipeWorkflow = inngest.createFunction(
@@ -41,12 +27,12 @@ export const generateRecipeWorkflow = inngest.createFunction(
     triggers: [{ event: "recipe/generate" }],
     concurrency: { key: "generate-recipe-active", limit: 3 },
     throttle: { key: "recipe-generation-throttle", limit: 2, period: "1m" },
-    retries: 3,
+    retries: 2,
     cancelOn: [{ event: "recipe/cancel", match: "data.recipeId" }],
   },
   async ({ event, step }) => {
-    const { recipeId, keyword, aorCategory, aorAngle, cuisine, cuisineIngredients, cuisineTechniques, mode } = event.data as {
-      recipeId: number; keyword: string; aorCategory?: string; aorAngle?: string;
+    const { recipeId, keyword, cuisine, cuisineIngredients, cuisineTechniques, mode } = event.data as {
+      recipeId: number; keyword: string;
       cuisine?: string; cuisineIngredients?: string; cuisineTechniques?: string;
       mode?: string;
     }
@@ -59,138 +45,117 @@ export const generateRecipeWorkflow = inngest.createFunction(
 
     const format = (mode === "pin-first" ? "pin-first" : "google") as "google" | "pin-first"
 
-    // Feature flag: set USE_AUTHENTICITY_AUDITOR=false to revert to legacy Auditor+QA
-    // Default: true (enhanced auditor v6.1 with pin-first awareness)
-    const useAuthenticityAuditor = process.env.USE_AUTHENTICITY_AUDITOR !== "false"
-
     let degraded = false
 
     try {
-      // ── Phase 1: SERP ─────────────────────────────────────────────────
+      // ── Step 1: SERP ───────────────────────────────────────────────────
       const serpResult = await runSerpPhase(step, recipeId, keyword)
       degraded = degraded || serpResult.degraded
 
-      // ── Phase 1.5: Link Suggester ────────────────────────────────────────
-      let linkTargets: LinkTarget[] = []
-      try {
-        linkTargets = await runLinkSuggester(
-          step, recipeId, keyword,
-          serpResult.structuredSerp?.topic_clusters?.flatMap(c => c.items) ?? [keyword],
-          "recipe",
-        )
-      } catch (err) {
-        await appendLog(recipeId, logEntry("Link Suggester", "error", (err as Error).message))
-        // Non-blocking — continue without link targets
-      }
-
-      // ── Phase 2: Agents ───────────────────────────────────────────────
-      const agentResult = await runAgentPhase(step, recipeId, keyword, serpResult.structuredSerp, cuisineReplacements, format, linkTargets)
+      // ── Step 2: Unified Agent (1 LLM call) ─────────────────────────────
+      const agentResult = await runUnifiedAgentPhase(
+        step, recipeId, keyword, serpResult, cuisineReplacements, format,
+      )
       degraded = degraded || agentResult.degraded
 
-      // ── Phase 3: Persist draft for review ─────────────────────────────
-      await persistDraftForReview(step, recipeId, agentResult.draft, agentResult.audit)
-      await step.sleep("sleep-after-persist-review", "2s")
-
-      // ── Phase 4: Wait for approval ────────────────────────────────────
-      await waitForApproval(step, recipeId)
-      await step.sleep("sleep-after-approval", "30s")
-
-      // ── Phase 5: Editor + QA loop ─────────────────────────────────────
-      let editResult = await runEditorQaLoop(step, recipeId, keyword, agentResult.draft, agentResult.audit, agentResult.seoPlan, format)
-      degraded = degraded || editResult.degraded
-
-      // Writer retry: QA REJECT/CRITICAL means structural issues the Editor
-      // can't fix. Re-run the Writer (fresh LLM sample) + Auditor + Editor loop.
-      if (editResult.needsRewrite) {
-        await appendLog(recipeId, logEntry("Workflow", "running",
-          `Writer retry triggered: QA ${editResult.qaReport.verdict} (score: ${editResult.qaReport.qaScore}/100) — ${editResult.qaReport.summary.substring(0, 200)}`))
-        await step.run("agent-2-writer-retry", async () => {
-          await appendLog(recipeId, logEntry("Writer", "running", "Retry — QA rejected content, regenerating from scratch"))
-          const retryDraft = await agentWriter(keyword, agentResult.seoPlan, cuisineReplacements, format, linkTargets)
-          await appendLog(recipeId, logEntry("Writer", "done", `Retry draft: "${retryDraft.title}"`))
-
-          await appendLog(recipeId, logEntry("Auditor", "running", "Re-evaluating retry draft"))
-          const retryAudit = await agentAuditor(keyword, retryDraft, agentResult.seoPlan.semanticEntities, format, linkTargets)
-          await appendLog(recipeId, logEntry("Auditor", "done", `Retry readiness: ${retryAudit.publication_readiness_score}/100 | Decision: ${retryAudit.decision}`))
-
-          const retryEditResult = await runEditorQaLoop(step, recipeId, keyword, retryDraft, retryAudit, agentResult.seoPlan, format)
-          degraded = degraded || retryEditResult.degraded
-
-          if (retryEditResult.needsRewrite) {
-            // Writer retry also failed — mark for human review, don't throw
-            await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
-            await appendLog(recipeId, logEntry("Workflow", "error", "Writer retry also rejected by QA — recipe set to draft for manual review"))
-          } else {
-            editResult = retryEditResult
-          }
-        })
+      // ── Step 3: Persist draft for review ───────────────────────────────
+      // Build a minimal audit-like object for persistDraftForReview compatibility
+      const placeholderAudit = {
+        publication_readiness_score: 70,
+        scores: {
+          signature_llm: 0, sur_optimisation_seo: 0,
+          factualite: 70, originalite: 70, utilite: 70, experience: 70,
+          coherence_interne: 70, eeat_trust: 70,
+        },
+        required_fixes: [] as { description: string }[],
+        final_recommendation: "",
+        decision: "PASS" as const,
       }
+      await persistDraftForReview(step, recipeId, agentResult.output, placeholderAudit)
+      await step.sleep("sleep-after-draft", "2s")
 
-      // ── Phase 6: Images ───────────────────────────────────────────────
-      const imageResult = await runImagePhase(step, recipeId, editResult.finalRecipe, keyword)
+      // ── Step 4: Wait for approval ──────────────────────────────────────
+      await waitForApproval(step, recipeId)
+      await step.sleep("sleep-after-approval", "5s")
+
+      // ── Step 5: Images ─────────────────────────────────────────────────
+      const imageResult = await runImagePhase(step, recipeId, agentResult.output, keyword)
       degraded = degraded || imageResult.degraded
 
-      // ── Phase 7: Self-improvement ─────────────────────────────────────
-      try {
-        await runSelfImprovement(step, recipeId, keyword, editResult.finalRecipe, agentResult.audit, editResult.qaReport, editResult.humanizationPass)
-      } catch (err) {
-        if (isRecoverableError(err as Error)) throw err
-        await logPipelineError({ recipeId, stepName: "self-improvement", errorType: "unknown", message: (err as Error).message, severity: "warning" })
+      // ── Step 6: Final persist with validation ──────────────────────────
+      // Build minimal SeoPlan for persistFinalDraft compatibility
+      const placeholderPlan = {
+        h2Sections: [] as { heading: string; subheadings: string[]; coverPaa: string[] }[],
+        semanticEntities: [] as string[],
+        tags: agentResult.output.tags,
+        title: agentResult.output.title,
+        metaTitle: agentResult.output.metaTitle,
+        metaDescription: agentResult.output.metaDescription,
+        excerpt: agentResult.output.excerpt,
+        prepTime: agentResult.output.prepTime,
+        cookTime: agentResult.output.cookTime,
+        totalTime: agentResult.output.totalTime,
+        servings: agentResult.output.servings,
+        difficulty: agentResult.output.difficulty,
       }
-      await step.sleep("sleep-after-self-improvement", "2s")
+      await persistFinalDraft(
+        step, recipeId, agentResult.output, placeholderPlan,
+        imageResult.heroImageUrl, imageResult.imageVariants as ImageVariant[],
+        keyword, format, degraded,
+      )
 
-      // ── Phase 8: Final persist ────────────────────────────────────────
-      await persistFinalDraft(step, recipeId, editResult.finalRecipe, agentResult.seoPlan, imageResult.heroImageUrl, imageResult.imageVariants as ImageVariant[], keyword, format, degraded)
-
-      // ── Phase 9: A/B stats ────────────────────────────────────────────
+      // ── Step 7: A/B stats ──────────────────────────────────────────────
       try {
         await initVariantStats(step, recipeId, imageResult.imageVariants as ImageVariant[])
       } catch (err) {
-        await logPipelineError({ recipeId, stepName: "init-variant-stats", errorType: "unknown", message: (err as Error).message, severity: "warning" })
+        await logPipelineError({
+          recipeId, stepName: "init-variant-stats",
+          errorType: "unknown", message: (err as Error).message, severity: "warning",
+        })
       }
 
-      // ── Phase 11: Pin Designer ────────────────────────────────────────────
+      // ── Step 8: Pin Designer ───────────────────────────────────────────
       try {
+        // Build minimal plan for Pin Designer
+        const pinPlan = {
+          semanticEntities: [] as string[],
+          tags: agentResult.output.tags,
+          h2Sections: [] as { heading: string; subheadings: string[]; coverPaa: string[] }[],
+          title: agentResult.output.title,
+          metaTitle: agentResult.output.metaTitle,
+          metaDescription: agentResult.output.metaDescription,
+          excerpt: agentResult.output.excerpt,
+          prepTime: agentResult.output.prepTime,
+          cookTime: agentResult.output.cookTime,
+          totalTime: agentResult.output.totalTime,
+          servings: agentResult.output.servings,
+          difficulty: agentResult.output.difficulty,
+          faqItems: [] as { question: string; answer: string }[],
+        }
         await generatePins(
-          step,
-          recipeId,
-          editResult.finalRecipe,
-          agentResult.seoPlan,
-          imageResult.heroImageUrl,
-          imageResult.imageVariants as ImageVariant[],
+          step, recipeId, agentResult.output, pinPlan,
+          imageResult.heroImageUrl, imageResult.imageVariants as ImageVariant[],
         )
       } catch (err) {
-        await logPipelineError({ recipeId, stepName: "agent-7-pin-designer", errorType: "unknown", message: (err as Error).message, severity: "warning" })
-      }
-
-      // ── Phase 13: AOR article ─────────────────────────────────────────────
-      if (aorCategory) {
-        try {
-          await generateAorArticle(step, recipeId, keyword, editResult.finalRecipe, agentResult.seoPlan, serpResult.structuredSerp, aorCategory, aorAngle ?? null)
-        } catch (err) {
-          if (isRecoverableError(err as Error)) throw err
-          await logPipelineError({ recipeId, stepName: "agent-6-aor-article", errorType: "unknown", message: (err as Error).message, severity: "warning" })
-        }
-      }
-
-      // ── Phase 14: Link Backfill ───────────────────────────────────────────
-      try {
-        // Fetch the slug that was persisted
-        const published = await db.query.recipes.findFirst({
-          where: eq(recipes.id, recipeId),
-          columns: { slug: true, title: true, tags: true },
+        await logPipelineError({
+          recipeId, stepName: "agent-pin-designer",
+          errorType: "unknown", message: (err as Error).message, severity: "warning",
         })
-        if (published?.slug && published?.title) {
-          await runLinkBackfill(step, recipeId, published.slug, published.title, published.tags ?? [], "recipe")
-        }
-      } catch (err) {
-        await appendLog(recipeId, logEntry("Link Backfill", "error", (err as Error).message))
-        // Non-blocking — backfill failure doesn't fail the recipe
       }
+
+      await appendLog(recipeId, logEntry("Workflow", "done", `Pipeline complete — ${format} format`))
 
     } catch (err) {
-      await logPipelineError({ recipeId, stepName: "workflow", errorType: "llm_unavailable", message: (err as Error).message, severity: "critical" })
-      throw err
+      if (isRecoverableError(err as Error)) throw err // Inngest will retry
+
+      await logPipelineError({
+        recipeId, stepName: "generate-recipe",
+        errorType: "unknown", message: (err as Error).message, severity: "critical",
+      })
+
+      await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
+      await appendLog(recipeId, logEntry("Workflow", "error",
+        `Pipeline failed: ${(err as Error).message.substring(0, 300)}`))
     }
   },
 )

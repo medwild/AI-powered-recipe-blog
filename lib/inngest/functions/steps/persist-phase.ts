@@ -6,10 +6,24 @@ import { db } from "@/lib/db"
 import { recipes, selfImprovementLogs, imageVariantStats, type NewSelfImprovementLog, type ImageVariant } from "@/lib/db/schema"
 import { eq, desc } from "drizzle-orm"
 import { slugify } from "@/lib/slug"
-import type { RecipeDraft } from "../agents/writer"
-import type { SeoPlan } from "../agents/strategist"
-import type { AuditReport } from "../agents/auditor"
-import type { QAReport } from "../agents/qa"
+import type { RecipeDraft, SeoPlan } from "../agents/chef-augustin"
+
+// Minimal audit type (was AuditReport from deleted auditor.ts)
+type MinimalAudit = {
+  publication_readiness_score: number
+  scores: Record<string, number>
+  required_fixes: { description: string }[]
+  final_recommendation: string
+  decision: string
+}
+
+// Minimal QA type (was QAReport from deleted qa.ts)
+type MinimalQAReport = {
+  qaScore: number
+  verdict: string
+  summary: string
+  checks: { name: string; status: string; issues: string[] }[]
+}
 import { validateContent, computeOriginalityScore, scrubBannedWords, checkContentSimilarity } from "@/lib/content-validator"
 import { checkCitability } from "@/lib/geo-validator"
 import { appendLog, logEntry, SITE_URL, stripHtmlComments, stripBracketTokens } from "../helpers"
@@ -45,7 +59,7 @@ function formatDuration(input: string): string {
 /** Step 5 — Persist draft for human review. */
 export async function persistDraftForReview(
   step: { run: (name: string, fn: () => Promise<unknown>) => Promise<unknown>; sleep: (name: string, dur: string) => Promise<void> },
-  recipeId: number, draft: RecipeDraft, audit: AuditReport,
+  recipeId: number, draft: RecipeDraft, audit: MinimalAudit,
 ) {
   await step.run("persist-draft-for-review", async () => {
     await db.update(recipes).set({
@@ -93,7 +107,7 @@ export async function waitForApproval(
 export async function runSelfImprovement(
   step: { run: (name: string, fn: () => Promise<unknown>) => Promise<unknown> },
   recipeId: number, keyword: string, finalRecipe: RecipeDraft,
-  audit: AuditReport, qaReport: QAReport, humanizationPass: number,
+  audit: MinimalAudit, qaReport: MinimalQAReport, humanizationPass: number,
 ) {
   await step.run("self-improvement", async () => {
     const tagList = finalRecipe.tags ?? []

@@ -9,8 +9,7 @@ import type { ImageVariant } from "@/lib/db/schema"
 import { slugify } from "@/lib/slug"
 import { agentPinDesigner } from "../agents/pin-designer"
 import { appendLog, logEntry, SITE_URL } from "../helpers"
-import type { RecipeDraft } from "../agents/writer"
-import type { SeoPlan } from "../agents/strategist"
+import type { RecipeDraft, SeoPlan } from "../agents/chef-augustin"
 
 export async function generatePins(
   step: { run: (name: string, fn: () => Promise<unknown>) => Promise<unknown> },

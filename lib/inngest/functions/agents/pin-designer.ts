@@ -10,9 +10,17 @@
 
 import { loadSkillContent } from "@/lib/skills"
 import { runTextAndParseJson } from "@/lib/agents/anthropic"
-import { validateContract, AGENT_CONTRACTS } from "@/lib/agents/contract-validator"
-import type { SeoPlan } from "./strategist"
 import type { ImageVariant } from "@/lib/db/schema"
+
+// Minimal SeoPlan type (was imported from deleted strategist.ts)
+type MinimalSeoPlan = {
+  title: string
+  tags: string[]
+  semanticEntities: string[]
+  h2Sections: { heading: string; subheadings: string[]; coverPaa: string[] }[]
+  faqItems?: { question: string; answer: string }[]
+  targetWordCount?: string
+}
 
 // ---------------------------------------------------------------------------
 // Types
@@ -27,7 +35,7 @@ export interface PinDesignerInput {
   imageVariants: ImageVariant[]
   ingredients: { name: string; quantity?: string }[]
   tags: string[]
-  seoPlan: SeoPlan
+  seoPlan: MinimalSeoPlan
   microNiche: string
   targetCountry: string
 }
@@ -132,10 +140,7 @@ export async function agentPinDesigner(
 
     // Contract validation — each pin individually
     for (const pin of result) {
-      const validation = validateContract(pin as unknown as Record<string, unknown>, AGENT_CONTRACTS.PinDesigner)
-      if (validation.warnings.length > 0) {
-        console.warn("[Pin Designer] Contract warnings:", validation.warnings.join("; "))
-      }
+      // Contract validation removed — no inter-agent contracts in v10
     }
 
     // Filter pins below 70 PTRA
