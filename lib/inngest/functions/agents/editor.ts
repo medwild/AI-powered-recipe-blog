@@ -132,11 +132,11 @@ export async function agentEditor(
     const systemPrompt = await loadSkillContent("agent-editor", mergedReplacements)
     const userPrompt = buildUserPrompt(keyword, draft, audit, humanizationPass)
 
-    // maxTokens 6144: must regenerate the FULL article (1800-2200 words) + all metadata
-    // + corrections. 3072 was too small and caused JSON truncation.
+    // maxTokens 8192: must regenerate the FULL article (1800-2200 words) + all metadata
+    // + corrections. DeepSeek v4 Pro needs extra headroom for JSON wrapper.
     const result = await runTextAndParseJson<RecipeDraft>(systemPrompt, userPrompt, {
       temperature: 0.8,
-      maxTokens: 6144,
+      maxTokens: 8192,
       model: "claude",
     })
 

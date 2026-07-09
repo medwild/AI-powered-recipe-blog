@@ -249,17 +249,16 @@ export async function runImage(prompt: string): Promise<Buffer> {
 /**
  * Attempt to repair a malformed JSON string produced by an LLM.
  *
- * LLMs sometimes produce unescaped control characters
- * (newlines, tabs) inside JSON strings. This function replaces them
- * with spaces to allow JSON.parse() to succeed.
+ * Phase 1 — Control characters: LLMs produce unescaped control characters
+ * (\n, \r, \t) inside JSON strings, which invalidates the JSON. We track
+ * whether we're inside a string and escape those.
+ *
+ * Phase 2 — Structural: DeepSeek v4 Pro sometimes generates trailing commas,
+ * missing commas between array elements, or truncates mid-JSON when hitting
+ * max_tokens. Apply mechanical fixes after control-character repair.
  */
 function repairJson(badJson: string): string {
-  // LLMs often produce unescaped control characters
-  // (\n, \r, \t) inside JSON strings, which invalidates the JSON.
-  // We can't replace ALL control chars with spaces because
-  // newlines outside strings (whitespace between JSON properties)
-  // are valid whitespace. We must track whether we're inside a
-  // JSON string and only escape those.
+  // ── Phase 1: Control character repair ──────────────────────────────────
   const output: string[] = []
   let inStr = false
 
@@ -290,7 +289,56 @@ function repairJson(badJson: string): string {
     }
   }
 
-  return output.join('')
+  let repaired = output.join('')
+
+  // ── Phase 2: Structural repair ─────────────────────────────────────────
+  // These are ordered — each fix may enable the next.
+
+  // 2a. Trailing commas before ] or } (LLMs often add these)
+  repaired = repaired.replace(/,(\s*[}\]])/g, '$1')
+
+  // 2b. Missing commas between array elements: "val1" "val2" → "val1", "val2"
+  //     (only on same line — don't touch multi-line cases which are harder)
+  repaired = repaired.replace(/"\s+"/g, '", "')
+  repaired = repaired.replace(/\]\s+"/g, '], "')
+  repaired = repaired.replace(/"\s+\[/g, '", [')
+  repaired = repaired.replace(/}\s+"/g, '}, "')
+  repaired = repaired.replace(/"\s+{/g, '", {')
+  repaired = repaired.replace(/]\s+{/g, '], {')
+  repaired = repaired.replace(/}\s+{/g, '}, {')
+  repaired = repaired.replace(/]\s+\[/g, '], [')
+  repaired = repaired.replace(/}\s+\[/g, '}, [')
+
+  // 2c. Numbers/booleans followed by strings without comma
+  repaired = repaired.replace(/(\d)\s+"/g, '$1, "')
+  repaired = repaired.replace(/(true|false|null)\s+"/g, '$1, "')
+
+  // 2d. Truncation — missing closing bracket/brace.
+  //     If the JSON starts with { but has more { than }, add missing }.
+  //     Same for [ and ].
+  const openBraces = (repaired.match(/{/g) ?? []).length
+  const closeBraces = (repaired.match(/}/g) ?? []).length
+  const openBrackets = (repaired.match(/\[/g) ?? []).length
+  const closeBrackets = (repaired.match(/\]/g) ?? []).length
+
+  // Close unbalanced braces (up to 3 missing)
+  for (let b = 0; b < Math.min(openBraces - closeBraces, 3); b++) {
+    repaired += '}'
+  }
+  // Close unbalanced brackets (up to 3 missing)
+  for (let b = 0; b < Math.min(openBrackets - closeBrackets, 3); b++) {
+    repaired += ']'
+  }
+
+  // 2e. Truncated string at end — close with empty string + closing brackets
+  //     If the last non-whitespace char is inside a string (odd quote count),
+  //     close the string before adding brackets.
+  const quoteCount = (repaired.match(/"/g) ?? []).length
+  if (quoteCount % 2 !== 0) {
+    repaired += '"'
+  }
+
+  return repaired
 }
 
 /**

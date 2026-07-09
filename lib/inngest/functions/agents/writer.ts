@@ -157,11 +157,11 @@ export async function agentWriter(
     const userPrompt = buildUserPrompt(keyword, plan, format, linkTargets)
 
     logAgentTrace("Writer", "input", { chars: systemPrompt.length + userPrompt.length })
-    // maxTokens 6144: the full article + JSON metadata needs more output space.
-    // 4096 was causing JSON truncation and triggering the Cloudflare fallback.
+    // maxTokens 8192: DeepSeek v4 Pro truncates at limit, causing malformed JSON.
+    // 6144 was enough for Claude but DeepSeek's JSON wrapper adds overhead.
     const result = await runTextAndParseJson<RecipeDraft>(systemPrompt, userPrompt, {
       temperature: 0.9,
-      maxTokens: 6144,
+      maxTokens: 8192,
       model: "claude",
     })
 
