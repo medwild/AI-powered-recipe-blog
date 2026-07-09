@@ -85,13 +85,20 @@ export async function runText(
 
     const data = await res.json()
 
-    // Anthropic Messages API: content[0].text
-    const out = data?.content?.[0]?.text
+    // Anthropic Messages API: find first text block in content array.
+    // DeepSeek v4 Pro returns thinking blocks before text blocks,
+    // so content[0] may be a thinking block with no .text field.
+    const contentBlocks: Array<Record<string, unknown>> = Array.isArray(data?.content)
+      ? data.content as Array<Record<string, unknown>>
+      : []
+    const textBlock = contentBlocks.find(b => b.type === "text")
+    const out = typeof textBlock?.text === "string" ? textBlock.text as string : ""
 
-    if (typeof out !== "string" || out.trim().length === 0) {
+    if (out.trim().length === 0) {
       throw new Error(
         "Anthropic text run returned no response. " +
-          `Response keys: ${Object.keys(data ?? {}).join(", ")}`,
+          `Response keys: ${Object.keys(data ?? {}).join(", ")}. ` +
+          `Content blocks: ${contentBlocks.map(b => b.type).join(", ") || "none"}`,
       )
     }
 
