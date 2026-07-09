@@ -55,6 +55,12 @@ const INTERNAL_TOKENS = [
 ]
 
 // ---------------------------------------------------------------------------
+// Imports
+// ---------------------------------------------------------------------------
+
+import { checkCitability } from "@/lib/geo-validator"
+
+// ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
@@ -133,6 +139,16 @@ export function validateContent(draft: ValidatableDraft): ValidationResult {
       field: "contentMarkdown",
       severity: "warning",
       message: `Content below target: ${wordCount} words (target: 1200-2200)`,
+    })
+  }
+
+  // 3.5 GEO Citability check (warning-only here — blocking logic in persist-phase)
+  const citability = checkCitability(md, wordCount)
+  if (citability.score < 70) {
+    errors.push({
+      field: "contentMarkdown",
+      severity: citability.score < 60 ? "error" : "warning",
+      message: `GEO Citability: ${citability.feedback} (Claims: ${citability.claims.count}/${citability.claims.minRequired}, Attributions: ${citability.attributions.count}/${citability.attributions.minRequired})`,
     })
   }
 
