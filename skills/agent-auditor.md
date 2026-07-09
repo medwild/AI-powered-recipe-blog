@@ -1,18 +1,18 @@
 ---
 id: agent-auditor
-version: "6.2.0-PREPUB"
-description: "Pre-Publication Content Quality Auditor v6.2 — evaluates drafts on 12 dimensions of content quality (Factualité, Validité Recette, Originalité, Utilité, Expérience, Cohérence Interne, E-E-A-T/Trust, Sur-Optimisation SEO, Signature LLM, Link Count, Anchor Quality, Broken Links) with weighted scoring and PASS/MINOR_FIX/MAJOR_REWRITE/REJECT decision."
+version: "6.3.0-PREPUB"
+description: "Pre-Publication Content Quality Auditor v6.3 — evaluates drafts on 13 dimensions of content quality (Factualité, Validité Recette, Originalité, Utilité, Expérience, Cohérence Interne, E-E-A-T/Trust, Sur-Optimisation SEO, Signature LLM, Link Count, Anchor Quality, Broken Links, Citation Quality) + Citation Quality (v6.3) with weighted scoring and PASS/MINOR_FIX/MAJOR_REWRITE/REJECT decision."
 model: "mistral-medium-3-5"
 routing: "NaraRouter"
 temperature: 0.1
 max_tokens: 6144
-last_updated: "2026-07-08"
-framework: "Pre-Publication Quality Assessment (12 dimensions) + Weighted Scoring + Evidence-Based Evaluation"
+last_updated: "2026-07-09"
+framework: "Pre-Publication Quality Assessment (13 dimensions) + Weighted Scoring + Evidence-Based Evaluation"
 ---
 
 ═══════════════════════════════════════════════════════════════
-PRE-PUBLICATION CONTENT QUALITY AUDITOR v6.2
-12-Dimension Quality Evaluation | Weighted Scoring | Evidence-Based
+PRE-PUBLICATION CONTENT QUALITY AUDITOR v6.3
+13-Dimension Quality Evaluation | Weighted Scoring | Evidence-Based
 RecipeDraft-Compatible JSON
 ═══════════════════════════════════════════════════════════════
 
@@ -73,6 +73,9 @@ Each dimension is scored 0-100. The publication readiness score is a weighted av
 | Link Count | 0% | Reporting only | Internal markdown link count audit (see §15) |
 | Anchor Quality | 0% | Reporting only | Anchor text descriptiveness check (see §16) |
 | Broken Links | 0% | Reporting only | Link validity against known slugs (see §17) |
+| Citation Quality | 0% | Reporting only | Specific claims and source attribution density (NEW v6.3) |
+
+- `citation_quality` (0-100): **NEW v6.3** — Are specific claims (numbers, entities, cause-effect) present and non-generic? Are source attributions natural and backed by claims (not empty name-dropping)? Is attribution density ≥1 per 250-300 words? Does the intro use inverted pyramid (direct answer in first sentence)?
 
 **INVERTED SCORES**: For dimensions 8 and 9, a score of 0 means "no detectable issue" and 100 means "extremely problematic". Be careful: if the content has ZERO LLM signature markers, score `signature_llm: 5` (not 95). If the content is heavily over-optimized for SEO, score `sur_optimisation_seo: 85` (not 15).
 
@@ -101,7 +104,7 @@ For articles (validite_recette = null), redistribute the 15% proportionally acro
 - Mark negative signals: generic claims, unsupported assertions, internal contradictions, visible SEO stuffing, LLM vocabulary patterns.
 
 ### Step 3 — EVIDENCE MAPPING
-- For each of the 12 dimensions, collect evidence BEFORE assigning a score.
+- For each of the 13 dimensions, collect evidence BEFORE assigning a score.
 - No score without evidence. No evidence without a direct quote from the text.
 - For inverted dimensions (8, 9): evidence = patterns found. No patterns found = low score (good).
 
@@ -527,7 +530,8 @@ Respond ONLY with a valid JSON object. No markdown code blocks. No surrounding t
     "coherence_interne": 85,
     "eeat_trust": 70,
     "sur_optimisation_seo": 30,
-    "signature_llm": 45
+    "signature_llm": 45,
+    "citation_quality": 50
   },
   "critical_issues": [
     {
@@ -612,7 +616,7 @@ Respond ONLY with a valid JSON object. No markdown code blocks. No surrounding t
 - `publication_readiness_score`: 0-100 integer
 - `confidence_level`: "low" | "medium" | "high"
 - `content_type`: "recipe" | "article"
-- `scores`: all keys required. `validite_recette` = null for articles. All others 0-100 integers.
+- `scores`: all keys required. `validite_recette` = null for articles. `citation_quality` = null for articles (no attribution expectations). All others 0-100 integers.
 - `critical_issues`, `major_issues`, `minor_issues`: arrays of objects with `criterion`, `issue`, `quote` (optional for minor), `location` (optional)
 - `evidence`: objects with `criterion`, `observation`, `quote`, `impact` ("positive" | "negative")
 - `required_fixes`: objects with `priority` ("must_fix" | "should_fix" | "optional"), `description`, `location` (optional), `original` (optional), `corrected` (optional)
@@ -643,7 +647,8 @@ If `draft` is missing or `contentMarkdown` is empty:
     "coherence_interne": 0,
     "eeat_trust": 0,
     "sur_optimisation_seo": 100,
-    "signature_llm": 100
+    "signature_llm": 100,
+    "citation_quality": 0
   },
   "critical_issues": [
     {
