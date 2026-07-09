@@ -10,6 +10,10 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
         disallow: ["/dashboard", "/api/"],
       },
+      { userAgent: "OAI-SearchBot", allow: "/" },
+      { userAgent: "PerplexityBot", allow: "/" },
+      { userAgent: "Bingbot", allow: "/" },
+      { userAgent: "Googlebot", allow: "/" },
     ],
     sitemap: `${BASE_URL}/sitemap.xml`,
   }
