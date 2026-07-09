@@ -14,6 +14,7 @@ import type { RecipeDraft } from "../agents/writer"
 import type { SeoPlan } from "../agents/strategist"
 import type { StructuredSerp } from "@/lib/agents/serp-structurer"
 import { validateContent, scrubBannedWords } from "@/lib/content-validator"
+import { checkCitability } from "@/lib/geo-validator"
 import { appendLog, logEntry, SITE_URL } from "../helpers"
 
 export async function generateAorArticle(
@@ -67,6 +68,22 @@ export async function generateAorArticle(
         .map(e => e.message).join("; ")
       await appendLog(recipeId, logEntry("AOR ContentValidator", "error",
         `Content validation FAILED: ${errorList}. Saving as draft.`))
+    }
+
+    // GEO Citability check — articles share the same thresholds as recipes
+    const aorWordCount = (aorResult.contentMarkdown ?? "").split(/\s+/).filter(Boolean).length
+    const aorCitability = checkCitability(aorResult.contentMarkdown ?? "", aorWordCount)
+    if (aorCitability.score < 50) {
+      aorContentValid = false
+      await appendLog(recipeId, logEntry("AOR GEO Validator", "error",
+        `Citability BLOCKED: score ${aorCitability.score}/100. ` +
+        `Claims: ${aorCitability.claims.count}/${aorCitability.claims.minRequired}, ` +
+        `Attributions: ${aorCitability.attributions.count}/${aorCitability.attributions.minRequired}. ` +
+        aorCitability.feedback))
+    } else if (aorCitability.score < 60) {
+      await appendLog(recipeId, logEntry("AOR GEO Validator", "error",
+        `Citability WARNING: score ${aorCitability.score}/100. ` +
+        aorCitability.feedback))
     }
 
     // Unique slug
