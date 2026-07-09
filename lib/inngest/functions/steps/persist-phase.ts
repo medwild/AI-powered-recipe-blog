@@ -11,6 +11,7 @@ import type { SeoPlan } from "../agents/strategist"
 import type { AuditReport } from "../agents/auditor"
 import type { QAReport } from "../agents/qa"
 import { validateContent, computeOriginalityScore, scrubBannedWords, checkContentSimilarity } from "@/lib/content-validator"
+import { checkCitability } from "@/lib/geo-validator"
 import { appendLog, logEntry, SITE_URL, stripHtmlComments, stripBracketTokens } from "../helpers"
 import { runSeoGate } from "@/lib/seo/gate"
 
@@ -244,6 +245,26 @@ export async function persistFinalDraft(
     if (similarityResult.matches.length > 0) {
       await appendLog(recipeId, logEntry("Workflow", "error",
         `Content similarity WARNING: ${similarityResult.matches.map(m => `${m.similarity}% → ${m.title}`).join("; ")}`))
+    }
+
+    // GEO Citability check — ensure content has enough specific claims
+    // and source attributions for LLM extraction. Block if score < 60.
+    const citability = checkCitability(finalRecipe.contentMarkdown ?? "", wordCount)
+    if (citability.score < 60) {
+      await appendLog(recipeId, logEntry("GEO Validator", "error",
+        `Citability BLOCKED: score ${citability.score}/100. ` +
+        `Claims: ${citability.claims.count}/${citability.claims.minRequired}, ` +
+        `Attributions: ${citability.attributions.count}/${citability.attributions.minRequired}. ` +
+        citability.feedback))
+      await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
+      return
+    }
+    if (citability.score < 70) {
+      await appendLog(recipeId, logEntry("GEO Validator", "error",
+        `Citability WARNING: score ${citability.score}/100. ` +
+        `Claims: ${citability.claims.count}/${citability.claims.minRequired}, ` +
+        `Attributions: ${citability.attributions.count}/${citability.attributions.minRequired}. ` +
+        citability.feedback))
     }
 
     // Deterministic content validation — catches banned words, token leaks,
