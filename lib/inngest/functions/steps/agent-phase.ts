@@ -12,6 +12,7 @@ import { agentAuditor, type AuditReport } from "../agents/auditor"
 import type { StructuredSerp } from "@/lib/agents/serp-structurer"
 import type { SeoPlan } from "../agents/strategist"
 import type { LinkTarget } from "./link-suggester"
+import { getRelevantSources } from "@/lib/external-sources"
 import { appendLog, logEntry, isRecoverableError, buildSyntheticAuditReport, buildSyntheticSeoPlan } from "../helpers"
 
 export interface AgentPhaseResult {
@@ -76,9 +77,12 @@ export async function runAgentPhase(
         )
       }
 
+      // Match external food-science sources by keyword (substring matching on topic tags)
+      const externalSources = getRelevantSources(keyword)
+
       await appendLog(recipeId, logEntry("SEO Strategist", "running",
-        `SERP analysis + ${improvements.length} past lessons + calibration data → editorial plan`))
-      const plan = await agentStrategistV2(keyword, structuredSerp, improvements, cuisineReplacements, format)
+        `SERP analysis + ${improvements.length} past lessons + ${externalSources.length} external sources + calibration data → editorial plan`))
+      const plan = await agentStrategistV2(keyword, structuredSerp, improvements, cuisineReplacements, format, undefined, externalSources)
       await appendLog(recipeId, logEntry("SEO Strategist", "done",
         `Editorial plan: ${plan.h2Sections.length} H2 sections, ${plan.semanticEntities.length} semantic entities`))
       return plan

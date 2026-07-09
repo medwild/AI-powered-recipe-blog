@@ -15,6 +15,7 @@ import { loadSkillContent } from "@/lib/skills"
 import { runTextAndParseJson } from "@/lib/agents/nararouter"
 import { validateContract, AGENT_CONTRACTS } from "@/lib/agents/contract-validator"
 import { logAgentTrace } from "../helpers"
+import { getRelevantSources, formatSourcesForPrompt, type ExternalSource } from "@/lib/external-sources"
 import type { SerpResult } from "@/lib/agents/serp"
 import type { StructuredSerp } from "@/lib/agents/serp-structurer"
 
@@ -150,6 +151,7 @@ function buildUserPromptV2(
   s: StructuredSerp,
   pastImprovements: string[],
   opportunityScore?: { score: number; status: string; keyword: string },
+  externalSources?: ExternalSource[],
 ): string {
   const pkg = s.strategist_agent_input_package
 
@@ -215,6 +217,19 @@ ${pkg.must_verify.map((v) => `- ⚠️ ${v}`).join("\n")}
 ### MUST AVOID:
 ${pkg.must_avoid.map((v) => `- 🚫 ${v}`).join("\n")}
 
+${
+    externalSources && externalSources.length > 0
+      ? `## Authoritative External Sources (Cite 1-2 in the article)
+These are verified food-science facts from authoritative sources. Integrate 1-2 of them into your editorial plan — they will be cited in the article body to boost E-E-A-T and LLM citability signals.
+
+Choose sources that are genuinely relevant to "${keyword}". Do not force a source that doesn't fit.
+
+${formatSourcesForPrompt(externalSources)}
+
+`
+      : ""
+}
+
 ## Lessons from Previous Articles (Self-Improvement with Context)
 ${
     pastImprovements.length > 0
@@ -258,6 +273,8 @@ export async function agentStrategistV2(
   format: "google" | "pin-first" = "google",
   /** Optional pre-scored opportunity data from discovery phase. */
   opportunityScore?: { score: number; status: string; keyword: string },
+  /** Optional external sources matched by keyword tags. */
+  externalSources?: ExternalSource[],
 ): Promise<SeoPlan> {
   try {
     // Merge format into replacements so {{format}} resolves in skill template
@@ -270,7 +287,7 @@ export async function agentStrategistV2(
     }
 
     const systemPrompt = await loadSkillContent("agent-strategist", mergedReplacements)
-    const userPrompt = buildUserPromptV2(keyword, structuredSerp, pastImprovements, opportunityScore)
+    const userPrompt = buildUserPromptV2(keyword, structuredSerp, pastImprovements, opportunityScore, externalSources)
     logAgentTrace("Strategist", "input", { chars: systemPrompt.length + userPrompt.length })
     const result = await runTextAndParseJson<SeoPlan>(systemPrompt, userPrompt, {
       maxTokens: 4096,
