@@ -1,7 +1,7 @@
 # GEO/LLM Optimization — Design Spec
 
 **Date**: 2026-07-09
-**Status**: Draft
+**Status**: Approved
 **Phase**: A1 — Citation-Worthy Claims + Source Attribution
 
 ## 1. Objective
@@ -60,11 +60,11 @@ Strategist v5.3          Writer v5.4           Auditor v6.1          Editor v5.3
 | 2 | `lib/content-validator.ts` | Integrate `checkCitability()` call | +20 |
 | 3 | `lib/inngest/functions/steps/persist-phase.ts` | Log + block if score < 60 | +25 |
 | 4 | `lib/inngest/functions/steps/aor-phase.ts` | Same logic for AOR articles | +20 |
-| 5 | `skills/agent-strategist.md` | v5.2 → v5.3 — Citation claims planning, list/table directives | +40 |
-| 6 | `skills/agent-writer.md` | v5.3 → v5.4 — Source attribution patterns, inverted pyramid, freshness | +50 |
-| 7 | `skills/agent-auditor.md` | v6.0 → v6.1 — `citation_quality` score dimension | +15 |
+| 5 | `skills/agent-strategist.md` | v5.2.0-ULTRA → v5.3.0-ULTRA — Citation claims planning, list/table directives | +40 |
+| 6 | `skills/agent-writer.md` | v6.5.0-ULTRA → v6.6.0-ULTRA — Source attribution patterns, inverted pyramid, freshness | +50 |
+| 7 | `skills/agent-auditor.md` | v6.2.0-PREPUB → v6.3.0-PREPUB — `citation_quality` score dimension | +15 |
 | 8 | `app/robots.ts` | Add explicit AI crawler allow rules | +8 |
-| 9 | `app/llms.txt/route.ts` | Standardize path (already at `/llm.txt`, add `/llms.txt` redirect) | +5 |
+| 9 | `next.config.ts` | Rewrite `/llms.txt` → `/llm.txt` (Option B: keep both URLs, no breaking change) | +5 |
 
 ---
 
@@ -134,7 +134,7 @@ densityScore      = min((claims + attributions) / wordCount × 1000, 1.0) × 100
 
 ## 4. Skill Changes
 
-### 4.1 Strategist v5.2 → v5.3
+### 4.1 Strategist v5.2.0-ULTRA → v5.3.0-ULTRA
 
 **New section (§9.5): "Citation-Worthy Claims Planning"**
 
@@ -161,7 +161,7 @@ Plan ≥2 structured bullet lists or 1 comparison table per article. LLMs extrac
 }
 ```
 
-### 4.2 Writer v5.3 → v5.4
+### 4.2 Writer v6.5.0-ULTRA → v6.6.0-ULTRA
 
 **New section (§7.5): "Source Attribution Patterns"**
 
@@ -186,7 +186,7 @@ Include a visible freshness marker in the article body:
 - Intro or footer: "Tested and updated [month year]"
 - Schema: `dateModified` set to the most recent test/revision date
 
-### 4.3 Auditor v6.0 → v6.1
+### 4.3 Auditor v6.2.0-PREPUB → v6.3.0-PREPUB
 
 **New score dimension**: `citation_quality` (0-100)
 
@@ -213,9 +213,20 @@ rules: [
 ]
 ```
 
-### 5.2 `/llms.txt` — Standard Path
+### 5.2 `/llms.txt` — Standard Path (Option B)
 
-The `llm.txt` standard uses the plural form `/llms.txt`. Current route is at `/llm.txt` (singular). Add a redirect or additional route handler at `/llms.txt` for compatibility.
+The `llm.txt` standard uses the plural form `/llms.txt`. Current route is at `/llm.txt` (singular) at `app/llm.txt/route.ts`. To support both without breaking the existing URL, add a Next.js rewrite in `next.config.ts`:
+
+```typescript
+// next.config.ts
+async rewrites() {
+  return [
+    { source: "/llms.txt", destination: "/llm.txt" },
+  ]
+}
+```
+
+This maps `/llms.txt` → `/llm.txt` transparently. Both URLs serve the same content. No redirect, no broken links.
 
 ---
 
