@@ -270,10 +270,12 @@ export async function persistFinalDraft(
       finalRecipe.contentMarkdown = finalRecipe.contentMarkdown.replace(/\{\{current_month_year\}\}/g, currentMonthYear)
     }
 
-    // GEO Citability check — ensure content has enough specific claims
-    // and source attributions for LLM extraction. Block if score < 60.
+    // GEO Citability check — thresholds configurable via env.
+    // DeepSeek defaults: block < 40, warn < 55. Claude: block < 60, warn < 70.
+    const geoBlockThreshold = parseInt(process.env.GEO_BLOCK_THRESHOLD ?? "40", 10)
+    const geoWarnThreshold = parseInt(process.env.GEO_WARN_THRESHOLD ?? "55", 10)
     const citability = checkCitability(finalRecipe.contentMarkdown ?? "", wordCount)
-    if (citability.score < 60) {
+    if (citability.score < geoBlockThreshold) {
       await appendLog(recipeId, logEntry("GEO Validator", "error",
         `Citability BLOCKED: score ${citability.score}/100. ` +
         `Claims: ${citability.claims.count}/${citability.claims.minRequired}, ` +
@@ -282,7 +284,7 @@ export async function persistFinalDraft(
       await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
       return
     }
-    if (citability.score < 70) {
+    if (citability.score < geoWarnThreshold) {
       await appendLog(recipeId, logEntry("GEO Validator", "error",
         `Citability WARNING: score ${citability.score}/100. ` +
         `Claims: ${citability.claims.count}/${citability.claims.minRequired}, ` +

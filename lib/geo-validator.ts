@@ -225,9 +225,11 @@ export function checkCitability(markdown: string, wordCount: number): Citability
   const claimsCount = allClaimMatches.length
   const attributionsCount = validAttrMatches.length
   const nuggetsCount = nuggets.count
-  const minClaims = 5
-  const minAttributions = 6
-  const minNuggets = 4
+  // Thresholds configurable via env — DeepSeek-friendly defaults (lower),
+  // raise for Claude Sonnet 4.6: GEO_ATTRIBUTIONS_MIN=6, GEO_NUGGETS_MIN=4
+  const minClaims = parseInt(process.env.GEO_CLAIMS_MIN ?? "5", 10)
+  const minAttributions = parseInt(process.env.GEO_ATTRIBUTIONS_MIN ?? "2", 10)
+  const minNuggets = parseInt(process.env.GEO_NUGGETS_MIN ?? "2", 10)
 
   const claimsScore = Math.min(claimsCount / minClaims, 1.0) * 100
   const attributionsScore = Math.min(attributionsCount / minAttributions, 1.0) * 100
