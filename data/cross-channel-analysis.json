@@ -1,0 +1,309 @@
+{
+  "generatedAt": "2026-07-12T17:14:18.411Z",
+  "sources": {
+    "semrush": {
+      "file": "healthy-dinner-recipes-for-two_bulk_us_2026-07-12_18-02-33.csv",
+      "keywords": 26
+    },
+    "pinclicks": {
+      "file": "recipes for two top chearch - recipes-interests.csv",
+      "keywords": 28
+    },
+    "pinData": {
+      "file": "pin data - recipes-pins.csv",
+      "pins": 101
+    }
+  },
+  "distribution": {
+    "DUAL_CHAMPION": 14,
+    "PINTEREST_PLAY": 7,
+    "GOOGLE_PLAY": 0,
+    "LONG_TAIL": 7
+  },
+  "dualChampions": [
+    {
+      "keyword": "healthy dinner recipes for two",
+      "googleVolume": 74000,
+      "kd": 35,
+      "pinterestSearchVolume": 18894,
+      "topPinScore": null,
+      "topPinSaves": null,
+      "geoPotential": 90,
+      "dualScore": 82,
+      "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+    },
+    {
+      "keyword": "easy dinner recipes for two",
+      "googleVolume": 8100,
+      "kd": 33,
+      "pinterestSearchVolume": 96091,
+      "topPinScore": null,
+      "topPinSaves": null,
+      "geoPotential": 100,
+      "dualScore": 70,
+      "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+    },
+    {
+      "keyword": "dinner for two recipes",
+      "googleVolume": 3600,
+      "kd": 33,
+      "pinterestSearchVolume": 11013,
+      "topPinScore": null,
+      "topPinSaves": null,
+      "geoPotential": 100,
+      "dualScore": 68,
+      "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+    },
+    {
+      "keyword": "quick dinner recipes for two",
+      "googleVolume": 590,
+      "kd": 30,
+      "pinterestSearchVolume": 1283,
+      "topPinScore": 2,
+      "topPinSaves": 2898,
+      "geoPotential": 100,
+      "dualScore": 68,
+      "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+    },
+    {
+      "keyword": "quick and easy dinner recipes for two",
+      "googleVolume": 1000,
+      "kd": 31,
+      "pinterestSearchVolume": 3742,
+      "topPinScore": null,
+      "topPinSaves": null,
+      "geoPotential": 100,
+      "dualScore": 64,
+      "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+    },
+    {
+      "keyword": "easy healthy dinner recipes for two",
+      "googleVolume": 480,
+      "kd": 23,
+      "pinterestSearchVolume": 3541,
+      "topPinScore": null,
+      "topPinSaves": null,
+      "geoPotential": 100,
+      "dualScore": 64,
+      "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+    },
+    {
+      "keyword": "fast and easy dinner recipes for two",
+      "googleVolume": 40,
+      "kd": 29,
+      "pinterestSearchVolume": 2996,
+      "topPinScore": null,
+      "topPinSaves": null,
+      "geoPotential": 100,
+      "dualScore": 61,
+      "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+    },
+    {
+      "keyword": "date night dinner recipes for two",
+      "googleVolume": 40,
+      "kd": 29,
+      "pinterestSearchVolume": 2616,
+      "topPinScore": null,
+      "topPinSaves": null,
+      "geoPotential": 100,
+      "dualScore": 60,
+      "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+    },
+    {
+      "keyword": "easy recipes for two",
+      "googleVolume": 2400,
+      "kd": 31,
+      "pinterestSearchVolume": 2054,
+      "topPinScore": null,
+      "topPinSaves": null,
+      "geoPotential": 100,
+      "dualScore": 58,
+      "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+    },
+    {
+      "keyword": "cooking for two recipes",
+      "googleVolume": 480,
+      "kd": 27,
+      "pinterestSearchVolume": 1560,
+      "topPinScore": null,
+      "topPinSaves": null,
+      "geoPotential": 100,
+      "dualScore": 57,
+      "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+    },
+    {
+      "keyword": "easy dinner for two recipes",
+      "googleVolume": 390,
+      "kd": 23,
+      "pinterestSearchVolume": 1651,
+      "topPinScore": null,
+      "topPinSaves": null,
+      "geoPotential": 100,
+      "dualScore": 57,
+      "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+    },
+    {
+      "keyword": "healthy easy dinner recipes for two",
+      "googleVolume": 320,
+      "kd": 32,
+      "pinterestSearchVolume": 1896,
+      "topPinScore": null,
+      "topPinSaves": null,
+      "geoPotential": 100,
+      "dualScore": 57,
+      "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+    },
+    {
+      "keyword": "simple dinner recipes for two",
+      "googleVolume": 210,
+      "kd": 23,
+      "pinterestSearchVolume": 1551,
+      "topPinScore": null,
+      "topPinSaves": null,
+      "geoPotential": 100,
+      "dualScore": 57,
+      "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+    },
+    {
+      "keyword": "dinner recipes for two healthy",
+      "googleVolume": 90,
+      "kd": 17,
+      "pinterestSearchVolume": 1231,
+      "topPinScore": null,
+      "topPinSaves": null,
+      "geoPotential": 100,
+      "dualScore": 57,
+      "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+    }
+  ],
+  "pinterestPlays": [
+    {
+      "keyword": "easy dinner recipes for two cheap quick",
+      "pinterestSearchVolume": 3396,
+      "topPinScore": null,
+      "dualScore": 57
+    },
+    {
+      "keyword": "dinner recipes for two",
+      "pinterestSearchVolume": 83606,
+      "topPinScore": null,
+      "dualScore": 52
+    },
+    {
+      "keyword": "chicken recipes for two",
+      "pinterestSearchVolume": 1591,
+      "topPinScore": 0,
+      "dualScore": 52
+    },
+    {
+      "keyword": "recipes for two",
+      "pinterestSearchVolume": 9835,
+      "topPinScore": null,
+      "dualScore": 51
+    },
+    {
+      "keyword": "crockpot recipes for two",
+      "pinterestSearchVolume": 5234,
+      "topPinScore": null,
+      "dualScore": 50
+    },
+    {
+      "keyword": "small crockpot recipes for two",
+      "pinterestSearchVolume": 3258,
+      "topPinScore": null,
+      "dualScore": 22
+    },
+    {
+      "keyword": "easy dinner recipes for two healthy",
+      "pinterestSearchVolume": 2734,
+      "topPinScore": null,
+      "dualScore": 21
+    }
+  ],
+  "geoOpportunities": [
+    {
+      "keyword": "easy dinner recipes for two",
+      "geoPotential": 100,
+      "hasAiOverview": true,
+      "kd": 33,
+      "googleVolume": 8100
+    },
+    {
+      "keyword": "dinner for two recipes",
+      "geoPotential": 100,
+      "hasAiOverview": true,
+      "kd": 33,
+      "googleVolume": 3600
+    },
+    {
+      "keyword": "quick dinner recipes for two",
+      "geoPotential": 100,
+      "hasAiOverview": true,
+      "kd": 30,
+      "googleVolume": 590
+    },
+    {
+      "keyword": "quick and easy dinner recipes for two",
+      "geoPotential": 100,
+      "hasAiOverview": true,
+      "kd": 31,
+      "googleVolume": 1000
+    },
+    {
+      "keyword": "easy healthy dinner recipes for two",
+      "geoPotential": 100,
+      "hasAiOverview": true,
+      "kd": 23,
+      "googleVolume": 480
+    },
+    {
+      "keyword": "fast and easy dinner recipes for two",
+      "geoPotential": 100,
+      "hasAiOverview": true,
+      "kd": 29,
+      "googleVolume": 40
+    },
+    {
+      "keyword": "date night dinner recipes for two",
+      "geoPotential": 100,
+      "hasAiOverview": true,
+      "kd": 29,
+      "googleVolume": 40
+    },
+    {
+      "keyword": "easy recipes for two",
+      "geoPotential": 100,
+      "hasAiOverview": true,
+      "kd": 31,
+      "googleVolume": 2400
+    },
+    {
+      "keyword": "cooking for two recipes",
+      "geoPotential": 100,
+      "hasAiOverview": true,
+      "kd": 27,
+      "googleVolume": 480
+    },
+    {
+      "keyword": "easy dinner for two recipes",
+      "geoPotential": 100,
+      "hasAiOverview": true,
+      "kd": 23,
+      "googleVolume": 390
+    },
+    {
+      "keyword": "healthy easy dinner recipes for two",
+      "geoPotential": 100,
+      "hasAiOverview": true,
+      "kd": 32,
+      "googleVolume": 320
+    },
+    {
+      "keyword": "simple dinner recipes for two",
+      "geoPotential": 100,
+      "hasAiOverview": true,
+      "kd": 23,
+      "googleVolume": 210
+    }
+  ]
+}
