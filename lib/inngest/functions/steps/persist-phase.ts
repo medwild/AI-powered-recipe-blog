@@ -3,31 +3,15 @@
  */
 
 import { db } from "@/lib/db"
-import { recipes, selfImprovementLogs, imageVariantStats, type NewSelfImprovementLog, type ImageVariant } from "@/lib/db/schema"
+import { recipes, imageVariantStats, type ImageVariant } from "@/lib/db/schema"
 import { eq, desc } from "drizzle-orm"
 import { slugify } from "@/lib/slug"
-import type { RecipeDraft, SeoPlan } from "../agents/chef-augustin"
-
-// Minimal audit type (was AuditReport from deleted auditor.ts)
-type MinimalAudit = {
-  publication_readiness_score: number
-  scores: Record<string, number>
-  required_fixes: { description: string }[]
-  final_recommendation: string
-  decision: string
-}
-
-// Minimal QA type (was QAReport from deleted qa.ts)
-type MinimalQAReport = {
-  qaScore: number
-  verdict: string
-  summary: string
-  checks: { name: string; status: string; issues: string[] }[]
-}
-import { validateContent, computeOriginalityScore, scrubBannedWords, checkContentSimilarity } from "@/lib/content-validator"
+import type { RecipeDraft } from "../agents/chef-augustin"
+import { validateContent, scrubBannedWords, checkContentSimilarity } from "@/lib/content-validator"
 import { checkCitability } from "@/lib/geo-validator"
 import { appendLog, logEntry, SITE_URL, stripHtmlComments, stripBracketTokens } from "../helpers"
 import { runSeoGate } from "@/lib/seo/gate"
+import { insertContextualLinks } from "@/lib/internal-linker"
 
 // ── Duration formatting for JSON-LD ──────────────────────────────────────────
 
@@ -59,7 +43,7 @@ function formatDuration(input: string): string {
 /** Step 5 — Persist draft for human review. */
 export async function persistDraftForReview(
   step: { run: (name: string, fn: () => Promise<unknown>) => Promise<unknown>; sleep: (name: string, dur: string) => Promise<void> },
-  recipeId: number, draft: RecipeDraft, audit: MinimalAudit,
+  recipeId: number, draft: RecipeDraft,
 ) {
   await step.run("persist-draft-for-review", async () => {
     await db.update(recipes).set({
@@ -70,8 +54,9 @@ export async function persistDraftForReview(
       ingredients: draft.ingredients, instructions: draft.instructions, tags: draft.tags,
       status: "draft_review", updatedAt: new Date(),
     }).where(eq(recipes.id, recipeId))
+    const wordCount = (draft.contentMarkdown ?? "").split(/\s+/).filter(Boolean).length
     await appendLog(recipeId, logEntry("Human Review", "running",
-      `Awaiting approval — readiness: ${audit.publication_readiness_score}/100 | LLM Sig: ${audit.scores.signature_llm}/100 | Decision: ${audit.decision}`))
+      `Awaiting approval — ${wordCount} words, ${(draft.ingredients ?? []).length} ingredients, ${(draft.instructions ?? []).length} steps`))
   })
 }
 
@@ -103,87 +88,10 @@ export async function waitForApproval(
   return true
 }
 
-/** Step 10 — Self-improvement feedback loop. */
-export async function runSelfImprovement(
-  step: { run: (name: string, fn: () => Promise<unknown>) => Promise<unknown> },
-  recipeId: number, keyword: string, finalRecipe: RecipeDraft,
-  audit: MinimalAudit, qaReport: MinimalQAReport, humanizationPass: number,
-) {
-  await step.run("self-improvement", async () => {
-    const tagList = finalRecipe.tags ?? []
-    const lessons: NewSelfImprovementLog[] = []
-    // Normal dimensions (high = good): record lesson if score < 60
-    // Inverted dimensions (high = bad): record lesson if score >= 60
-    const normalCriteria: (keyof typeof audit.scores)[] = [
-      "factualite", "originalite", "utilite", "experience",
-      "coherence_interne", "eeat_trust",
-    ]
-    for (const key of normalCriteria) {
-      const score = audit.scores[key]
-      if (typeof score === "number" && score < 60) {
-        lessons.push({
-          keyword, criterion: key, score: String(score),
-          recommendation: audit.required_fixes
-            .filter(f => f.description.toLowerCase().includes(key.replace(/_/g, " ")))
-            .map(f => f.description)
-            .join("; ") || audit.final_recommendation,
-          tags: tagList, source: "auditor",
-        })
-      }
-    }
-    // validite_recette: only if present and low
-    if (audit.scores.validite_recette != null && audit.scores.validite_recette < 60) {
-      lessons.push({
-        keyword, criterion: "validite_recette", score: String(audit.scores.validite_recette),
-        recommendation: audit.required_fixes
-          .filter(f => f.description.toLowerCase().includes("recipe") || f.description.toLowerCase().includes("ratio"))
-          .map(f => f.description)
-          .join("; ") || audit.final_recommendation,
-        tags: tagList, source: "auditor",
-      })
-    }
-    // Inverted scores: record if risk is high (>= 60)
-    if (audit.scores.signature_llm >= 60) {
-      lessons.push({
-        keyword, criterion: "llm_signature", score: String(audit.scores.signature_llm),
-        recommendation: audit.scores.signature_llm >= 80
-          ? `LLM signature risk ${audit.scores.signature_llm}/100 — very high. Strong anti-pattern signals detected.`
-          : `LLM signature risk ${audit.scores.signature_llm}/100 — elevated. Review vocabulary, transitions, and structure.`,
-        tags: tagList, source: "auditor",
-      })
-    }
-    if (audit.scores.sur_optimisation_seo >= 60) {
-      lessons.push({
-        keyword, criterion: "seo_overoptimization", score: String(audit.scores.sur_optimisation_seo),
-        recommendation: audit.scores.sur_optimisation_seo >= 80
-          ? `SEO over-optimization risk ${audit.scores.sur_optimisation_seo}/100 — very high. Visible keyword stuffing or artificial structure.`
-          : `SEO over-optimization risk ${audit.scores.sur_optimisation_seo}/100 — elevated. Review keyword density and section relevance.`,
-        tags: tagList, source: "auditor",
-      })
-    }
-    if (qaReport.verdict !== "PASS") {
-      const qaIssues = qaReport.checks.filter(c => c.status !== "PASS").map(c => `[${c.name}] ${c.status}: ${(c.issues ?? []).join("; ") || "no specific issues"}`).join(" | ")
-      lessons.push({ keyword, criterion: "qa_verdict", score: String(qaReport.qaScore), recommendation: `QA ${qaReport.verdict} (${qaReport.qaScore}/100): ${qaReport.summary} | Issues: ${qaIssues}`, tags: tagList, source: "qa" })
-    }
-    // Originality score — Koray GÜBÜR §6: track n-gram uniqueness vs AI detectability
-    const originality = computeOriginalityScore(finalRecipe.contentMarkdown ?? "")
-    lessons.push({
-      keyword, criterion: "originality", score: String(originality),
-      recommendation: originality >= 60 ? "High originality — strong anti-AI signal." :
-        originality >= 40 ? "Moderate originality — consider adding more unique phrasing." :
-          "Low originality — content may be detectable as AI-generated. Add personal anecdotes, unique sensory details, or technique variations.",
-      tags: tagList, source: "validator",
-    })
-    if (lessons.length > 0) await db.insert(selfImprovementLogs).values(lessons)
-    await appendLog(recipeId, logEntry("Self-Improvement", "done",
-      `${lessons.length} lessons saved | Final pass: ${humanizationPass} | LLM Sig: ${audit.scores.signature_llm}/100 | QA: ${qaReport.verdict}`))
-  })
-}
-
-/** Step 11 — Persist the final draft with JSON-LD enrichment. */
+/** Step 10 — Persist the final draft with JSON-LD enrichment. */
 export async function persistFinalDraft(
   step: { run: (name: string, fn: () => Promise<unknown>) => Promise<unknown> },
-  recipeId: number, finalRecipe: RecipeDraft, seoPlan: SeoPlan,
+  recipeId: number, finalRecipe: RecipeDraft,
   heroImageUrl: string | null, imageVariants: ImageVariant[],
   keyword: string,
   format: "google" | "pin-first" = "google",
@@ -270,19 +178,48 @@ export async function persistFinalDraft(
       finalRecipe.contentMarkdown = finalRecipe.contentMarkdown.replace(/\{\{current_month_year\}\}/g, currentMonthYear)
     }
 
+    // Internal Linking — insert 2-3 contextual links to related recipes.
+    // Runs deterministically (no AI), same-cluster priority.
+    try {
+      const enriched = await insertContextualLinks(
+        finalRecipe.contentMarkdown ?? "",
+        recipeId,
+        finalRecipe.tags ?? [],
+      )
+      if (enriched !== finalRecipe.contentMarkdown) {
+        finalRecipe.contentMarkdown = enriched
+        await appendLog(recipeId, logEntry("Internal Linker", "done",
+          "Contextual links inserted into markdown"))
+      }
+    } catch (err) {
+      // Non-blocking — linker failure should never prevent publication
+      await appendLog(recipeId, logEntry("Internal Linker", "error",
+        `Link insertion failed: ${err instanceof Error ? err.message : String(err)}`))
+    }
+
     // GEO Citability check — thresholds configurable via env.
-    // DeepSeek defaults: block < 40, warn < 55. Claude: block < 60, warn < 70.
-    const geoBlockThreshold = parseInt(process.env.GEO_BLOCK_THRESHOLD ?? "40", 10)
-    const geoWarnThreshold = parseInt(process.env.GEO_WARN_THRESHOLD ?? "55", 10)
+    // Defaults calibrated for Claude Sonnet 4.6. Lower for DeepSeek: block < 40, warn < 55.
+    // AUTOPILOT mode: the Content Loop is the quality gate — GEO becomes warn-only.
+    const isAutopilot = process.env.AUTOPILOT === "true"
+    const geoBlockThreshold = parseInt(process.env.GEO_BLOCK_THRESHOLD ?? "60", 10)
+    const geoWarnThreshold = parseInt(process.env.GEO_WARN_THRESHOLD ?? "70", 10)
     const citability = checkCitability(finalRecipe.contentMarkdown ?? "", wordCount)
     if (citability.score < geoBlockThreshold) {
-      await appendLog(recipeId, logEntry("GEO Validator", "error",
-        `Citability BLOCKED: score ${citability.score}/100. ` +
-        `Claims: ${citability.claims.count}/${citability.claims.minRequired}, ` +
-        `Attributions: ${citability.attributions.count}/${citability.attributions.minRequired}. ` +
-        citability.feedback))
-      await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
-      return
+      if (isAutopilot) {
+        await appendLog(recipeId, logEntry("GEO Validator", "error",
+          `Citability LOW (autopilot: warn-only): score ${citability.score}/100. ` +
+          `Claims: ${citability.claims.count}/${citability.claims.minRequired}, ` +
+          `Attributions: ${citability.attributions.count}/${citability.attributions.minRequired}. ` +
+          citability.feedback))
+      } else {
+        await appendLog(recipeId, logEntry("GEO Validator", "error",
+          `Citability BLOCKED: score ${citability.score}/100. ` +
+          `Claims: ${citability.claims.count}/${citability.claims.minRequired}, ` +
+          `Attributions: ${citability.attributions.count}/${citability.attributions.minRequired}. ` +
+          citability.feedback))
+        await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
+        return
+      }
     }
     if (citability.score < geoWarnThreshold) {
       await appendLog(recipeId, logEntry("GEO Validator", "error",
@@ -339,9 +276,27 @@ export async function persistFinalDraft(
         .filter((e) => e.severity === "error")
         .map((e) => e.message)
         .join("; ")
-      await appendLog(recipeId, logEntry("Workflow", "error", `ContentValidator FAILED: ${errorList}. Marking as draft.`))
-      await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
-      return // Stop — do not publish content that fails deterministic checks
+      // AUTOPILOT: the Content Loop is the quality gate — block only on
+      // truly missing recipe data (empty ingredients/instructions), warn on everything else.
+      if (isAutopilot) {
+        const hasStructuralErrors = validation.errors.some(e =>
+          e.severity === "error" && (
+            e.message.includes("No ingredients") ||
+            e.message.includes("No instructions") ||
+            e.message.includes("Title is empty")
+          )
+        )
+        if (hasStructuralErrors) {
+          await appendLog(recipeId, logEntry("Workflow", "error", `ContentValidator STRUCTURAL FAIL (autopilot: BLOCKED): ${errorList}. Marking as draft.`))
+          await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
+          return
+        }
+        await appendLog(recipeId, logEntry("Workflow", "error", `ContentValidator warnings (autopilot: warn-only): ${errorList}. Publishing with caveats.`))
+      } else {
+        await appendLog(recipeId, logEntry("Workflow", "error", `ContentValidator FAILED: ${errorList}. Marking as draft.`))
+        await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
+        return // Stop — do not publish content that fails deterministic checks
+      }
     }
     const warnList = validation.errors.filter((e) => e.severity === "warning")
     if (warnList.length > 0) {
@@ -364,9 +319,14 @@ export async function persistFinalDraft(
 
     if (seoGateResult.status === "BLOCK") {
       const blockReasons = seoGateResult.blockingIssues.map(i => `${i.code}: ${i.message}`).join("; ")
-      await appendLog(recipeId, logEntry("SEO Gate", "error", `BLOCKED — ${blockReasons}`))
-      await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
-      return
+      if (isAutopilot) {
+        await appendLog(recipeId, logEntry("SEO Gate", "error",
+          `Warnings (autopilot: warn-only) — ${blockReasons}`))
+      } else {
+        await appendLog(recipeId, logEntry("SEO Gate", "error", `BLOCKED — ${blockReasons}`))
+        await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
+        return
+      }
     }
     if (seoGateResult.warnings.length > 0) {
       await appendLog(recipeId, logEntry("SEO Gate", "error",
@@ -389,7 +349,7 @@ export async function persistFinalDraft(
       return faq.slice(0, 5)
     }
 
-    const faqItems = seoPlan.faqItems?.length ? seoPlan.faqItems : parseFaqFromMarkdown(finalRecipe.contentMarkdown ?? "")
+    const faqItems = parseFaqFromMarkdown(finalRecipe.contentMarkdown ?? "")
     const now = new Date().toISOString()
 
     const recipeBase: Record<string, unknown> = {
@@ -405,7 +365,7 @@ export async function persistFinalDraft(
       keywords: (finalRecipe.tags ?? []).join(", "),
       recipeIngredient: (finalRecipe.ingredients ?? []).map(i => `${i.quantity ? i.quantity + " " : ""}${i.name}`),
       recipeInstructions: (finalRecipe.instructions ?? []).map((s, idx) => ({ "@type": "HowToStep", position: idx + 1, text: s.text })),
-      ...(seoPlan.json_ld_recipe_base?.nutrition ? { nutrition: seoPlan.json_ld_recipe_base.nutrition } : {}),
+      ...(finalRecipe.jsonLd?.nutrition ? { nutrition: (finalRecipe.jsonLd as Record<string, unknown>).nutrition } : {}),
     }
 
     // Verify JSON-LD integrity — key claims must be visible in page content
@@ -418,7 +378,7 @@ export async function persistFinalDraft(
     }
 
     // Check: nutrition data in JSON-LD should be reflected in content
-    if (seoPlan.json_ld_recipe_base?.nutrition) {
+    if (finalRecipe.jsonLd && (finalRecipe.jsonLd as Record<string, unknown>).nutrition) {
       if (!md.includes("calories") && !md.includes("nutrition") && !md.includes("per serving")) {
         jsonLdIntegrityErrors.push("JSON-LD contains nutrition data not reflected in visible content")
       }
@@ -434,11 +394,17 @@ export async function persistFinalDraft(
         `JSON-LD integrity issues: ${jsonLdIntegrityErrors.join("; ")}`))
     }
 
+    // Pin-First: minimal JSON-LD (Recipe + BreadcrumbList only — no BlogPosting, no FAQPage)
+    // Google: full JSON-LD (Recipe + BlogPosting + FAQPage + BreadcrumbList)
+    const blogPostingNode = format !== "pin-first"
+      ? { "@type": "BlogPosting" as const, headline: finalRecipe.title, description: finalRecipe.metaDescription || finalRecipe.excerpt || undefined, author: { "@type": "Person", name: "Chef Augustin Lefèvre", url: `${SITE_URL}/about`, description: "French-trained baker and recipe developer" }, datePublished: now, dateModified: now, keywords: (finalRecipe.tags ?? []).join(", ") }
+      : null
+
     const jsonLd = {
       "@context": "https://schema.org",
       "@graph": [
         recipeBase,
-        { "@type": "BlogPosting", headline: finalRecipe.title, description: finalRecipe.metaDescription || finalRecipe.excerpt || undefined, author: { "@type": "Person", name: "Chef Augustin Lefèvre", url: `${SITE_URL}/about`, description: "French-trained baker and recipe developer" }, datePublished: now, dateModified: now, keywords: (finalRecipe.tags ?? []).join(", ") },
+        ...(blogPostingNode ? [blogPostingNode] : []),
         ...(faqItems.length > 0 && format !== "pin-first" ? [{ "@type": "FAQPage" as const, mainEntity: faqItems.map(f => ({ "@type": "Question" as const, name: f.question, acceptedAnswer: { "@type": "Answer" as const, text: f.answer } })) }] : []),
         { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` }, { "@type": "ListItem", position: 2, name: "Recipes", item: `${SITE_URL}/recettes` }, { "@type": "ListItem", position: 3, name: finalRecipe.title, item: `${SITE_URL}/recettes/${slugify(keyword)}` }] },
       ],
