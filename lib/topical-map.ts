@@ -34,6 +34,8 @@ export interface Cluster {
   coverageContribution: number
   kdAvg: number
   totalVolume: number
+  description: string        // Used on hub pages
+  siblings: string[]         // Cross-link target cluster IDs
 }
 
 export interface CoverageReport {
@@ -63,6 +65,8 @@ export const SLOW_COOKER_CLUSTER: Cluster = {
   kdAvg: 5,
   totalVolume: 12_500,
   coverageContribution: 25,
+  description: "Set-and-forget dinners perfectly portioned for two. Hearty stews, tender meats, and comforting soups made simple in a small slow cooker.",
+  siblings: ["budget-meals-for-two", "one-pan-dinners-for-two", "chicken-dinners-for-two"],
   pillarPage: {
     title: "Small-Batch Slow Cooker Dinners for Two — The Complete Guide",
     keyword: "slow cooker recipes for two",
@@ -106,6 +110,8 @@ export const ONE_PAN_CLUSTER: Cluster = {
   kdAvg: 5,
   totalVolume: 18_200,
   coverageContribution: 25,
+  description: "Minimal cleanup, maximum flavor — all-in-one sheet pan and skillet dinners for two. Perfect for busy weeknights without the mountain of dishes.",
+  siblings: ["chicken-dinners-for-two", "quick-healthy-dinners", "small-batch-slow-cooker"],
   pillarPage: {
     title: "One-Pan Dinners for Two — Minimal Cleanup, Maximum Flavor",
     keyword: "one pan dinners for two",
@@ -149,6 +155,8 @@ export const BUDGET_CLUSTER: Cluster = {
   kdAvg: 4,
   totalVolume: 9_800,
   coverageContribution: 20,
+  description: "Delicious dinners for two that won't break the bank. Smart swaps, pantry staples, and affordable ingredients for every night of the week.",
+  siblings: ["chicken-dinners-for-two", "small-batch-slow-cooker", "one-pan-dinners-for-two"],
   pillarPage: {
     title: "Budget-Friendly Dinners for Two — Eat Well for Less",
     keyword: "budget dinners for two",
@@ -185,6 +193,8 @@ export const CHICKEN_CLUSTER: Cluster = {
   kdAvg: 5,
   totalVolume: 15_600,
   coverageContribution: 20,
+  description: "Practical chicken recipes perfectly portioned for two people. Quick weeknight dinners, sheet-pan meals, and stir-fries that make cooking for a small household effortless.",
+  siblings: ["one-pan-dinners-for-two", "quick-healthy-dinners", "budget-meals-for-two"],
   pillarPage: {
     title: "Chicken Dinners for Two — Practical Recipes for Small Households",
     keyword: "chicken dinners for two",
@@ -228,6 +238,8 @@ export const ASIAN_CLUSTER: Cluster = {
   kdAvg: 5,
   totalVolume: 8_400,
   coverageContribution: 10,
+  description: "Better-than-takeout Asian-inspired dinners for two. Quick stir-fries, rice bowls, and noodles packed with authentic flavor for easy weeknights.",
+  siblings: ["quick-healthy-dinners", "chicken-dinners-for-two", "one-pan-dinners-for-two"],
   pillarPage: {
     title: "Asian-Inspired Dinners for Two — Easy Weeknight Favorites",
     keyword: "easy asian dinners for two",
@@ -256,6 +268,48 @@ export const ASIAN_CLUSTER: Cluster = {
   ],
 }
 
+export const QUICK_HEALTHY_CLUSTER: Cluster = {
+  id: "quick-healthy-dinners",
+  name: "Quick & Healthy Dinners for Two",
+  cuisine: "Quick & Healthy Dinners",
+  section: "core",
+  kdAvg: 5,
+  totalVolume: 12_000,
+  coverageContribution: 15,
+  description: "Fast, nutritious dinners scaled for two. All recipes ready in 30 minutes or less, using fresh ingredients and smart shortcuts.",
+  siblings: ["chicken-dinners-for-two", "asian-inspired-dinners", "one-pan-dinners-for-two"],
+  pillarPage: {
+    title: "Quick & Healthy Dinners for Two — 30 Minutes or Less",
+    keyword: "quick healthy dinners for two",
+    volume: 3600, kd: 6, intent: "informational",
+    requiredEntities: ["quick_meals", "healthy_dinner", "30_minute_meals", "small_batch"],
+    wordCountRange: { min: 2000, max: 2800 }, type: "pillar",
+  },
+  spokes: [
+    {
+      title: "15-Minute Mediterranean Bowls for Two",
+      keyword: "quick mediterranean bowls for two",
+      volume: 1800, kd: 4, intent: "informational",
+      requiredEntities: ["mediterranean", "grain_bowl", "quick_meal"],
+      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
+    },
+    {
+      title: "30-Minute Healthy Salmon Dinner for Two",
+      keyword: "healthy salmon dinner for two",
+      volume: 2400, kd: 5, intent: "informational",
+      requiredEntities: ["salmon", "healthy_fats", "omega_3", "quick_dinner"],
+      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
+    },
+    {
+      title: "High-Protein Ground Turkey Skillet for Two",
+      keyword: "ground turkey skillet for two",
+      volume: 1600, kd: 4, intent: "informational",
+      requiredEntities: ["ground_turkey", "high_protein", "skillet_meal"],
+      wordCountRange: { min: 1200, max: 1800 }, type: "spoke",
+    },
+  ],
+}
+
 /**
  * All active clusters in the topical map.
  * Add new clusters here as we expand to new cuisines.
@@ -266,6 +320,7 @@ export const TOPICAL_MAP: Cluster[] = [
   BUDGET_CLUSTER,        // Priority 3 — 9.8K vol
   CHICKEN_CLUSTER,       // Priority 4 — 15.6K vol
   ASIAN_CLUSTER,         // Priority 5 — 8.4K vol
+  QUICK_HEALTHY_CLUSTER, // Priority 6 — 12K vol
 ]
 
 /**
