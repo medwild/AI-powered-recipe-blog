@@ -62,6 +62,8 @@ Deterministic tag-to-cluster mapping using the 6 clusters defined in `lib/topica
 | `budget`, `cheap`, `affordable`, `economical`, `frugal` | `budget-meals` |
 | `healthy`, `quick`, `30-minute`, `15-minute`, `light`, `low-carb` | `quick-healthy-dinners` |
 
+**Priority rule:** Tags are iterated in array order (LLM places most relevant tags first). First cluster match wins. A recipe tagged `["chicken", "one-pan"]` resolves to `chicken-dinners` because `chicken` appears first.
+
 **Fallback:** `null` — recipe does not belong to any hub (no breadcrumb cluster, no hub page filtering).
 
 **No API calls, no DB queries, no side effects.** Imported by all other components.
@@ -103,7 +105,14 @@ The existing recipe listing page gains cluster-filtered hub mode via the `?clust
 - **Description:** 2-3 sentences about the cluster (hardcoded per cluster in the topical map)
 - **Stats row:** recipe count, average cook time, number of techniques
 - **Recipe grid:** filtered to recipes matching the cluster (via `resolveCluster`)
-- **Cross-links:** 3 related clusters at the bottom
+- **Cross-links:** up to 3 sibling clusters at the bottom, defined per cluster in `lib/topical-map.ts`:
+  - Chicken → [One-Pan, Quick & Healthy, Budget]
+  - One-Pan → [Chicken, Quick & Healthy, Slow Cooker]
+  - Asian-Inspired → [Quick & Healthy, Chicken, One-Pan]
+  - Slow Cooker → [One-Pan, Budget, Chicken]
+  - Budget → [Slow Cooker, Chicken, One-Pan]
+  - Quick & Healthy → [Chicken, Asian-Inspired, One-Pan]
+  Only siblings that have ≥1 published recipe are shown.
 
 **SEO metadata per hub:**
 Dynamically generated `<title>`, `<meta description>`, canonical URL, and JSON-LD (CollectionPage).
