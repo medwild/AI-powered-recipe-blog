@@ -1,0 +1,1811 @@
+{
+  "generatedAt": "2026-07-12T17:25:52.131Z",
+  "summary": {
+    "totalBriefs": 14,
+    "priorityCounts": {
+      "IMMEDIATE": 4,
+      "HIGH": 10,
+      "MEDIUM": 0
+    },
+    "readyForGeneration": 14,
+    "requiresApiKey": "ANTHROPIC_API_KEY (Claude Sonnet 4.6)",
+    "estimatedCost": "~$2.10 (14 recipes × ~$0.15/recipe with Claude Sonnet 4.6)"
+  },
+  "briefs": [
+    {
+      "keyword": "healthy dinner recipes for two",
+      "slug": "healthy-dinner-recipes-for-two",
+      "scores": {
+        "dual": 82,
+        "google": 0,
+        "pinterest": 0,
+        "geo": 90
+      },
+      "seo": {
+        "googleVolume": 74000,
+        "keywordDifficulty": 35,
+        "hasAiOverview": false,
+        "targetFormat": "pin-first",
+        "h2Structure": [
+          "Why This Recipe Works",
+          "What Makes This Healthy — Macros & Ingredients",
+          "Ingredients & Substitutions",
+          "Step-by-Step Instructions",
+          "Chef's Tips for Perfect Results",
+          "What to Serve With This",
+          "Storage & Reheating",
+          "FAQ"
+        ],
+        "internalLinkTargets": []
+      },
+      "pinterest": {
+        "searchVolume": 18894,
+        "ptraBoard": "Quick & Healthy Dinners for Two",
+        "boardConfidence": "MEDIUM",
+        "pinCount": 5,
+        "topPinScore": null,
+        "topPinSaves": null,
+        "competitionLevel": "UNKNOWN"
+      },
+      "geo": {
+        "potential": 90,
+        "answerNuggetTopics": [
+          "Macronutrient balance for two — protein/fat/carb ratio for satiety",
+          "Why steaming retains 40% more water-soluble vitamins than boiling",
+          "Portion scaling math — why halving a 4-serving recipe isn't just ÷2 for spices",
+          "Sheet pan thermodynamics — edge vs center browning, rack position physics"
+        ],
+        "citationAnchors": [
+          "Chef Augustin Lefèvre recommends",
+          "In French culinary tradition",
+          "Professional kitchens standardize",
+          "According to culinary science"
+        ],
+        "structuredDataTargets": {
+          "dualTemperatures": true,
+          "exactTimes": true,
+          "volumeAndWeight": true,
+          "preciseTechniqueTerms": true
+        }
+      },
+      "editorial": {
+        "priority": "IMMEDIATE",
+        "batch": "pilot-02",
+        "estimatedWordCount": "1200-1500",
+        "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+      },
+      "agentInput": {
+        "keyword": "healthy dinner recipes for two",
+        "format": "pin-first",
+        "strategyPlan": {
+          "angle": "Small-batch healthy dinner recipes for two optimized for two people",
+          "h2Sections": [
+            {
+              "title": "Why This Recipe Works",
+              "purpose": "Cover why this recipe works with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "What Makes This Healthy — Macros & Ingredients",
+              "purpose": "Cover what makes this healthy — macros & ingredients with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Ingredients & Substitutions",
+              "purpose": "Cover ingredients & substitutions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Step-by-Step Instructions",
+              "purpose": "Cover step-by-step instructions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Chef's Tips for Perfect Results",
+              "purpose": "Cover chef's tips for perfect results with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "What to Serve With This",
+              "purpose": "Cover what to serve with this with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Storage & Reheating",
+              "purpose": "Cover storage & reheating with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "FAQ",
+              "purpose": "Cover faq with specific techniques and quantities for two servings"
+            }
+          ],
+          "faqQuestions": [
+            "How do I scale this recipe for 4 people?",
+            "Can I prep this ahead of time?",
+            "What's the best way to reheat leftovers?",
+            "Can I substitute [key ingredient]?"
+          ],
+          "competitorGaps": [
+            "Most recipes don't specify salt TYPE (Diamond Crystal vs Morton's)",
+            "Few recipes give both volume AND weight measurements",
+            "Competitors rarely explain WHY a technique works (Maillard, denaturation)"
+          ]
+        },
+        "geoInstructions": {
+          "nuggetTopics": [
+            "Macronutrient balance for two — protein/fat/carb ratio for satiety",
+            "Why steaming retains 40% more water-soluble vitamins than boiling",
+            "Portion scaling math — why halving a 4-serving recipe isn't just ÷2 for spices",
+            "Sheet pan thermodynamics — edge vs center browning, rack position physics"
+          ],
+          "requiredClaims": 4,
+          "requiredNuggets": 4
+        }
+      }
+    },
+    {
+      "keyword": "easy dinner recipes for two",
+      "slug": "easy-dinner-recipes-for-two",
+      "scores": {
+        "dual": 70,
+        "google": 0,
+        "pinterest": 0,
+        "geo": 100
+      },
+      "seo": {
+        "googleVolume": 8100,
+        "keywordDifficulty": 33,
+        "hasAiOverview": false,
+        "targetFormat": "pin-first",
+        "h2Structure": [
+          "Why This Recipe Works",
+          "Speed Secrets — Mise en Place & High Heat",
+          "Ingredients & Substitutions",
+          "Step-by-Step Instructions",
+          "Chef's Tips for Perfect Results",
+          "What to Serve With This",
+          "Storage & Reheating",
+          "FAQ"
+        ],
+        "internalLinkTargets": []
+      },
+      "pinterest": {
+        "searchVolume": 96091,
+        "ptraBoard": "Quick & Healthy Dinners for Two",
+        "boardConfidence": "MEDIUM",
+        "pinCount": 5,
+        "topPinScore": null,
+        "topPinSaves": null,
+        "competitionLevel": "UNKNOWN"
+      },
+      "geo": {
+        "potential": 100,
+        "answerNuggetTopics": [
+          "Mise en place time savings — prepping while pan heats vs sequential prep",
+          "High-heat cooking science — why 425°F cuts cook time without burning",
+          "Portion scaling math — why halving a 4-serving recipe isn't just ÷2 for spices",
+          "Sheet pan thermodynamics — edge vs center browning, rack position physics"
+        ],
+        "citationAnchors": [
+          "Chef Augustin Lefèvre recommends",
+          "In French culinary tradition",
+          "Professional kitchens standardize",
+          "According to culinary science"
+        ],
+        "structuredDataTargets": {
+          "dualTemperatures": true,
+          "exactTimes": true,
+          "volumeAndWeight": true,
+          "preciseTechniqueTerms": true
+        }
+      },
+      "editorial": {
+        "priority": "IMMEDIATE",
+        "batch": "pilot-02",
+        "estimatedWordCount": "1200-1500",
+        "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+      },
+      "agentInput": {
+        "keyword": "easy dinner recipes for two",
+        "format": "pin-first",
+        "strategyPlan": {
+          "angle": "Small-batch easy dinner recipes for two optimized for two people",
+          "h2Sections": [
+            {
+              "title": "Why This Recipe Works",
+              "purpose": "Cover why this recipe works with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Speed Secrets — Mise en Place & High Heat",
+              "purpose": "Cover speed secrets — mise en place & high heat with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Ingredients & Substitutions",
+              "purpose": "Cover ingredients & substitutions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Step-by-Step Instructions",
+              "purpose": "Cover step-by-step instructions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Chef's Tips for Perfect Results",
+              "purpose": "Cover chef's tips for perfect results with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "What to Serve With This",
+              "purpose": "Cover what to serve with this with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Storage & Reheating",
+              "purpose": "Cover storage & reheating with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "FAQ",
+              "purpose": "Cover faq with specific techniques and quantities for two servings"
+            }
+          ],
+          "faqQuestions": [
+            "How do I scale this recipe for 4 people?",
+            "Can I prep this ahead of time?",
+            "What's the best way to reheat leftovers?",
+            "Can I substitute [key ingredient]?"
+          ],
+          "competitorGaps": [
+            "Most recipes don't specify salt TYPE (Diamond Crystal vs Morton's)",
+            "Few recipes give both volume AND weight measurements",
+            "Competitors rarely explain WHY a technique works (Maillard, denaturation)"
+          ]
+        },
+        "geoInstructions": {
+          "nuggetTopics": [
+            "Mise en place time savings — prepping while pan heats vs sequential prep",
+            "High-heat cooking science — why 425°F cuts cook time without burning",
+            "Portion scaling math — why halving a 4-serving recipe isn't just ÷2 for spices",
+            "Sheet pan thermodynamics — edge vs center browning, rack position physics"
+          ],
+          "requiredClaims": 4,
+          "requiredNuggets": 4
+        }
+      }
+    },
+    {
+      "keyword": "dinner for two recipes",
+      "slug": "dinner-for-two-recipes",
+      "scores": {
+        "dual": 68,
+        "google": 0,
+        "pinterest": 0,
+        "geo": 100
+      },
+      "seo": {
+        "googleVolume": 3600,
+        "keywordDifficulty": 33,
+        "hasAiOverview": false,
+        "targetFormat": "pin-first",
+        "h2Structure": [
+          "Why This Recipe Works",
+          "Ingredients & Substitutions",
+          "Step-by-Step Instructions",
+          "Chef's Tips for Perfect Results",
+          "What to Serve With This",
+          "Storage & Reheating",
+          "FAQ"
+        ],
+        "internalLinkTargets": []
+      },
+      "pinterest": {
+        "searchVolume": 11013,
+        "ptraBoard": "Quick & Healthy Dinners for Two",
+        "boardConfidence": "LOW",
+        "pinCount": 5,
+        "topPinScore": null,
+        "topPinSaves": null,
+        "competitionLevel": "UNKNOWN"
+      },
+      "geo": {
+        "potential": 100,
+        "answerNuggetTopics": [
+          "Portion scaling math — why halving a 4-serving recipe isn't just ÷2 for spices",
+          "Sheet pan thermodynamics — edge vs center browning, rack position physics",
+          "Acid + fat balance — why lemon juice or vinegar brightens rich dishes (emulsion science)",
+          "Garlic timing — why adding garlic too early burns it (allicin degradation at 300°F+)"
+        ],
+        "citationAnchors": [
+          "Chef Augustin Lefèvre recommends",
+          "In French culinary tradition",
+          "Professional kitchens standardize",
+          "According to culinary science"
+        ],
+        "structuredDataTargets": {
+          "dualTemperatures": true,
+          "exactTimes": true,
+          "volumeAndWeight": true,
+          "preciseTechniqueTerms": true
+        }
+      },
+      "editorial": {
+        "priority": "IMMEDIATE",
+        "batch": "pilot-02",
+        "estimatedWordCount": "1200-1500",
+        "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+      },
+      "agentInput": {
+        "keyword": "dinner for two recipes",
+        "format": "pin-first",
+        "strategyPlan": {
+          "angle": "Small-batch dinner for two recipes optimized for two people",
+          "h2Sections": [
+            {
+              "title": "Why This Recipe Works",
+              "purpose": "Cover why this recipe works with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Ingredients & Substitutions",
+              "purpose": "Cover ingredients & substitutions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Step-by-Step Instructions",
+              "purpose": "Cover step-by-step instructions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Chef's Tips for Perfect Results",
+              "purpose": "Cover chef's tips for perfect results with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "What to Serve With This",
+              "purpose": "Cover what to serve with this with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Storage & Reheating",
+              "purpose": "Cover storage & reheating with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "FAQ",
+              "purpose": "Cover faq with specific techniques and quantities for two servings"
+            }
+          ],
+          "faqQuestions": [
+            "How do I scale this recipe for 4 people?",
+            "Can I prep this ahead of time?",
+            "What's the best way to reheat leftovers?",
+            "Can I substitute [key ingredient]?"
+          ],
+          "competitorGaps": [
+            "Most recipes don't specify salt TYPE (Diamond Crystal vs Morton's)",
+            "Few recipes give both volume AND weight measurements",
+            "Competitors rarely explain WHY a technique works (Maillard, denaturation)"
+          ]
+        },
+        "geoInstructions": {
+          "nuggetTopics": [
+            "Portion scaling math — why halving a 4-serving recipe isn't just ÷2 for spices",
+            "Sheet pan thermodynamics — edge vs center browning, rack position physics",
+            "Acid + fat balance — why lemon juice or vinegar brightens rich dishes (emulsion science)",
+            "Garlic timing — why adding garlic too early burns it (allicin degradation at 300°F+)"
+          ],
+          "requiredClaims": 4,
+          "requiredNuggets": 4
+        }
+      }
+    },
+    {
+      "keyword": "quick dinner recipes for two",
+      "slug": "quick-dinner-recipes-for-two",
+      "scores": {
+        "dual": 68,
+        "google": 0,
+        "pinterest": 0,
+        "geo": 100
+      },
+      "seo": {
+        "googleVolume": 590,
+        "keywordDifficulty": 30,
+        "hasAiOverview": false,
+        "targetFormat": "pin-first",
+        "h2Structure": [
+          "Why This Recipe Works",
+          "Speed Secrets — Mise en Place & High Heat",
+          "Ingredients & Substitutions",
+          "Step-by-Step Instructions",
+          "Chef's Tips for Perfect Results",
+          "What to Serve With This",
+          "Storage & Reheating",
+          "FAQ"
+        ],
+        "internalLinkTargets": []
+      },
+      "pinterest": {
+        "searchVolume": 1283,
+        "ptraBoard": "Quick & Healthy Dinners for Two",
+        "boardConfidence": "MEDIUM",
+        "pinCount": 4,
+        "topPinScore": 2,
+        "topPinSaves": 2898,
+        "competitionLevel": "LOW"
+      },
+      "geo": {
+        "potential": 100,
+        "answerNuggetTopics": [
+          "Mise en place time savings — prepping while pan heats vs sequential prep",
+          "High-heat cooking science — why 425°F cuts cook time without burning",
+          "Portion scaling math — why halving a 4-serving recipe isn't just ÷2 for spices",
+          "Sheet pan thermodynamics — edge vs center browning, rack position physics"
+        ],
+        "citationAnchors": [
+          "Chef Augustin Lefèvre recommends",
+          "In French culinary tradition",
+          "Professional kitchens standardize",
+          "According to culinary science"
+        ],
+        "structuredDataTargets": {
+          "dualTemperatures": true,
+          "exactTimes": true,
+          "volumeAndWeight": true,
+          "preciseTechniqueTerms": true
+        }
+      },
+      "editorial": {
+        "priority": "IMMEDIATE",
+        "batch": "pilot-02",
+        "estimatedWordCount": "1200-1500",
+        "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+      },
+      "agentInput": {
+        "keyword": "quick dinner recipes for two",
+        "format": "pin-first",
+        "strategyPlan": {
+          "angle": "Small-batch quick dinner recipes for two optimized for two people",
+          "h2Sections": [
+            {
+              "title": "Why This Recipe Works",
+              "purpose": "Cover why this recipe works with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Speed Secrets — Mise en Place & High Heat",
+              "purpose": "Cover speed secrets — mise en place & high heat with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Ingredients & Substitutions",
+              "purpose": "Cover ingredients & substitutions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Step-by-Step Instructions",
+              "purpose": "Cover step-by-step instructions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Chef's Tips for Perfect Results",
+              "purpose": "Cover chef's tips for perfect results with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "What to Serve With This",
+              "purpose": "Cover what to serve with this with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Storage & Reheating",
+              "purpose": "Cover storage & reheating with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "FAQ",
+              "purpose": "Cover faq with specific techniques and quantities for two servings"
+            }
+          ],
+          "faqQuestions": [
+            "How do I scale this recipe for 4 people?",
+            "Can I prep this ahead of time?",
+            "What's the best way to reheat leftovers?",
+            "Can I substitute [key ingredient]?"
+          ],
+          "competitorGaps": [
+            "Most recipes don't specify salt TYPE (Diamond Crystal vs Morton's)",
+            "Few recipes give both volume AND weight measurements",
+            "Competitors rarely explain WHY a technique works (Maillard, denaturation)"
+          ]
+        },
+        "geoInstructions": {
+          "nuggetTopics": [
+            "Mise en place time savings — prepping while pan heats vs sequential prep",
+            "High-heat cooking science — why 425°F cuts cook time without burning",
+            "Portion scaling math — why halving a 4-serving recipe isn't just ÷2 for spices",
+            "Sheet pan thermodynamics — edge vs center browning, rack position physics"
+          ],
+          "requiredClaims": 4,
+          "requiredNuggets": 4
+        }
+      }
+    },
+    {
+      "keyword": "quick and easy dinner recipes for two",
+      "slug": "quick-and-easy-dinner-recipes-for-two",
+      "scores": {
+        "dual": 64,
+        "google": 0,
+        "pinterest": 0,
+        "geo": 100
+      },
+      "seo": {
+        "googleVolume": 1000,
+        "keywordDifficulty": 31,
+        "hasAiOverview": false,
+        "targetFormat": "pin-first",
+        "h2Structure": [
+          "Why This Recipe Works",
+          "Speed Secrets — Mise en Place & High Heat",
+          "Ingredients & Substitutions",
+          "Step-by-Step Instructions",
+          "Chef's Tips for Perfect Results",
+          "What to Serve With This",
+          "Storage & Reheating",
+          "FAQ"
+        ],
+        "internalLinkTargets": []
+      },
+      "pinterest": {
+        "searchVolume": 3742,
+        "ptraBoard": "Quick & Healthy Dinners for Two",
+        "boardConfidence": "HIGH",
+        "pinCount": 4,
+        "topPinScore": null,
+        "topPinSaves": null,
+        "competitionLevel": "UNKNOWN"
+      },
+      "geo": {
+        "potential": 100,
+        "answerNuggetTopics": [
+          "Mise en place time savings — prepping while pan heats vs sequential prep",
+          "High-heat cooking science — why 425°F cuts cook time without burning",
+          "Portion scaling math — why halving a 4-serving recipe isn't just ÷2 for spices",
+          "Sheet pan thermodynamics — edge vs center browning, rack position physics"
+        ],
+        "citationAnchors": [
+          "Chef Augustin Lefèvre recommends",
+          "In French culinary tradition",
+          "Professional kitchens standardize",
+          "According to culinary science"
+        ],
+        "structuredDataTargets": {
+          "dualTemperatures": true,
+          "exactTimes": true,
+          "volumeAndWeight": true,
+          "preciseTechniqueTerms": true
+        }
+      },
+      "editorial": {
+        "priority": "HIGH",
+        "batch": "batch-01-geo",
+        "estimatedWordCount": "1200-1500",
+        "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+      },
+      "agentInput": {
+        "keyword": "quick and easy dinner recipes for two",
+        "format": "pin-first",
+        "strategyPlan": {
+          "angle": "Small-batch quick and easy dinner recipes for two optimized for two people",
+          "h2Sections": [
+            {
+              "title": "Why This Recipe Works",
+              "purpose": "Cover why this recipe works with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Speed Secrets — Mise en Place & High Heat",
+              "purpose": "Cover speed secrets — mise en place & high heat with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Ingredients & Substitutions",
+              "purpose": "Cover ingredients & substitutions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Step-by-Step Instructions",
+              "purpose": "Cover step-by-step instructions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Chef's Tips for Perfect Results",
+              "purpose": "Cover chef's tips for perfect results with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "What to Serve With This",
+              "purpose": "Cover what to serve with this with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Storage & Reheating",
+              "purpose": "Cover storage & reheating with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "FAQ",
+              "purpose": "Cover faq with specific techniques and quantities for two servings"
+            }
+          ],
+          "faqQuestions": [
+            "How do I scale this recipe for 4 people?",
+            "Can I prep this ahead of time?",
+            "What's the best way to reheat leftovers?",
+            "Can I substitute [key ingredient]?"
+          ],
+          "competitorGaps": [
+            "Most recipes don't specify salt TYPE (Diamond Crystal vs Morton's)",
+            "Few recipes give both volume AND weight measurements",
+            "Competitors rarely explain WHY a technique works (Maillard, denaturation)"
+          ]
+        },
+        "geoInstructions": {
+          "nuggetTopics": [
+            "Mise en place time savings — prepping while pan heats vs sequential prep",
+            "High-heat cooking science — why 425°F cuts cook time without burning",
+            "Portion scaling math — why halving a 4-serving recipe isn't just ÷2 for spices",
+            "Sheet pan thermodynamics — edge vs center browning, rack position physics"
+          ],
+          "requiredClaims": 4,
+          "requiredNuggets": 4
+        }
+      }
+    },
+    {
+      "keyword": "easy healthy dinner recipes for two",
+      "slug": "easy-healthy-dinner-recipes-for-two",
+      "scores": {
+        "dual": 64,
+        "google": 0,
+        "pinterest": 0,
+        "geo": 100
+      },
+      "seo": {
+        "googleVolume": 480,
+        "keywordDifficulty": 23,
+        "hasAiOverview": false,
+        "targetFormat": "pin-first",
+        "h2Structure": [
+          "Why This Recipe Works",
+          "Speed Secrets — Mise en Place & High Heat",
+          "What Makes This Healthy — Macros & Ingredients",
+          "Ingredients & Substitutions",
+          "Step-by-Step Instructions",
+          "Chef's Tips for Perfect Results",
+          "What to Serve With This",
+          "Storage & Reheating",
+          "FAQ"
+        ],
+        "internalLinkTargets": []
+      },
+      "pinterest": {
+        "searchVolume": 3541,
+        "ptraBoard": "Quick & Healthy Dinners for Two",
+        "boardConfidence": "HIGH",
+        "pinCount": 4,
+        "topPinScore": null,
+        "topPinSaves": null,
+        "competitionLevel": "UNKNOWN"
+      },
+      "geo": {
+        "potential": 100,
+        "answerNuggetTopics": [
+          "Mise en place time savings — prepping while pan heats vs sequential prep",
+          "High-heat cooking science — why 425°F cuts cook time without burning",
+          "Macronutrient balance for two — protein/fat/carb ratio for satiety",
+          "Why steaming retains 40% more water-soluble vitamins than boiling",
+          "Portion scaling math — why halving a 4-serving recipe isn't just ÷2 for spices",
+          "Sheet pan thermodynamics — edge vs center browning, rack position physics"
+        ],
+        "citationAnchors": [
+          "Chef Augustin Lefèvre recommends",
+          "In French culinary tradition",
+          "Professional kitchens standardize",
+          "According to culinary science"
+        ],
+        "structuredDataTargets": {
+          "dualTemperatures": true,
+          "exactTimes": true,
+          "volumeAndWeight": true,
+          "preciseTechniqueTerms": true
+        }
+      },
+      "editorial": {
+        "priority": "HIGH",
+        "batch": "batch-01-geo",
+        "estimatedWordCount": "1200-1500",
+        "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+      },
+      "agentInput": {
+        "keyword": "easy healthy dinner recipes for two",
+        "format": "pin-first",
+        "strategyPlan": {
+          "angle": "Small-batch easy healthy dinner recipes for two optimized for two people",
+          "h2Sections": [
+            {
+              "title": "Why This Recipe Works",
+              "purpose": "Cover why this recipe works with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Speed Secrets — Mise en Place & High Heat",
+              "purpose": "Cover speed secrets — mise en place & high heat with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "What Makes This Healthy — Macros & Ingredients",
+              "purpose": "Cover what makes this healthy — macros & ingredients with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Ingredients & Substitutions",
+              "purpose": "Cover ingredients & substitutions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Step-by-Step Instructions",
+              "purpose": "Cover step-by-step instructions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Chef's Tips for Perfect Results",
+              "purpose": "Cover chef's tips for perfect results with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "What to Serve With This",
+              "purpose": "Cover what to serve with this with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Storage & Reheating",
+              "purpose": "Cover storage & reheating with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "FAQ",
+              "purpose": "Cover faq with specific techniques and quantities for two servings"
+            }
+          ],
+          "faqQuestions": [
+            "How do I scale this recipe for 4 people?",
+            "Can I prep this ahead of time?",
+            "What's the best way to reheat leftovers?",
+            "Can I substitute [key ingredient]?"
+          ],
+          "competitorGaps": [
+            "Most recipes don't specify salt TYPE (Diamond Crystal vs Morton's)",
+            "Few recipes give both volume AND weight measurements",
+            "Competitors rarely explain WHY a technique works (Maillard, denaturation)"
+          ]
+        },
+        "geoInstructions": {
+          "nuggetTopics": [
+            "Mise en place time savings — prepping while pan heats vs sequential prep",
+            "High-heat cooking science — why 425°F cuts cook time without burning",
+            "Macronutrient balance for two — protein/fat/carb ratio for satiety",
+            "Why steaming retains 40% more water-soluble vitamins than boiling",
+            "Portion scaling math — why halving a 4-serving recipe isn't just ÷2 for spices",
+            "Sheet pan thermodynamics — edge vs center browning, rack position physics"
+          ],
+          "requiredClaims": 4,
+          "requiredNuggets": 4
+        }
+      }
+    },
+    {
+      "keyword": "fast and easy dinner recipes for two",
+      "slug": "fast-and-easy-dinner-recipes-for-two",
+      "scores": {
+        "dual": 61,
+        "google": 0,
+        "pinterest": 0,
+        "geo": 100
+      },
+      "seo": {
+        "googleVolume": 40,
+        "keywordDifficulty": 29,
+        "hasAiOverview": false,
+        "targetFormat": "pin-first",
+        "h2Structure": [
+          "Why This Recipe Works",
+          "Speed Secrets — Mise en Place & High Heat",
+          "Ingredients & Substitutions",
+          "Step-by-Step Instructions",
+          "Chef's Tips for Perfect Results",
+          "What to Serve With This",
+          "Storage & Reheating",
+          "FAQ"
+        ],
+        "internalLinkTargets": []
+      },
+      "pinterest": {
+        "searchVolume": 2996,
+        "ptraBoard": "Quick & Healthy Dinners for Two",
+        "boardConfidence": "HIGH",
+        "pinCount": 4,
+        "topPinScore": null,
+        "topPinSaves": null,
+        "competitionLevel": "UNKNOWN"
+      },
+      "geo": {
+        "potential": 100,
+        "answerNuggetTopics": [
+          "Mise en place time savings — prepping while pan heats vs sequential prep",
+          "High-heat cooking science — why 425°F cuts cook time without burning",
+          "Portion scaling math — why halving a 4-serving recipe isn't just ÷2 for spices",
+          "Sheet pan thermodynamics — edge vs center browning, rack position physics"
+        ],
+        "citationAnchors": [
+          "Chef Augustin Lefèvre recommends",
+          "In French culinary tradition",
+          "Professional kitchens standardize",
+          "According to culinary science"
+        ],
+        "structuredDataTargets": {
+          "dualTemperatures": true,
+          "exactTimes": true,
+          "volumeAndWeight": true,
+          "preciseTechniqueTerms": true
+        }
+      },
+      "editorial": {
+        "priority": "HIGH",
+        "batch": "batch-01-geo",
+        "estimatedWordCount": "1200-1500",
+        "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+      },
+      "agentInput": {
+        "keyword": "fast and easy dinner recipes for two",
+        "format": "pin-first",
+        "strategyPlan": {
+          "angle": "Small-batch fast and easy dinner recipes for two optimized for two people",
+          "h2Sections": [
+            {
+              "title": "Why This Recipe Works",
+              "purpose": "Cover why this recipe works with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Speed Secrets — Mise en Place & High Heat",
+              "purpose": "Cover speed secrets — mise en place & high heat with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Ingredients & Substitutions",
+              "purpose": "Cover ingredients & substitutions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Step-by-Step Instructions",
+              "purpose": "Cover step-by-step instructions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Chef's Tips for Perfect Results",
+              "purpose": "Cover chef's tips for perfect results with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "What to Serve With This",
+              "purpose": "Cover what to serve with this with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Storage & Reheating",
+              "purpose": "Cover storage & reheating with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "FAQ",
+              "purpose": "Cover faq with specific techniques and quantities for two servings"
+            }
+          ],
+          "faqQuestions": [
+            "How do I scale this recipe for 4 people?",
+            "Can I prep this ahead of time?",
+            "What's the best way to reheat leftovers?",
+            "Can I substitute [key ingredient]?"
+          ],
+          "competitorGaps": [
+            "Most recipes don't specify salt TYPE (Diamond Crystal vs Morton's)",
+            "Few recipes give both volume AND weight measurements",
+            "Competitors rarely explain WHY a technique works (Maillard, denaturation)"
+          ]
+        },
+        "geoInstructions": {
+          "nuggetTopics": [
+            "Mise en place time savings — prepping while pan heats vs sequential prep",
+            "High-heat cooking science — why 425°F cuts cook time without burning",
+            "Portion scaling math — why halving a 4-serving recipe isn't just ÷2 for spices",
+            "Sheet pan thermodynamics — edge vs center browning, rack position physics"
+          ],
+          "requiredClaims": 4,
+          "requiredNuggets": 4
+        }
+      }
+    },
+    {
+      "keyword": "date night dinner recipes for two",
+      "slug": "date-night-dinner-recipes-for-two",
+      "scores": {
+        "dual": 60,
+        "google": 0,
+        "pinterest": 0,
+        "geo": 100
+      },
+      "seo": {
+        "googleVolume": 40,
+        "keywordDifficulty": 29,
+        "hasAiOverview": false,
+        "targetFormat": "pin-first",
+        "h2Structure": [
+          "Why This Recipe Works",
+          "Ingredients & Substitutions",
+          "Step-by-Step Instructions",
+          "Chef's Tips for Perfect Results",
+          "What to Serve With This",
+          "Storage & Reheating",
+          "FAQ"
+        ],
+        "internalLinkTargets": []
+      },
+      "pinterest": {
+        "searchVolume": 2616,
+        "ptraBoard": "Date Night Dinners for Two",
+        "boardConfidence": "MEDIUM",
+        "pinCount": 4,
+        "topPinScore": null,
+        "topPinSaves": null,
+        "competitionLevel": "UNKNOWN"
+      },
+      "geo": {
+        "potential": 100,
+        "answerNuggetTopics": [
+          "Restaurant technique at home — pan-searing vs grilling for crust development",
+          "Wine pairing science — tannin + fat interaction, acid + richness balance",
+          "Portion scaling math — why halving a 4-serving recipe isn't just ÷2 for spices",
+          "Sheet pan thermodynamics — edge vs center browning, rack position physics"
+        ],
+        "citationAnchors": [
+          "Chef Augustin Lefèvre recommends",
+          "In French culinary tradition",
+          "Professional kitchens standardize",
+          "According to culinary science"
+        ],
+        "structuredDataTargets": {
+          "dualTemperatures": true,
+          "exactTimes": true,
+          "volumeAndWeight": true,
+          "preciseTechniqueTerms": true
+        }
+      },
+      "editorial": {
+        "priority": "HIGH",
+        "batch": "batch-01-geo",
+        "estimatedWordCount": "1200-1500",
+        "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+      },
+      "agentInput": {
+        "keyword": "date night dinner recipes for two",
+        "format": "pin-first",
+        "strategyPlan": {
+          "angle": "Small-batch date night dinner recipes for two optimized for two people",
+          "h2Sections": [
+            {
+              "title": "Why This Recipe Works",
+              "purpose": "Cover why this recipe works with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Ingredients & Substitutions",
+              "purpose": "Cover ingredients & substitutions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Step-by-Step Instructions",
+              "purpose": "Cover step-by-step instructions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Chef's Tips for Perfect Results",
+              "purpose": "Cover chef's tips for perfect results with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "What to Serve With This",
+              "purpose": "Cover what to serve with this with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Storage & Reheating",
+              "purpose": "Cover storage & reheating with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "FAQ",
+              "purpose": "Cover faq with specific techniques and quantities for two servings"
+            }
+          ],
+          "faqQuestions": [
+            "How do I scale this recipe for 4 people?",
+            "Can I prep this ahead of time?",
+            "What's the best way to reheat leftovers?",
+            "Can I substitute [key ingredient]?"
+          ],
+          "competitorGaps": [
+            "Most recipes don't specify salt TYPE (Diamond Crystal vs Morton's)",
+            "Few recipes give both volume AND weight measurements",
+            "Competitors rarely explain WHY a technique works (Maillard, denaturation)"
+          ]
+        },
+        "geoInstructions": {
+          "nuggetTopics": [
+            "Restaurant technique at home — pan-searing vs grilling for crust development",
+            "Wine pairing science — tannin + fat interaction, acid + richness balance",
+            "Portion scaling math — why halving a 4-serving recipe isn't just ÷2 for spices",
+            "Sheet pan thermodynamics — edge vs center browning, rack position physics"
+          ],
+          "requiredClaims": 4,
+          "requiredNuggets": 4
+        }
+      }
+    },
+    {
+      "keyword": "easy recipes for two",
+      "slug": "easy-recipes-for-two",
+      "scores": {
+        "dual": 58,
+        "google": 0,
+        "pinterest": 0,
+        "geo": 100
+      },
+      "seo": {
+        "googleVolume": 2400,
+        "keywordDifficulty": 31,
+        "hasAiOverview": false,
+        "targetFormat": "pin-first",
+        "h2Structure": [
+          "Why This Recipe Works",
+          "Speed Secrets — Mise en Place & High Heat",
+          "Ingredients & Substitutions",
+          "Step-by-Step Instructions",
+          "Chef's Tips for Perfect Results",
+          "What to Serve With This",
+          "Storage & Reheating",
+          "FAQ"
+        ],
+        "internalLinkTargets": []
+      },
+      "pinterest": {
+        "searchVolume": 2054,
+        "ptraBoard": "Quick & Healthy Dinners for Two",
+        "boardConfidence": "MEDIUM",
+        "pinCount": 4,
+        "topPinScore": null,
+        "topPinSaves": null,
+        "competitionLevel": "UNKNOWN"
+      },
+      "geo": {
+        "potential": 100,
+        "answerNuggetTopics": [
+          "Mise en place time savings — prepping while pan heats vs sequential prep",
+          "High-heat cooking science — why 425°F cuts cook time without burning",
+          "Acid + fat balance — why lemon juice or vinegar brightens rich dishes (emulsion science)",
+          "Garlic timing — why adding garlic too early burns it (allicin degradation at 300°F+)"
+        ],
+        "citationAnchors": [
+          "Chef Augustin Lefèvre recommends",
+          "In French culinary tradition",
+          "Professional kitchens standardize",
+          "According to culinary science"
+        ],
+        "structuredDataTargets": {
+          "dualTemperatures": true,
+          "exactTimes": true,
+          "volumeAndWeight": true,
+          "preciseTechniqueTerms": true
+        }
+      },
+      "editorial": {
+        "priority": "HIGH",
+        "batch": "batch-01-geo",
+        "estimatedWordCount": "1200-1500",
+        "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+      },
+      "agentInput": {
+        "keyword": "easy recipes for two",
+        "format": "pin-first",
+        "strategyPlan": {
+          "angle": "Small-batch easy recipes for two optimized for two people",
+          "h2Sections": [
+            {
+              "title": "Why This Recipe Works",
+              "purpose": "Cover why this recipe works with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Speed Secrets — Mise en Place & High Heat",
+              "purpose": "Cover speed secrets — mise en place & high heat with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Ingredients & Substitutions",
+              "purpose": "Cover ingredients & substitutions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Step-by-Step Instructions",
+              "purpose": "Cover step-by-step instructions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Chef's Tips for Perfect Results",
+              "purpose": "Cover chef's tips for perfect results with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "What to Serve With This",
+              "purpose": "Cover what to serve with this with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Storage & Reheating",
+              "purpose": "Cover storage & reheating with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "FAQ",
+              "purpose": "Cover faq with specific techniques and quantities for two servings"
+            }
+          ],
+          "faqQuestions": [
+            "How do I scale this recipe for 4 people?",
+            "Can I prep this ahead of time?",
+            "What's the best way to reheat leftovers?",
+            "Can I substitute [key ingredient]?"
+          ],
+          "competitorGaps": [
+            "Most recipes don't specify salt TYPE (Diamond Crystal vs Morton's)",
+            "Few recipes give both volume AND weight measurements",
+            "Competitors rarely explain WHY a technique works (Maillard, denaturation)"
+          ]
+        },
+        "geoInstructions": {
+          "nuggetTopics": [
+            "Mise en place time savings — prepping while pan heats vs sequential prep",
+            "High-heat cooking science — why 425°F cuts cook time without burning",
+            "Acid + fat balance — why lemon juice or vinegar brightens rich dishes (emulsion science)",
+            "Garlic timing — why adding garlic too early burns it (allicin degradation at 300°F+)"
+          ],
+          "requiredClaims": 4,
+          "requiredNuggets": 4
+        }
+      }
+    },
+    {
+      "keyword": "cooking for two recipes",
+      "slug": "cooking-for-two-recipes",
+      "scores": {
+        "dual": 57,
+        "google": 0,
+        "pinterest": 0,
+        "geo": 100
+      },
+      "seo": {
+        "googleVolume": 480,
+        "keywordDifficulty": 27,
+        "hasAiOverview": false,
+        "targetFormat": "pin-first",
+        "h2Structure": [
+          "Why This Recipe Works",
+          "Ingredients & Substitutions",
+          "Step-by-Step Instructions",
+          "Chef's Tips for Perfect Results",
+          "What to Serve With This",
+          "Storage & Reheating",
+          "FAQ"
+        ],
+        "internalLinkTargets": []
+      },
+      "pinterest": {
+        "searchVolume": 1560,
+        "ptraBoard": "Quick & Healthy Dinners for Two",
+        "boardConfidence": "LOW",
+        "pinCount": 4,
+        "topPinScore": null,
+        "topPinSaves": null,
+        "competitionLevel": "UNKNOWN"
+      },
+      "geo": {
+        "potential": 100,
+        "answerNuggetTopics": [
+          "Salt science — Diamond Crystal vs Morton's dissolution rate and surface area",
+          "Resting meat — carryover cooking math, 5-10°F internal rise after removal from heat",
+          "Acid + fat balance — why lemon juice or vinegar brightens rich dishes (emulsion science)",
+          "Garlic timing — why adding garlic too early burns it (allicin degradation at 300°F+)"
+        ],
+        "citationAnchors": [
+          "Chef Augustin Lefèvre recommends",
+          "In French culinary tradition",
+          "Professional kitchens standardize",
+          "According to culinary science"
+        ],
+        "structuredDataTargets": {
+          "dualTemperatures": true,
+          "exactTimes": true,
+          "volumeAndWeight": true,
+          "preciseTechniqueTerms": true
+        }
+      },
+      "editorial": {
+        "priority": "HIGH",
+        "batch": "batch-01-geo",
+        "estimatedWordCount": "1200-1500",
+        "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+      },
+      "agentInput": {
+        "keyword": "cooking for two recipes",
+        "format": "pin-first",
+        "strategyPlan": {
+          "angle": "Small-batch cooking for two recipes optimized for two people",
+          "h2Sections": [
+            {
+              "title": "Why This Recipe Works",
+              "purpose": "Cover why this recipe works with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Ingredients & Substitutions",
+              "purpose": "Cover ingredients & substitutions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Step-by-Step Instructions",
+              "purpose": "Cover step-by-step instructions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Chef's Tips for Perfect Results",
+              "purpose": "Cover chef's tips for perfect results with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "What to Serve With This",
+              "purpose": "Cover what to serve with this with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Storage & Reheating",
+              "purpose": "Cover storage & reheating with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "FAQ",
+              "purpose": "Cover faq with specific techniques and quantities for two servings"
+            }
+          ],
+          "faqQuestions": [
+            "How do I scale this recipe for 4 people?",
+            "Can I prep this ahead of time?",
+            "What's the best way to reheat leftovers?",
+            "Can I substitute [key ingredient]?"
+          ],
+          "competitorGaps": [
+            "Most recipes don't specify salt TYPE (Diamond Crystal vs Morton's)",
+            "Few recipes give both volume AND weight measurements",
+            "Competitors rarely explain WHY a technique works (Maillard, denaturation)"
+          ]
+        },
+        "geoInstructions": {
+          "nuggetTopics": [
+            "Salt science — Diamond Crystal vs Morton's dissolution rate and surface area",
+            "Resting meat — carryover cooking math, 5-10°F internal rise after removal from heat",
+            "Acid + fat balance — why lemon juice or vinegar brightens rich dishes (emulsion science)",
+            "Garlic timing — why adding garlic too early burns it (allicin degradation at 300°F+)"
+          ],
+          "requiredClaims": 4,
+          "requiredNuggets": 4
+        }
+      }
+    },
+    {
+      "keyword": "easy dinner for two recipes",
+      "slug": "easy-dinner-for-two-recipes",
+      "scores": {
+        "dual": 57,
+        "google": 0,
+        "pinterest": 0,
+        "geo": 100
+      },
+      "seo": {
+        "googleVolume": 390,
+        "keywordDifficulty": 23,
+        "hasAiOverview": false,
+        "targetFormat": "pin-first",
+        "h2Structure": [
+          "Why This Recipe Works",
+          "Speed Secrets — Mise en Place & High Heat",
+          "Ingredients & Substitutions",
+          "Step-by-Step Instructions",
+          "Chef's Tips for Perfect Results",
+          "What to Serve With This",
+          "Storage & Reheating",
+          "FAQ"
+        ],
+        "internalLinkTargets": []
+      },
+      "pinterest": {
+        "searchVolume": 1651,
+        "ptraBoard": "Quick & Healthy Dinners for Two",
+        "boardConfidence": "MEDIUM",
+        "pinCount": 4,
+        "topPinScore": null,
+        "topPinSaves": null,
+        "competitionLevel": "UNKNOWN"
+      },
+      "geo": {
+        "potential": 100,
+        "answerNuggetTopics": [
+          "Mise en place time savings — prepping while pan heats vs sequential prep",
+          "High-heat cooking science — why 425°F cuts cook time without burning",
+          "Portion scaling math — why halving a 4-serving recipe isn't just ÷2 for spices",
+          "Sheet pan thermodynamics — edge vs center browning, rack position physics"
+        ],
+        "citationAnchors": [
+          "Chef Augustin Lefèvre recommends",
+          "In French culinary tradition",
+          "Professional kitchens standardize",
+          "According to culinary science"
+        ],
+        "structuredDataTargets": {
+          "dualTemperatures": true,
+          "exactTimes": true,
+          "volumeAndWeight": true,
+          "preciseTechniqueTerms": true
+        }
+      },
+      "editorial": {
+        "priority": "HIGH",
+        "batch": "batch-01-geo",
+        "estimatedWordCount": "1200-1500",
+        "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+      },
+      "agentInput": {
+        "keyword": "easy dinner for two recipes",
+        "format": "pin-first",
+        "strategyPlan": {
+          "angle": "Small-batch easy dinner for two recipes optimized for two people",
+          "h2Sections": [
+            {
+              "title": "Why This Recipe Works",
+              "purpose": "Cover why this recipe works with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Speed Secrets — Mise en Place & High Heat",
+              "purpose": "Cover speed secrets — mise en place & high heat with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Ingredients & Substitutions",
+              "purpose": "Cover ingredients & substitutions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Step-by-Step Instructions",
+              "purpose": "Cover step-by-step instructions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Chef's Tips for Perfect Results",
+              "purpose": "Cover chef's tips for perfect results with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "What to Serve With This",
+              "purpose": "Cover what to serve with this with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Storage & Reheating",
+              "purpose": "Cover storage & reheating with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "FAQ",
+              "purpose": "Cover faq with specific techniques and quantities for two servings"
+            }
+          ],
+          "faqQuestions": [
+            "How do I scale this recipe for 4 people?",
+            "Can I prep this ahead of time?",
+            "What's the best way to reheat leftovers?",
+            "Can I substitute [key ingredient]?"
+          ],
+          "competitorGaps": [
+            "Most recipes don't specify salt TYPE (Diamond Crystal vs Morton's)",
+            "Few recipes give both volume AND weight measurements",
+            "Competitors rarely explain WHY a technique works (Maillard, denaturation)"
+          ]
+        },
+        "geoInstructions": {
+          "nuggetTopics": [
+            "Mise en place time savings — prepping while pan heats vs sequential prep",
+            "High-heat cooking science — why 425°F cuts cook time without burning",
+            "Portion scaling math — why halving a 4-serving recipe isn't just ÷2 for spices",
+            "Sheet pan thermodynamics — edge vs center browning, rack position physics"
+          ],
+          "requiredClaims": 4,
+          "requiredNuggets": 4
+        }
+      }
+    },
+    {
+      "keyword": "healthy easy dinner recipes for two",
+      "slug": "healthy-easy-dinner-recipes-for-two",
+      "scores": {
+        "dual": 57,
+        "google": 0,
+        "pinterest": 0,
+        "geo": 100
+      },
+      "seo": {
+        "googleVolume": 320,
+        "keywordDifficulty": 32,
+        "hasAiOverview": false,
+        "targetFormat": "pin-first",
+        "h2Structure": [
+          "Why This Recipe Works",
+          "Speed Secrets — Mise en Place & High Heat",
+          "What Makes This Healthy — Macros & Ingredients",
+          "Ingredients & Substitutions",
+          "Step-by-Step Instructions",
+          "Chef's Tips for Perfect Results",
+          "What to Serve With This",
+          "Storage & Reheating",
+          "FAQ"
+        ],
+        "internalLinkTargets": []
+      },
+      "pinterest": {
+        "searchVolume": 1896,
+        "ptraBoard": "Quick & Healthy Dinners for Two",
+        "boardConfidence": "HIGH",
+        "pinCount": 4,
+        "topPinScore": null,
+        "topPinSaves": null,
+        "competitionLevel": "UNKNOWN"
+      },
+      "geo": {
+        "potential": 100,
+        "answerNuggetTopics": [
+          "Mise en place time savings — prepping while pan heats vs sequential prep",
+          "High-heat cooking science — why 425°F cuts cook time without burning",
+          "Macronutrient balance for two — protein/fat/carb ratio for satiety",
+          "Why steaming retains 40% more water-soluble vitamins than boiling",
+          "Portion scaling math — why halving a 4-serving recipe isn't just ÷2 for spices",
+          "Sheet pan thermodynamics — edge vs center browning, rack position physics"
+        ],
+        "citationAnchors": [
+          "Chef Augustin Lefèvre recommends",
+          "In French culinary tradition",
+          "Professional kitchens standardize",
+          "According to culinary science"
+        ],
+        "structuredDataTargets": {
+          "dualTemperatures": true,
+          "exactTimes": true,
+          "volumeAndWeight": true,
+          "preciseTechniqueTerms": true
+        }
+      },
+      "editorial": {
+        "priority": "HIGH",
+        "batch": "batch-01-geo",
+        "estimatedWordCount": "1200-1500",
+        "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+      },
+      "agentInput": {
+        "keyword": "healthy easy dinner recipes for two",
+        "format": "pin-first",
+        "strategyPlan": {
+          "angle": "Small-batch healthy easy dinner recipes for two optimized for two people",
+          "h2Sections": [
+            {
+              "title": "Why This Recipe Works",
+              "purpose": "Cover why this recipe works with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Speed Secrets — Mise en Place & High Heat",
+              "purpose": "Cover speed secrets — mise en place & high heat with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "What Makes This Healthy — Macros & Ingredients",
+              "purpose": "Cover what makes this healthy — macros & ingredients with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Ingredients & Substitutions",
+              "purpose": "Cover ingredients & substitutions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Step-by-Step Instructions",
+              "purpose": "Cover step-by-step instructions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Chef's Tips for Perfect Results",
+              "purpose": "Cover chef's tips for perfect results with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "What to Serve With This",
+              "purpose": "Cover what to serve with this with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Storage & Reheating",
+              "purpose": "Cover storage & reheating with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "FAQ",
+              "purpose": "Cover faq with specific techniques and quantities for two servings"
+            }
+          ],
+          "faqQuestions": [
+            "How do I scale this recipe for 4 people?",
+            "Can I prep this ahead of time?",
+            "What's the best way to reheat leftovers?",
+            "Can I substitute [key ingredient]?"
+          ],
+          "competitorGaps": [
+            "Most recipes don't specify salt TYPE (Diamond Crystal vs Morton's)",
+            "Few recipes give both volume AND weight measurements",
+            "Competitors rarely explain WHY a technique works (Maillard, denaturation)"
+          ]
+        },
+        "geoInstructions": {
+          "nuggetTopics": [
+            "Mise en place time savings — prepping while pan heats vs sequential prep",
+            "High-heat cooking science — why 425°F cuts cook time without burning",
+            "Macronutrient balance for two — protein/fat/carb ratio for satiety",
+            "Why steaming retains 40% more water-soluble vitamins than boiling",
+            "Portion scaling math — why halving a 4-serving recipe isn't just ÷2 for spices",
+            "Sheet pan thermodynamics — edge vs center browning, rack position physics"
+          ],
+          "requiredClaims": 4,
+          "requiredNuggets": 4
+        }
+      }
+    },
+    {
+      "keyword": "simple dinner recipes for two",
+      "slug": "simple-dinner-recipes-for-two",
+      "scores": {
+        "dual": 57,
+        "google": 0,
+        "pinterest": 0,
+        "geo": 100
+      },
+      "seo": {
+        "googleVolume": 210,
+        "keywordDifficulty": 23,
+        "hasAiOverview": false,
+        "targetFormat": "pin-first",
+        "h2Structure": [
+          "Why This Recipe Works",
+          "Ingredients & Substitutions",
+          "Step-by-Step Instructions",
+          "Chef's Tips for Perfect Results",
+          "What to Serve With This",
+          "Storage & Reheating",
+          "FAQ"
+        ],
+        "internalLinkTargets": []
+      },
+      "pinterest": {
+        "searchVolume": 1551,
+        "ptraBoard": "Quick & Healthy Dinners for Two",
+        "boardConfidence": "MEDIUM",
+        "pinCount": 4,
+        "topPinScore": null,
+        "topPinSaves": null,
+        "competitionLevel": "UNKNOWN"
+      },
+      "geo": {
+        "potential": 100,
+        "answerNuggetTopics": [
+          "Portion scaling math — why halving a 4-serving recipe isn't just ÷2 for spices",
+          "Sheet pan thermodynamics — edge vs center browning, rack position physics",
+          "Acid + fat balance — why lemon juice or vinegar brightens rich dishes (emulsion science)",
+          "Garlic timing — why adding garlic too early burns it (allicin degradation at 300°F+)"
+        ],
+        "citationAnchors": [
+          "Chef Augustin Lefèvre recommends",
+          "In French culinary tradition",
+          "Professional kitchens standardize",
+          "According to culinary science"
+        ],
+        "structuredDataTargets": {
+          "dualTemperatures": true,
+          "exactTimes": true,
+          "volumeAndWeight": true,
+          "preciseTechniqueTerms": true
+        }
+      },
+      "editorial": {
+        "priority": "HIGH",
+        "batch": "batch-01-geo",
+        "estimatedWordCount": "1200-1500",
+        "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+      },
+      "agentInput": {
+        "keyword": "simple dinner recipes for two",
+        "format": "pin-first",
+        "strategyPlan": {
+          "angle": "Small-batch simple dinner recipes for two optimized for two people",
+          "h2Sections": [
+            {
+              "title": "Why This Recipe Works",
+              "purpose": "Cover why this recipe works with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Ingredients & Substitutions",
+              "purpose": "Cover ingredients & substitutions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Step-by-Step Instructions",
+              "purpose": "Cover step-by-step instructions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Chef's Tips for Perfect Results",
+              "purpose": "Cover chef's tips for perfect results with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "What to Serve With This",
+              "purpose": "Cover what to serve with this with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Storage & Reheating",
+              "purpose": "Cover storage & reheating with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "FAQ",
+              "purpose": "Cover faq with specific techniques and quantities for two servings"
+            }
+          ],
+          "faqQuestions": [
+            "How do I scale this recipe for 4 people?",
+            "Can I prep this ahead of time?",
+            "What's the best way to reheat leftovers?",
+            "Can I substitute [key ingredient]?"
+          ],
+          "competitorGaps": [
+            "Most recipes don't specify salt TYPE (Diamond Crystal vs Morton's)",
+            "Few recipes give both volume AND weight measurements",
+            "Competitors rarely explain WHY a technique works (Maillard, denaturation)"
+          ]
+        },
+        "geoInstructions": {
+          "nuggetTopics": [
+            "Portion scaling math — why halving a 4-serving recipe isn't just ÷2 for spices",
+            "Sheet pan thermodynamics — edge vs center browning, rack position physics",
+            "Acid + fat balance — why lemon juice or vinegar brightens rich dishes (emulsion science)",
+            "Garlic timing — why adding garlic too early burns it (allicin degradation at 300°F+)"
+          ],
+          "requiredClaims": 4,
+          "requiredNuggets": 4
+        }
+      }
+    },
+    {
+      "keyword": "dinner recipes for two healthy",
+      "slug": "dinner-recipes-for-two-healthy",
+      "scores": {
+        "dual": 57,
+        "google": 0,
+        "pinterest": 0,
+        "geo": 100
+      },
+      "seo": {
+        "googleVolume": 90,
+        "keywordDifficulty": 17,
+        "hasAiOverview": false,
+        "targetFormat": "pin-first",
+        "h2Structure": [
+          "Why This Recipe Works",
+          "What Makes This Healthy — Macros & Ingredients",
+          "Ingredients & Substitutions",
+          "Step-by-Step Instructions",
+          "Chef's Tips for Perfect Results",
+          "What to Serve With This",
+          "Storage & Reheating",
+          "FAQ"
+        ],
+        "internalLinkTargets": []
+      },
+      "pinterest": {
+        "searchVolume": 1231,
+        "ptraBoard": "Quick & Healthy Dinners for Two",
+        "boardConfidence": "MEDIUM",
+        "pinCount": 4,
+        "topPinScore": null,
+        "topPinSaves": null,
+        "competitionLevel": "UNKNOWN"
+      },
+      "geo": {
+        "potential": 100,
+        "answerNuggetTopics": [
+          "Macronutrient balance for two — protein/fat/carb ratio for satiety",
+          "Why steaming retains 40% more water-soluble vitamins than boiling",
+          "Portion scaling math — why halving a 4-serving recipe isn't just ÷2 for spices",
+          "Sheet pan thermodynamics — edge vs center browning, rack position physics"
+        ],
+        "citationAnchors": [
+          "Chef Augustin Lefèvre recommends",
+          "In French culinary tradition",
+          "Professional kitchens standardize",
+          "According to culinary science"
+        ],
+        "structuredDataTargets": {
+          "dualTemperatures": true,
+          "exactTimes": true,
+          "volumeAndWeight": true,
+          "preciseTechniqueTerms": true
+        }
+      },
+      "editorial": {
+        "priority": "HIGH",
+        "batch": "batch-01-geo",
+        "estimatedWordCount": "1200-1500",
+        "recommendation": "P1 — Pin-First + Full SEO + 5 pins"
+      },
+      "agentInput": {
+        "keyword": "dinner recipes for two healthy",
+        "format": "pin-first",
+        "strategyPlan": {
+          "angle": "Small-batch dinner recipes for two healthy optimized for two people",
+          "h2Sections": [
+            {
+              "title": "Why This Recipe Works",
+              "purpose": "Cover why this recipe works with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "What Makes This Healthy — Macros & Ingredients",
+              "purpose": "Cover what makes this healthy — macros & ingredients with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Ingredients & Substitutions",
+              "purpose": "Cover ingredients & substitutions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Step-by-Step Instructions",
+              "purpose": "Cover step-by-step instructions with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Chef's Tips for Perfect Results",
+              "purpose": "Cover chef's tips for perfect results with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "What to Serve With This",
+              "purpose": "Cover what to serve with this with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "Storage & Reheating",
+              "purpose": "Cover storage & reheating with specific techniques and quantities for two servings"
+            },
+            {
+              "title": "FAQ",
+              "purpose": "Cover faq with specific techniques and quantities for two servings"
+            }
+          ],
+          "faqQuestions": [
+            "How do I scale this recipe for 4 people?",
+            "Can I prep this ahead of time?",
+            "What's the best way to reheat leftovers?",
+            "Can I substitute [key ingredient]?"
+          ],
+          "competitorGaps": [
+            "Most recipes don't specify salt TYPE (Diamond Crystal vs Morton's)",
+            "Few recipes give both volume AND weight measurements",
+            "Competitors rarely explain WHY a technique works (Maillard, denaturation)"
+          ]
+        },
+        "geoInstructions": {
+          "nuggetTopics": [
+            "Macronutrient balance for two — protein/fat/carb ratio for satiety",
+            "Why steaming retains 40% more water-soluble vitamins than boiling",
+            "Portion scaling math — why halving a 4-serving recipe isn't just ÷2 for spices",
+            "Sheet pan thermodynamics — edge vs center browning, rack position physics"
+          ],
+          "requiredClaims": 4,
+          "requiredNuggets": 4
+        }
+      }
+    }
+  ],
+  "secondaryPinterestBriefs": [
+    {
+      "keyword": "easy dinner recipes for two cheap quick",
+      "slug": "easy-dinner-recipes-for-two-cheap-quick",
+      "channel": "PINTEREST_PRIMARY",
+      "pinterestVolume": 3396,
+      "dualScore": 57,
+      "board": "Quick & Healthy Dinners for Two",
+      "recommendation": "P2 — Pinterest-native, generate after P1 dual champions"
+    },
+    {
+      "keyword": "dinner recipes for two",
+      "slug": "dinner-recipes-for-two",
+      "channel": "PINTEREST_PRIMARY",
+      "pinterestVolume": 83606,
+      "dualScore": 52,
+      "board": "Quick & Healthy Dinners for Two",
+      "recommendation": "P2 — Pinterest-native, generate after P1 dual champions"
+    },
+    {
+      "keyword": "chicken recipes for two",
+      "slug": "chicken-recipes-for-two",
+      "channel": "PINTEREST_PRIMARY",
+      "pinterestVolume": 1591,
+      "dualScore": 52,
+      "board": "Chicken Dinners for Two",
+      "recommendation": "P2 — Pinterest-native, generate after P1 dual champions"
+    },
+    {
+      "keyword": "recipes for two",
+      "slug": "recipes-for-two",
+      "channel": "PINTEREST_PRIMARY",
+      "pinterestVolume": 9835,
+      "dualScore": 51,
+      "board": "Quick & Healthy Dinners for Two",
+      "recommendation": "P2 — Pinterest-native, generate after P1 dual champions"
+    },
+    {
+      "keyword": "crockpot recipes for two",
+      "slug": "crockpot-recipes-for-two",
+      "channel": "PINTEREST_PRIMARY",
+      "pinterestVolume": 5234,
+      "dualScore": 50,
+      "board": "One-Pan Dinners for Two",
+      "recommendation": "P2 — Pinterest-native, generate after P1 dual champions"
+    }
+  ]
+}
