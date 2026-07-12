@@ -2,11 +2,13 @@
  * Internal Linker — Post-processing contextual link insertion.
  *
  * Inserts 2-3 natural contextual links into recipe markdown, linking to
- * published recipes in the same cluster. Pure post-processing — no AI calls.
+ * published recipes. Uses tag-overlap scoring (getRelatedRecipes) for
+ * same-cluster priority, falls back to getPublishedRecipes for cross-cluster
+ * discovery. Enforces 200-word minimum spacing between links for recipes
+ * with 400+ words. Pure post-processing — no AI calls.
  */
 
-import { getPublishedRecipes } from "@/lib/queries"
-import { resolveCluster } from "@/lib/cluster-resolver"
+import { getPublishedRecipes, getRelatedRecipes } from "@/lib/queries"
 
 interface LinkTarget {
   id: number
@@ -130,41 +132,43 @@ export async function insertContextualLinks(
   const candidates = extractCandidates(markdown)
   if (candidates.length === 0) return markdown
 
+  // 1. Get same-cluster related recipes (tag-overlap scoring, top 5)
+  const relatedRecipes = await getRelatedRecipes(recipeId, tags)
+
+  // 2. Get all published recipes for cross-cluster fallback
   const publishedRecipes = await getPublishedRecipes()
-  if (publishedRecipes.length <= 1) return markdown
 
-  const linkTargets: LinkTarget[] = publishedRecipes.map((r) => ({
-    id: r.id,
-    slug: r.slug,
-    title: r.title,
-    tags: (r.tags ?? []) as string[],
-  }))
+  // 3. Build ordered target list: related first (priority), then others
+  const relatedIds = new Set(relatedRecipes.map((r) => r.id))
+  const otherRecipes = publishedRecipes.filter(
+    (r) => r.id !== recipeId && !relatedIds.has(r.id),
+  )
 
-  // Resolve cluster for same-cluster priority
-  const cluster = resolveCluster(tags)
-  let sameClusterRecipes: LinkTarget[] = []
-  let otherRecipes: LinkTarget[] = []
+  const allTargets: LinkTarget[] = [
+    ...relatedRecipes.map((r) => ({
+      id: r.id,
+      slug: r.slug,
+      title: r.title,
+      tags: (r.tags ?? []) as string[],
+    })),
+    ...otherRecipes.map((r) => ({
+      id: r.id,
+      slug: r.slug,
+      title: r.title,
+      tags: (r.tags ?? []) as string[],
+    })),
+  ]
 
-  if (cluster) {
-    for (const r of linkTargets) {
-      if (r.id === recipeId) continue
-      const rCluster = resolveCluster(r.tags)
-      if (rCluster?.id === cluster.id) {
-        sameClusterRecipes.push(r)
-      } else {
-        otherRecipes.push(r)
-      }
-    }
-  } else {
-    otherRecipes = linkTargets.filter((r) => r.id !== recipeId)
-  }
+  if (allTargets.length === 0) return markdown
 
-  // Prioritize same-cluster recipes
-  const orderedTargets = [...sameClusterRecipes, ...otherRecipes]
+  // 4. Check word count for spacing enforcement
+  const totalWords = markdown.split(/\s+/).filter((w) => w.length > 0).length
+  const enforceSpacing = totalWords >= 400
 
   const paragraphs = markdown.split("\n\n")
   const linkedParagraphs = new Set<number>()
   let linksInserted = 0
+  let lastLinkWordPosition = -Infinity
 
   for (let i = 0; i < paragraphs.length && linksInserted < 3; i++) {
     if (linkedParagraphs.has(i)) continue
@@ -172,13 +176,31 @@ export async function insertContextualLinks(
     // Skip paragraphs that are headings, images, or code blocks
     if (/^(#{1,6}\s|!\[|```|<)/.test(paragraphs[i].trim())) continue
 
+    // Calculate cumulative word position before this paragraph
+    const wordsBefore = paragraphs
+      .slice(0, i)
+      .reduce(
+        (sum, p) => sum + p.split(/\s+/).filter((w) => w.length > 0).length,
+        0,
+      )
+
+    // Enforce 200-word minimum spacing (skip for short recipes < 400 words)
+    if (enforceSpacing && wordsBefore - lastLinkWordPosition < 200) continue
+
     for (const candidate of candidates) {
-      const match = findLinkTarget(candidate, orderedTargets, recipeId)
+      const match = findLinkTarget(candidate, allTargets, recipeId)
       if (!match) continue
 
-      // Check if candidate appears in this paragraph
+      // Check if candidate phrase appears with proper word boundaries.
+      // Uses lookbehind/lookahead instead of \b to avoid breaking hyphenated
+      // compounds like "green-beans": \b matches between 'n' and '-', but our
+      // pattern treats hyphen as a word-internal character so we only match
+      // standalone words.
       const escapedPhrase = match.phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
-      const regex = new RegExp(`(\\b${escapedPhrase}\\b)`, "i")
+      const regex = new RegExp(
+        `(?<=^|[^\\w-])${escapedPhrase}(?=[^\\w-]|$)`,
+        "i",
+      )
 
       if (regex.test(paragraphs[i])) {
         // Insert link at first occurrence
@@ -186,6 +208,7 @@ export async function insertContextualLinks(
         paragraphs[i] = paragraphs[i].replace(regex, link)
         linkedParagraphs.add(i)
         linksInserted++
+        lastLinkWordPosition = wordsBefore
         break // One link per paragraph
       }
     }
