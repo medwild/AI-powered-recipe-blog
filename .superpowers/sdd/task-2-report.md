@@ -87,7 +87,7 @@ Result: PASS (no errors).
 
 ### Commits
 
-- **`ee2753e`** — fix: internal linker — 3 bug fixes from Task 2 review
+- **`94fa189`** — fix: internal linker — 3 bug fixes from Task 2 review
 
 ## Key Design Decisions
 
