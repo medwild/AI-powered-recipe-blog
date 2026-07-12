@@ -61,20 +61,22 @@ Every claim that could be cited MUST include: (1) the specific claim, (2) why it
 
 ### Impact attendu
 
-- Les answer nuggets sont écrits au passage 1, pas rajoutés après coup au passage 2-3
-- Le validateur GEO (`lib/geo-validator.ts`) trouve plus de claims/attributions/nuggets dès le premier passage
-- Le Content Loop fait moins de passes → coût réduit (~$0.11/recette au lieu de ~$0.17)
-- La note de l'article recette #160 passe de 54/100 à ~70/100 dès le passage 1
+- Les answer nuggets et claims citables sont demandés dès le passage 1 — le validateur GEO les trouve sans attendre le feedback du Content Loop
+- **Limite connue :** DeepSeek v4 Pro a déjà du mal à suivre les instructions existantes (0/4 nuggets, 1-3/6 attributions). L'ajout de §4.7 ne produira son plein effet qu'avec **Claude Sonnet 4.6**. Avec DeepSeek, le gain sera marginal au mieux — le bottleneck est le modèle, pas les instructions.
+- Pas de prédiction chiffrée — seul un test réel avec Claude Sonnet 4.6 pourra mesurer l'impact sur le GEO score
 
 ### Validation
 
-- Vérifier que le skill modifié ne casse pas le contrat d'input/output existant
-- Test avec `npx tsc --noEmit` (aucun code TS modifié, mais par sécurité)
-- Premier test de génération : vérifier le GEO score au passage 1 vs baseline DeepSeek
+- Vérifier que le skill modifié ne casse pas le contrat d'input/output existant (les champs du Output Schema §8 restent inchangés)
+- `npx tsc --noEmit` (le skill est un fichier Markdown, aucun code TS modifié — par sécurité)
+- Test de génération avec DeepSeek : mesurer si le GEO score passe 1 s'améliore, mais s'attendre à un gain limité
+- Test de génération avec Claude Sonnet 4.6 (dès qu'`ANTHROPIC_API_KEY` est disponible) : mesurer le GEO score réel
 
 ---
 
 ## Amélioration 2 — Ingestion Pinclicks + Jointure
+
+> **⚠️ Condition :** Cette amélioration est conditionnée à la réception du fichier Pinclicks. Ne rien implémenter avant que l'utilisateur fournisse le fichier.
 
 ### Fichiers créés/modifiés
 
@@ -103,20 +105,13 @@ La jointure ajoute `pinterest_search_volume` à chaque keyword du fichier enrich
 
 Les phases suivantes (filtrage niche, PTRA mapping, plan éditorial) n'ont **aucune modification** — elles consomment le champ s'il est présent, l'ignorent sinon.
 
-### Scoring Dual-Potential (ajouté au niche score existant)
+### Scoring Dual-Potential
 
-Dans la phase 1 (niche filtering), une règle supplémentaire :
-
-```typescript
-// Pinterest Search Volume signal (Pinclicks data)
-if (pinterestSearchVolume > 1000) nicheScore += 1
-if (pinterestSearchVolume > 5000) nicheScore += 2
-```
+Dans la phase 1 (niche filtering), ajouter le `pinterestSearchVolume` comme signal. **Les seuils exacts seront calibrés après analyse de la distribution réelle des données Pinclicks** — ne pas utiliser de valeurs arbitraires. La règle suit le même principe que le scoring existant : volume plus élevé = signal plus fort.
 
 ### Impact attendu
 
-- Les keywords avec fort volume natif Pinterest mais faible volume Google sont mieux classés
-- Le score niche reflète les DEUX canaux, pas seulement Google
+Les keywords avec fort volume natif Pinterest mais faible volume Google sont mieux classés. Le score niche reflète les DEUX canaux. L'ampleur de l'impact dépend de la corrélation entre volume Pinclicks et traffic Pinterest réel — à mesurer après déploiement.
 
 ---
 
@@ -148,5 +143,14 @@ if (pinterestSearchVolume > 5000) nicheScore += 2
 
 ## Ordre d'exécution recommandé
 
-1. Amélioration 1 (GEO prompt) — impact immédiat, zéro dépendance
-2. Amélioration 2 (Pinclicks) — nécessite que l'utilisateur fournisse le fichier Pinclicks
+1. **Amélioration 1 (GEO prompt)** — prête à implémenter, zéro dépendance. Gain limité avec DeepSeek, plein effet avec Claude Sonnet 4.6.
+2. **Amélioration 2 (Pinclicks)** — **bloquée** tant que le fichier Pinclicks n'est pas fourni. Ne pas coder avant.
+
+## Risques et limites reconnus
+
+| Risque | Probabilité | Impact |
+|---|---|---|
+| DeepSeek ignore les nouvelles instructions GEO | Élevée | Faible (le prompt est déjà ignoré sur d'autres points) |
+| Pinclicks non fourni → Amélioration 2 jamais implémentée | Moyenne | Faible (le scoring Google-only fonctionne déjà) |
+| Les instructions GEO alourdissent le prompt sans bénéfice mesurable | Moyenne | Négligeable (~35 lignes sur 176 existantes) |
+| **Vrai levier non adressé :** absence d'`ANTHROPIC_API_KEY` | Certain | Élevé — Claude Sonnet 4.6 est le facteur décisif de qualité |
