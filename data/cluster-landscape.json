@@ -1,0 +1,709 @@
+{
+  "generatedAt": "2026-07-09T20:03:05.915Z",
+  "sourceCsv": "",
+  "totalKeywords": 217,
+  "clusters": [
+    {
+      "clusterName": "general_recipe_ideas",
+      "keywordCount": 19,
+      "avgSearchVolume": 3416,
+      "topKeywords": [
+        "countryliving.com recipes",
+        "the kitchen recipes",
+        "boursin recipes",
+        "martha stewart recipes",
+        "mr food recipes"
+      ],
+      "priorityTiers": {
+        "EXCLUDE": 14,
+        "P2": 1,
+        "P3": 4
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "Health-focused recipes",
+      "keywordCount": 17,
+      "avgSearchVolume": 10171,
+      "topKeywords": [
+        "healthy dinner recipes for two",
+        "nutritious crockpot recipes",
+        "weight watchers recipes",
+        "carnivore diet recipes",
+        "free gluten free recipes for dinner"
+      ],
+      "priorityTiers": {
+        "P2": 8,
+        "P1": 2,
+        "PILLAR": 6,
+        "P3": 1
+      },
+      "opportunitySignal": "STRONG"
+    },
+    {
+      "clusterName": "Desserts & baking",
+      "keywordCount": 17,
+      "avgSearchVolume": 16741,
+      "topKeywords": [
+        "cookie recipes",
+        "easy dessert recipes",
+        "cookies and recipes",
+        "cake recipes",
+        "recipes for philadelphia cheesecake"
+      ],
+      "priorityTiers": {
+        "PILLAR": 12,
+        "P2": 2,
+        "P1": 3
+      },
+      "opportunitySignal": "MODERATE"
+    },
+    {
+      "clusterName": "world_cuisine",
+      "keywordCount": 14,
+      "avgSearchVolume": 2743,
+      "topKeywords": [
+        "greek yogurt recipes",
+        "food from dominican republic recipes",
+        "hot pot recipes",
+        "dominican food recipes",
+        "authentic mexican food recipes"
+      ],
+      "priorityTiers": {
+        "P1": 4,
+        "P2": 5,
+        "P3": 5
+      },
+      "opportunitySignal": "MODERATE"
+    },
+    {
+      "clusterName": "health_diet_sensitive",
+      "keywordCount": 12,
+      "avgSearchVolume": 2258,
+      "topKeywords": [
+        "dash diet recipes",
+        "dinner recipes keto",
+        "fodmap recipes",
+        "low fodmap diet recipes",
+        "low fat dinner recipes"
+      ],
+      "priorityTiers": {
+        "P3": 9,
+        "P2": 2,
+        "EXCLUDE": 1
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "Protein main dishes",
+      "keywordCount": 10,
+      "avgSearchVolume": 4930,
+      "topKeywords": [
+        "chuck steak recipes",
+        "ground venison recipes",
+        "cheese and steak recipes",
+        "easy chicken and rice recipes",
+        "beef tip recipes"
+      ],
+      "priorityTiers": {
+        "P1": 2,
+        "P2": 2,
+        "P3": 6
+      },
+      "opportunitySignal": "STRONG"
+    },
+    {
+      "clusterName": "Asian recipes",
+      "keywordCount": 10,
+      "avgSearchVolume": 3430,
+      "topKeywords": [
+        "asian recipes",
+        "asian food recipes",
+        "easy asian recipes at home",
+        "asian dinner recipes",
+        "easy asian recipes"
+      ],
+      "priorityTiers": {
+        "P1": 3,
+        "PILLAR": 5,
+        "P2": 2
+      },
+      "opportunitySignal": "MODERATE"
+    },
+    {
+      "clusterName": "appliance_cooking_methods",
+      "keywordCount": 9,
+      "avgSearchVolume": 3067,
+      "topKeywords": [
+        "ninja slushie recipes",
+        "grilled dinner recipes",
+        "dash ice cream maker recipes",
+        "convection oven recipes",
+        "electric skillet recipes"
+      ],
+      "priorityTiers": {
+        "P2": 1,
+        "P3": 5,
+        "EXCLUDE": 2,
+        "P1": 1
+      },
+      "opportunitySignal": "MODERATE"
+    },
+    {
+      "clusterName": "meat_steak_sausage",
+      "keywordCount": 9,
+      "avgSearchVolume": 2000,
+      "topKeywords": [
+        "leftover steak recipes",
+        "sirloin tip steak recipes",
+        "ribeye steak recipes",
+        "leftover pork recipes",
+        "crock pot ribs recipes"
+      ],
+      "priorityTiers": {
+        "EXCLUDE": 1,
+        "P3": 5,
+        "P2": 1,
+        "P1": 2
+      },
+      "opportunitySignal": "STRONG"
+    },
+    {
+      "clusterName": "Sides, casseroles & comfort food",
+      "keywordCount": 8,
+      "avgSearchVolume": 8463,
+      "topKeywords": [
+        "potato recipes",
+        "sandwich recipes",
+        "grits recipes",
+        "vegetable casserole recipes",
+        "canned corn recipes"
+      ],
+      "priorityTiers": {
+        "PILLAR": 7,
+        "P2": 1
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "Seasonal & occasion recipes",
+      "keywordCount": 8,
+      "avgSearchVolume": 2175,
+      "topKeywords": [
+        "friday evening dinner recipes",
+        "winter recipes",
+        "easter potluck recipes ideas",
+        "summer soup recipes",
+        "treats for halloween recipes"
+      ],
+      "priorityTiers": {
+        "P2": 2,
+        "P1": 2,
+        "PILLAR": 3,
+        "P3": 1
+      },
+      "opportunitySignal": "MODERATE"
+    },
+    {
+      "clusterName": "dinner_meal_planning",
+      "keywordCount": 8,
+      "avgSearchVolume": 2550,
+      "topKeywords": [
+        "easy lunch recipes",
+        "light dinner recipes",
+        "dinner for two recipes",
+        "gluten free recipes dinner",
+        "unique dinner recipes"
+      ],
+      "priorityTiers": {
+        "P2": 1,
+        "P3": 6,
+        "P1": 1
+      },
+      "opportunitySignal": "MODERATE"
+    },
+    {
+      "clusterName": "Competitor / platform queries",
+      "keywordCount": 7,
+      "avgSearchVolume": 49286,
+      "topKeywords": [
+        "allrecipes",
+        "good housekeeping recipes",
+        "pinterest recipes",
+        "pinterest recipes",
+        "cook's kitchen recipes"
+      ],
+      "priorityTiers": {
+        "EXCLUDE": 7
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "Drinks & beverages",
+      "keywordCount": 5,
+      "avgSearchVolume": 6380,
+      "topKeywords": [
+        "dirty soda recipes",
+        "mixed drink recipes",
+        "frozen fruit smoothie recipes",
+        "jello shot recipes",
+        "matcha drink recipes"
+      ],
+      "priorityTiers": {
+        "P2": 2,
+        "EXCLUDE": 2,
+        "P1": 1
+      },
+      "opportunitySignal": "STRONG"
+    },
+    {
+      "clusterName": "Italian recipes",
+      "keywordCount": 5,
+      "avgSearchVolume": 3920,
+      "topKeywords": [
+        "italian food recipes",
+        "italian dinner recipes",
+        "pizza sides recipes",
+        "authentic italian recipes",
+        "italian cooking recipes"
+      ],
+      "priorityTiers": {
+        "PILLAR": 5
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "baking_bread",
+      "keywordCount": 5,
+      "avgSearchVolume": 1720,
+      "topKeywords": [
+        "cracker food recipes",
+        "healthy baking recipes",
+        "simple baking recipes",
+        "recipes containing yeast",
+        "stuffed bread recipes"
+      ],
+      "priorityTiers": {
+        "P3": 3,
+        "P2": 1,
+        "P1": 1
+      },
+      "opportunitySignal": "MODERATE"
+    },
+    {
+      "clusterName": "chicken_recipes",
+      "keywordCount": 4,
+      "avgSearchVolume": 4600,
+      "topKeywords": [
+        "skinless boneless chicken thigh recipes",
+        "easy 4 ingredient chicken breast recipes",
+        "deboned chicken thigh recipes",
+        "panda express recipes kung pao chicken"
+      ],
+      "priorityTiers": {
+        "P1": 2,
+        "EXCLUDE": 1,
+        "P3": 1
+      },
+      "opportunitySignal": "STRONG"
+    },
+    {
+      "clusterName": "Meal planning & family meals",
+      "keywordCount": 3,
+      "avgSearchVolume": 13133,
+      "topKeywords": [
+        "recipes for dinner",
+        "lunch recipes",
+        "recipes for picky eaters"
+      ],
+      "priorityTiers": {
+        "PILLAR": 2,
+        "P2": 1
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "General recipe ideas",
+      "keywordCount": 3,
+      "avgSearchVolume": 7567,
+      "topKeywords": [
+        "baking recipes",
+        "cranberry recipes",
+        "hilarious recipes"
+      ],
+      "priorityTiers": {
+        "PILLAR": 2,
+        "EXCLUDE": 1
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "Latin & Caribbean recipes",
+      "keywordCount": 3,
+      "avgSearchVolume": 5667,
+      "topKeywords": [
+        "mexican recipes",
+        "cuban food recipes",
+        "west indian cuisine recipes"
+      ],
+      "priorityTiers": {
+        "PILLAR": 2,
+        "P2": 1
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "seasonal_holiday",
+      "keywordCount": 3,
+      "avgSearchVolume": 1500,
+      "topKeywords": [
+        "easter salad recipes",
+        "easy recipes for halloween potluck",
+        "at home brunch recipes"
+      ],
+      "priorityTiers": {
+        "P2": 1,
+        "P3": 2
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "alcoholic_drinks",
+      "keywordCount": 3,
+      "avgSearchVolume": 2867,
+      "topKeywords": [
+        "martini recipes",
+        "mixed drinks recipes",
+        "recipes for frozen alcoholic beverages"
+      ],
+      "priorityTiers": {
+        "P3": 3
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "drinks_smoothies_mocktails",
+      "keywordCount": 3,
+      "avgSearchVolume": 1100,
+      "topKeywords": [
+        "tropical smoothie cafe recipes",
+        "smoothie king recipes",
+        "christmas mocktail recipes"
+      ],
+      "priorityTiers": {
+        "EXCLUDE": 2,
+        "P3": 1
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "starches_grains_pasta",
+      "keywordCount": 3,
+      "avgSearchVolume": 4100,
+      "topKeywords": [
+        "rice bowl recipes",
+        "fettuccine recipes",
+        "quick potato recipes"
+      ],
+      "priorityTiers": {
+        "P3": 3
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "Southern soul food",
+      "keywordCount": 2,
+      "avgSearchVolume": 5400,
+      "topKeywords": [
+        "food soul recipes",
+        "soul food recipes"
+      ],
+      "priorityTiers": {
+        "PILLAR": 2
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "desserts_baking",
+      "keywordCount": 2,
+      "avgSearchVolume": 1300,
+      "topKeywords": [
+        "recipes with meringue",
+        "easy dessert recipes with few ingredients"
+      ],
+      "priorityTiers": {
+        "P2": 1,
+        "P3": 1
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "non_recipe_or_non_food",
+      "keywordCount": 2,
+      "avgSearchVolume": 1300,
+      "topKeywords": [
+        "banner recipes on minecraft",
+        "melt and pour soap recipes"
+      ],
+      "priorityTiers": {
+        "EXCLUDE": 2
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "crockpot_slow_cooker_dinners",
+      "keywordCount": 2,
+      "avgSearchVolume": 2650,
+      "topKeywords": [
+        "low carb recipes for the crock pot",
+        "crockpot recipes for ground beef"
+      ],
+      "priorityTiers": {
+        "P3": 1,
+        "P2": 1
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "one_pot_meals",
+      "keywordCount": 2,
+      "avgSearchVolume": 1600,
+      "topKeywords": [
+        "easy one pot recipes",
+        "one pot meals recipes"
+      ],
+      "priorityTiers": {
+        "P3": 2
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "Copycat recipes",
+      "keywordCount": 1,
+      "avgSearchVolume": 6600,
+      "topKeywords": [
+        "copycat recipes"
+      ],
+      "priorityTiers": {
+        "PILLAR": 1
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "Cooking method recipes",
+      "keywordCount": 1,
+      "avgSearchVolume": 4400,
+      "topKeywords": [
+        "griddle recipes"
+      ],
+      "priorityTiers": {
+        "PILLAR": 1
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "baby_toddler_food",
+      "keywordCount": 1,
+      "avgSearchVolume": 1000,
+      "topKeywords": [
+        "recipes for toddlers 12-18 months"
+      ],
+      "priorityTiers": {
+        "P3": 1
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "seasonal_drinks",
+      "keywordCount": 1,
+      "avgSearchVolume": 1900,
+      "topKeywords": [
+        "halloween punch recipes"
+      ],
+      "priorityTiers": {
+        "P2": 1
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "vegetable_sides",
+      "keywordCount": 1,
+      "avgSearchVolume": 1300,
+      "topKeywords": [
+        "vegetables recipes"
+      ],
+      "priorityTiers": {
+        "P3": 1
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "salads",
+      "keywordCount": 1,
+      "avgSearchVolume": 1600,
+      "topKeywords": [
+        "cold salad recipes"
+      ],
+      "priorityTiers": {
+        "P2": 1
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "sliders_appetizers_party_food",
+      "keywordCount": 1,
+      "avgSearchVolume": 1300,
+      "topKeywords": [
+        "best hawaiian bread sliders recipes"
+      ],
+      "priorityTiers": {
+        "P2": 1
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "easy_potato_recipes",
+      "keywordCount": 1,
+      "avgSearchVolume": 3600,
+      "topKeywords": [
+        "potato recipes easy"
+      ],
+      "priorityTiers": {
+        "P3": 1
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "mexican_dinner_recipes",
+      "keywordCount": 1,
+      "avgSearchVolume": 1300,
+      "topKeywords": [
+        "mexican dishes recipes"
+      ],
+      "priorityTiers": {
+        "P3": 1
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "caribbean_haitian_recipes",
+      "keywordCount": 1,
+      "avgSearchVolume": 1000,
+      "topKeywords": [
+        "haitian food recipes legume"
+      ],
+      "priorityTiers": {
+        "P2": 1
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "air_fryer_recipes",
+      "keywordCount": 1,
+      "avgSearchVolume": 3600,
+      "topKeywords": [
+        "ninja air fryer recipes"
+      ],
+      "priorityTiers": {
+        "P3": 1
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "daniel_fast_recipes",
+      "keywordCount": 1,
+      "avgSearchVolume": 1000,
+      "topKeywords": [
+        "quick daniel fast recipes"
+      ],
+      "priorityTiers": {
+        "P3": 1
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "cream_cheese_recipes",
+      "keywordCount": 1,
+      "avgSearchVolume": 2900,
+      "topKeywords": [
+        "recipes using cream cheese"
+      ],
+      "priorityTiers": {
+        "P1": 1
+      },
+      "opportunitySignal": "MODERATE"
+    },
+    {
+      "clusterName": "vegan_raw_recipes",
+      "keywordCount": 1,
+      "avgSearchVolume": 2400,
+      "topKeywords": [
+        "raw vegan recipes"
+      ],
+      "priorityTiers": {
+        "P2": 1
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "sour_cream_recipes",
+      "keywordCount": 1,
+      "avgSearchVolume": 2400,
+      "topKeywords": [
+        "recipes with sour cream"
+      ],
+      "priorityTiers": {
+        "P3": 1
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "exclude_brand_diet_program",
+      "keywordCount": 1,
+      "avgSearchVolume": 2400,
+      "topKeywords": [
+        "weight watcher recipes"
+      ],
+      "priorityTiers": {
+        "EXCLUDE": 1
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "vegetarian_lunch_recipes",
+      "keywordCount": 1,
+      "avgSearchVolume": 2400,
+      "topKeywords": [
+        "lunchtime recipes vegetarian"
+      ],
+      "priorityTiers": {
+        "P1": 1
+      },
+      "opportunitySignal": "MODERATE"
+    },
+    {
+      "clusterName": "low_sodium_dinner_recipes",
+      "keywordCount": 1,
+      "avgSearchVolume": 1300,
+      "topKeywords": [
+        "low sodium dinner recipes"
+      ],
+      "priorityTiers": {
+        "P3": 1
+      },
+      "opportunitySignal": "WEAK"
+    },
+    {
+      "clusterName": "beef_steak_cut_recipes",
+      "keywordCount": 1,
+      "avgSearchVolume": 3600,
+      "topKeywords": [
+        "round eye round steak recipes"
+      ],
+      "priorityTiers": {
+        "P1": 1
+      },
+      "opportunitySignal": "MODERATE"
+    }
+  ]
+}

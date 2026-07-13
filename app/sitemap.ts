@@ -6,7 +6,7 @@ import { getPublishedRecipes } from "@/lib/queries"
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com"
 
-const CATEGORY_PAGES = ["techniques", "guides", "histoire", "equipement"]
+const CATEGORY_PAGES = ["techniques", "guides", "histoire", "equipement", "idees"]
 const STATIC_PAGES = ["privacy", "terms"]
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

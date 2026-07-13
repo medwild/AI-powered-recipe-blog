@@ -59,6 +59,7 @@ const INTERNAL_TOKENS = [
 // ---------------------------------------------------------------------------
 
 import { checkCitability } from "@/lib/geo-validator"
+import { validateCulinary } from "@/lib/culinary-validator"
 
 // ---------------------------------------------------------------------------
 // Types
@@ -216,9 +217,24 @@ export function validateContent(draft: ValidatableDraft): ValidationResult {
     errors.push(...ingredientErrors)
   }
 
-  // 5.6 Food safety — USDA temperature validation (warning-only)
+  // 5.6 Food safety — USDA temperature validation (CRITICAL: blocks in autopilot)
   const safetyErrors = validateFoodSafety(md)
   errors.push(...safetyErrors)
+
+  // 5.7 Sentence rhythm — deterministic checks moved from skill (warning-only)
+  const rhythmErrors = validateSentenceRhythm(md)
+  errors.push(...rhythmErrors)
+
+  // 5.8 Culinary validation — ingredient ratios, cook times, temperatures (warning-only)
+  const culinaryErrors = validateCulinary({
+    ingredients: (draft.ingredients as Ingredient[]) ?? null,
+    instructions: (draft.instructions as { text?: string }[]) ?? null,
+    prepTime: null, // not available at validation time — checked in persist-phase
+    cookTime: null,
+    totalTime: null,
+    servings: null,
+  })
+  errors.push(...culinaryErrors)
 
   if (isRecipe) {
     if (!draft.ingredients?.length) {
@@ -255,18 +271,21 @@ export function validateContent(draft: ValidatableDraft): ValidationResult {
       }
     }
 
-    // 7b. Recipe card position — must appear within 300 chars of content start
-    const first300 = md.substring(0, 300).toLowerCase()
+    // 7b. Recipe card position — must appear within 500 chars of content start.
+    // The intro target is 50-80 words (~300-480 chars), so 500 chars gives
+    // enough room for a well-crafted intro while keeping the recipe above the fold.
+    const first500 = md.substring(0, 500).toLowerCase()
     const hasRecipeCardEarly =
-      first300.includes("ingredient") ||
-      first300.includes("## ingredient") ||
+      first500.includes("ingredient") ||
+      first500.includes("## ingredient") ||
       (draft.ingredients && draft.ingredients.length > 0 &&
-       (first300.includes("cup") || first300.includes("tablespoon") || first300.includes("teaspoon")))
+       (first500.includes("cup") || first500.includes("tablespoon") || first500.includes("teaspoon") ||
+        first500.includes("ounce") || first500.includes("pound") || first500.includes("gram")))
     if (!hasRecipeCardEarly) {
       errors.push({
         field: "contentMarkdown",
         severity: "error",
-        message: "Pin-First format requires recipe card (ingredients) within the first 300 characters.",
+        message: `Pin-First format requires recipe card (ingredients) within the first 500 characters (intro is ${first500.length}+ chars without recipe).`,
       })
     }
 
@@ -533,11 +552,102 @@ export function validateFoodSafety(contentMarkdown: string | null | undefined): 
       if (!isNaN(temp) && temp < rule.minTempF && temp > 50) { // >50 to skip non-temperature numbers
         errors.push({
           field: "contentMarkdown",
-          severity: "warning",
-          message: `Food safety: "${match[0].trim()}" — ${rule.message}. Found ${temp}°F.`,
+          severity: "error",
+          message: `CRITICAL Food safety: "${match[0].trim()}" — ${rule.message}. Found ${temp}°F. USDA minimum is ${rule.minTempF}°F. This blocks publication even in autopilot mode.`,
         })
       }
     }
+  }
+
+  return errors
+}
+
+// ---------------------------------------------------------------------------
+// Sentence Rhythm Validation — Deterministic checks moved from skill
+// ---------------------------------------------------------------------------
+
+/**
+ * Validates sentence rhythm patterns that were previously in the LLM skill.
+ * The LLM cannot count adverbs or sentence lengths reliably — these checks
+ * are now deterministic code. All are warning-only.
+ */
+function validateSentenceRhythm(contentMarkdown: string | null | undefined): ValidationError[] {
+  const errors: ValidationError[] = []
+  if (!contentMarkdown) return errors
+
+  // Strip markdown formatting for sentence analysis
+  const plainText = contentMarkdown
+    .replace(/^#{1,6}\s+/gm, "") // headings
+    .replace(/\[IMAGE:.*?\]/gi, "") // image placeholders
+    .replace(/[*_~`>\[\]()#|!-]/g, "") // inline formatting
+    .replace(/\n{2,}/g, ". ") // paragraph breaks → sentence separators
+    .replace(/\n/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+
+  // Split into sentences
+  const sentences = plainText
+    .split(/[.!?]+/)
+    .map(s => s.trim())
+    .filter(s => s.split(/\s+/).length >= 3)
+
+  if (sentences.length < 10) return errors
+
+  // Check 1: Consecutive sentences starting with the same word
+  let consecutiveSame = 0
+  for (let i = 1; i < sentences.length; i++) {
+    const prevFirst = sentences[i - 1].split(/\s+/)[0]?.toLowerCase()
+    const currFirst = sentences[i].split(/\s+/)[0]?.toLowerCase()
+    if (prevFirst && currFirst && prevFirst === currFirst) {
+      consecutiveSame++
+      if (consecutiveSame >= 2) {
+        errors.push({
+          field: "contentMarkdown",
+          severity: "warning",
+          message: `Rhythm: ${consecutiveSame + 1} consecutive sentences start with "${prevFirst}". Vary sentence openings.`,
+        })
+        break
+      }
+    } else {
+      consecutiveSame = 0
+    }
+  }
+
+  // Check 2: -ly adverbs per paragraph
+  const paragraphs = contentMarkdown
+    .split(/\n\n+/)
+    .filter(p => p.trim().length > 0 && !p.startsWith("#") && !p.startsWith("```"))
+  for (let i = 0; i < paragraphs.length; i++) {
+    const lyMatches = paragraphs[i].match(/\b\w+ly\b/gi)
+    const lyCount = lyMatches ? lyMatches.length : 0
+    if (lyCount > 2) {
+      errors.push({
+        field: "contentMarkdown",
+        severity: "warning",
+        message: `Rhythm: Paragraph ${i + 1} has ${lyCount} -ly adverbs (max 2 recommended). Replace some with concrete descriptions.`,
+      })
+      break
+    }
+  }
+
+  // Check 3: Presence of short sentences (≤5 words)
+  const shortCount = sentences.filter(s => s.split(/\s+/).length <= 5).length
+  if (shortCount < 3 && sentences.length >= 20) {
+    errors.push({
+      field: "contentMarkdown",
+      severity: "warning",
+      message: `Rhythm: Only ${shortCount} short sentence(s) (≤5 words) found. Aim for ≥3 for pacing variety.`,
+    })
+  }
+
+  // Check 4: Presence of long sentences (≥25 words)
+  const longCount = sentences.filter(s => s.split(/\s+/).length >= 25).length
+  if (longCount < 2 && sentences.length >= 20) {
+    errors.push({
+      field: "contentMarkdown",
+      severity: "warning",
+      message: `Rhythm: Only ${longCount} long sentence(s) (≥25 words) found. Aim for ≥2 for depth and flow.`,
+    })
   }
 
   return errors

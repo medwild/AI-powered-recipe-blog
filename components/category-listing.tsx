@@ -13,6 +13,7 @@ export const CATEGORY_LABELS: Record<string, string> = {
   guides: "Guides",
   histoire: "Histoire",
   equipement: "Équipement",
+  idees: "Idées",
 }
 
 export function categoryMetadata(category: string): Metadata {

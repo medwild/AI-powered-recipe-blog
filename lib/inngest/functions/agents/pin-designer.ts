@@ -9,18 +9,8 @@
 //   User prompt   ← buildUserPrompt()                        (recette, SEO plan, image variants)
 
 import { loadSkillContent } from "@/lib/skills"
-import { runTextAndParseJson } from "@/lib/agents/anthropic"
+import { runTextAndParseJson } from "@/lib/agents/provider"
 import type { ImageVariant } from "@/lib/db/schema"
-
-// Minimal SeoPlan type (was imported from deleted strategist.ts)
-type MinimalSeoPlan = {
-  title: string
-  tags: string[]
-  semanticEntities: string[]
-  h2Sections: { heading: string; subheadings: string[]; coverPaa: string[] }[]
-  faqItems?: { question: string; answer: string }[]
-  targetWordCount?: string
-}
 
 // ---------------------------------------------------------------------------
 // Types
@@ -35,7 +25,7 @@ export interface PinDesignerInput {
   imageVariants: ImageVariant[]
   ingredients: { name: string; quantity?: string }[]
   tags: string[]
-  seoPlan: MinimalSeoPlan
+  contentMarkdown: string
   microNiche: string
   targetCountry: string
 }
@@ -78,13 +68,13 @@ export interface PinDraftOutput {
 // ---------------------------------------------------------------------------
 
 function buildUserPrompt(input: PinDesignerInput): string {
-  // Extract key info from SeoPlan for brevity
-  const seoPlanSummary = {
-    h2Sections: input.seoPlan.h2Sections?.map(h => h.heading) ?? [],
-    faqItems: input.seoPlan.faqItems?.map(f => f.question) ?? [],
-    tags: input.seoPlan.tags ?? [],
-    targetWordCount: input.seoPlan.targetWordCount ?? "1800-2200",
-  }
+  // Extract H2 headings and FAQ questions from content markdown
+  // Filter out question-style H2s (FAQ entries are extracted separately below)
+  const h2Headings = (input.contentMarkdown.match(/^## (.+)$/gm) ?? [])
+    .map(h => h.replace(/^## /, ""))
+    .filter(h => !h.includes("?"))
+  const faqQuestions = (input.contentMarkdown.match(/^\*\*(.+?\?)\*\*\s*$/gm) ?? [])
+    .map(q => q.replace(/\*\*/g, "").trim())
 
   return `Generate exactly 5 Pinterest Pins for this recipe using the PTRA framework.
 
@@ -98,10 +88,9 @@ Image Variants: ${input.imageVariants.map(v => v.url).join(", ")}
 Ingredients: ${input.ingredients.map(i => `${i.name}${i.quantity ? ` (${i.quantity})` : ""}`).join(", ")}
 Tags: ${input.tags.join(", ")}
 
-SEO PLAN:
-H2 Sections: ${seoPlanSummary.h2Sections.join(" | ")}
-FAQ Questions: ${seoPlanSummary.faqItems.join(" | ")}
-Tags: ${seoPlanSummary.tags.join(", ")}
+ARTICLE STRUCTURE:
+H2 Sections: ${h2Headings.join(" | ")}
+FAQ Questions: ${faqQuestions.join(" | ")}
 
 MICRO-NICHE: ${input.microNiche}
 TARGET COUNTRY: ${input.targetCountry}

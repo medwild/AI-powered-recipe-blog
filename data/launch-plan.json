@@ -1,0 +1,107 @@
+{
+  "plan": "launch-v1",
+  "generatedAt": "2026-07-13",
+  "totalArticles": 70,
+  "totalVolumeMonthly": 146980,
+  "waves": {
+    "wave1": {
+      "description": "Quick Wins — KD < 20",
+      "timing": "Week 1-2",
+      "count": 10,
+      "totalVolume": 7270,
+      "articles": [
+        { "keyword": "healthy dinner ideas for two", "format": "pin-first", "category": "idees", "volume": 2400, "kd": 14, "priority": 1 },
+        { "keyword": "dessert for 2", "format": "pin-first", "category": "recettes", "volume": 1300, "kd": 18, "priority": 2 },
+        { "keyword": "cooking for two", "format": "google", "category": "guides", "volume": 1300, "kd": 15, "priority": 3 },
+        { "keyword": "mac and cheese for 2", "format": "pin-first", "category": "recettes", "volume": 590, "kd": 15, "priority": 4 },
+        { "keyword": "steak dinner ideas for 2", "format": "pin-first", "category": "recettes", "volume": 480, "kd": 13, "priority": 5 },
+        { "keyword": "easy week of meals", "format": "google", "category": "idees", "volume": 260, "kd": 14, "priority": 6 },
+        { "keyword": "chicken pot pie for 2", "format": "pin-first", "category": "recettes", "volume": 260, "kd": 18, "priority": 7 },
+        { "keyword": "recipes for 2 qt slow cooker", "format": "pin-first", "category": "recettes", "volume": 260, "kd": 15, "priority": 8 },
+        { "keyword": "mashed potato recipe for 2", "format": "pin-first", "category": "recettes", "volume": 210, "kd": 15, "priority": 9 },
+        { "keyword": "recipe for 2 chocolate chip cookies", "format": "pin-first", "category": "recettes", "volume": 210, "kd": 12, "priority": 10 }
+      ]
+    },
+    "wave2": {
+      "description": "Mid Tier Part 1 — KD 20-24",
+      "timing": "Week 3-4",
+      "count": 15,
+      "articles": [
+        { "keyword": "healthy dinner recipes for 2", "format": "pin-first", "category": "recettes", "volume": 2900, "kd": 20 },
+        { "keyword": "thanksgiving dinner for two", "format": "google", "category": "guides", "volume": 1000, "kd": 24, "seasonal": true },
+        { "keyword": "quick recipes for two for dinner", "format": "pin-first", "category": "idees", "volume": 1000, "kd": 23 },
+        { "keyword": "edible cookie dough recipe for 2", "format": "pin-first", "category": "recettes", "volume": 1000, "kd": 21 },
+        { "keyword": "easy and healthy dinner recipes for two", "format": "pin-first", "category": "recettes", "volume": 880, "kd": 21 },
+        { "keyword": "simple dinner recipes for 2", "format": "pin-first", "category": "idees", "volume": 590, "kd": 21 },
+        { "keyword": "easter dinner for two", "format": "google", "category": "guides", "volume": 590, "kd": 23, "seasonal": true },
+        { "keyword": "easy healthy dinner recipes for two", "format": "pin-first", "category": "recettes", "volume": 480, "kd": 23 },
+        { "keyword": "romantic dinner for two at home", "format": "google", "category": "guides", "volume": 480, "kd": 23 },
+        { "keyword": "romantic dinner ideas for two", "format": "pin-first", "category": "idees", "volume": 480, "kd": 22 },
+        { "keyword": "easy dinner for two recipes", "format": "pin-first", "category": "recettes", "volume": 390, "kd": 23 },
+        { "keyword": "chicken dinner for two", "format": "pin-first", "category": "recettes", "volume": 320, "kd": 20 },
+        { "keyword": "dinner for two recipes healthy", "format": "pin-first", "category": "recettes", "volume": 320, "kd": 22 },
+        { "keyword": "easy meal recipes for 2", "format": "pin-first", "category": "idees", "volume": 320, "kd": 24 },
+        { "keyword": "easy chicken dinners for 2", "format": "pin-first", "category": "recettes", "volume": 320, "kd": 24 }
+      ]
+    },
+    "wave3": {
+      "description": "Mid Tier Part 2 + High KD",
+      "timing": "Month 2-3",
+      "count": 27,
+      "articles": [
+        { "keyword": "healthy dinner recipes for two", "format": "google", "category": "recettes", "volume": 74000, "kd": 35 },
+        { "keyword": "easy to cook dinner for two", "format": "pin-first", "category": "guides", "volume": 14800, "kd": 30 },
+        { "keyword": "easy dinner recipes for two", "format": "pin-first", "category": "recettes", "volume": 8100, "kd": 33 },
+        { "keyword": "dinner recipe ideas for two", "format": "pin-first", "category": "idees", "volume": 5400, "kd": 29 },
+        { "keyword": "dinner recipes for two", "format": "pin-first", "category": "recettes", "volume": 5400, "kd": 27 },
+        { "keyword": "dinner for two recipes", "format": "pin-first", "category": "recettes", "volume": 3600, "kd": 33 },
+        { "keyword": "easy recipes for two", "format": "pin-first", "category": "recettes", "volume": 2400, "kd": 31 },
+        { "keyword": "recipes for two", "format": "google", "category": "guides", "volume": 1900, "kd": 28 },
+        { "keyword": "crockpot recipes for two", "format": "pin-first", "category": "recettes", "volume": 1300, "kd": 33 },
+        { "keyword": "fast and easy dinner for 2", "format": "pin-first", "category": "recettes", "volume": 1300, "kd": 33 },
+        { "keyword": "easy meal ideas for two", "format": "google", "category": "idees", "volume": 1300, "kd": 28 },
+        { "keyword": "simple healthy dinner ideas for two", "format": "pin-first", "category": "idees", "volume": 1300, "kd": 26 },
+        { "keyword": "quick and easy dinner recipes for two", "format": "pin-first", "category": "recettes", "volume": 1000, "kd": 31 },
+        { "keyword": "easy lasagna recipe", "format": "pin-first", "category": "recettes", "volume": 390, "kd": 19 },
+        { "keyword": "easy slow cooker pasta recipes", "format": "pin-first", "category": "recettes", "volume": 390, "kd": 14 },
+        { "keyword": "easy chili colorado recipe", "format": "pin-first", "category": "recettes", "volume": 480, "kd": 19 },
+        { "keyword": "easy beef ramen noodle recipes", "format": "pin-first", "category": "recettes", "volume": 260, "kd": 17 },
+        { "keyword": "easy whole30 recipes", "format": "google", "category": "guides", "volume": 480, "kd": 14 },
+        { "keyword": "easy carnivore recipes", "format": "google", "category": "guides", "volume": 320, "kd": 12 },
+        { "keyword": "easy low fodmap recipes", "format": "google", "category": "guides", "volume": 590, "kd": 8 },
+        { "keyword": "easy ibs dinner recipes", "format": "google", "category": "guides", "volume": 260, "kd": 8 },
+        { "keyword": "easy lactose free dinner recipes", "format": "google", "category": "guides", "volume": 260, "kd": 14 },
+        { "keyword": "easy meals for beginners", "format": "google", "category": "guides", "volume": 320, "kd": 16 },
+        { "keyword": "baking for 2", "format": "google", "category": "guides", "volume": 260, "kd": 24 },
+        { "keyword": "candlelight dinner for two", "format": "google", "category": "guides", "volume": 260, "kd": 12 },
+        { "keyword": "romantic dinner recipes for two", "format": "google", "category": "guides", "volume": 260, "kd": 19 },
+        { "keyword": "texas roadhouse dinner for two", "format": "pin-first", "category": "recettes", "volume": 320, "kd": 19 }
+      ]
+    },
+    "wave4": {
+      "description": "Specialized dishes + remaining — KD mixed",
+      "timing": "Month 4-6",
+      "count": 18,
+      "articles": [
+        { "keyword": "recipes for two people", "format": "google", "category": "guides", "volume": 880, "kd": 32 },
+        { "keyword": "romantic dinner ideas for two at home", "format": "google", "category": "idees", "volume": 720, "kd": 26 },
+        { "keyword": "easy healthy dinner ideas for two", "format": "pin-first", "category": "idees", "volume": 590, "kd": 26 },
+        { "keyword": "libby pumpkin pie recipe for 2 pies", "format": "pin-first", "category": "recettes", "volume": 590, "kd": 15, "seasonal": true },
+        { "keyword": "crock pot recipes for two", "format": "pin-first", "category": "recettes", "volume": 590, "kd": 27 },
+        { "keyword": "quick dinner recipes for two", "format": "pin-first", "category": "recettes", "volume": 590, "kd": 30 },
+        { "keyword": "lasagna recipe for 2", "format": "pin-first", "category": "recettes", "volume": 480, "kd": 29 },
+        { "keyword": "cooking for two recipes", "format": "google", "category": "guides", "volume": 480, "kd": 27 },
+        { "keyword": "meals for 2 recipes", "format": "pin-first", "category": "idees", "volume": 480, "kd": 27 },
+        { "keyword": "easy dinner recipes for two with few ingredients", "format": "pin-first", "category": "recettes", "volume": 390, "kd": 26 },
+        { "keyword": "quick healthy dinner meals for two", "format": "pin-first", "category": "recettes", "volume": 320, "kd": 21 },
+        { "keyword": "healthy and easy dinner recipes for 2", "format": "pin-first", "category": "recettes", "volume": 320, "kd": 25 },
+        { "keyword": "yummy dinner ideas for two", "format": "pin-first", "category": "idees", "volume": 320, "kd": 28 },
+        { "keyword": "fast healthy dinner ideas for two", "format": "pin-first", "category": "idees", "volume": 260, "kd": 28 },
+        { "keyword": "thanksgiving for two ideas", "format": "google", "category": "guides", "volume": 260, "kd": 27, "seasonal": true },
+        { "keyword": "chicken parmigiana recipe for 2", "format": "pin-first", "category": "recettes", "volume": 260, "kd": 26 },
+        { "keyword": "mac and cheese recipe for 2", "format": "pin-first", "category": "recettes", "volume": 260, "kd": 29 },
+        { "keyword": "beef wellington recipe for 2", "format": "pin-first", "category": "recettes", "volume": 210, "kd": 27 }
+      ]
+    }
+  }
+}

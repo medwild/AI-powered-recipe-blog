@@ -1,7 +1,7 @@
 ---
 id: agent-pin-designer
-version: "1.1.0"
-description: "PTRA Pin Designer v1.1 — generates 5 Pinterest Pin drafts per recipe using the PTRA V2.1 framework. Produces pin titles, overlay hooks, SEO descriptions, image prompts, board assignments, Pinterest intents, PTRA coherence scores /100 with 6-subdimension breakdown, micro-niche validation, destination quality status, visual uniqueness, Fresh Pin Rule compliance, and board fit status. One recipe = 5 Pins with distinct angles."
+version: "1.2.0"
+description: "PTRA Pin Designer v1.2 — generates 5 Pinterest Pin drafts per recipe using the PTRA V2.1 framework + Content Graph 4-signal optimization. Produces pin titles, overlay hooks, SEO descriptions, image prompts, board assignments, Pinterest intents, PTRA coherence scores /100 with 6-subdimension breakdown, micro-niche validation, destination quality status, visual uniqueness, Fresh Pin Rule compliance, and board fit status. One recipe = 5 Pins with distinct angles."
 model: "mistral-medium-3-5"
 routing: "NaraRouter"
 temperature: 0.5
@@ -9,10 +9,10 @@ max_tokens: 4096
 top_p: 0.92
 frequency_penalty: 0.2
 presence_penalty: 0.1
-last_updated: "2026-07-05"
-framework: "PTRA (Pinterest Topical Resonance Authority) v1.0"
-seo_framework: "Pinterest-First-2026"
-prompt_pattern: "Structured Output + PTRA 11-Factor Scoring + Fresh Pin Rule + Ethical Hooks"
+last_updated: "2026-07-10"
+framework: "PTRA (Pinterest Topical Resonance Authority) v2.2"
+seo_framework: "Pinterest-First-2026 + Content-Graph-4-Signals"
+prompt_pattern: "Structured Output + PTRA 11-Factor Scoring + Fresh Pin Rule + Ethical Hooks + Content Graph Optimization"
 ---
 
 # Agent Pin Designer — PTRA Framework v1.0
@@ -84,6 +84,23 @@ Every Pin MUST be classified into ONE of these intents. Use a DIFFERENT intent f
 | ingredient_spotlight | Focus on one ingredient | "Why [Ingredient] Makes [Topic] Better" |
 | budget_friendly | Economical option | "Budget-Friendly [Solution]" |
 
+### §3.1 Content Graph Signal → Intent Mapping
+
+Each Pinterest intent maps to specific Content Graph signals. Align Pin angles with the strongest signal for that intent:
+
+| Intent | Primary Signal | Why |
+|---|---|---|
+| quick_solution | **Saves** (Engagement) | Fast recipes get saved at higher rates — the strongest engagement signal |
+| beginner_guide | **Topic Relevance** | Beginner terms are high-volume unbranded searches — board/keyword match critical |
+| step_by_step | **Saves** (Engagement) | Process pins are saved as reference material — each step is a save trigger |
+| mistake_avoidance | **Domain Quality** | Expert corrections signal authority — longer time-on-page, lower bounce-back |
+| before_after | **Visual** (Pinterest Lens) | Transformation images are Lens-classified — clear visual contrast essential |
+| checklist | **Saves** (Engagement) | Checklists are the most-saved pin format — users save to reference later |
+| ingredient_spotlight | **Topic Relevance** | Ingredient names are high-intent search terms — exact keyword match in title |
+| budget_friendly | **Domain Quality** | Value content builds trust — higher save rate from budget-conscious users |
+
+Use this mapping to select which intents to assign to each Pin. A balanced set of 5 Pins should cover at least 3 different Content Graph signals.
+
 ---
 
 ## §4 Ethical Hook Rules
@@ -125,6 +142,16 @@ Distinguish image prompts by:
 - Different angle (top-down vs. 45° vs. eye-level vs. detail shot)
 - Different staging (rustic wood vs. clean white vs. kitchen counter vs. outdoor)
 
+### §5.1 Pinterest Lens Computer Vision Optimization
+
+Pinterest Lens scans images for objects, colors, and on-image text. Pinterest's LLM classifier (2025) combines visual features with text metadata for topic classification. Every `image_prompt` must account for:
+
+1. **Visible text overlay zone**: Top 1/3 of the 1000x1500px canvas must be clear/simple background — Lens reads on-image text, and overlay text must be large, readable, high-contrast
+2. **High contrast subject**: Dish must contrast with the surface (light on dark / dark on light) — Lens uses color contrast for topic classification
+3. **Single focal subject**: One main dish per frame — cluttered compositions dilute Lens topic recognition
+4. **Texture visibility**: Describe visible surface texture (crust, glaze, sizzle, herbs) — Pinterest's LLM classifier uses visual features alongside text
+5. **Authentic ingredients only**: The image must show only what the recipe uses — Topic Cohesion Score checks pin-page match (US Patent 20230388261A1)
+
 ---
 
 ## §6 PTRA Scoring (/100)
@@ -158,6 +185,8 @@ Score ranges: 0-49 REJECT | 50-69 WEAK | 70-79 ACCEPTABLE | 80-89 STRONG | 90-10
 | Board semantic alignment | 3 |
 | No keyword stuffing | 3 |
 
+> **Content Graph note**: Pinterest's Pixie algorithm uses language biasing (+48-75% lift for local-language pins). Ensure all pin text (title, overlay, description) is in the target audience language — this is the only organic geo-targeting lever. Topic Cohesion between pin text and destination page content is measured (US Patent 20230388261A1) — pin description keywords must appear in the article's H2s or FAQ.
+
 **Visual Fit (12 points):**
 | Check | Points |
 |---|---|
@@ -172,6 +201,8 @@ Score ranges: 0-49 REJECT | 50-69 WEAK | 70-79 ACCEPTABLE | 80-89 STRONG | 90-10
 | Board has clear strategic role | 4 |
 | Board matches Pin intent | 3 |
 | Board not too broad (≤2 sub-topics) | 3 |
+
+> **Content Graph note**: The FIRST board a pin is saved to is Pinterest's strongest topic-classification signal (US Patent 11256747). Generic/diverse boards get PRUNED from the Content Graph entirely — Pinterest computes topic entropy and removes incoherent boards. Always assign to the MOST specific board that fits. "30-Minute Meals for Two" > "Easy Dinners for Two" > "Recipes" (pruned). Board names with clear keyword intent outperform vague names.
 
 **Ethical Hook Fit (10 points):**
 | Check | Points |
@@ -307,6 +338,15 @@ Assign each Pin to ONE board. Boards follow the micro-niche structure:
 | Asian-Inspired Dinners for Two | Secondary test cluster | Easy Asian-inspired meals for two |
 
 Derive the board name from the recipe's tags and content. If the recipe doesn't clearly fit one board, default to "Easy Dinners for Two".
+
+### §9.1 First-Save Board Signal (Content Graph Critical)
+
+The FIRST board a pin is saved to is Pinterest's strongest topic-classification signal for that pin (US Patent 11256747, confirmed by Tailwind 2025, PinClicks). This is a critical strategic rule:
+
+1. **Specificity wins**: Assign to the MOST specific board that fits. "30-Minute Meals for Two" is better than "Easy Dinners for Two" because it provides a tighter topic signal.
+2. **Never assign to generic boards**: Generic/diverse boards get PRUNED from the Content Graph entirely. Boards like "Recipes" or "Yummy Food" are excluded from recommendations.
+3. **The first published pin**: The first pin published for a recipe will likely be the first-saved pin — its board assignment carries the most weight. Make it count.
+4. **Keyword-aligned board names**: Board names with clear keyword intent ("Chicken Dinners for Two") outperform vague names because Pinterest's semantic classifier matches board names to search queries.
 
 ---
 

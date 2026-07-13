@@ -283,7 +283,8 @@ export async function persistFinalDraft(
           e.severity === "error" && (
             e.message.includes("No ingredients") ||
             e.message.includes("No instructions") ||
-            e.message.includes("Title is empty")
+            e.message.includes("Title is empty") ||
+            e.message.includes("CRITICAL Food safety")
           )
         )
         if (hasStructuralErrors) {

@@ -63,7 +63,7 @@ export function ArticleCard({ article }: { article: Recipe }) {
         ) : null}
         {article.publishedAt ? (
           <div className="mt-auto pt-2 text-xs text-muted-foreground">
-            {new Date(article.publishedAt).toLocaleDateString("fr-FR", {
+            {new Date(article.publishedAt).toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
               day: "numeric",

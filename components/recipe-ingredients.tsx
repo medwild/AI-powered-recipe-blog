@@ -74,20 +74,16 @@ export function RecipeIngredients({
       className="mx-auto max-w-3xl px-4 pt-12 scroll-mt-20"
     >
       <div
-        className="rounded-3xl border border-border/80 p-6 sm:p-8"
-        style={{
-          backgroundImage: `
-            repeating-linear-gradient(
-              0deg,
-              transparent,
-              transparent 28px,
-              oklch(0.6 0.16 41 / 0.03) 28px,
-              oklch(0.6 0.16 41 / 0.03) 29px
-            )
-          `,
-          backgroundColor: "oklch(1 0.004 85 / 0.7)",
-        }}
+        className="rounded-3xl border border-border/80 p-6 sm:p-8 bg-card relative overflow-hidden"
       >
+        {/* Lined paper texture — visible in both light and dark mode */}
+        <div
+          className="absolute inset-0 pointer-events-none rounded-3xl overflow-hidden"
+          aria-hidden="true"
+          style={{
+            backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 28px, oklch(0.55 0.01 90 / 0.07) 28px, oklch(0.55 0.01 90 / 0.07) 29px)`,
+          }}
+        />
         <div className="flex items-center gap-2 mb-6">
           <ChefHat className="h-5 w-5 text-primary/60" aria-hidden="true" />
           <h2

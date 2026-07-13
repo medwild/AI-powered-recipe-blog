@@ -1,7 +1,6 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { RecipeCard } from "@/components/recipe-card"
-import { Button } from "@/components/ui/button"
 import type { Recipe } from "@/lib/db/schema"
 
 export function HomepageFeatured({
@@ -19,7 +18,7 @@ export function HomepageFeatured({
         <div>
           <h2 className="font-serif text-3xl">Featured</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Start with these — they&apos;re worth it.
+            Start with these — they're worth it.
           </p>
         </div>
         <Link
@@ -30,23 +29,22 @@ export function HomepageFeatured({
           <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </Link>
       </div>
-      <div className="grid gap-6 lg:grid-cols-2">
-        <div className="lg:row-span-2">
-          <RecipeCard recipe={featured[0]} />
-        </div>
-        {featured.slice(1, 3).map((recipe) => (
-          <RecipeCard key={recipe.id} recipe={recipe} />
+
+      {/* 4 cards — 2×2 on desktop, 2×2 on tablet, 1 column on mobile */}
+      <div className="grid gap-5 sm:grid-cols-2">
+        {featured.map((recipe) => (
+          <RecipeCard key={recipe.id} recipe={recipe} aspectRatio="4/3" />
         ))}
       </div>
 
-      {recent.length > 3 ? (
+      {recent.length > 4 ? (
         <>
           <h2 className="mb-8 mt-16 font-serif text-3xl">
             Most recent
           </h2>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {recent.slice(3).map((recipe) => (
-              <RecipeCard key={recipe.id} recipe={recipe} />
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {recent.slice(4).map((recipe) => (
+              <RecipeCard key={recipe.id} recipe={recipe} aspectRatio="4/3" />
             ))}
           </div>
         </>

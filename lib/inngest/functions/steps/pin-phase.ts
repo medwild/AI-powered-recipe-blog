@@ -9,13 +9,12 @@ import type { ImageVariant } from "@/lib/db/schema"
 import { slugify } from "@/lib/slug"
 import { agentPinDesigner } from "../agents/pin-designer"
 import { appendLog, logEntry, SITE_URL } from "../helpers"
-import type { RecipeDraft, SeoPlan } from "../agents/chef-augustin"
+import type { RecipeDraft } from "../agents/chef-augustin"
 
 export async function generatePins(
   step: { run: (name: string, fn: () => Promise<unknown>) => Promise<unknown> },
   recipeId: number,
   finalRecipe: RecipeDraft,
-  seoPlan: SeoPlan,
   heroImageUrl: string | null,
   imageVariants: ImageVariant[],
 ) {
@@ -32,7 +31,7 @@ export async function generatePins(
       imageVariants: imageVariants ?? [],
       ingredients: (finalRecipe.ingredients ?? []) as { name: string; quantity?: string }[],
       tags: finalRecipe.tags ?? [],
-      seoPlan,
+      contentMarkdown: finalRecipe.contentMarkdown ?? "",
       microNiche: "Easy Weeknight Dinners for Two",
       targetCountry: process.env.SERP_GL || "us",
     })

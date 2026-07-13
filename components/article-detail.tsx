@@ -58,7 +58,7 @@ export async function ArticleDetail({ slug }: { slug: string }) {
 
         <article className="mx-auto max-w-3xl px-4 py-8 pt-2">
           {article.heroImageUrl ? (
-            <div className="relative mb-8 aspect-[2/3] overflow-hidden rounded-3xl border border-border shadow-2xl shadow-primary/10">
+            <div className="relative mb-8 aspect-[16/9] overflow-hidden rounded-3xl border border-border shadow-2xl shadow-primary/10">
               <Image
                 src={article.heroImageUrl}
                 alt={article.title}
@@ -84,7 +84,7 @@ export async function ArticleDetail({ slug }: { slug: string }) {
               </span>
               {article.publishedAt ? (
                 <time dateTime={new Date(article.publishedAt).toISOString()}>
-                  {new Date(article.publishedAt).toLocaleDateString("fr-FR", {
+                  {new Date(article.publishedAt).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
@@ -94,9 +94,9 @@ export async function ArticleDetail({ slug }: { slug: string }) {
               {article.updatedAt && article.publishedAt &&
                 (new Date(article.updatedAt).getTime() - new Date(article.publishedAt).getTime()) > 7 * 24 * 60 * 60 * 1000 ? (
                 <span className="text-muted-foreground/70">
-                  · Mis à jour le{" "}
+                  · Updated{" "}
                   <time dateTime={new Date(article.updatedAt).toISOString()}>
-                    {new Date(article.updatedAt).toLocaleDateString("fr-FR", {
+                    {new Date(article.updatedAt).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "long",
                       day: "numeric",
@@ -118,7 +118,7 @@ export async function ArticleDetail({ slug }: { slug: string }) {
         {relatedRecipes.length > 0 ? (
           <section className="mx-auto max-w-5xl px-4 py-14">
             <h2 className="mb-8 font-serif text-2xl text-balance">
-              Recettes Associées
+              Related Recipes
             </h2>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {relatedRecipes.map((r) => (

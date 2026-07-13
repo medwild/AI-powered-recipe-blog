@@ -7,6 +7,7 @@ import { SiteFooter } from "@/components/site-footer"
 import { RecipeArticle } from "@/components/recipe-article"
 import { RecipeRelated } from "@/components/recipe-related"
 import { Breadcrumbs } from "@/components/breadcrumbs"
+import { JumpToRecipeDesktop, JumpToRecipeMobile } from "@/components/jump-to-recipe"
 import { getRecipeBySlug, getPublishedRecipes, getRelatedRecipes, getLinkedArticle } from "@/lib/queries"
 
 export const revalidate = 300
@@ -174,7 +175,8 @@ export default async function RecipePage({
 
   return (
     <div className="flex min-h-screen flex-col">
-      <SiteHeader />
+      <SiteHeader actions={<JumpToRecipeDesktop />} />
+      <JumpToRecipeMobile />
       <main className="flex-1">
         <Breadcrumbs
           crumbs={[

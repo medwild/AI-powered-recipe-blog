@@ -12,7 +12,7 @@ const NAV_LINKS = [
   { href: "/about", label: "About" },
 ]
 
-export function SiteHeader() {
+export function SiteHeader({ actions }: { actions?: React.ReactNode }) {
   const [open, setOpen] = useState(false)
 
   const close = useCallback(() => setOpen(false), [])
@@ -67,6 +67,7 @@ export function SiteHeader() {
           >
             Studio
           </Link>
+          {actions}
           <ThemeToggle />
         </nav>
 

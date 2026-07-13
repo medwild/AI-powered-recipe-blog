@@ -173,10 +173,12 @@ function countAnswerNuggets(markdown: string): { count: number; matches: string[
  * will extract and cite specific claims from this content.
  *
  * Scoring:
- *   claimsScore (40%)       = min(claims.count / 5, 1.0) × 100
- *   attributionsScore (25%) = min(attributions.count / 6, 1.0) × 100
- *   nuggetsScore (20%)      = min(nuggets.count / 4, 1.0) × 100
+ *   claimsScore (40%)       = min(claims.count / CLAIMS_MIN, 1.0) × 100
+ *   attributionsScore (25%) = min(attributions.count / ATTRIBUTIONS_MIN, 1.0) × 100
+ *   nuggetsScore (20%)      = min(nuggets.count / NUGGETS_MIN, 1.0) × 100
  *   densityScore (15%)      = min((claims + attributions + nuggets) / wordCount × 1000 / 3, 1.0) × 100
+ *
+ * Defaults (Claude Sonnet 4.6): CLAIMS_MIN=6, ATTRIBUTIONS_MIN=4, NUGGETS_MIN=4
  *
  * Attribution match only counts if a claim is present in the same paragraph.
  * No empty name-dropping.
@@ -225,11 +227,11 @@ export function checkCitability(markdown: string, wordCount: number): Citability
   const claimsCount = allClaimMatches.length
   const attributionsCount = validAttrMatches.length
   const nuggetsCount = nuggets.count
-  // Thresholds configurable via env — DeepSeek-friendly defaults (lower),
-  // raise for Claude Sonnet 4.6: GEO_ATTRIBUTIONS_MIN=6, GEO_NUGGETS_MIN=4
-  const minClaims = parseInt(process.env.GEO_CLAIMS_MIN ?? "5", 10)
-  const minAttributions = parseInt(process.env.GEO_ATTRIBUTIONS_MIN ?? "2", 10)
-  const minNuggets = parseInt(process.env.GEO_NUGGETS_MIN ?? "2", 10)
+  // Thresholds configurable via env — defaults calibrated for Claude Sonnet 4.6.
+  // Lower for DeepSeek: GEO_ATTRIBUTIONS_MIN=2, GEO_NUGGETS_MIN=2
+  const minClaims = parseInt(process.env.GEO_CLAIMS_MIN ?? "6", 10)
+  const minAttributions = parseInt(process.env.GEO_ATTRIBUTIONS_MIN ?? "4", 10)
+  const minNuggets = parseInt(process.env.GEO_NUGGETS_MIN ?? "4", 10)
 
   const claimsScore = Math.min(claimsCount / minClaims, 1.0) * 100
   const attributionsScore = Math.min(attributionsCount / minAttributions, 1.0) * 100

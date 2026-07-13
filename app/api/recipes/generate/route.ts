@@ -102,7 +102,7 @@ export async function POST(req: Request) {
   // Aor article params (Step 13 — optional)
   // generateAorArticle is now implicit: providing a valid aorCategory is sufficient.
   // The explicit generateAorArticle flag is retained for backward compatibility.
-  const validAorCategories = ["techniques", "guides", "histoire", "equipement"]
+  const validAorCategories = ["techniques", "guides", "histoire", "equipement", "idees"]
   let aorCategory: string | undefined
   let aorAngle: string | undefined
 

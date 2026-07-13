@@ -4,12 +4,13 @@ import { Clock, Users } from "lucide-react"
 import type { Recipe } from "@/lib/db/schema"
 import { PinButton } from "@/components/pin-button"
 
-export function RecipeCard({ recipe }: { recipe: Recipe }) {
+export function RecipeCard({ recipe, aspectRatio }: { recipe: Recipe; aspectRatio?: string }) {
+  const ratio = aspectRatio ?? "2/3"
   return (
     <article className="card-hover group flex flex-col overflow-hidden rounded-2xl border border-border bg-card">
       <Link
         href={`/recettes/${recipe.slug}`}
-        className="relative aspect-[2/3] overflow-hidden bg-muted block"
+        className={`relative overflow-hidden bg-muted block aspect-[${ratio}]`}
         tabIndex={-1}
       >
         {recipe.heroImageUrl ? (

@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
-import Image from "next/image"
 import Link from "next/link"
+import { ChefHat } from "lucide-react"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { Button } from "@/components/ui/button"
@@ -26,13 +26,8 @@ export default function AboutPage() {
       <main className="flex-1">
         <div className="mx-auto max-w-3xl px-4 py-14">
           <header className="flex flex-col items-center gap-6 text-center">
-            <div className="relative h-32 w-32 overflow-hidden rounded-full border-4 border-primary/20 bg-secondary">
-              <Image
-                src="/hero-kitchen.png"
-                alt="Chef Augustin Lefèvre"
-                fill
-                className="object-cover"
-              />
+            <div className="flex h-32 w-32 items-center justify-center rounded-full border-4 border-primary/20 bg-primary/10">
+              <ChefHat className="h-14 w-14 text-primary" aria-hidden="true" />
             </div>
             <div>
               <h1 className="font-serif text-4xl">Chef Augustin Lefèvre</h1>
@@ -45,34 +40,41 @@ export default function AboutPage() {
 
           <section className="mt-12 space-y-6 text-base leading-relaxed text-muted-foreground">
             <p>
-              I spent years learning the craft of practical home cooking — from the
-              precise techniques of French boulangeries to the rhythms of home
-              baking. I learned that the best bread isn&apos;t always the most
-              complicated. It&apos;s the loaf you make with care, baked in your
-              own oven, shared with people you love.
+              I trained in the professional kitchens of Lyon — not the tourist
+              spots, the real ones. The kind where you learn to sear, deglaze,
+              and reduce before you&apos;re allowed to touch a pan on the line.
+              I brought that precision home with me, and I&apos;ve spent the
+              years since figuring out how to make it work for Tuesday night,
+              not Saturday night. Two plates. One pan when possible.
+              No leftovers that die in the back of the fridge.
             </p>
 
             <p>
               My focus is simple: teaching home cooks how to make practical
-              dinners for two that work. Not recipes that look impressive on Instagram
-              but fail on your plate. Recipes that hold up. Recipes you can nail
-              the first time and perfect the fifth.
+              dinners for two that actually work. Not recipes that look
+              impressive on Instagram but fail on your plate. Recipes that
+              hold up. Recipes you can nail the first time and perfect the
+              fifth — the ones that become your Wednesday go-to, the ones
+              you text to a friend.
             </p>
 
             <p>
               Every recipe on Chef Augustin is developed with professional
-              technique and tested against the common mistakes that trip up home
-              cooks. I study what goes wrong — over-proofed dough, under-seasoned
-              loaves, starters that won&apos;t rise — so my recipes catch you
-              before you fall. The techniques are grounded in the science of
-              fermentation and the craft of classic French cooking.
+              technique and tested against the mistakes that trip up home
+              cooks. I study what goes wrong — chicken that steams instead
+              of sears, sauces that break, pasta that clumps, the five
+              minutes of overcooking that turn a perfect dinner into a
+              apology — so my recipes catch you before you fall. The
+              techniques are grounded in culinary science and the craft
+              of classic French cooking, applied to the ingredients and
+              equipment you actually have.
             </p>
 
             <p>
-              When I&apos;m not cooking, you&apos;ll find me at the farmer&apos;s
-              market arguing with vegetable vendors about the correct ripeness of
-              a tomato, or teaching my kids that patience is the most
-              underrated ingredient in any kitchen.
+              When I&apos;m not cooking, you&apos;ll find me at the
+              farmer&apos;s market arguing with vegetable vendors about
+              the correct ripeness of a tomato, or teaching my kids that
+              patience is the most underrated ingredient in any kitchen.
             </p>
           </section>
 
@@ -100,6 +102,22 @@ export default function AboutPage() {
                 honest recipes, clearly presented
               </li>
             </ul>
+          </section>
+
+          <section className="mt-12 rounded-xl border border-muted bg-muted/30 p-6">
+            <h2 className="font-serif text-lg">About Our Content</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Chef Augustin is a culinary brand persona — a voice that brings
+              together AI-assisted research, professional recipe development,
+              and editorial expertise. Every recipe is generated with careful
+              attention to culinary science, food safety, and real-world
+              practicality. Our process combines structured knowledge (USDA
+              guidelines, food science from Harold McGee and Modernist Cuisine,
+              professional testing protocols) with editorial review to ensure
+              each recipe is clear, accurate, and genuinely useful. We believe
+              in transparency: great recipes come from great technique, not
+              from pretending a persona is a person.
+            </p>
           </section>
 
           <section className="mt-12 text-center">

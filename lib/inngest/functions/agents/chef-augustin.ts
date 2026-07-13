@@ -1,19 +1,20 @@
-// Agent Unique — Chef Augustin Unified Content Engine
+// Agent 1 — Chef Augustin Writer
 //
-// Replaces Strategist + Writer + Auditor + Editor + QA + Image Optimizer
-// with a single LLM call. Handles SERP analysis, pin-first writing,
-// self-editing, image prompt generation, and JSON-LD.
+// Executes a StrategyPlan (from Strategist agent) to produce the complete
+// article: content markdown, ingredients, instructions, metadata, image
+// prompt, and JSON-LD. Focuses exclusively on writing quality.
 //
 // Architecture:
 //   System prompt ← loadSkillContent("agent-chef-augustin")
-//   User prompt   ← buildUserPrompt()
+//   User prompt   ← buildUserPrompt() with strategyPlan + SERP data
 //   Output        ← ChefAugustinOutput (single JSON)
 
 import { loadSkillContent } from "@/lib/skills"
-import { runTextAndParseJson } from "@/lib/agents/anthropic"
+import { runTextAndParseJson } from "@/lib/agents/provider"
 import { getRelevantSources, formatSourcesForPrompt } from "@/lib/external-sources"
 import { logAgentTrace } from "../helpers"
 import type { Ingredient, Instruction } from "@/lib/db/schema"
+import type { StrategyPlan } from "./strategist"
 
 // ---------------------------------------------------------------------------
 // Types
@@ -37,27 +38,8 @@ export type ChefAugustinOutput = {
   jsonLd: Record<string, unknown>
 }
 
-// Backward-compatible aliases for files that still reference old type names
+// Backward-compatible alias
 export type RecipeDraft = ChefAugustinOutput
-
-export type SeoPlan = {
-  title: string
-  metaTitle: string
-  metaDescription: string
-  excerpt: string
-  prepTime: string
-  cookTime: string
-  totalTime: string
-  servings: string
-  difficulty: string
-  tags: string[]
-  h2Sections: { heading: string; subheadings: string[]; coverPaa: string[] }[]
-  semanticEntities: string[]
-  faqItems?: { question: string; answer: string }[]
-  jsonLd?: Record<string, unknown>
-  json_ld_recipe_base?: Record<string, unknown>
-  targetWordCount?: string
-}
 
 // ---------------------------------------------------------------------------
 // User prompt builder
@@ -66,32 +48,50 @@ export type SeoPlan = {
 function buildUserPrompt(params: {
   keyword: string
   format: "google" | "pin-first"
-  serpData: {
-    competitorTitles: string[]
-    snippets: string[]
-    relatedQuestions: string[]
-    relatedSearches: string[]
-  }
+  strategyPlan: StrategyPlan
   linkTargets?: { anchorText: string; url: string; context: string }[]
+  feedback?: string
 }): string {
-  const { keyword, format, serpData, linkTargets } = params
+  const { keyword, format, strategyPlan, linkTargets, feedback } = params
 
   const linkSection = (linkTargets && linkTargets.length > 0)
     ? `\n## Internal Linking Targets\n${linkTargets.map(t => `- [${t.anchorText}](${t.url}) — ${t.context}`).join("\n")}\n\nInsert 2-3 of these as contextual links where they fit naturally.`
     : ""
 
-  return `Write a complete ${format === "pin-first" ? "pin-first format (1200-1500 words)" : "Google format (1800-2200 words)"} article for the keyword "${keyword}".
+  // Build the strategy plan section
+  const planSection = `
+## Strategy Plan (Pre-Planned — Follow Exactly)
 
-## Google SERP Data
-${JSON.stringify({
-  competitorTitles: serpData.competitorTitles.slice(0, 10),
-  snippets: serpData.snippets.slice(0, 10),
-  frequentlyAskedQuestions: serpData.relatedQuestions.slice(0, 8),
-  relatedSearches: serpData.relatedSearches.slice(0, 8),
-}, null, 2)}
-${linkSection}
+**Angle**: ${strategyPlan.angle}
+**Primary Keyword**: ${strategyPlan.primaryKeyword}
+**Secondary Keywords**: ${strategyPlan.secondaryKeywords.join(", ")}
+**Target Word Count**: ${strategyPlan.targetWordCount}
 
-Follow your system prompt exactly. Output ONLY the JSON object — no markdown fences, no reasoning.`
+### H2 Sections (in order):
+${strategyPlan.h2Sections.map((h, i) => `${i + 1}. **${h.heading}** — Purpose: ${h.purpose}${h.coverPaa.length ? ` (cover: ${h.coverPaa.join("; ")})` : ""}`).join("\n")}
+
+### FAQ Questions:
+${strategyPlan.faqQuestions.map((q, i) => `${i + 1}. ${q}`).join("\n")}
+
+### Competitor Gaps to Exploit:
+${strategyPlan.competitorGaps.map(g => `- ${g}`).join("\n")}
+
+### Semantic Entities:
+${strategyPlan.semanticEntities.join(", ")}
+`
+
+  let userPrompt = `Write a complete ${format === "pin-first" ? "pin-first format (1200-1500 words)" : "Google format (1800-2200 words)"} article for the keyword "${keyword}".
+${planSection}
+${linkSection}`
+
+  // Inject loop feedback from previous Evaluator pass
+  if (feedback) {
+    userPrompt += `\n\n${feedback}`
+  }
+
+  userPrompt += `\n\nFollow the strategy plan exactly. Output ONLY the JSON object — no markdown fences, no reasoning.`
+
+  return userPrompt
 }
 
 // ---------------------------------------------------------------------------
@@ -101,37 +101,28 @@ Follow your system prompt exactly. Output ONLY the JSON object — no markdown f
 export async function agentChefAugustin(params: {
   keyword: string
   format: "google" | "pin-first"
-  serpOrganic: { title: string; snippet: string }[]
-  serpRelatedQuestions: string[]
-  serpRelatedSearches: string[]
+  strategyPlan: StrategyPlan
   cuisineReplacements: Record<string, string>
   linkTargets?: { anchorText: string; url: string; context: string }[]
+  feedback?: string
 }): Promise<ChefAugustinOutput> {
-  const { keyword, format, serpOrganic, serpRelatedQuestions, serpRelatedSearches, cuisineReplacements, linkTargets } = params
+  const { keyword, format, strategyPlan, cuisineReplacements, linkTargets, feedback } = params
 
   try {
-    // Match external sources by keyword
     const sources = getRelevantSources(keyword)
     const sourcesText = formatSourcesForPrompt(sources)
 
-    // Build system prompt with template replacements
     const mergedReplacements = { ...cuisineReplacements, format } as Record<string, string>
     const systemPrompt = await loadSkillContent("agent-chef-augustin", mergedReplacements)
 
-    // Build user prompt with SERP data + links
     let userPrompt = buildUserPrompt({
       keyword,
       format,
-      serpData: {
-        competitorTitles: serpOrganic.map(o => o.title),
-        snippets: serpOrganic.map(o => o.snippet),
-        relatedQuestions: serpRelatedQuestions,
-        relatedSearches: serpRelatedSearches,
-      },
+      strategyPlan,
       linkTargets,
+      feedback,
     })
 
-    // Inject external sources into user prompt if available
     if (sources.length > 0) {
       userPrompt += `\n\n## Authoritative External Sources (Cite 1-2 that fit naturally)\n${sourcesText}`
     }
@@ -143,7 +134,6 @@ export async function agentChefAugustin(params: {
       maxTokens: 8192,
     })
 
-    const wordCount = (result.contentMarkdown ?? "").split(/\s+/).filter(Boolean).length
     logAgentTrace("ChefAugustin", "output", {
       chars: JSON.stringify(result).length,
       fields: Object.keys(result).length,

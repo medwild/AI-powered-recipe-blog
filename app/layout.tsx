@@ -23,6 +23,14 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || 'https://chefaugustin.com',
   ),
+  // Google Search Console — set NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION in .env.local
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
+  },
+  // Google AdSense — set NEXT_PUBLIC_ADSENSE_PUBLISHER_ID in .env.local
+  other: process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID
+    ? { 'google-adsense-account': process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID }
+    : undefined,
   openGraph: {
     type: 'website',
     siteName: 'Chef Augustin',
@@ -55,8 +63,17 @@ export default function RootLayout({
       className={`${geistSans.variable} ${playfair.variable} bg-background`}
     >
       <body className="font-sans antialiased">
+        {/* Skip to content — WCAG 2.1 AA (bypass blocks) */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-foreground focus:shadow-lg focus:outline-none"
+        >
+          Skip to content
+        </a>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-          {children}
+          <div id="main-content" tabIndex={-1}>
+            {children}
+          </div>
           <Toaster position="top-center" richColors />
           <CookieBanner />
           {process.env.NODE_ENV === 'production' && <Analytics />}

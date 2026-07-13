@@ -1,12 +1,18 @@
 /**
- * generate-recipe workflow — Simplified v10 Orchestrator
+ * generate-recipe workflow — Pipeline v11 Loop-Engineered Orchestrator
  *
- * 4 pipeline steps:
+ * 5 pipeline steps:
  *   1. serp-phase       — Google SERP analysis (Serper API)
- *   2. unified-agent    — Chef Augustin (single DeepSeek call)
- *   3. image-phase      — FLUX-1 → Cloudinary
- *   4. persist-phase    — Validation + DB write
- *   5. pin-phase        — Pin Designer (5 pins per recipe)
+ *   2. content-loop      — Evaluator-Optimizer loop (Writer → Validators → Feedback, max 3 passes)
+ *   3. image-phase       — FLUX-1 → Cloudinary
+ *   4. persist-phase     — Validation + DB write (double safety net)
+ *   5. pin-phase         — Pin Designer (5 pins per recipe)
+ *
+ * Loop-engineering patterns applied:
+ *   - Maker/Checker split: Writer (LLM) vs Validators (deterministic code)
+ *   - Evaluator-Optimizer: structured feedback drives quality improvement
+ *   - Refexion: self_improvement_logs + STATE.md memory
+ *   - Stopping rules: threshold met, diminishing returns, max 3 passes
  */
 
 import { db } from "@/lib/db"
@@ -15,7 +21,7 @@ import { eq } from "drizzle-orm"
 import { logPipelineError } from "@/lib/queries"
 import { inngest } from "@/lib/inngest/client"
 import { runSerpPhase } from "./steps/serp-phase"
-import { runUnifiedAgentPhase } from "./steps/unified-agent-phase"
+import { runContentLoopPhase } from "./steps/content-loop-phase"
 import { persistDraftForReview, waitForApproval, persistFinalDraft, initVariantStats } from "./steps/persist-phase"
 import { runImagePhase } from "./steps/image-phase"
 import { generatePins } from "./steps/pin-phase"
@@ -52,26 +58,14 @@ export const generateRecipeWorkflow = inngest.createFunction(
       const serpResult = await runSerpPhase(step, recipeId, keyword)
       degraded = degraded || serpResult.degraded
 
-      // ── Step 2: Unified Agent (1 LLM call) ─────────────────────────────
-      const agentResult = await runUnifiedAgentPhase(
+      // ── Step 2: Content Loop (Evaluator-Optimizer — Pipeline v11) ────
+      const agentResult = await runContentLoopPhase(
         step, recipeId, keyword, serpResult, cuisineReplacements, format,
       )
       degraded = degraded || agentResult.degraded
 
       // ── Step 3: Persist draft for review ───────────────────────────────
-      // Build a minimal audit-like object for persistDraftForReview compatibility
-      const placeholderAudit = {
-        publication_readiness_score: 70,
-        scores: {
-          signature_llm: 0, sur_optimisation_seo: 0,
-          factualite: 70, originalite: 70, utilite: 70, experience: 70,
-          coherence_interne: 70, eeat_trust: 70,
-        },
-        required_fixes: [] as { description: string }[],
-        final_recommendation: "",
-        decision: "PASS" as const,
-      }
-      await persistDraftForReview(step, recipeId, agentResult.output, placeholderAudit)
+      await persistDraftForReview(step, recipeId, agentResult.output)
       await step.sleep("sleep-after-draft", "2s")
 
       // ── Step 4: Wait for approval ──────────────────────────────────────
@@ -83,23 +77,8 @@ export const generateRecipeWorkflow = inngest.createFunction(
       degraded = degraded || imageResult.degraded
 
       // ── Step 6: Final persist with validation ──────────────────────────
-      // Build minimal SeoPlan for persistFinalDraft compatibility
-      const placeholderPlan = {
-        h2Sections: [] as { heading: string; subheadings: string[]; coverPaa: string[] }[],
-        semanticEntities: [] as string[],
-        tags: agentResult.output.tags,
-        title: agentResult.output.title,
-        metaTitle: agentResult.output.metaTitle,
-        metaDescription: agentResult.output.metaDescription,
-        excerpt: agentResult.output.excerpt,
-        prepTime: agentResult.output.prepTime,
-        cookTime: agentResult.output.cookTime,
-        totalTime: agentResult.output.totalTime,
-        servings: agentResult.output.servings,
-        difficulty: agentResult.output.difficulty,
-      }
       await persistFinalDraft(
-        step, recipeId, agentResult.output, placeholderPlan,
+        step, recipeId, agentResult.output,
         imageResult.heroImageUrl, imageResult.imageVariants as ImageVariant[],
         keyword, format, degraded,
       )
@@ -116,24 +95,8 @@ export const generateRecipeWorkflow = inngest.createFunction(
 
       // ── Step 8: Pin Designer ───────────────────────────────────────────
       try {
-        // Build minimal plan for Pin Designer
-        const pinPlan = {
-          semanticEntities: [] as string[],
-          tags: agentResult.output.tags,
-          h2Sections: [] as { heading: string; subheadings: string[]; coverPaa: string[] }[],
-          title: agentResult.output.title,
-          metaTitle: agentResult.output.metaTitle,
-          metaDescription: agentResult.output.metaDescription,
-          excerpt: agentResult.output.excerpt,
-          prepTime: agentResult.output.prepTime,
-          cookTime: agentResult.output.cookTime,
-          totalTime: agentResult.output.totalTime,
-          servings: agentResult.output.servings,
-          difficulty: agentResult.output.difficulty,
-          faqItems: [] as { question: string; answer: string }[],
-        }
         await generatePins(
-          step, recipeId, agentResult.output, pinPlan,
+          step, recipeId, agentResult.output,
           imageResult.heroImageUrl, imageResult.imageVariants as ImageVariant[],
         )
       } catch (err) {

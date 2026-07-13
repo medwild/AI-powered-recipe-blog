@@ -39,6 +39,8 @@ INTERDIT :
 | `/histoire/{slug}` | Article histoire | — |
 | `/equipement` | Liste équipement | — |
 | `/equipement/{slug}` | Article équipement | — |
+| `/idees` | Liste idées repas | — |
+| `/idees/{slug}` | Article idée repas | `/idees/healthy-dinner-ideas-for-two` |
 | `/about` | Page auteur | — |
 | `/dashboard` | Studio éditorial (protégé) | — |
 | `/login` | Login dashboard | — |
@@ -53,7 +55,7 @@ INTERDIT :
 ### 1.4 Catégories valides
 
 ```typescript
-const VALID_CATEGORIES = ["techniques", "guides", "histoire", "equipement"]
+const VALID_CATEGORIES = ["techniques", "guides", "histoire", "equipement", "idees"]
 ```
 
 Ajouter une catégorie nécessite :
