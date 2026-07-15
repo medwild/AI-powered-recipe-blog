@@ -1,3 +1,9 @@
+---
+paths:
+  - "app/**"
+  - "components/**"
+---
+
 # Règles frontend
 
 ## Next.js App Router

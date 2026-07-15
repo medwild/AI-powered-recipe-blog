@@ -139,10 +139,9 @@ const FALLBACK_PROMPT =
 /**
  * Construit un prompt d'image professionnel à partir des données de la recette.
  *
- * Utilise l'architecture 10 couches du skill image-prompt-optimizer
- * (sujet → contexte → cadrage → style → éclairage → composition →
- *  couleur → technique → format → exclusions) pour produire un prompt
- * de qualité professionnelle même quand le Writer n'a pas généré de prompt.
+ * Architecture 10 couches (sujet → contexte → cadrage → style → éclairage →
+ * composition → couleur → technique → format → exclusions) pour produire un
+ * prompt de qualité professionnelle quand le Writer n'a pas généré de prompt.
  */
 export function buildDefaultPrompt(source: PromptSource): string {
   const dishName = source.title ?? source.keyword

@@ -37,26 +37,35 @@ const prompt = optimizeImagePrompt(recipe)
 
 ```
 skills/
-├ README.md                            # This file
-├ image-prompt-optimizer/              # Complex skill with references
-│   SKILL.md                           #   Main definition (frontmatter + rules)
-│   references/                        #   Specialized reference documents
-│       art_direction.md
-│       art_styles.md
-│       common_mistakes.md
-│       composition.md
-│       glossary.md
-│       lighting.md
-│       model_specs.md
-│       photography.md
-│       quality_checklist.md
-│       templates_and_palettes.md
-├ agent-strategist.md          # Super-skill Agent 1 (SEO Strategist)
-├ agent-writer.md              # Super-skill Agent 2 (Writer)
-├ agent-auditor.md             # Super-skill Agent 3 (Auditor)
-├ agent-editor.md              # Super-skill Agent 4 (Editor)
-└ self-improvement.md          # Continuous self-improvement
+├ README.md                              # This file
+├ agent-chef-augustin.md                 # Agent unique — Writer
+├ agent-strategist.md                    # Agent — Content Strategist
+├ agent-judge.md                         # Agent — Quality Evaluator
+├ agent-science-enricher.md              # Agent — Food Science Enricher (Sonnet 5)
+├ agent-pin-designer.md                  # Agent — Pin Designer (PTRA framework)
+├ references/                            # Reference documents (loaded by agents)
+└ archive/                               # Archived agents (pre-v11 multi-agent pipeline)
+    ├ agent-aor-writer.md
+    ├ agent-auditor.md
+    ├ agent-editor.md
+    ├ agent-qa.md
+    ├ agent-strategist.md
+    ├ agent-writer.md
+    ├ content-gap-strategist.md
+    ├ food-photography.md
+    ├ self-improvement.md
+    └ writing-samples.md                 # Archived: patterns now in agent-chef-augustin
 ```
+
+## Active Agents (v12 — Human-First Pipeline)
+
+| Skill | Agent | Model | Role |
+|---|---|---|---|
+| `agent-chef-augustin` | Chef Augustin | Claude Sonnet 4.6 | Writer — full article + image prompt + JSON-LD |
+| `agent-strategist` | Strategist | Claude Sonnet 4.6 | Content strategy — SERP analysis + H2 planning |
+| `agent-judge` | Judge v2.0 | Claude Sonnet 4.6 | Quality evaluation — 5 dimensions + Voice Authenticity |
+| `agent-science-enricher` | Science Enricher | Claude Sonnet 5 | Food science gap analysis — 6 enrichment types |
+| `agent-pin-designer` | Pin Designer | Claude Sonnet 4.6 | 5 Pinterest Pins — PTRA scoring + Content Graph |
 
 ## Supported Formats
 

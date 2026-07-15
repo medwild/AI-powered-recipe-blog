@@ -239,7 +239,8 @@ export async function persistFinalDraft(
     let validation = validateContent({ ...finalRecipe, contentType: "recipe", format })
 
     // Auto-remediate: if ContentValidator found recoverable errors (banned words,
-    // health claims), re-scrub more aggressively and re-validate before giving up.
+    // health claims), use the deterministic scrubber with proper replacements
+    // instead of breaking text with [...]. Re-validate after scrubbing.
     if (!validation.passed) {
       const fixableErrors = validation.errors.filter(e =>
         e.severity === "error" &&
@@ -247,26 +248,16 @@ export async function persistFinalDraft(
       )
 
       if (fixableErrors.length > 0) {
-        // Aggressive remediation: for each failing word, force-replace all occurrences
-        let md = finalRecipe.contentMarkdown ?? ""
-        for (const err of fixableErrors) {
-          const wordMatch = err.message.match(/"([^"]+)"/)
-          if (wordMatch) {
-            const word = wordMatch[1]
-            // Case-insensitive global replace of the banned word
-            const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-            const regex = new RegExp(escaped.replace(/\s+/g, '\\s+'), 'gi')
-            const before = md
-            md = md.replace(regex, '[...]')
-            if (md !== before) {
-              await appendLog(recipeId, logEntry("Workflow", "error",
-                `Auto-scrubbed "${word}" → removed (ContentValidator remediation)`))
-            }
+        const { scrubbed, replacements } = scrubBannedWords(finalRecipe.contentMarkdown ?? "")
+        if (replacements.length > 0) {
+          finalRecipe.contentMarkdown = scrubbed
+          for (const r of replacements) {
+            await appendLog(recipeId, logEntry("Workflow", "error",
+              `Auto-scrubbed: ${r} (ContentValidator remediation)`))
           }
         }
-        finalRecipe.contentMarkdown = md
 
-        // Re-validate after aggressive scrubbing
+        // Re-validate after deterministic scrubbing
         validation = validateContent({ ...finalRecipe, contentType: "recipe", format })
       }
     }

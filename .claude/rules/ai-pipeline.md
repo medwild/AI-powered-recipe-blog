@@ -1,3 +1,9 @@
+---
+paths:
+  - "lib/inngest/**"
+  - "skills/**"
+---
+
 # Règles pipeline IA
 
 ## Workflow Inngest

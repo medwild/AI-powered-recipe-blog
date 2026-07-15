@@ -284,8 +284,56 @@ Valid anchors: "Chef Augustin Lefèvre [action verb]...", "In French culinary tr
 
 ## 6. IMAGE PROMPT
 
-Generate a food photography prompt for 2:3 vertical aspect ratio (Pinterest standard).
-Format: `[Style] food photography of [subject] on [surface], [lighting], [composition], [camera], 2:3 vertical, editorial food photography`
+Generate a food photography prompt for 2:3 vertical aspect ratio (Pinterest standard). The prompt is used by Ideogram v4 Turbo (primary) or FLUX-1-Schnell (fallback).
+
+### 6.1 Prompt Anatomy (6 parts)
+
+```
+[Subject], [Action/Pose], [Environment]. [Lighting setup]. [Camera/Lens]. [Style descriptor], [Color palette].
+```
+
+- **Subject** (< 40 words for parts 1-3 combined): Specific textures, visible ingredients, plating details. Name the dish in the first 15 words.
+- **Action**: Steam rising? Sauce pooling? Cheese pulling? Fork lifting a bite?
+- **Environment**: Minimal. Plate/surface only. No complex backgrounds, no hands, no cutlery.
+- **Lighting**: Pick ONE: natural window (3500K), dramatic side (3200K), golden hour (3000K), studio softbox (5000K), bright overhead (5500K).
+- **Camera**: Always "Sony A7R IV". Match lens to framing (see §6.2).
+- **Style + Color palette**: One dominant style + 2-3 hex codes extracted from the actual recipe ingredients. No "vibrant colors" — use real food colors.
+
+**Budget rule**: Core subject < 40 words. Total prompt 60-100 words. Never exceed 120 words.
+
+### 6.2 Dish Type → Framing Map
+
+| Dish Type | Best Angle | Lens | Example |
+|---|---|---|---|
+| Soups, stews, bowls | Overhead (90°) | 50mm f/5.6 | Ramen, curry, chili |
+| Plated mains (protein+veg) | 45° medium shot | 85mm f/4 | Steak, roasted chicken, fish |
+| Burgers, sandwiches | Eye-level close-up | 100mm macro f/2.8 | Burger, club sandwich |
+| Pasta in bowl | 45° medium | 50mm f/4 | Twirled pasta, gnocchi |
+| Desserts (plated) | 45° close-up | 90mm macro f/2.8 | Tart, crème brûlée, mousse |
+| Flat baked goods | Overhead | 35mm f/5.6 | Pizza, focaccia, galette |
+| Bread, pastries | 30° slightly above | 50mm f/4 | Sourdough, croissant |
+| Salads, bowls | Overhead or 45° | 50mm f/5.6 | Grain bowl, salad |
+| Casseroles, gratins | Overhead or 45° | 50mm f/5.6 | Lasagna, gratin |
+
+**Rule**: Dish has height (burger, layer cake) → eye-level or 45°. Dish is flat (soup, pizza) → overhead.
+
+### 6.3 Low-Visual Fallback
+
+When the dish has no strong visual subject (broth, plain rice, mashed potatoes without garnish, simple sauce):
+
+- **Strategy A — Ingredient Focus**: Photograph key raw ingredients before cooking (overhead, bright light, colorful).
+- **Strategy B — Process Shot**: Steam from pot, wooden spoon lifting, sauce being poured, dough being kneaded.
+- **Strategy C — Lifestyle Context**: Dish on a set table with linen, warm lighting, lived-in kitchen.
+- **Strategy D — Texture Close-Up**: Zoom in on the ONE interesting texture (crust, glaze, flaky layers, herb garnish).
+
+Never generate a standard "hero shot of the dish" for low-visual recipes — it will be unclickable.
+
+### 6.4 Pre-Output Checklist
+
+Before writing `imagePrompt` in the JSON, silently verify:
+1. **Dish named in first 15 words?** The exact recipe title appears early.
+2. **Framing matches dish type?** Cross-reference §6.2 — no contradictions (e.g., "overhead" + "eye-level" in same prompt).
+3. **At least 2 key ingredients visually described?** Colors and textures anchored to real recipe ingredients, not generic terms.
 
 ---
 

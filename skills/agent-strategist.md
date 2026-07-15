@@ -1,11 +1,11 @@
 ---
 id: agent-strategist
-version: "1.0.0"
+version: "1.1.0"
 description: "Content strategist — SERP analysis + article structure planning. Produces a StrategyPlan consumed by the Writer agent. No writing — pure strategy."
 model: "claude-sonnet-4-6"
 temperature: 0.7
 max_tokens: 4096
-last_updated: "2026-07-11"
+last_updated: "2026-07-15"
 ---
 
 # Strategist — Content Planning Agent v1.0

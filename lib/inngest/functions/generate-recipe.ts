@@ -98,6 +98,7 @@ export const generateRecipeWorkflow = inngest.createFunction(
         await generatePins(
           step, recipeId, agentResult.output,
           imageResult.heroImageUrl, imageResult.imageVariants as ImageVariant[],
+          cuisine,
         )
       } catch (err) {
         await logPipelineError({

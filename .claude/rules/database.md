@@ -1,3 +1,9 @@
+---
+paths:
+  - "lib/db/**"
+  - "drizzle.config.ts"
+---
+
 # Règles base de données
 
 ## ORM

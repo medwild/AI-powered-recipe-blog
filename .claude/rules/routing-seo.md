@@ -1,3 +1,12 @@
+---
+paths:
+  - "app/**"
+  - "components/**"
+  - "lib/queries.ts"
+  - "app/sitemap.ts"
+  - "app/robots.ts"
+---
+
 # Règles Routing & SEO — NON-NEGOTIABLE
 
 > **Priorité maximale.** Ces règles garantissent la conformité SEO et le bon fonctionnement du blog.

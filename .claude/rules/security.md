@@ -1,3 +1,10 @@
+---
+paths:
+  - "middleware.ts"
+  - "app/api/**"
+  - "lib/rate-limit.ts"
+---
+
 # Règles de sécurité
 
 ## Secrets

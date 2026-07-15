@@ -1,3 +1,9 @@
+---
+paths:
+  - "app/api/**"
+  - "app/actions/**"
+---
+
 # Règles API
 
 ## Conventions App Router

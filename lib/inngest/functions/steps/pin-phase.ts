@@ -17,6 +17,7 @@ export async function generatePins(
   finalRecipe: RecipeDraft,
   heroImageUrl: string | null,
   imageVariants: ImageVariant[],
+  cuisine?: string,
 ) {
   await step.run("pin-designer", async () => {
     const slug = slugify(finalRecipe.title ?? "recipe")
@@ -32,7 +33,7 @@ export async function generatePins(
       ingredients: (finalRecipe.ingredients ?? []) as { name: string; quantity?: string }[],
       tags: finalRecipe.tags ?? [],
       contentMarkdown: finalRecipe.contentMarkdown ?? "",
-      microNiche: "Easy Weeknight Dinners for Two",
+      microNiche: cuisine || "Easy Weeknight Dinners for Two",
       targetCountry: process.env.SERP_GL || "us",
     })
 
