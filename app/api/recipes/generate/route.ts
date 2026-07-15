@@ -4,6 +4,7 @@ import { recipes } from "@/lib/db/schema"
 import { slugify } from "@/lib/slug"
 import { inngest } from "@/lib/inngest/client"
 import { checkRateLimit } from "@/lib/rate-limit"
+import { preGenerationGate } from "@/lib/pre-generation-gate"
 
 export const maxDuration = 30
 
@@ -75,19 +76,31 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Le mot-clé est requis." }, { status: 400 })
   }
 
-  // Keyword deduplication — prevent SEO cannibalization
-  const existingPublished = await db.query.recipes.findFirst({
-    where: (r, { eq, and }) => and(
-      eq(r.keyword, keyword),
-      eq(r.status, "published"),
-    ),
-    columns: { id: true, slug: true, title: true },
-  })
-  if (existingPublished) {
-    return NextResponse.json({
-      error: `Ce mot-clé est déjà publié : "${existingPublished.title}" (/${existingPublished.slug}). Le contenu dupliqué causerait une cannibalisation SEO.`,
-      existingId: existingPublished.id,
-    }, { status: 409 })
+  // Pre-Generation Gate — anti-duplicate & anti-cannibalization
+  // Checks: exact slug, keyword fuzzy match, semantic neighbor, tag saturation
+  const gateResult = await preGenerationGate(keyword)
+
+  if (gateResult.verdict === "block") {
+    return NextResponse.json(
+      {
+        error: "DUPLICATE_KEYWORD",
+        message: `"${keyword}" is too similar to existing article "${gateResult.existingArticle?.title}". Publishing this would cause duplicate content or SEO cannibalization.`,
+        check: gateResult.check,
+        similarity: gateResult.similarity,
+        existingArticle: gateResult.existingArticle,
+        suggestion: gateResult.suggestion,
+      },
+      { status: 409 },
+    )
+  }
+
+  if (gateResult.verdict === "warn") {
+    console.warn(
+      `[PreGenGate] WARN for "${keyword}": ${gateResult.check} ` +
+      `(existing: "${gateResult.existingArticle?.title}", ` +
+      `similarity: ${gateResult.similarity}%, ` +
+      `tags: [${gateResult.saturatedTags?.join(", ")}])`,
+    )
   }
 
   // Check for existing draft/failed — allow regeneration with warning

@@ -96,7 +96,12 @@
       "WebFetch(domain:chefaugustin.com)",
       "WebFetch(domain:rdap.verisign.com)",
       "Bash(dig +short chefaugustin.com)",
-      "Bash(git *)"
+      "Bash(git *)",
+      "WebFetch(domain:indicator.media)",
+      "WebFetch(domain:iptc.org)",
+      "WebFetch(domain:newsroom.pinterest.com)",
+      "WebFetch(domain:techcrunch.com)",
+      "WebFetch(domain:www.zdnet.com)"
     ]
   }
 }

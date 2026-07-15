@@ -48,7 +48,7 @@ export function computeLoopScore(
   validation: ValidationResult,
   judgeVerdict?: QualityVerdict,
 ): LoopScore {
-  // Judge quality: 20% of composite (reduced from 40% — Haiku 4.5 is a weak evaluator)
+  // Judge quality: 20% of composite (Sonnet 4.6 — reliable evaluator)
   const judgeScore = judgeVerdict?.totalScore ?? 0
 
   // GEO citability: 50% of composite (increased from 30% — deterministic, reliable)

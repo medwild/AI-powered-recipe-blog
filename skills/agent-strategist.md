@@ -56,6 +56,7 @@ You must output exactly:
 **Rules**:
 - Pin-first: 4-5 H2s, 3 FAQ, recipe card must be section #2 (after intro)
 - Google: 6-8 H2s, 5 FAQ, include "Why This Works" and "What Most Recipes Get Wrong" sections
+- **Every plan MUST include a "Chef's Tips & What I've Learned" H2.** The Writer will use this section for signed tips ("Chef Augustin's Tip:"), standalone wisdom lines, and personal commentary. Place it after the technique sections and before FAQ.
 - Every H2 must have a clear purpose — no filler sections
 - FAQ questions must come from real PAA data when available
 - `competitorGaps` must be specific — not "better content" but "competitors don't explain why 375°F is better than 350°F for this dish"

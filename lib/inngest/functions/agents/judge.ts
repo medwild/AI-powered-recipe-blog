@@ -1,8 +1,9 @@
 // Agent 2 — Judge — Quality Evaluator
 //
-// Evaluates article quality on 4 dimensions (culinary accuracy, narrative,
-// usefulness, structure) and produces a QualityVerdict consumed by the
-// Content Loop. Uses Claude Haiku 4.5 for cost efficiency.
+// Evaluates article quality on 5 dimensions (culinary accuracy, narrative,
+// usefulness, structure, voice authenticity) and produces a QualityVerdict
+// consumed by the Content Loop. Uses Claude Sonnet 4.6 — strong enough for
+// nuanced voice authenticity evaluation without being overkill.
 //
 // Architecture:
 //   System prompt ← loadSkillContent("agent-judge")
@@ -38,6 +39,7 @@ export interface QualityVerdict {
     narrativeQuality: DimensionScore
     usefulness: DimensionScore
     structureFlow: DimensionScore
+    voiceAuthenticity: DimensionScore
   }
   criticalIssues: CriticalIssue[]
   strengths: string[]
@@ -85,7 +87,7 @@ Evaluate according to your system prompt. Output ONLY the JSON object.`
     const result = await runTextAndParseJson<QualityVerdict>(systemPrompt, userPrompt, {
       temperature: 0.3,
       maxTokens: 2048,
-      model: "claude-haiku-4-5", // cheaper, faster — sufficient for evaluation
+      model: "claude-sonnet-4-6",
     })
 
     logAgentTrace("Judge", "output", {
@@ -102,6 +104,7 @@ Evaluate according to your system prompt. Output ONLY the JSON object.`
         narrativeQuality: result.dimensions?.narrativeQuality ?? { score: 70, note: "" },
         usefulness: result.dimensions?.usefulness ?? { score: 70, note: "" },
         structureFlow: result.dimensions?.structureFlow ?? { score: 70, note: "" },
+        voiceAuthenticity: result.dimensions?.voiceAuthenticity ?? { score: 70, note: "" },
       },
       criticalIssues: result.criticalIssues ?? [],
       strengths: result.strengths ?? [],
@@ -117,6 +120,7 @@ Evaluate according to your system prompt. Output ONLY the JSON object.`
         narrativeQuality: { score: 60, note: "Judge unavailable — default score" },
         usefulness: { score: 60, note: "Judge unavailable — default score" },
         structureFlow: { score: 60, note: "Judge unavailable — default score" },
+        voiceAuthenticity: { score: 60, note: "Judge unavailable — default score" },
       },
       criticalIssues: [],
       strengths: [],

@@ -13,6 +13,7 @@
 import { agentStrategist, type StrategyPlan } from "../agents/strategist"
 import { agentChefAugustin, type ChefAugustinOutput } from "../agents/chef-augustin"
 import { agentJudge } from "../agents/judge"
+import { agentScienceEnricher, formatEnrichmentsForWriter } from "../agents/science-enricher"
 import { checkCitability } from "@/lib/geo-validator"
 import { validateContent } from "@/lib/content-validator"
 import { computeLoopScore, buildLoopFeedback, thresholdMet, isDiminishing } from "@/lib/loop-scorer"
@@ -200,6 +201,38 @@ export async function runContentLoopPhase(
     // 6. Build feedback for next pass
     previousScore = loopScore.total
     feedback = buildLoopFeedback(citability, contentValidation, pass + 1, MAX_PASSES)
+
+    // ── Science Enricher (Sonnet 5) — after Pass 1 only ──────────────────
+    // If Pass 1 didn't meet the threshold, enrich with food science before
+    // Pass 2. Gated behind SCIENCE_ENRICHER_ENABLED (default: true).
+    if (pass === 1 && process.env.SCIENCE_ENRICHER_ENABLED !== "false") {
+      try {
+        await appendLog(recipeId, logEntry("ScienceEnricher", "running",
+          "Analysing article for food science gaps with Claude Sonnet 5..."))
+
+        const enrichmentOutput = await agentScienceEnricher({
+          articleMarkdown: result.contentMarkdown,
+          keyword,
+        })
+
+        if (enrichmentOutput && enrichmentOutput.enrichments.length > 0) {
+          const enrichmentFeedback = formatEnrichmentsForWriter(enrichmentOutput)
+          feedback += "\n\n" + enrichmentFeedback
+
+          await appendLog(recipeId, logEntry("ScienceEnricher", "done",
+            `${enrichmentOutput.enrichments.length} science enrichments generated ` +
+            `(${enrichmentOutput.enrichments.map(e => e.type).join(", ")}). ` +
+            `Assessment: ${enrichmentOutput.overall_assessment}`))
+        } else {
+          await appendLog(recipeId, logEntry("ScienceEnricher", "done",
+            "No enrichment opportunities found — article already science-dense."))
+        }
+      } catch (err) {
+        // Enricher failure is non-fatal — the loop continues without enrichment
+        await appendLog(recipeId, logEntry("ScienceEnricher", "error",
+          `Enrichment failed: ${(err as Error).message}. Continuing without enrichments.`))
+      }
+    }
 
     await appendLog(recipeId, logEntry("Writer", "running",
       `Pass ${pass} feedback: ${feedback.substring(0, 250)}...`))
