@@ -36,8 +36,8 @@ export interface LoopScore {
  *   Content quality: 20% — banned words, health claims, meta, word count
  *   Structure:       10% — ingredients, instructions, tags, image placeholders
  *
- * The Judge (Haiku 4.5) weight was reduced from 40% to 20% to eliminate
- * systemic evaluation distortion from a weak evaluator model. GEO citability
+ * The Judge weight was reduced from 40% to 20% to eliminate
+ * systemic evaluation distortion from a weaker evaluator model. GEO citability
  * (deterministic code) is more reliable and now drives the score.
  *
  * This score drives the stopping decision in the Evaluator-Optimizer loop.
@@ -48,7 +48,7 @@ export function computeLoopScore(
   validation: ValidationResult,
   judgeVerdict?: QualityVerdict,
 ): LoopScore {
-  // Judge quality: 20% of composite (Sonnet 4.6 — reliable evaluator)
+  // Judge quality: 20% of composite
   const judgeScore = judgeVerdict?.totalScore ?? 0
 
   // GEO citability: 50% of composite (increased from 30% — deterministic, reliable)
@@ -87,17 +87,25 @@ export function computeLoopScore(
 // ---------------------------------------------------------------------------
 
 /**
- * Builds structured, machine-parseable feedback from validator results.
+ * Builds surgical feedback from validator results for the next Writer pass.
  *
- * The feedback is injected into the USER prompt of the next Writer pass
- * (not the system prompt — the skill stays immutable). Each line targets
- * a specific, fixable issue with exact counts so the Writer knows what
- * to add.
+ * Karpathy rule: simplicity first. DeepSeek regresses when feedback exceeds
+ * ~500 chars — it tries to rewrite everything and loses what worked. This
+ * version reports ONLY the top 2 blocking issues as imperative one-liners,
+ * with explicit instructions to preserve everything else.
  *
- * Design rules (from loop-engineering anti-patterns):
- *   - No narrative paragraphs — structured, scannable
- *   - Exact counts ("2/6") not vague ("not enough")
- *   - Actionable ("Add 4 attributions using patterns §5.2") not generic ("improve")
+ * Priority order (only top 2 are emitted):
+ *   1. Food safety violations (CRITICAL — USDA temps, unsafe practices)
+ *   2. Banned words (instant AI tell, deterministic scrubber will catch)
+ *   3. Missing attributions (GEO citability, second-most impactful)
+ *   4. Missing answer nuggets (GEO structure)
+ *   5. Meta length / other warnings
+ *
+ * Design constraints:
+ *   - Max 500 chars total
+ *   - One imperative sentence per issue
+ *   - "DO NOT rewrite working sections" is the first instruction
+ *   - No praise, no narrative, no § references
  */
 export function buildLoopFeedback(
   citability: CitabilityReport,
@@ -105,106 +113,81 @@ export function buildLoopFeedback(
   passNumber: number,
   maxPasses: number,
 ): string {
-  const lines: string[] = [
-    `## ⚠️ QUALITY FEEDBACK — Pass ${passNumber}/${maxPasses}`,
-    `Score: ${citability.score}/100. Fix ALL issues below before outputting.`,
-    "",
-  ]
+  const issues: string[] = []
 
-  // ── GEO Citability feedback ──────────────────────────────────────────
+  // ── Priority 1: Food safety (CRITICAL — blocks publication) ─────────
+
+  const foodSafetyErrors = validation.errors.filter(
+    e => e.severity === "error" && e.message.includes("food safety"),
+  )
+  for (const err of foodSafetyErrors) {
+    // Extract the wrong temperature and the correct one
+    const tempMatch = err.message.match(/Found (\d+°F)/)
+    const correctMatch = err.message.match(/USDA minimum is (\d+°F)/)
+    if (tempMatch && correctMatch) {
+      issues.push(`Replace "${tempMatch[1]}" with "${correctMatch[1]}" (USDA minimum for poultry). Do not mention any temperature below 165°F for chicken.`)
+    } else {
+      issues.push(`Fix food safety: ${err.message.split(".")[0]}.`)
+    }
+  }
+
+  // ── Priority 2: Banned words ───────────────────────────────────────
+
+  const bannedWordErrors = validation.errors.filter(e => e.message.includes("Banned word"))
+  for (const err of bannedWordErrors) {
+    const wordMatch = err.message.match(/"([^"]+)"/)
+    if (wordMatch) {
+      issues.push(`Replace the word "${wordMatch[1]}" with a concrete description of what you see.`)
+    }
+  }
+
+  // ── Priority 3: Missing attributions (GEO) ──────────────────────────
 
   if (citability.attributions.count < citability.attributions.minRequired) {
     const missing = citability.attributions.minRequired - citability.attributions.count
-    lines.push(`### ❌ ATTRIBUTIONS: ${citability.attributions.count}/${citability.attributions.minRequired}`)
-    lines.push(`Add ${missing} more source attributions using the 4 patterns from §5.2:`)
-    lines.push(`1. Named Authority + Claim ("Chef Augustin Lefèvre recommends...")`)
-    lines.push(`2. First-Person Testing ("I've tested this [N] times...")`)
-    lines.push(`3. Cause-Effect Expertise ("[Claim] because [mechanism]")`)
-    lines.push(`4. Comparison Anchoring ("Unlike [common], [ours] because...")`)
-    lines.push("Each attribution MUST co-occur with a specific claim (number, entity, or cause-effect) in the same paragraph.")
-    lines.push("")
+    issues.push(
+      `Insert ${missing} first-person attribution${missing > 1 ? "s" : ""} (e.g. "I've tested this", "my go-to method", "Chef Augustin recommends") into existing paragraphs — each paired with a specific fact or number. Do NOT add new sections.`,
+    )
   }
+
+  // ── Priority 4: Missing answer nuggets ──────────────────────────────
 
   if (citability.nuggets.count < citability.nuggets.minRequired) {
     const missing = citability.nuggets.minRequired - citability.nuggets.count
-    lines.push(`### ❌ ANSWER NUGGETS: ${citability.nuggets.count}/${citability.nuggets.minRequired}`)
-    lines.push(`Add ${missing} more self-contained FAQ answers (## Question? header + 25-120 word answer with specific facts/numbers).`)
-    lines.push("Each nugget must contain at least one number OR a named entity. No generic answers.")
-    lines.push("")
+    issues.push(
+      `Add ${missing} FAQ H2${missing > 1 ? "s" : ""} (## Question?) with a 25-120 word answer containing a specific number or fact.`,
+    )
   }
 
-  if (citability.claims.count < citability.claims.minRequired) {
-    const missing = citability.claims.minRequired - citability.claims.count
-    lines.push(`### ⚠️ SPECIFIC CLAIMS: ${citability.claims.count}/${citability.claims.minRequired}`)
-    lines.push(`Add ${missing} more specific claims: numbered facts, quantified comparisons, or causal claims (because/which creates/preventing).`)
-    lines.push("")
-  }
+  // ── Priority 5: Meta title too long ─────────────────────────────────
 
-  // ── Sections without attributions (granular feedback) ──────────────
-
-  if (citability.attributions.count < citability.attributions.minRequired) {
-    lines.push("### 💡 ATTRIBUTION TARGETING")
-    lines.push("Distribute attributions across H2 sections. Each major section should contain at least one source attribution + claim pair.")
-    lines.push("")
-  }
-
-  // ── Banned word feedback ──────────────────────────────────────────
-
-  const bannedWordErrors = validation.errors.filter(e => e.message.includes("Banned word"))
-  if (bannedWordErrors.length > 0) {
-    lines.push("### ❌ BANNED AI VOCABULARY FOUND")
-    lines.push("The following AI-telltale words were detected in your content. Replace each with natural, specific language:")
-    for (const err of bannedWordErrors) {
-      const wordMatch = err.message.match(/"([^"]+)"/)
-      if (wordMatch) lines.push(`- Remove "${wordMatch[1]}" — rewrite the entire sentence naturally.`)
-    }
-    lines.push("These words are instant AI tells. The validator penalizes them and will scrub them if unfixed.")
-    lines.push("")
-  }
-
-  // ── Meta title feedback ───────────────────────────────────────────
-
-  const metaTitleError = validation.errors.find(e => e.field === "metaTitle" && e.message.includes("too long"))
+  const metaTitleError = validation.errors.find(
+    e => e.field === "metaTitle" && e.message.includes("too long"),
+  )
   if (metaTitleError) {
-    lines.push("### ⚠️ META TITLE TOO LONG")
-    lines.push("Your meta title exceeds 60 characters. Rewrite it naturally under 60 chars — do NOT mechanically truncate. A truncated fallback will damage SEO if published.")
-    lines.push("")
+    issues.push("Shorten metaTitle to under 60 characters without truncating mid-word.")
   }
 
-  // ── Content validation feedback ──────────────────────────────────────
+  // ── Assemble: top 2 issues only, boxed with preservation directive ──
 
-  const criticalErrors = validation.errors.filter(e => e.severity === "error")
-  const warnings = validation.errors.filter(e => e.severity === "warning")
+  const topIssues = issues.slice(0, 2)
 
-  if (criticalErrors.length > 0) {
-    lines.push("### ❌ CRITICAL ERRORS (Blocking)")
-    for (const err of criticalErrors) {
-      lines.push(`- **${err.field}**: ${err.message}`)
-    }
-    lines.push("")
+  if (topIssues.length === 0) {
+    return `## ✅ Pass ${passNumber}/${maxPasses} — No blocking issues. Output the same JSON unchanged.`
   }
 
-  if (warnings.length > 0) {
-    lines.push("### ⚠️ WARNINGS")
-    for (const err of warnings) {
-      lines.push(`- ${err.field}: ${err.message}`)
-    }
-    lines.push("")
+  const lines: string[] = [
+    `## 🔧 PASS ${passNumber}/${maxPasses} — SURGICAL FIXES ONLY`,
+    `CRITICAL: Do NOT rewrite the article. Keep every paragraph, sentence, and word that is NOT mentioned below. Only fix these ${topIssues.length} issue${topIssues.length > 1 ? "s" : ""}:`,
+    "",
+  ]
+
+  for (let i = 0; i < topIssues.length; i++) {
+    lines.push(`${i + 1}. ${topIssues[i]}`)
   }
 
-  // ── Positive signal (if mostly good) ─────────────────────────────────
-
-  if (citability.score >= 50 && criticalErrors.length === 0) {
-    lines.push("### ✅ Keep")
-    lines.push("Your structure, culinary precision, and overall flow are good. Focus only on adding the missing attributions and nuggets above — do NOT rewrite sections that are working.")
-    lines.push("")
-  }
-
-  // ── Closing instruction ──────────────────────────────────────────────
-
-  lines.push("---")
-  lines.push(`This is pass ${passNumber} of ${maxPasses}. Fix ALL ❌ items. The next pass will re-evaluate and stop if the threshold is met.`)
-  lines.push("Output ONLY the JSON object — no markdown fences, no reasoning.")
+  lines.push("")
+  lines.push("Output the complete JSON with ONLY these fixes applied. Everything else stays exactly as it was.")
 
   return lines.join("\n")
 }
