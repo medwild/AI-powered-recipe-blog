@@ -90,9 +90,11 @@ L'utilisateur installe le plugin WordPress, le configure une fois (clé Zernio, 
 ÉTAPE 4 : Automatique — plus rien à faire
   → Il publie un article normalement sur WordPress
   → PinPilot détecte la publication → envoie à l'API
-  → L'IA génère 5 pins + images (2-3 min)
-  → Les pins apparaissent dans le dashboard wp-admin
-  → Zernio les publie selon le planning configuré
+  → L'IA génère 5 pins (LLM : ~30-60s) puis 5 images (Ideogram : ~50-150s)
+  → Temps total estimé : 3-5 minutes. Une notification apparaît dans wp-admin
+    quand c'est terminé. Le dashboard se rafraîchit automatiquement (AJAX polling
+    toutes les 15s pendant la génération).
+  → Zernio publie les pins selon le planning configuré
 ```
 
 ---
@@ -107,7 +109,7 @@ L'utilisateur installe le plugin WordPress, le configure une fois (clé Zernio, 
 | 2 | Détection automatique | P0 | Hook `publish_post` → envoi vers API PinPilot |
 | 3 | Analyse de contenu IA | P0 | Détection niche, topics, potentiel Pinterest par article |
 | 4 | Plan éditorial PTRA | P0 | Clusters, boards, calendrier de publication |
-| 5 | Génération de pins | P0 | 5 pins/article avec PTRA scoring 11 facteurs |
+| 5 | Génération de pins | P0 | 5 pins/article + scoring PTRA déterministe 5 facteurs |
 | 6 | Génération d'images IA | P0 | 1 image/pin via Ideogram (2:3, 1000x1500px) |
 | 7 | Publication Zernio | P0 | Envoi automatique vers Zernio, scheduling respecté |
 | 8 | Dashboard wp-admin | P0 | Files d'attente, statut des pins, logs |
@@ -134,7 +136,7 @@ L'utilisateur installe le plugin WordPress, le configure une fois (clé Zernio, 
 | Base de données | PostgreSQL (Neon) | Multi-tenant, pins, projets |
 | ORM | Drizzle | Queries typées |
 | Jobs async | Inngest | Pipeline IA : analyse → PTRA → pins → images |
-| LLM | DeepSeek v4 Pro | Génération de contenu, scoring |
+| LLM | DeepSeek v4 Pro | Génération de contenu (pins, plans, analyse) |
 | Images | Ideogram v4 Turbo | Génération images Pinterest |
 | Publication | Zernio REST API | Scheduling + publication Pinterest |
 | WordPress API | REST API native WP | Extraction de contenu (fallback : flux RSS) |
@@ -155,7 +157,7 @@ pinpilot/
 │   ├── class-pin-detail.php     # Page détail d'un pin (édition, regénération)
 │   ├── class-api-client.php     # Client HTTP vers API PinPilot
 │   ├── class-publish-hook.php   # Hook transition_post_status
-│   ├── class-cron-sync.php      # WP-Cron : sync statuts Zernio → WP
+│   ├── class-ajax-sync.php      # AJAX : sync statuts (dashboard interroge l'API au chargement)
 │   └── class-encryption.php     # Chiffrement clés API stockées
 ├── assets/
 │   ├── css/admin.css            # Styles wp-admin
@@ -173,7 +175,7 @@ pinpilot/
 | `transition_post_status` | Détecter `draft→publish` → envoyer à l'API PinPilot |
 | `admin_menu` | Ajouter le menu "PinPilot" dans la sidebar |
 | `admin_enqueue_scripts` | Charger CSS/JS sur les pages PinPilot |
-| `wp_ajax_pinpilot_*` | Endpoints AJAX pour les actions dashboard |
+| `wp_ajax_pinpilot_*` | Endpoints AJAX pour les actions dashboard (sync statuts, refresh) |
 | `admin_post_pinpilot_*` | Form submissions (settings save) |
 
 ### 5.3 Pages wp-admin
@@ -286,7 +288,7 @@ TRIGGER : POST /api/v1/sites/:id/articles
 │  → Pour chaque article (1 ou N) :                    │
 │    → LLM : Pin Designer (adapté horizontal)          │
 │    → Génère 5 pins (titres, descriptions, boards)   │
-│    → Attribue un score PTRA /100                    │
+│    → Score déterministe calculé APRÈS (code, pas LLM)│
 │  → Stocke dans pins table                            │
 │  → Trigger JOB 4 (par lot de 5 pins)                │
 └──────────────┬──────────────────────────────────────┘
@@ -380,14 +382,13 @@ CONTENU :
 - Boards disponibles : {boards}
 - Cluster : {cluster}
 
-Pour chaque Pin, génère :
+Pour chaque Pin, génère (LE LLM NE SCORE PAS — voir §10.1) :
 - pin_title : Titre accrocheur (< 100 chars)
 - overlay_text : Texte overlay (< 30 chars)
 - description : Description SEO (< 500 chars, mots-clés longue traîne)
 - image_prompt : Prompt image 2:3 détaillé (composition DIFFÉRENTE par pin)
 - board : Board le plus spécifique
 - intent : Un des 8 intents Pinterest (tous différents)
-- ptra_score : Score /100 avec breakdown 11 facteurs
 
 RÈGLES CRITIQUES :
 - 5 intents DIFFÉRENTS. Pas de doublon.
@@ -407,15 +408,6 @@ Exemples non-food : "Why Ergonomic Chairs Make Home Office Better" (mobilier),
 "The One Lens Every Travel Photographer Needs" (photo), "Why Linen Fabric
 Makes Summer Dresses Better" (mode). Le "spotlight" porte sur l'élément
 central de l'article, quel que soit le domaine.
-
-PTRA SCORING (11 facteurs, /100) :
-Micro-Niche Focus (10) + Problem-Solution Fit (10) + Value-Added Fit (10) +
-Semantic Fit (12) + Visual Fit (12) + Board Fit (10) + Destination Fit (10) +
-Ethical Hook Fit (10) + Consistency Fit (8) + Trend Timing (4) +
-Measurement Readiness (4)
-
-SCORE RANGES :
-0-49 REJECT | 50-69 WEAK | 70-79 ACCEPTABLE | 80-89 STRONG | 90-100 EXCELLENT
 
 IMAGE PROMPT — Format obligatoire :
 "Aspect ratio 2:3 (1000x1500px), vertical orientation, safe zone respected
@@ -469,6 +461,10 @@ Output : JSON array de 5 PinDraft objects. Pas de markdown, pas de prose.
 // POST https://api.zernio.com/v1/posts
 // Header: Authorization: Bearer {zernio_api_key}
 
+// ⚠️ HYPOTHESIS — Payload basé sur la documentation web de Zernio.
+// Les champs exacts (accountId, boardId) doivent être vérifiés contre l'API réelle.
+// Ajuster si l'API Zernio utilise des noms de champs différents.
+
 const payload = {
   content: pin.description,
   title: pin.pin_title,
@@ -480,7 +476,7 @@ const payload = {
     {
       platform: "pinterest",
       accountId: user.zernio_pinterest_account_id,
-      boardName: pin.board        // Board cible
+      boardId: pin.board_zernio_id  // ID du board (pas le nom — les noms peuvent être dupliqués/renommés)
     }
   ]
 };
@@ -490,8 +486,12 @@ const payload = {
 
 ```
 POST /api/v1/sites/:id/zernio/webhook
+Header: X-Zernio-Signature: hmac_sha256(body, webhook_secret)
 
-Body (envoyé par Zernio) :
+⚠️ HYPOTHESIS — Le format exact du payload et le mécanisme de signature
+doivent être vérifiés contre la documentation Zernio réelle.
+
+Body (format attendu, à vérifier) :
 {
   "postId": "zernio_post_xxx",
   "status": "published" | "failed",
@@ -500,8 +500,11 @@ Body (envoyé par Zernio) :
   "publishedAt": "2026-07-20T08:00:00Z"
 }
 
+→ PinPilot vérifie la signature HMAC (webhook_secret stocké dans sites.webhook_secret)
 → PinPilot met à jour pins.status = 'published' | 'failed'
-→ Le plugin WordPress reçoit la mise à jour au prochain sync
+  (via pins.zernio_post_id pour faire le lien)
+→ Le plugin WordPress interroge l'API au chargement du dashboard
+  (GET /api/v1/sites/:id/pins?status=scheduled — AJAX, pas WP-Cron)
 ```
 
 ### 8.5 Scheduler interne (avant envoi à Zernio)
@@ -546,8 +549,10 @@ CREATE TABLE sites (
   site_name TEXT,
   niche TEXT,
   wp_version TEXT,
+  api_key TEXT NOT NULL,             -- Clé API du site (générée à l'activation). Le plugin l'utilise pour s'authentifier.
   zernio_api_key_encrypted TEXT,    -- Chiffré AES-256-GCM
   zernio_pinterest_account_id TEXT, -- ID du compte Pinterest dans Zernio
+  zernio_webhook_secret TEXT,       -- Secret pour vérifier les signatures HMAC des webhooks Zernio
   pins_per_day INTEGER DEFAULT 3,
   schedule_start_hour INTEGER DEFAULT 8,
   schedule_end_hour INTEGER DEFAULT 20,
@@ -589,14 +594,14 @@ CREATE TABLE pins (
   description TEXT NOT NULL,
   image_prompt TEXT NOT NULL,
   image_url TEXT,
-  board TEXT NOT NULL,
+  board TEXT NOT NULL,              -- Nom lisible du board (affichage)
+  board_zernio_id TEXT,             -- ID Zernio du board (pour l'API — les noms peuvent changer)
   intent TEXT NOT NULL,
   ptra_score INTEGER NOT NULL,
   ptra_breakdown JSONB,
   fresh_pin_rule_status TEXT DEFAULT 'fresh',
   scheduled_date TIMESTAMPTZ,
-  zernio_post_id TEXT,               -- ID du post dans Zernio
-  zernio_status TEXT,                -- scheduled|published|failed
+  zernio_post_id TEXT,               -- ID du post dans Zernio (null si pas encore envoyé)
   status TEXT DEFAULT 'draft',       -- draft|image_generated|scheduled|published|failed
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -617,21 +622,25 @@ CREATE TABLE user_api_keys (
 
 ## 10. Logique Métier importée du codebase `ai-blog-builder`
 
-### 10.1 PTRA Scoring (11 facteurs, /100)
+### 10.1 PTRA Scoring — Déterministe (pas de LLM)
 
-| Facteur | Points | Ce qu'il mesure |
-|---|---|---|
-| Micro-Niche Focus | 10 | Le pin appartient strictement à la micro-niche ? |
-| Problem-Solution Fit | 10 | Problème clair + solution claire ? |
-| Value-Added Fit | 10 | Le contenu de destination a une vraie valeur ? |
-| Semantic Fit | 12 | Titre, description, mots-clés alignés ? |
-| Visual Fit | 12 | Image correspond au sujet, angle, board ? |
-| Board Fit | 10 | Le board a un rôle clair et correspond à l'intent ? |
-| Destination Fit | 10 | Le pin promet uniquement ce que l'article délivre ? |
-| Ethical Hook Fit | 10 | Hook éthique, spécifique, vérifiable ? |
-| Consistency Fit | 8 | Renforce le graph topical global ? |
-| Trend Timing | 4 | Pertinence saisonnière/temporelle ? |
-| Measurement Readiness | 4 | Performance traçable et mesurable ? |
+> **Principe :** Le LLM génère les pins bruts. Le score est calculé APRÈS par une
+> fonction TypeScript pure. Pas de LLM qui note ses propres devoirs.
+
+**MVP v1 — 5 facteurs vérifiables par code (score /50, multiplié ×2 → /100)**
+
+| # | Facteur | Points | Règle déterministe |
+|---|---|---|---|
+| 1 | **Semantic Fit** | 10 | Le `pin_title` contient ≥1 mot du `article.title`. La `description` contient ≥2 mots des headings du contenu. |
+| 2 | **Board Fit** | 10 | Le `board` assigné existe dans la liste des boards du plan PTRA. Le nom du board contient un mot-clé présent dans le titre ou les catégories de l'article. |
+| 3 | **Fresh Pin Rule** | 10 | Chaque `image_prompt` est comparé aux autres du même article via similarité cosinus (embeddings). Score > 0.8 → pénalité. Les 5 prompts doivent être distincts. |
+| 4 | **Ethical Hook** | 10 | Checklist : absence de mots interdits (`/guaranteed|secret trick|change your life|won't believe/i`). Le hook contient un chiffre ou une promesse vérifiable. |
+| 5 | **Destination Fit** | 10 | La `description` ne promet rien que le `article.content_md` ne contient pas. Vérifié via keyword matching : tous les verbes d'action de la description doivent avoir un match dans le contenu. |
+
+**Score ranges :** 0-49 REJECT | 50-69 WEAK | 70-79 ACCEPTABLE | 80-89 STRONG | 90-100 EXCELLENT
+
+> **Post-MVP (v1.1+)** : Ajouter Micro-Niche Focus, Problem-Solution Fit, Consistency
+> Fit, Trend Timing via embeddings + validation croisée avec le plan PTRA.
 
 ### 10.2 Pinterest Intent Taxonomy (8 intents, universels)
 
@@ -708,7 +717,7 @@ CREATE TABLE user_api_keys (
 ### Phase 5 — Pin Generator (3-4h)
 18. Job Inngest `pin-generator`
 19. Prompt Pin Designer adapté horizontal
-20. Scoring PTRA 11 facteurs
+20. Scoring PTRA déterministe (5 facteurs, fonction TypeScript)
 21. Routes pins (list, detail, update, delete)
 
 ### Phase 6 — Image Generator (2-3h)
@@ -725,11 +734,11 @@ CREATE TABLE user_api_keys (
 30. Route `/api/v1/sites/:id/zernio/webhook`
 
 ### Phase 8 — Dashboard Plugin + Polish (2-3h)
-31. Dashboard wp-admin (files d'attente, statuts)
+31. Dashboard wp-admin (files d'attente, statuts, AJAX polling 15s)
 32. Page détail pin (édition, regénération, republish)
 33. Export CSV fallback
-34. Sync WP-Cron (statuts Zernio → WP)
-35. États vides, erreurs, logs
+34. États vides, erreurs, logs
+35. Notification "pins prêts" dans wp-admin
 
 ---
 
@@ -744,17 +753,21 @@ CREATE TABLE user_api_keys (
 ### LLM
 - Rate limit DeepSeek → retry backoff exponentiel
 - JSON malformé → `jsonrepair` systématique
-- Timeout 120s → fallback sur une erreur gracieuse
+- Timeout 120s → erreur gracieuse affichée dans le dashboard WP
+- Clé API invalide/épuisée → statut `error` sur les pins, notification dans le dashboard
 
 ### Images
 - Ideogram échec → retry 3x, puis marquer `failed`
 - File d'attente : max 3 générations simultanées
 - Stockage : URLs signées avec expiration
+- Clé API invalide → pins marqués `failed`, notification dashboard
 
 ### Zernio
-- API Zernio down → pins restent en file d'attente, retry automatique
+- ⚠️ Payloads API et webhooks basés sur la documentation web — à tester contre l'API réelle
+- API Zernio down → pins restent en file d'attente, retry automatique (backoff exponentiel)
 - Pinterest account disconnected → notifier l'utilisateur dans le dashboard WP
 - Rate limit Zernio → respecter `Retry-After` header
+- L'utilisateur change sa clé API Zernio → les pins en file d'attente échouent → notifier dans le dashboard
 
 ---
 
