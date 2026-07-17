@@ -37,8 +37,8 @@ export interface ContentLoopResult {
 // Configuration
 // ---------------------------------------------------------------------------
 
-const MAX_PASSES = parseInt(process.env.LOOP_MAX_PASSES ?? "3", 10)
-const GEO_BLOCK_THRESHOLD = parseInt(process.env.GEO_BLOCK_THRESHOLD ?? "70", 10)
+const MAX_PASSES = parseInt(process.env.LOOP_MAX_PASSES || "2", 10)
+const GEO_BLOCK_THRESHOLD = parseInt(process.env.GEO_BLOCK_THRESHOLD || "70", 10)
 
 // ---------------------------------------------------------------------------
 // Phase
@@ -104,7 +104,7 @@ export async function runContentLoopPhase(
 
   // ── Step 2.2: Writer Loop — Evaluate-Optimize ─────────────────────────
 
-  let bestScore = 0
+  let bestScore = -1
   let bestContent: ChefAugustinOutput | null = null
   let bestPass = 0
   let feedback = ""
@@ -178,34 +178,45 @@ export async function runContentLoopPhase(
 
     updateGenerationProgress(recipeId, pass, loopScore.total)
 
-    // 5. Science Enricher (Sonnet 5) — after Pass 1, always
+    // 5. Science Enricher (DeepSeek v4 Pro) — after Pass 1, always
     // Runs even if Pass 1 meets the threshold. If gaps are found,
     // forces a second pass to integrate food science depth.
+    //
+    // WRAPPED in step.run() — Inngest memoizes the result so the
+    // Science Enricher never re-executes on function replay. Before
+    // this fix, it ran 4+ times per pass, wasting DeepSeek v4 Pro tokens.
     let enrichedPass1 = false
     if (pass === 1 && process.env.SCIENCE_ENRICHER_ENABLED !== "false") {
       try {
-        await appendLog(recipeId, logEntry("ScienceEnricher", "running",
-          "Analysing article for food science gaps with Claude Sonnet 5..."))
+        const enrichmentResult = await step.run("agent-science-enricher-pass-1", async () => {
+          await appendLog(recipeId, logEntry("ScienceEnricher", "running",
+            "Analysing article for food science gaps with DeepSeek v4 Pro..."))
 
-        const enrichmentOutput = await agentScienceEnricher({
-          articleMarkdown: result.contentMarkdown,
-          keyword,
-        })
+          const enrichmentOutput = await agentScienceEnricher({
+            articleMarkdown: result.contentMarkdown,
+            keyword,
+          })
 
-        if (enrichmentOutput && enrichmentOutput.enrichments.length > 0) {
-          enrichedPass1 = true
-          const enrichmentFeedback = formatEnrichmentsForWriter(enrichmentOutput)
-          // Build feedback early so enrichments are injected into Pass 2 prompt
-          feedback = buildLoopFeedback(citability, contentValidation, pass + 1, MAX_PASSES)
-          feedback += "\n\n" + enrichmentFeedback
+          if (enrichmentOutput && enrichmentOutput.enrichments.length > 0) {
+            const enrichmentFeedback = formatEnrichmentsForWriter(enrichmentOutput)
+            const loopFeedback = buildLoopFeedback(citability, contentValidation, pass + 1, MAX_PASSES)
 
-          await appendLog(recipeId, logEntry("ScienceEnricher", "done",
-            `${enrichmentOutput.enrichments.length} science enrichments generated ` +
-            `(${enrichmentOutput.enrichments.map(e => e.type).join(", ")}). ` +
-            `Forcing Pass 2 to integrate. Assessment: ${enrichmentOutput.overall_assessment}`))
-        } else {
+            await appendLog(recipeId, logEntry("ScienceEnricher", "done",
+              `${enrichmentOutput.enrichments.length} science enrichments generated ` +
+              `(${enrichmentOutput.enrichments.map(e => e.type).join(", ")}). ` +
+              `Forcing Pass 2 to integrate. Assessment: ${enrichmentOutput.overall_assessment}`))
+
+            return { enriched: true, feedback: loopFeedback + "\n\n" + enrichmentFeedback }
+          }
+
           await appendLog(recipeId, logEntry("ScienceEnricher", "done",
             "No enrichment opportunities found — article already science-dense."))
+          return { enriched: false, feedback: "" }
+        }) as { enriched: boolean; feedback: string }
+
+        if (enrichmentResult.enriched) {
+          enrichedPass1 = true
+          feedback = enrichmentResult.feedback
         }
       } catch (err) {
         // Enricher failure is non-fatal — the loop continues without enrichment
