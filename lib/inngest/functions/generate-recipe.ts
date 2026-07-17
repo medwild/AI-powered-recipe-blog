@@ -1,18 +1,20 @@
 /**
- * generate-recipe workflow — Pipeline v11 Loop-Engineered Orchestrator
+ * generate-recipe workflow — Pipeline v13 Single-Pass Content Generation
  *
  * 5 pipeline steps:
  *   1. serp-phase       — Google SERP analysis (Serper API)
- *   2. content-loop      — Evaluator-Optimizer loop (Writer → Validators → Feedback, max 3 passes)
+ *   2. content-loop      — Strategist (LLM) → Writer (LLM, retry once on truncation) → Quality Gate (code)
  *   3. image-phase       — FLUX-1 → Cloudinary
  *   4. persist-phase     — Validation + DB write (double safety net)
  *   5. pin-phase         — Pin Designer (5 pins per recipe)
  *
- * Loop-engineering patterns applied:
- *   - Maker/Checker split: Writer (LLM) vs Validators (deterministic code)
- *   - Evaluator-Optimizer: structured feedback drives quality improvement
- *   - Refexion: self_improvement_logs + STATE.md memory
- *   - Stopping rules: threshold met, diminishing returns, max 3 passes
+ * Architecture (v13):
+ *   - Single-pass: the LLM generates, code enforces quality. No iterative loop.
+ *   - Strategist plans structure once, Writer generates with all quality rules baked in.
+ *   - Deterministic fixes in persist-phase: banned-word scrubbing, meta truncation
+ *     (autopilot fallback only), internal linking, SEO gate.
+ *   - Retry ONLY on structural truncation (missing ingredients/instructions/words).
+ *   - Quality gates: Food safety → REJECT. Word count < minimum → REJECT.
  */
 
 import { db } from "@/lib/db"

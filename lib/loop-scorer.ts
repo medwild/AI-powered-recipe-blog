@@ -1,10 +1,11 @@
 // lib/loop-scorer.ts
-// Pipeline v11 — Composite scoring + structured feedback for the
-// Evaluator-Optimizer loop.
+// Pipeline v13 — Composite quality scoring for the Quality Gate.
+// Used for logging and monitoring; no longer drives an iterative loop
+// (v13 is single-pass with retry on truncation only).
 //
 // Pure functions only — no side effects, no API calls, no DB access.
-// The Checker is deterministic: GEO citability + Content validation.
-// No LLM in the evaluation path (Maker/Checker split from loop-engineering).
+// The checker is deterministic: GEO citability + Content validation.
+// No LLM in the evaluation path.
 
 import type { CitabilityReport } from "@/lib/geo-validator"
 import type { ValidationResult } from "@/lib/content-validator"

@@ -3,13 +3,7 @@ import Link from "next/link"
 import { BookOpen } from "lucide-react"
 import type { Recipe } from "@/lib/db/schema"
 import { PinButton } from "@/components/pin-button"
-
-const CATEGORY_LABELS: Record<string, string> = {
-  techniques: "Technique",
-  guides: "Guide",
-  histoire: "Histoire",
-  equipement: "Équipement",
-}
+import { CATEGORY_LABELS } from "@/components/category-listing"
 
 export function ArticleCard({ article }: { article: Recipe }) {
   const categoryLabel = CATEGORY_LABELS[article.category ?? ""] ?? article.category ?? "Article"

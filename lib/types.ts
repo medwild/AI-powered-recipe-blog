@@ -15,7 +15,7 @@ export type ContentType = "recipe" | "article"
 /** Fields consumed by RecipeCard */
 export type RecipeCardData = Pick<
   Recipe,
-  "slug" | "title" | "excerpt" | "heroImageUrl" | "difficulty" | "totalTime" | "servings"
+  "id" | "slug" | "title" | "excerpt" | "heroImageUrl" | "difficulty" | "totalTime" | "servings"
 >
 
 /** Fields consumed by RecipeHero */

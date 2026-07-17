@@ -1,8 +1,8 @@
 ---
 id: agent-judge
 version: "2.0.0"
-description: "Quality evaluator — assesses article quality on culinary accuracy, narrative flow, voice authenticity, and real usefulness. Outputs a scored verdict consumed by the Content Loop."
-model: "claude-sonnet-4-6"
+description: "Quality evaluator — assesses article quality on culinary accuracy, narrative flow, voice authenticity, and real usefulness. Outputs a scored verdict consumed by the Quality Gate (logging only, non-blocking)."
+model: "deepseek-v4-pro"
 temperature: 0.3
 max_tokens: 2048
 last_updated: "2026-07-15"

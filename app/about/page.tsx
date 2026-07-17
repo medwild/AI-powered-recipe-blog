@@ -141,7 +141,7 @@ export default function AboutPage() {
             "@context": "https://schema.org",
             "@type": "Organization",
             name: "Chef Augustin",
-            url: "https://chefaugustin.com",
+            url: process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com",
             description:
               "Practical small-batch dinner recipes for two, grounded in French cooking technique and real-world kitchen experience.",
             founder: {

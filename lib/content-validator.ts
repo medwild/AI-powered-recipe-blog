@@ -127,19 +127,23 @@ export function validateContent(draft: ValidatableDraft): ValidationResult {
     }
   }
 
-  // 3. Word count check (minimum threshold)
+  // 3. Word count check — thresholds aligned with Quality Gate (content-loop-phase.ts).
+  // Google format: error < 1200, warning < 1500 (target: 1800-2200 per Strategist).
+  // Pin-First format: error < 800, warning < 1000 (target: 1200-1500 per Strategist).
   const wordCount = md.split(/\s+/).filter(Boolean).length
-  if (wordCount < 1000) {
+  const minWords = draft.format === "pin-first" ? 800 : 1200
+  const warnWords = draft.format === "pin-first" ? 1000 : 1500
+  if (wordCount < minWords) {
     errors.push({
       field: "contentMarkdown",
       severity: "error",
-      message: `Content too short: ${wordCount} words (minimum: 1000)`,
+      message: `Content too short: ${wordCount} words (minimum: ${minWords} for ${draft.format ?? "google"} format)`,
     })
-  } else if (wordCount < 1200) {
+  } else if (wordCount < warnWords) {
     errors.push({
       field: "contentMarkdown",
       severity: "warning",
-      message: `Content below target: ${wordCount} words (target: 1200-2200)`,
+      message: `Content below target: ${wordCount} words (target: ${warnWords}+ for ${draft.format ?? "google"} format)`,
     })
   }
 
@@ -250,6 +254,28 @@ export function validateContent(draft: ValidatableDraft): ValidationResult {
         severity: "error",
         message: "No instructions — recipe schema requires at least one step",
       })
+    } else {
+      // Validate each step has a valid step number and non-empty text.
+      // Catches LLM returning {text: ""} or {step: NaN} which would crash
+      // the JSON-LD renderer (markdown.ts) and the recipe page.
+      for (const s of draft.instructions as { step?: unknown; text?: unknown }[]) {
+        if (typeof s.step !== "number" || !Number.isInteger(s.step) || s.step < 1) {
+          errors.push({
+            field: "instructions",
+            severity: "error",
+            message: `Instruction step has invalid step number: ${JSON.stringify(s.step)}. Must be a positive integer.`,
+          })
+          continue
+        }
+        if (typeof s.text !== "string" || !s.text.trim()) {
+          errors.push({
+            field: "instructions",
+            severity: "error",
+            message: "Instruction step has empty text — required for JSON-LD and page rendering.",
+          })
+          continue
+        }
+      }
     }
   }
 
@@ -312,14 +338,8 @@ export function validateContent(draft: ValidatableDraft): ValidationResult {
       })
     }
 
-    // 7e. Pin-First word count floor: 1000 (vs 1500 for google)
-    if (wordCount < 1000) {
-      errors.push({
-        field: "contentMarkdown",
-        severity: "error",
-        message: `Pin-First article is ${wordCount} words — minimum is 1000.`,
-      })
-    }
+    // 7e. Word count checked above (§3) with format-aware thresholds (800/1200).
+    // Pin-First structural rules beyond word count are covered by 7a–7d.
   }
 
   const criticalErrors = errors.filter((e) => e.severity === "error")

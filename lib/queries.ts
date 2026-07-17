@@ -58,7 +58,13 @@ export async function getRecipeCategories() {
   return rows.rows.map((r) => r.tag)
 }
 
-export async function getRelatedRecipes(currentId: number, tags: string[]): Promise<Recipe[]> {
+/** Subset of Recipe fields returned by getRelatedRecipes (tag-overlap query). */
+export type RelatedRecipeData = Pick<
+  Recipe,
+  "id" | "slug" | "title" | "heroImageUrl" | "excerpt" | "tags" | "totalTime" | "servings" | "difficulty"
+> & { score: number }
+
+export async function getRelatedRecipes(currentId: number, tags: string[]): Promise<RelatedRecipeData[]> {
   if (tags.length === 0) return []
 
   // Build a tag-overlap score at the DB level with LIMIT 5.
@@ -93,14 +99,20 @@ export async function getRelatedRecipes(currentId: number, tags: string[]): Prom
     .orderBy((t) => desc(t.score))
     .limit(5)
 
-  return rows.filter((r) => (r.score as number) > 0) as unknown as Recipe[]
+  return rows.filter((r) => r.score > 0) as RelatedRecipeData[]
 }
 
 export async function getRecipeBySlug(slug: string) {
   const [row] = await db
     .select()
     .from(recipes)
-    .where(and(eq(recipes.slug, slug), eq(recipes.content_type, "recipe")))
+    .where(
+      and(
+        eq(recipes.slug, slug),
+        eq(recipes.content_type, "recipe"),
+        eq(recipes.status, "published"),
+      ),
+    )
   return row ?? null
 }
 
@@ -126,7 +138,13 @@ export async function getArticleBySlug(slug: string) {
   const rows = await db
     .select()
     .from(recipes)
-    .where(and(eq(recipes.slug, slug), eq(recipes.content_type, "article")))
+    .where(
+      and(
+        eq(recipes.slug, slug),
+        eq(recipes.content_type, "article"),
+        eq(recipes.status, "published"),
+      ),
+    )
     .limit(1)
   return rows[0] ?? null
 }
@@ -154,11 +172,18 @@ export async function getLinkedArticle(recipeId: number) {
 
 export async function getRelatedForArticle(linkedRecipeId: number | null) {
   if (!linkedRecipeId) return []
-  // Return the linked recipe + up to 2 other published recipes
+  // Return the linked recipe + up to 2 other published recipes.
+  // Must filter by content_type = "recipe" — if linked_content_id points to an
+  // article, RecipeCard would render /recettes/{article-slug} → 404.
   const linked = await db
     .select()
     .from(recipes)
-    .where(eq(recipes.id, linkedRecipeId))
+    .where(
+      and(
+        eq(recipes.id, linkedRecipeId),
+        eq(recipes.content_type, "recipe"),
+      ),
+    )
     .limit(1)
   const others = await db
     .select()
@@ -337,7 +362,7 @@ export async function getCalibrationStats(): Promise<CalibrationStats> {
   }
 }
 
-import { pipelineErrors, type NewPipelineError } from "@/lib/db/schema"
+import { pipelineErrors } from "@/lib/db/schema"
 
 export async function logPipelineError(params: {
   recipeId: number

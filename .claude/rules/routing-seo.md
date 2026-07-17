@@ -124,14 +124,14 @@ Le ContentValidator est le **dernier rempart** avant publication. Il s'exécute 
 **Checks bloquants (error)** :
 - Banned words Tier 1 (22 termes : "delve", "robust", "elevate", "transform", etc.)
 - Internal vibe tokens (`[WARM]`, `<!--GLOW-->`, etc.)
-- Word count < 1500
+- Word count < 1200 (google) ou < 800 (pin-first) — aligné sur le Quality Gate
 - Title vide
 - Ingrédients vides (recettes uniquement)
 - Instructions vides (recettes uniquement)
 - Health claims non sourcés (probiotics, digestibility, immunity, detox, etc.)
 
 **Checks non-bloquants (warning)** :
-- Word count < 1800
+- Word count < 1500 (google) ou < 1000 (pin-first)
 - Meta title > 60 chars
 - Meta description < 120 ou > 155 chars
 

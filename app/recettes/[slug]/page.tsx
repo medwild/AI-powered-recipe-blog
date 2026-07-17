@@ -68,7 +68,7 @@ function RecipeJsonLd({
           publisher: {
             "@type": "Organization",
             name: "Chef Augustin",
-            url: "https://chefaugustin.com",
+            url: process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com",
           },
         }
       }
@@ -149,6 +149,8 @@ export default async function RecipePage({
   const { slug } = await params
   const recipe = await getRecipeBySlug(slug)
 
+  // Defense-in-depth: getRecipeBySlug already filters status="published" (fix 1.4),
+  // but we keep this check in case the query is ever relaxed for dashboard/admin use.
   if (!recipe || recipe.status !== "published") {
     notFound()
   }

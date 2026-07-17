@@ -8,6 +8,11 @@ import { and, eq, desc } from "drizzle-orm"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 
+/**
+ * Canonical category label map — single source of truth for the 5 article categories.
+ * Used by: CategoryListing, ArticleCard, ArticleDetail, ArticleJsonLd, sitemap.
+ * When adding a category, update this map AND create the route files (§1.4 in routing-seo.md).
+ */
 export const CATEGORY_LABELS: Record<string, string> = {
   techniques: "Techniques",
   guides: "Guides",

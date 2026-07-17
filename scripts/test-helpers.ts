@@ -3,7 +3,7 @@
  * Usage: npx tsx scripts/test-helpers.ts
  */
 
-import { generateSyntheticPAA, isRecoverableError, buildFallbackImagePrompt, buildSyntheticAuditReport, buildSyntheticQAReport } from "../lib/inngest/functions/helpers"
+import { generateSyntheticPAA, isRecoverableError, buildFallbackImagePrompt } from "../lib/inngest/functions/helpers"
 import { slugify } from "../lib/slug"
 
 let passed = 0, failed = 0
@@ -39,25 +39,6 @@ assert(prompt.toLowerCase().includes("overhead"), "includes composition directio
 assert(prompt.includes("4K"), "includes quality spec")
 const noTag = buildFallbackImagePrompt("Test", [])
 assert(!noTag.includes("undefined"), "no undefined in output")
-
-// ── buildSyntheticAuditReport ────────────────────────────────────────────────
-console.log("\nbuildSyntheticAuditReport()")
-const audit = buildSyntheticAuditReport()
-assert(audit.decision === "REJECT", "synthetic audit → REJECT")
-assert(audit.publication_readiness_score === 0, "synthetic audit readiness = 0")
-assert(audit.scores.signature_llm === 100, "LLM signature risk = 100 (max)")
-assert(audit.scores.sur_optimisation_seo === 100, "SEO over-opt risk = 100 (max)")
-assert(audit.scores.factualite === 0, "factualite = 0")
-assert(audit.scores.validite_recette === null, "validite_recette = null (unknown content type)")
-assert(audit.critical_issues.length >= 1, "1+ critical issue")
-assert(audit.confidence_level === "low", "confidence = low")
-
-// ── buildSyntheticQAReport ───────────────────────────────────────────────────
-console.log("\nbuildSyntheticQAReport()")
-const qa = buildSyntheticQAReport()
-assert(qa.verdict === "CRITICAL", "synthetic QA → CRITICAL")
-assert(qa.qaScore === 0, "QA score = 0")
-assert(qa.checks.length === 0, "no checks")
 
 // ── slugify ──────────────────────────────────────────────────────────────────
 console.log("\nslugify()")

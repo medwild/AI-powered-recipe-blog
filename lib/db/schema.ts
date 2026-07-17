@@ -186,6 +186,11 @@ export const recipes = pgTable(
     contentMarkdown: text("content_markdown"),
     heroImageUrl: text("hero_image_url"),
     imageVariants: jsonb("image_variants").$type<ImageVariant[]>().default([]),
+    /**
+     * Human-readable time strings consumed by formatDuration() in persist-phase.ts.
+     * Expected formats: "45 min", "1 hour 30 minutes", "2 hours", "1h30m".
+     * Converted to ISO 8601 (PT45M, PT1H30M) for JSON-LD @graph output.
+     */
     prepTime: text("prep_time"),
     cookTime: text("cook_time"),
     totalTime: text("total_time"),

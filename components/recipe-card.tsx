@@ -1,10 +1,10 @@
 import Image from "next/image"
 import Link from "next/link"
 import { Clock, Users } from "lucide-react"
-import type { Recipe } from "@/lib/db/schema"
+import type { RecipeCardData } from "@/lib/types"
 import { PinButton } from "@/components/pin-button"
 
-export function RecipeCard({ recipe, aspectRatio }: { recipe: Recipe; aspectRatio?: string }) {
+export function RecipeCard({ recipe, aspectRatio }: { recipe: RecipeCardData; aspectRatio?: string }) {
   const ratio = aspectRatio ?? "2/3"
   return (
     <article className="card-hover group flex flex-col overflow-hidden rounded-2xl border border-border bg-card">

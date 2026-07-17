@@ -98,16 +98,35 @@ export async function persistFinalDraft(
   degraded = false,
 ) {
   await step.run("persist-draft-final", async () => {
-    // SEO guards — flag oversize metadata for rewrite (do NOT mechanically truncate)
+    const isAutopilot = process.env.AUTOPILOT === "true"
+
+    // SEO guards — meta title / description length validation.
+    // Rule §3.5: mechanical truncation is a LAST-RESORT fallback, never the rule.
+    // Non-autopilot: block publication so a human can rewrite naturally.
+    // Autopilot: truncate as fallback (no human available).
     if (finalRecipe.metaTitle && finalRecipe.metaTitle.length > 60) {
-      await appendLog(recipeId, logEntry("Workflow", "error",
-        `Meta title is ${finalRecipe.metaTitle.length} chars (max 60). Editor should rewrite naturally, not truncate. Published with truncated title as fallback.`))
-      finalRecipe.metaTitle = finalRecipe.metaTitle.substring(0, 57).replace(/\s\S*$/, "") + "…"
+      if (isAutopilot) {
+        await appendLog(recipeId, logEntry("Workflow", "error",
+          `Meta title is ${finalRecipe.metaTitle.length} chars (max 60). Autopilot: truncating as last-resort fallback.`))
+        finalRecipe.metaTitle = finalRecipe.metaTitle.substring(0, 57).replace(/\s\S*$/, "") + "…"
+      } else {
+        await appendLog(recipeId, logEntry("Workflow", "error",
+          `Meta title is ${finalRecipe.metaTitle.length} chars (max 60). BLOCKED — requires human rewrite.`))
+        await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
+        return
+      }
     }
     if (finalRecipe.metaDescription && finalRecipe.metaDescription.length > 155) {
-      await appendLog(recipeId, logEntry("Workflow", "error",
-        `Meta description is ${finalRecipe.metaDescription.length} chars (max 155). Editor should rewrite naturally. Published with truncated description as fallback.`))
-      finalRecipe.metaDescription = finalRecipe.metaDescription.substring(0, 152).replace(/\s\S*$/, "") + "…"
+      if (isAutopilot) {
+        await appendLog(recipeId, logEntry("Workflow", "error",
+          `Meta description is ${finalRecipe.metaDescription.length} chars (max 155). Autopilot: truncating as last-resort fallback.`))
+        finalRecipe.metaDescription = finalRecipe.metaDescription.substring(0, 152).replace(/\s\S*$/, "") + "…"
+      } else {
+        await appendLog(recipeId, logEntry("Workflow", "error",
+          `Meta description is ${finalRecipe.metaDescription.length} chars (max 155). BLOCKED — requires human rewrite.`))
+        await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
+        return
+      }
     }
 
     const wordCount = (finalRecipe.contentMarkdown ?? "").split(/\s+/).filter(Boolean).length
@@ -198,9 +217,8 @@ export async function persistFinalDraft(
     }
 
     // GEO Citability check — thresholds configurable via env.
-    // Defaults calibrated for Claude Sonnet 4.6. Lower for DeepSeek: block < 40, warn < 55.
+    // Defaults calibrated for DeepSeek v4 Pro.
     // AUTOPILOT mode: the Content Loop is the quality gate — GEO becomes warn-only.
-    const isAutopilot = process.env.AUTOPILOT === "true"
     const geoBlockThreshold = parseInt(process.env.GEO_BLOCK_THRESHOLD ?? "60", 10)
     const geoWarnThreshold = parseInt(process.env.GEO_WARN_THRESHOLD ?? "70", 10)
     const citability = checkCitability(finalRecipe.contentMarkdown ?? "", wordCount)

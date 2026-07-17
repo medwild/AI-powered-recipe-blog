@@ -41,7 +41,7 @@ skills/
 ├ agent-chef-augustin.md                 # Agent unique — Writer
 ├ agent-strategist.md                    # Agent — Content Strategist
 ├ agent-judge.md                         # Agent — Quality Evaluator
-├ agent-science-enricher.md              # Agent — Food Science Enricher (Sonnet 5)
+├ agent-science-enricher.md              # Agent — Food Science Enricher (DeepSeek v4 Pro)
 ├ agent-pin-designer.md                  # Agent — Pin Designer (PTRA framework)
 ├ references/                            # Reference documents (loaded by agents)
 └ archive/                               # Archived agents (pre-v11 multi-agent pipeline)
@@ -57,15 +57,15 @@ skills/
     └ writing-samples.md                 # Archived: patterns now in agent-chef-augustin
 ```
 
-## Active Agents (v12 — Human-First Pipeline)
+## Active Agents (v13 — Single-Pass Pipeline)
 
 | Skill | Agent | Model | Role |
 |---|---|---|---|
-| `agent-chef-augustin` | Chef Augustin | Claude Sonnet 4.6 | Writer — full article + image prompt + JSON-LD |
-| `agent-strategist` | Strategist | Claude Sonnet 4.6 | Content strategy — SERP analysis + H2 planning |
-| `agent-judge` | Judge v2.0 | Claude Sonnet 4.6 | Quality evaluation — 5 dimensions + Voice Authenticity |
-| `agent-science-enricher` | Science Enricher | Claude Sonnet 5 | Food science gap analysis — 6 enrichment types |
-| `agent-pin-designer` | Pin Designer | Claude Sonnet 4.6 | 5 Pinterest Pins — PTRA scoring + Content Graph |
+| `agent-chef-augustin` | Chef Augustin | DeepSeek v4 Pro | Writer — full article + image prompt + JSON-LD |
+| `agent-strategist` | Strategist | DeepSeek v4 Pro | Content strategy — SERP analysis + H2 planning |
+| `agent-judge` | Judge v2.0 | DeepSeek v4 Pro | Quality evaluation — 5 dimensions + Voice Authenticity |
+| `agent-science-enricher` | Science Enricher | DeepSeek v4 Pro | Food science gap analysis — 6 enrichment types |
+| `agent-pin-designer` | Pin Designer | DeepSeek v4 Pro | 5 Pinterest Pins — PTRA scoring + Content Graph |
 
 ## Supported Formats
 

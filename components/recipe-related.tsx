@@ -1,7 +1,7 @@
-import type { Recipe } from "@/lib/db/schema"
+import type { RecipeCardData } from "@/lib/types"
 import { RecipeCard } from "@/components/recipe-card"
 
-export function RecipeRelated({ recipes }: { recipes: Recipe[] }) {
+export function RecipeRelated({ recipes }: { recipes: RecipeCardData[] }) {
   if (!recipes || recipes.length === 0) return null
 
   return (
