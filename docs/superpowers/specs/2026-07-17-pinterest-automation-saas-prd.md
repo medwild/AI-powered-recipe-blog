@@ -224,24 +224,47 @@ Header: X-PinPilot-Plugin: 1.0.0
 | `DELETE` | `/api/v1/sites/:id/pins/:pinId` | Supprimer un pin de la file d'attente |
 | `GET` | `/api/v1/sites/:id/plan` | Récupérer le plan PTRA |
 | `GET` | `/api/v1/sites/:id/export` | Télécharger CSV (fallback) |
+| `GET` | `/api/v1/sites/:id/zernio/boards` | Lister les boards Pinterest disponibles via Zernio |
 | `POST` | `/api/v1/sites/:id/zernio/webhook` | Webhook Zernio (statut de publication) |
 
 ---
 
 ## 7. Pipeline IA — Jobs Inngest
 
-### 7.1 Vue d'ensemble
+### 7.1 Vue d'ensemble — Deux flux distincts
+
+#### Flux A : Analyse initiale (au setup du plugin)
+
+```
+TRIGGER : POST /api/v1/sites/:id/analyze
+  → JOB 1 (site-analyzer) → JOB 2 (PTRA plan) → JOB 3 (pins) → JOB 4 (images) → JOB 5 (Zernio)
+```
+
+#### Flux B : Nouvel article (hook publish_post)
+
+```
+TRIGGER : POST /api/v1/sites/:id/articles
+  → JOB 3 (pin-generator) → JOB 4 (image-generator) → JOB 5 (zernio-scheduler)
+```
+
+> **Règle de routage :** Le paramètre `trigger` (`initial_analysis` | `new_article`) détermine le point d'entrée. Le plan PTRA (JOB 2) n'est généré qu'une fois lors de l'analyse initiale. Les articles suivants héritent du plan existant.
 
 ```
 ┌─────────────────────────────────────────────────────┐
 │              TRIGGERS                                │
-│  POST /api/v1/sites/:id/analyze    (analyse initiale)│
-│  POST /api/v1/sites/:id/articles   (nouvel article)   │
+│                                                     │
+│  A) POST /api/v1/sites/:id/analyze                  │
+│     trigger = "initial_analysis"                    │
+│     → JOB 1 → JOB 2 → JOB 3 → JOB 4 → JOB 5        │
+│                                                     │
+│  B) POST /api/v1/sites/:id/articles                 │
+│     trigger = "new_article"                         │
+│     → JOB 3 → JOB 4 → JOB 5                         │
 └──────────────┬──────────────────────────────────────┘
                │
                ▼
 ┌─────────────────────────────────────────────────────┐
-│  JOB 1 : site-analyzer                              │
+│  JOB 1 : site-analyzer  [initial_analysis ONLY]     │
 │  → Fetch WP REST API (tous les articles)            │
 │  → LLM : détection niche + topics + potentiel        │
 │  → Stocke dans articles table                        │
@@ -250,17 +273,17 @@ Header: X-PinPilot-Plugin: 1.0.0
                │
                ▼
 ┌─────────────────────────────────────────────────────┐
-│  JOB 2 : ptra-plan-generator                        │
+│  JOB 2 : ptra-plan-generator [initial_analysis ONLY] │
 │  → LLM : PTRA Editorial Architect (adapté horizontal)│
 │  → Génère : Niche Core, Clusters, Boards, Calendrier │
-│  → Stocke dans projects.ptra_plan (JSONB)            │
-│  → Trigger JOB 3                                     │
+│  → Stocke dans sites.ptra_plan (JSONB)               │
+│  → Trigger JOB 3 (pour tous les articles)            │
 └──────────────┬──────────────────────────────────────┘
                │
                ▼
 ┌─────────────────────────────────────────────────────┐
-│  JOB 3 : pin-generator                              │
-│  → Pour chaque article :                             │
+│  JOB 3 : pin-generator  [BOTH flows]                │
+│  → Pour chaque article (1 ou N) :                    │
 │    → LLM : Pin Designer (adapté horizontal)          │
 │    → Génère 5 pins (titres, descriptions, boards)   │
 │    → Attribue un score PTRA /100                    │
@@ -270,17 +293,17 @@ Header: X-PinPilot-Plugin: 1.0.0
                │
                ▼
 ┌─────────────────────────────────────────────────────┐
-│  JOB 4 : image-generator                            │
+│  JOB 4 : image-generator  [BOTH flows]              │
 │  → Pour chaque pin :                                 │
 │    → Ideogram API : génération image 2:3             │
 │    → Stocke l'image (R2/S3)                         │
 │  → Met à jour pins.image_url                         │
-│  → Trigger JOB 5                                     │
+│  → Trigger JOB 5 (par pin)                           │
 └──────────────┬──────────────────────────────────────┘
                │
                ▼
 ┌─────────────────────────────────────────────────────┐
-│  JOB 5 : zernio-scheduler                           │
+│  JOB 5 : zernio-scheduler  [BOTH flows]             │
 │  → Applique le planning (cadence configurée)         │
 │  → POST /posts vers Zernio API                       │
 │  → Met à jour pins.status = 'scheduled'              │
@@ -378,6 +401,13 @@ INTENTS DISPONIBLES (8) :
 quick_solution | beginner_guide | step_by_step | mistake_avoidance |
 before_after | checklist | ingredient_spotlight | budget_friendly
 
+Note — ingredient_spotlight : malgré son nom hérité du framework PTRA (food-first),
+cet intent est UNIVERSEL. Il signifie "Focus sur un élément/feature clé du contenu".
+Exemples non-food : "Why Ergonomic Chairs Make Home Office Better" (mobilier),
+"The One Lens Every Travel Photographer Needs" (photo), "Why Linen Fabric
+Makes Summer Dresses Better" (mode). Le "spotlight" porte sur l'élément
+central de l'article, quel que soit le domaine.
+
 PTRA SCORING (11 facteurs, /100) :
 Micro-Niche Focus (10) + Problem-Solution Fit (10) + Value-Added Fit (10) +
 Semantic Fit (12) + Visual Fit (12) + Board Fit (10) + Destination Fit (10) +
@@ -407,9 +437,33 @@ Output : JSON array de 5 PinDraft objects. Pas de markdown, pas de prose.
 2. Dans le dashboard Zernio : "Connect Platform" → Pinterest
 3. OAuth Pinterest (géré par Zernio, pas par nous)
 4. L'utilisateur copie sa clé API Zernio → la colle dans les réglages PinPilot
+5. PinPilot appelle GET /api/v1/sites/:id/zernio/boards → récupère la liste
+   des boards Pinterest disponibles avec leurs noms et IDs
+6. L'utilisateur voit ses boards dans une dropdown → il mappe chaque
+   catégorie WordPress vers un board Pinterest
 ```
 
-### 8.2 Publication via Zernio API
+### 8.2 Discovery des boards (Zernio API)
+
+```typescript
+// GET /api/v1/sites/:id/zernio/boards
+// → L'API PinPilot appelle Zernio pour lister les boards du compte Pinterest connecté
+//
+// Zernio endpoint : GET /v1/platforms/pinterest/boards
+// Header: Authorization: Bearer {zernio_api_key}
+//
+// Response Zernio :
+// [
+//   { "id": "board_xxx", "name": "Easy Dinners for Two", "pinCount": 45 },
+//   { "id": "board_yyy", "name": "30-Minute Meals", "pinCount": 23 },
+//   ...
+// ]
+//
+// → L'API PinPilot renvoie cette liste au plugin WordPress
+// → Le plugin affiche les boards dans la page settings pour le mapping
+```
+
+### 8.3 Publication via Zernio API
 
 ```typescript
 // POST https://api.zernio.com/v1/posts
@@ -432,7 +486,7 @@ const payload = {
 };
 ```
 
-### 8.3 Webhook Zernio → PinPilot
+### 8.4 Webhook Zernio → PinPilot
 
 ```
 POST /api/v1/sites/:id/zernio/webhook
@@ -450,7 +504,7 @@ Body (envoyé par Zernio) :
 → Le plugin WordPress reçoit la mise à jour au prochain sync
 ```
 
-### 8.4 Scheduler interne (avant envoi à Zernio)
+### 8.5 Scheduler interne (avant envoi à Zernio)
 
 ```typescript
 // Logique de planification
@@ -589,7 +643,7 @@ CREATE TABLE user_api_keys (
 | `mistake_avoidance` | "[N] Mistakes That Ruin [Topic]" |
 | `before_after` | "Before & After: [Result]" |
 | `checklist` | "[Topic] Checklist for [Outcome]" |
-| `ingredient_spotlight` | "Why [Element] Makes [Topic] Better" |
+| `ingredient_spotlight` | "Why [Key Element] Makes [Topic] Better" — universel (pas que food) |
 | `budget_friendly` | "Budget-Friendly [Solution]" |
 
 ### 10.3 Content Graph 4 Signals
@@ -666,15 +720,16 @@ CREATE TABLE user_api_keys (
 ### Phase 7 — Zernio Integration (2-3h)
 26. Job Inngest `zernio-scheduler`
 27. Client Zernio API (create post, schedule)
-28. Webhook Zernio (statut publication)
-29. Route `/api/v1/sites/:id/zernio/webhook`
+28. Route `GET /api/v1/sites/:id/zernio/boards` (discovery)
+29. Webhook Zernio (statut publication)
+30. Route `/api/v1/sites/:id/zernio/webhook`
 
 ### Phase 8 — Dashboard Plugin + Polish (2-3h)
-30. Dashboard wp-admin (files d'attente, statuts)
-31. Page détail pin (édition, regénération, republish)
-32. Export CSV fallback
-33. Sync WP-Cron (statuts Zernio → WP)
-34. États vides, erreurs, logs
+31. Dashboard wp-admin (files d'attente, statuts)
+32. Page détail pin (édition, regénération, republish)
+33. Export CSV fallback
+34. Sync WP-Cron (statuts Zernio → WP)
+35. États vides, erreurs, logs
 
 ---
 
