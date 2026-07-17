@@ -1,23 +1,30 @@
 /**
- * Step 2 — Content Loop Phase (Pipeline v12)
+ * Step 2 — Content Generation Phase (Pipeline v13)
  *
- * Plan-then-Write architecture:
- *   Strategist (LLM) → Plan → Writer (LLM) → Validators (code) → Feedback → Writer → ...
+ * Single-pass architecture with retry on truncation:
+ *   Strategist (LLM) → Writer (LLM, retry once if truncated) → Quality Gate (code) → Deterministic Fixes (code)
  *
- * The Strategist runs ONCE before the loop, producing a StrategyPlan.
- * The Writer executes the plan in up to LOOP_MAX_PASSES iterations,
- * with deterministic GEO + Content validators providing structured
- * feedback after each pass. Returns the best-scoring content.
+ * Karpathy principle: the LLM generates, code enforces quality. The model
+ * cannot reliably self-correct — each "pass" is a fresh generation that may
+ * lose what worked. Instead, bake all quality requirements into the skill
+ * (§4 attributions, §4.3 banned words, §4.6 USDA temps, §5 self-check),
+ * make a single LLM call, then let code handle the rest:
+ *
+ *   - Banned words → deterministic scrubber (persist-phase)
+ *   - Meta truncation → smart truncation (persist-phase)
+ *   - Food safety violations → REJECT (human review)
+ *   - Word count < minimum → retry once, then REJECT if still failing
+ *
+ * Total LLM calls: 2 (Strategist + Writer), occasionally 3 on truncation retry.
+ * Down from 3-5 in v12.
  */
 
 import { agentStrategist, type StrategyPlan } from "../agents/strategist"
 import { agentChefAugustin, type ChefAugustinOutput } from "../agents/chef-augustin"
-import { agentJudge } from "../agents/judge"
-import { agentScienceEnricher, formatEnrichmentsForWriter } from "../agents/science-enricher"
 import { checkCitability } from "@/lib/geo-validator"
 import { validateContent } from "@/lib/content-validator"
-import { computeLoopScore, buildLoopFeedback, thresholdMet, isDiminishing } from "@/lib/loop-scorer"
-import { startGeneration, updateGenerationProgress, finishGeneration, appendRunLog } from "@/lib/loop-state"
+import { computeLoopScore } from "@/lib/loop-scorer"
+import { startGeneration, finishGeneration, appendRunLog } from "@/lib/loop-state"
 import type { SerpPhaseResult } from "./serp-phase"
 import { appendLog, logEntry } from "../helpers"
 
@@ -28,17 +35,10 @@ import { appendLog, logEntry } from "../helpers"
 export interface ContentLoopResult {
   output: ChefAugustinOutput
   strategyPlan: StrategyPlan
-  bestScore: number
+  score: number
   passesUsed: number
   degraded: boolean
 }
-
-// ---------------------------------------------------------------------------
-// Configuration
-// ---------------------------------------------------------------------------
-
-const MAX_PASSES = parseInt(process.env.LOOP_MAX_PASSES || "2", 10)
-const GEO_BLOCK_THRESHOLD = parseInt(process.env.GEO_BLOCK_THRESHOLD || "70", 10)
 
 // ---------------------------------------------------------------------------
 // Phase
@@ -55,8 +55,8 @@ export async function runContentLoopPhase(
 
   const startedAt = Date.now()
 
-  // Init STATE.json tracking
-  startGeneration(recipeId, keyword, MAX_PASSES)
+  // Init STATE.json tracking (single pass — was MAX_PASSES in v12)
+  startGeneration(recipeId, keyword, 1)
 
   // ── Step 2.1: Strategist — Plan once ──────────────────────────────────
 
@@ -102,194 +102,152 @@ export async function runContentLoopPhase(
     }
   }
 
-  // ── Step 2.2: Writer Loop — Evaluate-Optimize ─────────────────────────
+  // ── Step 2.2: Writer — Single pass with retry on truncation ──────────
+  //
+  // DeepSeek occasionally produces truncated JSON (valid but incomplete —
+  // missing ingredients, instructions, or < minimum words). When that happens,
+  // retry once. The second attempt virtually always succeeds.
 
-  let bestScore = -1
-  let bestContent: ChefAugustinOutput | null = null
-  let bestPass = 0
-  let feedback = ""
-  let previousScore = -1
-  let stagnationCount = 0
-  let degraded = serpResult.degraded
+  const minWords = format === "pin-first" ? 800 : 1200
+  let result: ChefAugustinOutput | null = null
+  let loopScore: ReturnType<typeof computeLoopScore> | null = null
+  let citability: ReturnType<typeof checkCitability> | null = null
+  let contentValidation: ReturnType<typeof validateContent> | null = null
+  let wordCount = 0
+  let attempts = 0
 
-  for (let pass = 1; pass <= MAX_PASSES; pass++) {
-    const passLabel = `agent-writer-loop-pass-${pass}`
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    const stepName = attempt === 1 ? "agent-writer" : "agent-writer-retry"
 
-    const output = await step.run(passLabel, async () => {
+    const output = await step.run(stepName, async () => {
       await appendLog(recipeId, logEntry("Writer", "running",
-        `Pass ${pass}/${MAX_PASSES}${feedback ? " — with feedback from previous pass" : ""}`))
+        `Generating article for "${keyword}" in ${format} format${attempt > 1 ? " (retry after truncation)" : ""}`))
 
-      // 1. Generate (Writer — LLM call with strategy plan)
-      const result = await agentChefAugustin({
+      const res = await agentChefAugustin({
         keyword,
         format,
         strategyPlan,
         cuisineReplacements,
-        feedback: feedback || undefined,
       })
 
-      // 2. Evaluate — Judge (LLM quality check, non-blocking)
-      let judgeVerdict
-      try {
-        judgeVerdict = await agentJudge({ keyword, output: result, strategyPlan })
-      } catch (err) {
-        await appendLog(recipeId, logEntry("Judge", "error",
-          `Judge evaluation failed: ${(err as Error).message}. Continuing without judge score.`))
-        judgeVerdict = undefined
-      }
-
-      // 3. Evaluate — Checker (deterministic code, no LLM)
-      const wordCount = (result.contentMarkdown ?? "").split(/\s+/).filter(Boolean).length
-      const citability = checkCitability(result.contentMarkdown ?? "", wordCount)
-      const contentValidation = validateContent({
-        contentMarkdown: result.contentMarkdown,
-        metaTitle: result.metaTitle,
-        metaDescription: result.metaDescription,
-        title: result.title,
-        ingredients: result.ingredients,
-        instructions: result.instructions,
+      const wc = (res.contentMarkdown ?? "").split(/\s+/).filter(Boolean).length
+      const geo = checkCitability(res.contentMarkdown ?? "", wc)
+      const val = validateContent({
+        contentMarkdown: res.contentMarkdown,
+        metaTitle: res.metaTitle,
+        metaDescription: res.metaDescription,
+        title: res.title,
+        ingredients: res.ingredients,
+        instructions: res.instructions,
         contentType: "recipe",
         format,
       })
+      const score = computeLoopScore(geo, val)
 
-      // 4. Score (composite: Judge 40% + GEO 30% + Content 20% + Structure 10%)
-      const loopScore = computeLoopScore(citability, contentValidation, judgeVerdict)
+      const errors = val.errors.filter(e => e.severity === "error")
+      const warnings = val.errors.filter(e => e.severity === "warning")
 
-      await appendLog(recipeId, logEntry("Writer", "running",
-        `Pass ${pass}/${MAX_PASSES} evaluated — score ${loopScore.total}/100 ` +
-        `(${loopScore.breakdown}) | ` +
-        `Judge: ${judgeVerdict?.totalScore ?? "n/a"}/100 (${judgeVerdict?.verdict ?? "N/A"}) | ` +
-        `GEO: claims=${citability.claims.count}, attr=${citability.attributions.count}, nuggets=${citability.nuggets.count} | ` +
-        `Content: ${contentValidation.errors.filter(e => e.severity === "error").length} errors, ` +
-        `${contentValidation.errors.filter(e => e.severity === "warning").length} warnings | ` +
-        `${wordCount} words`))
-
-      return { result, loopScore, citability, contentValidation, wordCount, judgeVerdict }
-    }) as { result: ChefAugustinOutput; loopScore: ReturnType<typeof computeLoopScore>; citability: ReturnType<typeof checkCitability>; contentValidation: ReturnType<typeof validateContent>; wordCount: number; judgeVerdict: ReturnType<typeof agentJudge> }
-
-    const { result, loopScore, citability, contentValidation, wordCount, judgeVerdict: judge } = output
-
-    // 4. Track best
-    if (loopScore.total > bestScore) {
-      bestScore = loopScore.total
-      bestContent = result
-      bestPass = pass
-    }
-
-    updateGenerationProgress(recipeId, pass, loopScore.total)
-
-    // 5. Science Enricher (DeepSeek v4 Pro) — after Pass 1, always
-    // Runs even if Pass 1 meets the threshold. If gaps are found,
-    // forces a second pass to integrate food science depth.
-    //
-    // WRAPPED in step.run() — Inngest memoizes the result so the
-    // Science Enricher never re-executes on function replay. Before
-    // this fix, it ran 4+ times per pass, wasting DeepSeek v4 Pro tokens.
-    let enrichedPass1 = false
-    if (pass === 1 && process.env.SCIENCE_ENRICHER_ENABLED !== "false") {
-      try {
-        const enrichmentResult = await step.run("agent-science-enricher-pass-1", async () => {
-          await appendLog(recipeId, logEntry("ScienceEnricher", "running",
-            "Analysing article for food science gaps with DeepSeek v4 Pro..."))
-
-          const enrichmentOutput = await agentScienceEnricher({
-            articleMarkdown: result.contentMarkdown,
-            keyword,
-          })
-
-          if (enrichmentOutput && enrichmentOutput.enrichments.length > 0) {
-            const enrichmentFeedback = formatEnrichmentsForWriter(enrichmentOutput)
-            const loopFeedback = buildLoopFeedback(citability, contentValidation, pass + 1, MAX_PASSES)
-
-            await appendLog(recipeId, logEntry("ScienceEnricher", "done",
-              `${enrichmentOutput.enrichments.length} science enrichments generated ` +
-              `(${enrichmentOutput.enrichments.map(e => e.type).join(", ")}). ` +
-              `Forcing Pass 2 to integrate. Assessment: ${enrichmentOutput.overall_assessment}`))
-
-            return { enriched: true, feedback: loopFeedback + "\n\n" + enrichmentFeedback }
-          }
-
-          await appendLog(recipeId, logEntry("ScienceEnricher", "done",
-            "No enrichment opportunities found — article already science-dense."))
-          return { enriched: false, feedback: "" }
-        }) as { enriched: boolean; feedback: string }
-
-        if (enrichmentResult.enriched) {
-          enrichedPass1 = true
-          feedback = enrichmentResult.feedback
-        }
-      } catch (err) {
-        // Enricher failure is non-fatal — the loop continues without enrichment
-        await appendLog(recipeId, logEntry("ScienceEnricher", "error",
-          `Enrichment failed: ${(err as Error).message}. Continuing without enrichments.`))
-      }
-    }
-
-    // 6. Check stopping conditions
-    // Skip threshold break if Science Enricher found gaps (force Pass 2)
-    if (!enrichedPass1 && thresholdMet(loopScore, GEO_BLOCK_THRESHOLD, citability, contentValidation)) {
       await appendLog(recipeId, logEntry("Writer", "done",
-        `Threshold met at pass ${pass}/${MAX_PASSES} — score ${loopScore.total}/${GEO_BLOCK_THRESHOLD}. ` +
-        `${wordCount} words, ${result.ingredients.length} ingredients, ${result.instructions.length} steps.`))
-      break
+        `${attempt > 1 ? "[retry] " : ""}Generated — score ${score.total}/100 ` +
+        `(${score.breakdown}) | ` +
+        `${wc} words | ` +
+        `${errors.length} errors, ${warnings.length} warnings | ` +
+        `GEO: claims=${geo.claims.count}, attr=${geo.attributions.count}, nuggets=${geo.nuggets.count}`))
+
+      return { res, score, geo, val, wc }
+    }) as {
+      res: ChefAugustinOutput
+      score: ReturnType<typeof computeLoopScore>
+      geo: ReturnType<typeof checkCitability>
+      val: ReturnType<typeof validateContent>
+      wc: number
     }
 
-    if (isDiminishing(loopScore.total, previousScore, stagnationCount)) {
+    result = output.res
+    loopScore = output.score
+    citability = output.geo
+    contentValidation = output.val
+    wordCount = output.wc
+    attempts = attempt
+
+    // Check if output is structurally complete
+    const hasIngredients = (result.ingredients ?? []).length > 0
+    const hasInstructions = (result.instructions ?? []).length > 0
+    const meetsMinWords = wordCount >= minWords
+    const hasContent = (result.contentMarkdown ?? "").length > 500
+
+    if (hasIngredients && hasInstructions && meetsMinWords && hasContent) {
+      break // Output is complete — no retry needed
+    }
+
+    if (attempt < 2) {
       await appendLog(recipeId, logEntry("Writer", "error",
-        `Diminishing returns at pass ${pass}/${MAX_PASSES} — score ${loopScore.total} ≤ previous ${previousScore} (stagnation: ${stagnationCount + 1}). Stopping loop.`))
-      break
+        `Truncated output — ${wordCount}w, ${result.ingredients?.length ?? 0} ingredients, ` +
+        `${result.instructions?.length ?? 0} instructions. Retrying once.`))
     }
-
-    if (loopScore.total <= previousScore) {
-      stagnationCount++
-    } else {
-      stagnationCount = 0
-    }
-
-    // 7. Build feedback for next pass (skip if already built by Science Enricher)
-    previousScore = loopScore.total
-    if (!enrichedPass1) {
-      feedback = buildLoopFeedback(citability, contentValidation, pass + 1, MAX_PASSES)
-    }
-
-    await appendLog(recipeId, logEntry("Writer", "running",
-      `Pass ${pass} feedback: ${feedback.substring(0, 250)}...`))
   }
 
-  // ── Post-loop: finalize ──────────────────────────────────────────────
+  // Safe: at least one attempt completed
+  const finalResult = result!
+  const finalScore = loopScore!
+  const finalCitability = citability!
+  const finalValidation = contentValidation!
+
+  // ── Quality Gate: CRITICAL errors only ──────────────────────────────────
+  //
+  // Only food safety and catastrophically short content block publication.
+  // Everything else (banned words, meta length, GEO score, attributions,
+  // nuggets) is fixed deterministically in persist-phase or logged for
+  // quality monitoring.
+
+  const foodSafetyErrors = finalValidation.errors.filter(
+    e => e.severity === "error" && e.message.toLowerCase().includes("food safety"),
+  )
+  const tooShort = wordCount < minWords
+  const blocked = foodSafetyErrors.length > 0 || tooShort
+
+  if (blocked) {
+    const reasons: string[] = []
+    if (foodSafetyErrors.length > 0) {
+      reasons.push(`Food safety: ${foodSafetyErrors.map(e => e.message).join("; ")}`)
+    }
+    if (tooShort) {
+      reasons.push(`Word count: ${wordCount} < ${minWords} minimum (after ${attempts} attempt${attempts > 1 ? "s" : ""})`)
+    }
+    await appendLog(recipeId, logEntry("Writer", "error",
+      `BLOCKED — ${reasons.join(" | ")}`))
+  }
+
+  // ── Finalize ───────────────────────────────────────────────────────────
 
   const durationS = Math.round((Date.now() - startedAt) / 1000)
-  const citability = checkCitability(
-    bestContent?.contentMarkdown ?? "",
-    (bestContent?.contentMarkdown ?? "").split(/\s+/).filter(Boolean).length,
-  )
+  const passed = !blocked
+  const outcome = passed ? "published" : "draft"
 
-  const outcome = bestScore >= GEO_BLOCK_THRESHOLD ? "published" : "draft"
-
-  finishGeneration(recipeId, keyword, bestScore, bestPass, outcome, GEO_BLOCK_THRESHOLD)
+  finishGeneration(recipeId, keyword, finalScore.total, attempts, outcome, 70)
 
   appendRunLog({
     runId: new Date().toISOString(),
     recipeId,
     keyword,
-    passesUsed: bestPass,
-    bestScore,
+    passesUsed: attempts,
+    bestScore: finalScore.total,
     duration_s: durationS,
     outcome,
-    threshold: GEO_BLOCK_THRESHOLD,
+    threshold: 70,
   })
 
-  await appendLog(recipeId, logEntry("Content Loop", outcome === "published" ? "done" : "error",
-    `${outcome === "published" ? "Passed" : "WARNING"} — best score ${bestScore}/100 ` +
-    `(threshold: ${GEO_BLOCK_THRESHOLD}) at pass ${bestPass}/${MAX_PASSES}. ` +
-    `Claims: ${citability.claims.count}, Attributions: ${citability.attributions.count}, ` +
-    `Nuggets: ${citability.nuggets.count}. Duration: ${durationS}s.`))
+  await appendLog(recipeId, logEntry("Content Gen", passed ? "done" : "error",
+    `${passed ? "Published" : "DRAFT (blocked)"} — score ${finalScore.total}/100. ` +
+    `${wordCount} words (${attempts} attempt${attempts > 1 ? "s" : ""}). ` +
+    `Claims: ${finalCitability.claims.count}, Attributions: ${finalCitability.attributions.count}, ` +
+    `Nuggets: ${finalCitability.nuggets.count}. Duration: ${durationS}s.`))
 
   return {
-    output: bestContent!,
+    output: finalResult,
     strategyPlan,
-    bestScore,
-    passesUsed: bestPass,
-    degraded: degraded || bestScore < GEO_BLOCK_THRESHOLD,
+    score: finalScore.total,
+    passesUsed: attempts,
+    degraded: serpResult.degraded || !passed,
   }
 }
