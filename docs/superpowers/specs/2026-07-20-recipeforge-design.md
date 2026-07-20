@@ -107,7 +107,7 @@ Séparation stricte : le LLM est créatif, le code est déterministe. Pas de LLM
 
 ## 2. Data Flow & API Design
 
-### Pipeline complet (3 appels LLM)
+### Pipeline complet (3 appels LLM, boucle de retry interne)
 
 ```
 Dashboard (POST /api/generate { keyword, nicheId })
@@ -127,47 +127,41 @@ Dashboard (POST /api/generate { keyword, nicheId })
   ▼
 3. Chef Augustin (LLM #2 — Gemini)
    → Input: StrategyPlan + NicheProfile + skill chef-augustin.md
-   → Output: ChefAugustinOutput { titre, meta, content_md, ingredients,
-              instructions, tags, totalTime, difficulty, servings,
-              imagePrompt, jsonLd }
+   → Output: ChefAugustinOutput
    → Token: ~3500 in, ~2500 out
    → ~5-8s
   │
   ▼
-4. Quality Gate (code pur, pas de LLM)
-   → ContentValidator + GeoValidator + CulinaryValidator + LoopScorer
-   → Score composite → PASS / RETRY / REJECT
-   → ~0.1s
-  │
-  ▼
-5. Retry si truncation (max 1)
-   → Si ingrédients/instructions incomplets OU < min words
-   → Retry Chef Augustin avec instruction "output complet, ne tronque pas"
-  │
-  ▼
-6. Pin Designer (LLM #3 — Gemini)
-   → Input: ChefAugustinOutput + NicheProfile + skill pin-designer.md
-   → Output: 5 pins { title, description, imagePrompt, altText, boardName }
-   → Token: ~1500 in, ~1200 out
-   → ~3-5s
-  │
-  ▼
-7. Persist + Export
-   → Neon DB: INSERT generation + recipe + pins
-   → File: /output/{niche}/{slug}/ (dossier complet)
-   → File: /output/json/{niche}/{slug}.json (fichier unique machine)
+4. Quality Gate (code pur)
+   ├── PASS (score ≥ 65, zero food safety violations)
+   │     │
+   │     ▼
+   │   5. Pin Designer (LLM #3 — Gemini)
+   │     → Input: ChefAugustinOutput + NicheProfile + skill pin-designer.md
+   │     → Output: 5 pins
+   │     → ~3-5s
+   │     │
+   │     ▼
+   │   6. Persist + Export
+   │     → Neon DB: UPDATE recipe + INSERT pins
+   │     → Files: /output/{niche}/{slug}/
+   │
+   ├── RETRY (truncation: ingrédients/instructions incomplets, retries < 2)
+   │     → Retour à l'étape 3 (Chef Augustin) avec instruction renforcée
+   │
+   └── REJECT (food safety violation OU < minWords OU score < 40)
+         → Neon DB: UPDATE status='failed', error_reason
 ```
 
 ### API Routes — 6 endpoints
 
 | Method | Route | Rôle |
 |---|---|---|
-| `POST` | `/api/generate` | Lance une génération, retourne `{ generationId }` |
-| `GET` | `/api/generate/{id}` | Statut de la génération (polling, pas SSE — Vercel serverless coupe les connexions longues) |
+| `POST` | `/api/generate` | Lance une génération, retourne `{ recipeId }` |
 | `GET` | `/api/recipes` | Liste paginée (filtres: niche, score, date) |
-| `GET` | `/api/recipes/{id}` | Détail complet + preview Markdown + prompts |
-| `DELETE` | `/api/recipes/{id}` | Supprimer une recette |
-| `POST` | `/api/recipes/{id}/regenerate` | Relancer même keyword+niche |
+| `GET` | `/api/recipes/{id}` | Détail complet + preview Markdown + prompts + statut (polling) |
+| `DELETE` | `/api/recipes/{id}` | Supprimer une recette (CASCADE sur les pins) |
+| `POST` | `/api/recipes/{id}/regenerate` | Relancer même keyword+niche (même si status=failed) |
 | `GET` | `/api/niches` | Liste des profils disponibles |
 
 ### Polling (pas SSE)
@@ -175,53 +169,50 @@ Dashboard (POST /api/generate { keyword, nicheId })
 Les API Routes Vercel serverless coupent les connexions longues (10s Hobby, 60s Pro). Le dashboard fait du polling HTTP :
 
 ```
-GET /api/generate/{id}  →  { status, progress: { step, elapsed }, result? }
+GET /api/recipes/{id}  →  { status, progress: { step, elapsed }, ...recette }
 ```
 
-Le client appelle toutes les 2 secondes. Latence perçue négligeable. Fiable sur serverless.
+Le client appelle toutes les 2 secondes. Latence perçue négligeable. Fiable sur serverless. Si l'utilisateur ferme l'onglet pendant la génération, la génération continue côté serveur — au retour, l'historique affichera le statut `completed` ou `failed`.
 
-### Schema Neon DB — 3 tables
+### Schema Neon DB — 2 tables
+
+Relation 1:N — une recette a 5 pins. La table `generations` a été fusionnée dans `recipes` (relation 1:1 inutile — Karpathy §2).
 
 ```sql
-generations (
+recipes (
   id            UUID PRIMARY KEY
   keyword       TEXT NOT NULL
   niche_id      TEXT NOT NULL
   format        TEXT NOT NULL DEFAULT 'pin-first'
   status        TEXT NOT NULL  -- 'running' | 'completed' | 'failed'
-  score         JSONB
+  error_reason  TEXT           -- si failed (ex: "food safety: claim anti-inflammatoire")
   retries       INT DEFAULT 0
+  -- Contenu (nullable, rempli seulement si status='completed')
+  title         TEXT
+  slug          TEXT
+  meta          JSONB           -- { description, focusKeyword, canonical }
+  content_md    TEXT
+  ingredients   JSONB
+  instructions  JSONB
+  tags          TEXT[]
+  total_time    INT
+  difficulty    TEXT
+  servings      INT
+  image_prompt  TEXT            -- super prompt blog 16:9
+  json_ld       JSONB           -- @graph complet
+  scores        JSONB           -- { total, geo, content, structure }
   started_at    TIMESTAMPTZ
   completed_at  TIMESTAMPTZ
   created_at    TIMESTAMPTZ DEFAULT NOW()
 )
 
-recipes (
-  id            UUID PRIMARY KEY
-  generation_id UUID REFERENCES generations(id)
-  title         TEXT NOT NULL
-  slug          TEXT NOT NULL
-  meta          JSONB           -- { description, focusKeyword, canonical }
-  content_md    TEXT NOT NULL
-  ingredients   JSONB NOT NULL
-  instructions  JSONB NOT NULL
-  tags          TEXT[]
-  total_time    INT
-  difficulty    TEXT
-  servings      INT
-  image_prompt  TEXT NOT NULL   -- super prompt blog
-  json_ld       JSONB NOT NULL  -- @graph complet
-  scores        JSONB
-  created_at    TIMESTAMPTZ DEFAULT NOW()
-)
-
 pins (
   id            UUID PRIMARY KEY
-  recipe_id     UUID REFERENCES recipes(id)
+  recipe_id     UUID REFERENCES recipes(id) ON DELETE CASCADE
   position      INT NOT NULL    -- 1-5
   title         TEXT NOT NULL
   description   TEXT NOT NULL
-  image_prompt  TEXT NOT NULL   -- super prompt Pinterest
+  image_prompt  TEXT NOT NULL   -- super prompt Pinterest 2:3
   alt_text      TEXT
   board_name    TEXT
   created_at    TIMESTAMPTZ DEFAULT NOW()
@@ -398,19 +389,25 @@ const prompt = skill
   .replace('{{strategyPlan}}', strategyOutput)
 ```
 
-### Quality Gate — 4 validateurs, 1 score
+### Quality Gate — 4 validateurs, 1 score, configuré par format
 
 ```
 ChefAugustinOutput
-  → ContentValidator    : food safety, banned words, health claims, word count, meta length
+  → ContentValidator    : food safety, banned words, health claims, minWords (1200 pin-first / 1800 google-first), meta length
   → GeoValidator        : claims, attributions documentées, answer nuggets, source quality
   → CulinaryValidator   : ratios plausibles, temps de cuisson, cohérence des ingrédients
   → LoopScorer          : composite GEO(60%) + Content(25%) + Structure(15%)
 
 PASS   = score >= 65 AND zero food safety violations
 RETRY  = truncation (ingrédients/instructions incomplets) — max 1 retry
-REJECT = food safety violation OR word count < minimum OR score < 40
+REJECT = food safety violation OR word count < minWords OR score < 40
 ```
+
+Le `minWords` est déterminé par le format choisi :
+- `pin-first` : 1200 mots minimum
+- `google-first` : 1800 mots minimum
+
+Le format est passé au Quality Gate via `validate(output, { format, nicheProfile })`.
 
 ### Adaptations vs le blueprint
 
@@ -476,8 +473,9 @@ recipe-forge/
 │   │   ├── content-validator.ts
 │   │   ├── geo-validator.ts
 │   │   ├── culinary-validator.ts
-│   │   ├── loop-scorer.ts
-│   │   └── niche-config.ts           ← 🆕
+│   │   └── loop-scorer.ts
+│   │
+│   ├── niche-registry.ts             ← 🆕 Charge les profils, configure skills + validateurs
 │   │
 │   ├── exporters/                    ← 🆕
 │   │   ├── markdown-exporter.ts
@@ -485,7 +483,7 @@ recipe-forge/
 │   │   └── wordpress-exporter.ts
 │   │
 │   ├── db/                           ← 🆕
-│   │   ├── schema.ts
+│   │   ├── schema.ts                 ← 2 tables: recipes, pins
 │   │   └── queries.ts
 │   │
 │   ├── skills.ts                     ← ⬅️ Copié
@@ -500,13 +498,11 @@ recipe-forge/
 │   │   └── page.tsx                  ← History
 │   └── api/
 │       ├── generate/
-│       │   ├── route.ts              ← POST
-│       │   └── [id]/
-│       │       └── route.ts          ← GET (polling)
+│       │   └── route.ts              ← POST (crée une recipe en status='running', lance pipeline async)
 │       ├── recipes/
 │       │   ├── route.ts              ← GET (liste)
 │       │   └── [id]/
-│       │       ├── route.ts          ← GET + DELETE
+│       │       ├── route.ts          ← GET (détail + statut polling) + DELETE
 │       │       └── regenerate/
 │       │           └── route.ts      ← POST
 │       └── niches/
@@ -538,6 +534,37 @@ recipe-forge/
     └── pipeline.test.ts
 ```
 
+### .gitignore
+
+```gitignore
+# Générations
+output/*
+!output/.gitkeep
+
+# Secrets
+.env.local
+
+# Build
+.next/
+```
+
+### Scripts npm
+
+```json
+{
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  }
+}
+```
+
+Pas de `concurrently` — pas d'Inngest à lancer en parallèle.
+
 ### Fichiers copiés du blueprint (14 fichiers)
 
 | Source (`ai-blog-builder`) | Destination (`recipe-forge`) | Modification |
@@ -562,12 +589,12 @@ recipe-forge/
 | Fichier blueprint | Raison |
 |---|---|
 | `lib/inngest/**` | Plus d'Inngest |
-| `lib/db/schema.ts` | Nouveau schéma 3 tables |
+| `lib/db/schema.ts` | Nouveau schéma 2 tables |
 | `lib/queries.ts` | Nouvelles queries |
 | `lib/cluster-resolver.ts` | SEO topical authority — spécifique blog |
 | `lib/internal-linker.ts` | Liens internes — blog |
 | `lib/topical-map.ts` | Architecture clusters — blog |
-| `lib/pre-generation-gate.ts` | Remplacé par Niche Registry |
+| `lib/pre-generation-gate.ts` | Remplacé par Niche Registry (`lib/niche-registry.ts`) |
 | `app/recettes/**`, `app/guides/**`, `app/idees/**` | Pages blog |
 | `components/recipe-card.tsx`, `article-card.tsx` | Composants blog |
 | `data/launch-plan.json` | Spécifique "dinners for two" |
@@ -582,14 +609,15 @@ recipe-forge/
 | Core Engine (pipeline + runner + retry) | ~300 |
 | Agents (3 runtime + provider + serp) | ~400 |
 | Validateurs (4 fichiers) | ~800 |
+| Niche Registry | ~100 |
 | Exporters (3 fichiers) | ~200 |
-| DB (schema + queries) | ~150 |
-| API Routes (7 endpoints) | ~300 |
+| DB (schema 2 tables + queries) | ~130 |
+| API Routes (5 endpoints) | ~250 |
 | Dashboard (2 pages + 7 composants) | ~500 |
 | Skills (3 fichiers Markdown) | ~800 |
 | Niche profiles (10 profils JSON) | ~500 |
 | Tests | ~400 |
-| **Total** | **~4350 lignes** |
+| **Total** | **~4380 lignes** |
 
 Comparaison : `ai-blog-builder` = ~15 000 lignes. RecipeForge = ~4 350 lignes. On retire le blog, Inngest, le SEO topical authority, le frontend public, les scripts batch.
 
