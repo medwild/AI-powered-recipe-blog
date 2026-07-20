@@ -57,8 +57,8 @@ Séparation stricte : le LLM est créatif, le code est déterministe. Pas de LLM
 │  │  Dashboard   │  │  API Routes    │  │  Core Engine   │  │
 │  │  (React SPA) │  │  /api/generate  │  │  (TS pur)     │  │
 │  │              │  │  /api/recipes   │  │  Pipeline      │  │
-│  │  Lancement   │  │  /api/export    │  │  Agents        │  │
-│  │  Suivi       │  │  /api/niches    │  │  Validators    │  │
+│  │  Lancement   │  │  /api/niches    │  │  Agents        │  │
+│  │  Suivi       │  │                 │  │  Validators    │  │
 │  │  Historique  │  │                 │  │  Exporters     │  │
 │  └──────────────┘  └────────────────┘  └────────────────┘  │
 │                                                             │
@@ -110,7 +110,7 @@ Séparation stricte : le LLM est créatif, le code est déterministe. Pas de LLM
 ### Pipeline complet (3 appels LLM, boucle de retry interne)
 
 ```
-Dashboard (POST /api/generate { keyword, nicheId })
+Dashboard (POST /api/generate { keyword, nicheId, format })
   │
   ▼
 1. SERP Phase (Serper.dev live)
@@ -579,8 +579,8 @@ Pas de `concurrently` — pas d'Inngest à lancer en parallèle.
 | `lib/agents/provider.ts` | `lib/agents/provider.ts` | Gemini primary, DeepSeek fallback |
 | `lib/agents/serp.ts` | `lib/agents/serp.ts` | Inchangé |
 | `lib/agents/json-utils.ts` | `lib/agents/json-utils.ts` | Inchangé |
-| `lib/content-validator.ts` | `lib/validators/content-validator.ts` | + `nicheId` → foodSafety config |
-| `lib/geo-validator.ts` | `lib/validators/geo-validator.ts` | + `nicheId` → thresholds config |
+| `lib/content-validator.ts` | `lib/validators/content-validator.ts` | + `nicheProfile` → foodSafety config |
+| `lib/geo-validator.ts` | `lib/validators/geo-validator.ts` | + `nicheProfile` → thresholds config |
 | `lib/culinary-validator.ts` | `lib/validators/culinary-validator.ts` | Inchangé |
 | `lib/loop-scorer.ts` | `lib/validators/loop-scorer.ts` | Inchangé |
 | `lib/skills.ts` | `lib/skills.ts` | Inchangé |
