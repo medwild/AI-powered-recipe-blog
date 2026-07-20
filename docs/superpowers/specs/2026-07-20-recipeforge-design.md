@@ -153,7 +153,7 @@ Dashboard (POST /api/generate { keyword, nicheId })
          → Neon DB: UPDATE status='failed', error_reason
 ```
 
-### API Routes — 6 endpoints
+### API Routes — 7 endpoints
 
 | Method | Route | Rôle |
 |---|---|---|
@@ -162,6 +162,7 @@ Dashboard (POST /api/generate { keyword, nicheId })
 | `GET` | `/api/recipes/{id}` | Détail complet + preview Markdown + prompts + statut (polling) |
 | `DELETE` | `/api/recipes/{id}` | Supprimer une recette (CASCADE sur les pins) |
 | `POST` | `/api/recipes/{id}/regenerate` | Relancer même keyword+niche (même si status=failed) |
+| `GET` | `/api/recipes/{id}/download` | Télécharger — `?format=zip` (défaut, dossier complet) ou `?format=json` (fichier unique machine) |
 | `GET` | `/api/niches` | Liste des profils disponibles |
 
 ### Polling (pas SSE)
@@ -236,15 +237,16 @@ pins (
 - Logo "RecipeForge"
 - Formulaire : mot-clé (input text), niche (select alimenté par `/api/niches`), format (radio : pin-first / google-first)
 - Bouton "Générer la recette"
-- Barre de progression en 5 étapes (✅ ⏳ ⬜) avec temps écoulé (polling `GET /api/generate/{id}`)
+- Barre de progression en 5 étapes (✅ ⏳ ⬜) avec temps écoulé (polling `GET /api/recipes/{id}`)
 - Résultat : score affiché, preview Markdown expandable (`<details>` + `react-markdown`), prompts pins avec bouton copier, boutons télécharger (dossier + JSON)
+- Téléchargements : 📥 dossier `.zip` (via `GET /api/recipes/{id}/download`), 📥 fichier JSON, 📋 copier prompt blog, 📌 5 prompts pins
 - Bouton "Regénérer" si score insuffisant
 
 ### Page 2 — History
 
 - Table paginée : keyword, niche, score, date, format, statut
 - Filtres : niche (select), score min (range), date (date range)
-- Actions par ligne : 📥 télécharger dossier, 📥 télécharger JSON, 📋 copier prompt blog, 📌 voir pins, 🔄 regenerate, 🗑️ delete
+- Actions par ligne : 📥 `.zip`, 📥 JSON, 📋 prompt blog, 📌 pins, 🔄 regenerate, 🗑️ delete
 - Lignes "failed" affichées avec raison du rejet + bouton 🔄 pour retenter
 - Pagination simple (20 par page)
 
@@ -503,6 +505,8 @@ recipe-forge/
 │       │   ├── route.ts              ← GET (liste)
 │       │   └── [id]/
 │       │       ├── route.ts          ← GET (détail + statut polling) + DELETE
+│       │       ├── download/
+│       │       │   └── route.ts       ← GET (zip du dossier)
 │       │       └── regenerate/
 │       │           └── route.ts      ← POST
 │       └── niches/
@@ -582,7 +586,7 @@ Pas de `concurrently` — pas d'Inngest à lancer en parallèle.
 | `lib/skills.ts` | `lib/skills.ts` | Inchangé |
 | `lib/rate-limit.ts` | `lib/rate-limit.ts` | Inchangé |
 | `lib/slug.ts` | `lib/slug.ts` | Inchangé |
-| `lib/types.ts` | `lib/types.ts` | + NicheProfile, Generation, Recipe, Pin |
+| `lib/types.ts` | `lib/types.ts` | + NicheProfile, Recipe, Pin |
 
 ### Fichiers NON copiés (et pourquoi)
 
@@ -612,14 +616,14 @@ Pas de `concurrently` — pas d'Inngest à lancer en parallèle.
 | Niche Registry | ~100 |
 | Exporters (3 fichiers) | ~200 |
 | DB (schema 2 tables + queries) | ~130 |
-| API Routes (5 endpoints) | ~250 |
+| API Routes (7 endpoints) | ~280 |
 | Dashboard (2 pages + 7 composants) | ~500 |
 | Skills (3 fichiers Markdown) | ~800 |
 | Niche profiles (10 profils JSON) | ~500 |
 | Tests | ~400 |
-| **Total** | **~4380 lignes** |
+| **Total** | **~4410 lignes** |
 
-Comparaison : `ai-blog-builder` = ~15 000 lignes. RecipeForge = ~4 350 lignes. On retire le blog, Inngest, le SEO topical authority, le frontend public, les scripts batch.
+Comparaison : `ai-blog-builder` = ~15 000 lignes. RecipeForge = ~4 410 lignes. On retire le blog, Inngest, le SEO topical authority, le frontend public, les scripts batch.
 
 ---
 
@@ -670,5 +674,5 @@ CRON_SECRET=              # (réservé Phase 2 si batch planifié)
 - [x] Pas d'Inngest — async/await direct
 - [x] Pas de SSE — polling HTTP (compatible Vercel serverless)
 - [x] 14 fichiers copiés du blueprint, adaptés de façon chirurgicale
-- [x] ~4 350 lignes vs 15 000 (élagage 71%)
+- [x] ~4 410 lignes vs 15 000 (élagage 71%)
 - [x] Projet séparé — le blueprint ne change pas
