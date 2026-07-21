@@ -1,8 +1,9 @@
 # Pipeline v14 — Karpathy Simplification
 
-> **Design spec — 2026-07-21**
+> **Design spec — 2026-07-21 — v1.2 (post-review Kimi 2.6 + Sonnet 4.6)**
 > Objectif : Simplification radicale du pipeline IA selon les principes Karpathy.
 > Principe fondateur : *"The LLM generates, code enforces quality."*
+> Revue externe : 8.5/10 (Kimi), favorable avec 4 réserves (Sonnet). Corrections intégrées.
 
 ## 1. Philosophy
 
@@ -188,7 +189,7 @@ interface GateResult {
   errors?: string[];
 }
 
-function qualityGate(output: RecipeArticle): GateResult {
+async function qualityGate(output: RecipeArticle): Promise<GateResult> {
   // Check 0: Duplicate slug
   const slug = slugify(output.title);
   const existing = await db.select().from(recipes).where(eq(recipes.slug, slug)).limit(1);
