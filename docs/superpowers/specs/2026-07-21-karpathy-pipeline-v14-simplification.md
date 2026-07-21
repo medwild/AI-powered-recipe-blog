@@ -49,10 +49,12 @@ Le pipeline v13 actuel souffre de **complexité accumulée** : 4 agents LLM, 5 s
 
 ```
 ┌──────────────────────────────────────────────────┐
-│ STEP 1: SERP (code, ~50 lignes)                  │
+│ STEP 1: SERP (code, ~60 lignes)                  │
 │                                                   │
-│ Serper API → dump SERP brut                       │
-│ Pas de structuration, pas de matching             │
+│ Serper API → nettoyage minimal:                    │
+│   Extraire titles + snippets du top 10 organiques  │
+│   + PAA questions + related searches               │
+│   Format texte simple, pas de JSON complexe        │
 └──────────────────┬───────────────────────────────┘
                    │
                    ▼
@@ -62,24 +64,30 @@ Le pipeline v13 actuel souffre de **complexité accumulée** : 4 agents LLM, 5 s
 │ System: CHEF_AUGUSTIN_MEGA (~200 lignes)          │
 │ Messages: [{ role: "user", content: `              │
 │   KEYWORD, CUISINE, INGREDIENTS, TECHNIQUES,      │
-│   SERP dump, SOURCE citations                     │
+│   SERP data, SOURCE citations                     │
 │ `}]                                                │
 │                                                   │
 │ cache_control: { type: "ephemeral" }              │
 │ output_config: { format: RecipeArticleSchema }    │
 │ thinking: { type: "adaptive" }                    │
 │                                                   │
+│ Modèle primaire:    claude-opus-4-8               │
+│ Modèle fallback:    claude-sonnet-5 (même skill,  │
+│   même structured output, moins cher, léger recul │
+│   de qualité rédactionnelle — acceptable)         │
+│                                                   │
 │ Output: RecipeArticle (validated by API)          │
 └──────────────────┬───────────────────────────────┘
                    │
                    ▼
 ┌──────────────────────────────────────────────────┐
-│ STEP 3: QUALITY GATE (code, ~60 lignes)          │
+│ STEP 3: QUALITY GATE (code, ~70 lignes)          │
 │                                                   │
 │ 1. Duplicate slug? → BLOCK                        │
 │ 2. Food safety temps? → BLOCK                     │
 │ 3. Word count < 1200? → BLOCK                     │
-│ 4. Banned words? → FIX (scrub)                    │
+│ 4. Banned words? → BLOCK (skill §1 prevents them; │
+│    if triggered, le LLM n'a pas suivi le skill)   │
 └──────────────────┬───────────────────────────────┘
                    │
                    ▼
@@ -169,16 +177,15 @@ Un seul fichier `skills/chef-augustin-mega.md`, ~200 lignes.
 
 ## 4. La Quality Gate
 
-Un seul fichier `lib/quality-gate.ts`, ~60 lignes.
+Un seul fichier `lib/quality-gate.ts`, ~70 lignes.
 
-### Les 4 checks
+### Les 4 checks (tous BLOCK — pas de modification silencieuse du contenu)
 
 ```typescript
 interface GateResult {
   status: "PASS" | "BLOCK";
-  reason?: "duplicate" | "food_safety" | "too_short";
+  reason?: "duplicate" | "food_safety" | "too_short" | "banned_words";
   errors?: string[];
-  output: RecipeArticle; // modifié (banned words scrubbed)
 }
 
 function qualityGate(output: RecipeArticle): GateResult {
@@ -186,25 +193,30 @@ function qualityGate(output: RecipeArticle): GateResult {
   const slug = slugify(output.title);
   const existing = await db.select().from(recipes).where(eq(recipes.slug, slug)).limit(1);
   if (existing.length > 0) {
-    return { status: "BLOCK", reason: "duplicate", errors: [`Slug "${slug}" exists`], output };
+    return { status: "BLOCK", reason: "duplicate", errors: [`Slug "${slug}" exists`] };
   }
 
-  // Check 1: Food Safety
+  // Check 1: Food Safety (USDA temps)
   const foodSafetyErrors = validateFoodSafety(output.instructions, output.ingredients);
   if (foodSafetyErrors.length > 0) {
-    return { status: "BLOCK", reason: "food_safety", errors: foodSafetyErrors, output };
+    return { status: "BLOCK", reason: "food_safety", errors: foodSafetyErrors };
   }
 
-  // Check 2: Word Count
+  // Check 2: Word Count minimum
   const wordCount = output.contentMarkdown.split(/\s+/).filter(Boolean).length;
   if (wordCount < 1200) {
-    return { status: "BLOCK", reason: "too_short", errors: [`${wordCount} words < 1200 minimum`], output };
+    return { status: "BLOCK", reason: "too_short", errors: [`${wordCount} words < 1200 minimum`] };
   }
 
-  // Check 3: Banned Words (FIX — never blocks)
-  output.contentMarkdown = scrubBannedWords(output.contentMarkdown);
+  // Check 3: Banned Words (BLOCK — skill §1 is the prevention layer)
+  // Si ce check déclenche, le LLM n'a pas respecté §1. Ne pas scrubber —
+  // un scrub crée des phrases cassées. Bloquer et retry avec feedback.
+  const bannedWordsFound = detectBannedWords(output.contentMarkdown);
+  if (bannedWordsFound.length > 0) {
+    return { status: "BLOCK", reason: "banned_words", errors: bannedWordsFound.map(w => `"${w}" found`) };
+  }
 
-  return { status: "PASS", output };
+  return { status: "PASS" };
 }
 ```
 
@@ -262,22 +274,44 @@ all-natural (as health claim), clinically proven, scientifically proven
 | Fichier | Description |
 |---|---|
 | `skills/chef-augustin-mega.md` | Mega-skill unique (~200 lignes) |
-| `lib/quality-gate.ts` | Quality gate simplifiée (~60 lignes) |
+| `lib/quality-gate.ts` | Quality gate simplifiée (~70 lignes) |
 | `lib/schemas/recipe-article.ts` | Zod schema pour structured output |
-| `scripts/eval-recipe.ts` | Script de test : génère 1 recette et dump le JSON |
+| `scripts/eval-recipe.ts` | Script de test : génère 10 recettes variées et audite chaque section du mega-skill séparément |
 
 ### Modifiés
 | Fichier | Changement |
 |---|---|
 | `lib/inngest/functions/generate-recipe.ts` | Réécrit : 4 steps au lieu de 8 |
 | `lib/inngest/functions/agents/chef-augustin.ts` | Réécrit : mega-skill au lieu de chef-augustin skill |
-| `lib/inngest/functions/steps/serp-phase.ts` | Simplifié : dump brut, pas de structuration |
+| `lib/inngest/functions/steps/serp-phase.ts` | Simplifié : nettoyage minimal (titres + snippets top 10) |
 | `lib/inngest/functions/steps/persist-phase.ts` | Simplifié : persist + sitemap ping |
 | `lib/inngest/functions/steps/image-phase.ts` | Simplifié : non-bloquant |
 | `lib/inngest/functions/helpers.ts` | Réduit : log functions uniquement |
 | `CLAUDE.md` | Mis à jour pour v14 |
 | `.claude/rules/global.md` | Fusion de routing-seo + database |
 | `package.json` | Dépendances inutilisées retirées |
+
+### eval-recipe.ts — 10 keywords de validation
+
+Cas edge explicites pour couvrir tous les scénarios de la food safety gate :
+
+| # | Keyword | Test |
+|---|---|---|
+| 1 | Roast chicken for two | Protéine unique volaille, classique |
+| 2 | Beef bourguignon small batch | Viande rouge, cuisson longue |
+| 3 | Authentic carbonara for two | Œuf cru, multi-protéines (œuf + porc) |
+| 4 | Pan-seared salmon medium-rare | Poisson, cuisson partielle |
+| 5 | Vegetarian chickpea curry for two | Sans protéine animale |
+| 6 | Caesar salad with homemade dressing | Œuf cru dans dressing + poulet |
+| 7 | Perfect medium-rare steak for two | Température vs USDA minimum |
+| 8 | Dark chocolate mousse for two | Dessert, pas de protéine à cuire |
+| 9 | Chicken bacon pasta for two | Deux protéines animales, double validation |
+| 10 | 15-minute garlic shrimp | Recette express, risque < 1200 mots |
+
+Chaque évaluation loggue :
+- `input_tokens`, `output_tokens`, `cache_read_input_tokens`, `cache_creation_input_tokens`
+- Score par section du mega-skill (food safety ✓/✗, human patterns count, attributions count, FAQ count, JSON-LD valid)
+- Coût réel calculé à partir des tokens
 
 ---
 
@@ -301,36 +335,43 @@ all-natural (as health claim), clinically proven, scientifically proven
 
 | Risque | Probabilité | Impact | Mitigation |
 |---|---|---|---|
-| Opus 4.8 API down | Faible | Bloquant | Retries Inngest (2), monitoring |
-| Mega-skill non testé en production | Moyen | Qualité dégradée | `scripts/eval-recipe.ts` sur 5 keywords avant déploiement |
-| Structured output rejeté (schema mismatch) | Faible | Article perdu | Retry Inngest automatique |
+| Opus 4.8 API down ou rate-limité | Faible | Bloquant | Fallback automatique sur Sonnet 5 (même skill, structured outputs natif). Retries Inngest (2) |
+| Mega-skill non testé en production | Moyen | Qualité dégradée | `scripts/eval-recipe.ts` sur 10 keywords variés (viande, poisson, végé, dessert, edge cases) avant déploiement. Audit par section du skill |
+| Structured output rejeté (schema mismatch) | Faible | Article perdu | Retry Inngest automatique. Zod schema testé en isolation |
 | Image FLUX-1 échoue | Faible | Article sans image | Non-bloquant, retry asynchrone |
-| AdSense refuse malgré compliance | Faible | Revenu | Hors scope — on suit les règles connues |
-| LLM ignore certaines règles du mega-skill | Moyen | Qualité variable | La gate bloque les violations critiques (food safety, mots) |
+| AdSense refuse malgré compliance | Faible | Revenu | Hors scope immédiat — on suit les règles connues. Monitoring des refus AdSense sur les 50 premiers articles |
+| LLM ignore certaines règles du mega-skill | Moyen | Qualité variable | La gate bloque les violations critiques (food safety, banned words, word count). eval-recipe.ts audite §3 (patterns) et §4 (attributions) par section |
+| Internal linking absent du pipeline | Certain | SEO long-terme | **Dette documentée pour v15** — à activer quand le corpus > 30 recettes. Solution probable : script déterministe par matching de tags |
+| Coût Opus 4.8 sous-estimé | Moyen | Budget | Premier run eval-recipe.ts loggue les tokens réels (input/output/thinking/cache) avant de fixer les estimations |
 
 ---
 
 ## 9. Plan de migration
 
 1. **Créer** `skills/chef-augustin-mega.md` (skill uniquement, pas de code)
-2. **Créer** `lib/schemas/recipe-article.ts` (Zod schema)
-3. **Créer** `lib/quality-gate.ts` (4 checks)
-4. **Réécrire** `lib/inngest/functions/generate-recipe.ts` (4 steps)
-5. **Réécrire** `lib/inngest/functions/agents/chef-augustin.ts` (mega-skill call)
-6. **Simplifier** `serp-phase.ts`, `persist-phase.ts`, `image-phase.ts`
-7. **Supprimer** les fichiers obsolètes
-8. **Créer** `scripts/eval-recipe.ts` et tester sur 5 keywords
-9. **Mettre à jour** `CLAUDE.md` et `.claude/rules/`
-10. **`npx tsc --noEmit`** + déploiement
+2. **Créer** `lib/schemas/recipe-article.ts` (Zod schema pour structured output)
+3. **Créer** `lib/quality-gate.ts` (4 checks, tous BLOCK)
+4. **Réécrire** `lib/inngest/functions/generate-recipe.ts` (4 steps, fallback Opus 4.8 → Sonnet 5)
+5. **Réécrire** `lib/inngest/functions/agents/chef-augustin.ts` (mega-skill call avec structured output + fallback)
+6. **Simplifier** `serp-phase.ts` (nettoyage minimal : titres + snippets top 10 + PAA)
+7. **Simplifier** `persist-phase.ts` (slugify, <img> alt text, sitemap ping)
+8. **Simplifier** `image-phase.ts` (non-bloquant, try/catch)
+9. **Supprimer** les fichiers obsolètes (25+ fichiers)
+10. **Créer** `scripts/eval-recipe.ts` et tester sur 10 keywords avec audit par section
+11. **Logger** les tokens réels (input/output/thinking/cache) du premier run → ajuster estimations coût
+12. **`npx tsc --noEmit`** + déploiement
+13. **Monitorer** les 50 premières recettes : taux de BLOCK, temps de génération, coût réel
 
 ---
 
 ## 10. Succès — Comment on saura que ça marche
 
 - [ ] `npx tsc --noEmit` passe
-- [ ] 1 recette générée de bout en bout sans erreur
-- [ ] Quality gate PASS sur 5/5 recettes test
+- [ ] 1 recette générée de bout en bout sans erreur (smoke test)
+- [ ] 10/10 recettes eval-recipe.ts : quality gate PASS, JSON-LD valide, ≥5 human patterns, ≥4 attributions
+- [ ] Cas edge couverts : multi-protéine, sans protéine animale, œuf cru, poisson cru, recette courte
 - [ ] Score Google Rich Results Test : 0 erreurs JSON-LD
 - [ ] Indexation Google < 24h après ping sitemap
-- [ ] AdSense approuve le contenu (pas de violation de politique)
-- [ ] Aucun article bloqué pour food safety (faux positif)
+- [ ] AdSense approuve le contenu (pas de violation de politique sur les 50 premiers articles)
+- [ ] Taux de BLOCK < 10% sur les 50 premières recettes
+- [ ] Coût réel/article mesuré et dans le budget (tokens loggués du premier run)
