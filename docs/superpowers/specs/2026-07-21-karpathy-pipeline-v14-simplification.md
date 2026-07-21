@@ -1,9 +1,9 @@
 # Pipeline v14 — Karpathy Simplification
 
-> **Design spec — 2026-07-21 — v1.3 (2ème review Kimi 2.6 + Claude Sonnet 4.6)**
+> **Design spec — 2026-07-21 — v1.4 (3ème review Kimi 2.6 + Claude Sonnet 4.6)**
 > Objectif : Simplification radicale du pipeline IA selon les principes Karpathy.
 > Principe fondateur : *"The LLM generates, code enforces quality."*
-> Revue externe : 9/10 (Kimi) — GO conditionnel. Favorable avec 5 clarifications (Claude). Corrections intégrées.
+> Revue externe : 9.2/10 (Kimi) — implémentable. Quasi-production-ready (Claude). Corrections finales intégrées.
 
 ## 1. Philosophy
 
@@ -70,10 +70,13 @@ Le pipeline v13 actuel souffre de **complexité accumulée** : 4 agents LLM, 5 s
 │                                                   │
 │ cache_control: { type: "ephemeral" }              │
 │ output_config: { format: RecipeArticleSchema }    │
-│ thinking: { type: "adaptive" }                    │
+│ thinking: { type: "adaptive", budget_tokens: 4000 }│
+│   → Hard cap pour latence < 3 min, coût prévisible    │
+│   → Si le modèle a besoin de plus, il passe en direct │
 │                                                   │
 │ Modèle primaire:    claude-opus-4-8               │
-│ Modèle fallback:    claude-sonnet-5               │
+│ Modèle fallback:    claude-sonnet-5 (modèle réel —│
+│   voir table Anthropic: claude-sonnet-5, $3/$15)  │
 │   Déclenché sur:  HTTP 429, 529, 5xx, timeout >120s │
 │   Jamais sur:      schema mismatch (bug skill)    │
 │   Même skill, même structured output              │
@@ -130,7 +133,14 @@ Un seul fichier `skills/chef-augustin-mega.md`, ~200 lignes.
 
 ```
 §1 CRITICAL — Food Safety + AdSense Compliance
-    - USDA températures (poultry 165°F/74°C, ground meat 160°F/71°C, ...)
+    - USDA températures (poultry 165°F/74°C, ground meat 160°F/71°C, pork 145°F/63°C, fish 145°F/63°C)
+    - Mention USDA temperatures BOTH in the step text AND in the structured temperature field
+    - For medium-rare steak/salmon/lamb: ALWAYS cite USDA minimum (145°F/63°C) as safety baseline,
+      then mention desired doneness temp. Example: "USDA recommends 145°F for safety; for medium-rare,
+      pull at 130°F and rest 5 min — carryover cooking will bring it to a safe temperature."
+    - For raw/undercooked egg preparations (carbonara, Caesar dressing, mousse, tiramisu):
+      specify "use pasteurized eggs" and cite FDA recommendation. Example: "The FDA recommends
+      pasteurized eggs for raw preparations — they're widely available and taste identical."
     - Never "healthy", "good for you", "nutritious", "better than [food]"
     - Zero health claims: probiotics, detox, gut health, immune, anti-inflammatory, fat-burning
     - Transparent brand persona — no fabricated credentials
@@ -212,7 +222,15 @@ export const RecipeArticleSchema = z.object({
   servings: z.string().describe("e.g. '2 servings'"),
   difficulty: z.enum(["Easy", "Medium", "Hard"]),
   imagePrompt: z.string().max(120).describe("Food photography prompt, 60-100 words, ≤120"),
-  jsonLd: z.object({}).passthrough().describe("@graph: Recipe + BlogPosting + FAQPage + BreadcrumbList for Google; Recipe + BreadcrumbList only for Pin-First"),
+  jsonLd: z.object({
+    "@context": z.literal("https://schema.org"),
+    "@graph": z.array(z.object({
+      "@type": z.enum(["Recipe", "BlogPosting", "FAQPage", "BreadcrumbList"]),
+      // Les champs obligatoires varient par @type — le LLM les connaît.
+      // La gate ne valide pas le JSON-LD (trop lourd). eval-recipe.ts le fait
+      // via Google Rich Results Test ou schema.org validator.
+    }).passthrough()),
+  }).describe("@graph: Recipe + BlogPosting + FAQPage + BreadcrumbList. Validé par eval-recipe.ts, pas par la gate."),
 });
 ```
 
@@ -240,17 +258,33 @@ async function qualityGate(output: RecipeArticle): Promise<GateResult> {
   }
 
   // Check 1: Food Safety (USDA temps)
-  const foodSafetyErrors = validateFoodSafety(output.instructions, output.ingredients);
+  // Scan BOTH structured instructions AND markdown — le lecteur voit le markdown,
+  // mais les températures peuvent être dans le champ structuré uniquement
+  const allText = [
+    ...output.instructions.map(i => i.text),
+    output.contentMarkdown
+  ].join(" ");
+  const foodSafetyErrors = validateFoodSafety(allText, output.ingredients);
   if (foodSafetyErrors.length > 0) {
     return { status: "BLOCK", reason: "food_safety", errors: foodSafetyErrors };
   }
 
   // Check 2: Word Count minimum (seuils par type de recette)
   const wordCount = output.contentMarkdown.split(/\s+/).filter(Boolean).length;
-  const minWords = getMinWords(output); // ≥30min/plat principal: 1200, express <30min: 800, dessert: 600
+  const minWords = getMinWords(output);
   if (wordCount < minWords) {
     return { status: "BLOCK", reason: "too_short", errors: [`${wordCount} words < ${minWords} minimum`] };
   }
+
+// Helper — détermine le seuil de mots minimum
+function getMinWords(output: RecipeArticle): number {
+  const totalMatch = (output.prepTime + output.cookTime).match(/(\d+)/g);
+  const minutes = totalMatch ? totalMatch.reduce((sum, n) => sum + parseInt(n), 0) : 999;
+  const isDessert = output.tags.some((t: string) => /dessert|mousse|cake|cookie|tart|pie|pudding/i.test(t));
+  if (isDessert) return 600;
+  if (minutes <= 30) return 800;  // express
+  return 1200;                      // plat principal
+}
 
   // Check 3: Banned Words (BLOCK — skill §1 is the prevention layer)
   // Si ce check déclenche, le LLM n'a pas respecté §1. Ne pas scrubber —
@@ -331,8 +365,15 @@ const PROTEIN_RULES = [
 // Pour chaque PROTEIN_RULE :
 //   1. Scanner ingredients[] pour les keywords (en excluant les exclude)
 //   2. Si une protéine est trouvée ET qu'elle n'est PAS dans exclude :
-//      → Au moins une instruction doit mentionner une température du tableau temp[]
-//      → OU (pour la règle fda_egg) : mentionner "pasteurized" ou "cooked until firm"
+//      → Si la règle a temp[] non vide :
+//          → Au moins une instruction doit mentionner une température de temp[]
+//          → Le champ "tolerate" est documentaire — il rappelle que le LLM peut
+//            viser une température inférieure (ex: medium-rare 130°F) MAIS doit
+//            quand même citer la température USDA. tolerate n'annule pas l'exigence.
+//      → Si la règle a rule: "fda_egg" (temp[] vide) :
+//          → Au moins une instruction doit contenir "pasteurized" OU
+//            "cooked until firm" OU "cook until yolk and white are firm"
+//          → Alternative : "use pasteurized eggs" dans les ingrédients
 //      → Si absent → BLOCK
 ```
 
@@ -433,8 +474,9 @@ Cas edge explicites pour couvrir tous les scénarios de la food safety gate :
 | 10 | 15-minute garlic shrimp | Recette express, risque < 1200 mots |
 
 Chaque évaluation loggue :
-- `input_tokens`, `output_tokens`, `cache_read_input_tokens`, `cache_creation_input_tokens`
-- Score par section du mega-skill (food safety ✓/✗, human patterns count, attributions count, FAQ count, JSON-LD valid)
+- `input_tokens`, `output_tokens`, `cache_read_input_tokens`, `cache_creation_input_tokens`, `thinking_tokens`
+- Score par section du mega-skill (food safety ✓/✗, human patterns count, attributions count, FAQ count)
+- JSON-LD validation : schema.org required fields check + Google Rich Results Test (via API ou manuel)
 - Coût réel calculé à partir des tokens
 
 ---
@@ -491,7 +533,36 @@ Metrics logguées par recette dans `pipeline_logs` (table existante) :
 1. **Créer** `skills/chef-augustin-mega.md` (skill uniquement, pas de code)
 2. **Créer** `lib/schemas/recipe-article.ts` (Zod schema pour structured output)
 3. **Créer** `lib/quality-gate.ts` (4 checks, tous BLOCK)
-4. **Réécrire** `lib/inngest/functions/generate-recipe.ts` (4 steps, fallback Opus 4.8 → Sonnet 5)
+4. **Réécrire** `lib/inngest/functions/generate-recipe.ts` (4 steps avec retry loop + fallback)
+
+```typescript
+// Boucle de retry avec feedback dans generate-recipe.ts
+const MAX_RETRIES: Record<string, number> = { duplicate: 0, food_safety: 1, too_short: 1, banned_words: 2 };
+
+let attempt = 0;
+let feedback = "";
+let gateResult: GateResult;
+let article: RecipeArticle;
+
+do {
+  article = await step.invoke("call-llm", {
+    function: callChefAugustinMega,
+    data: { keyword, cuisine, cuisineIngredients, cuisineTechniques, serpData, citations, feedback },
+  });
+
+  gateResult = await step.run("quality-gate", () => qualityGate(article));
+
+  if (gateResult.status === "BLOCK") {
+    const maxRetries = MAX_RETRIES[gateResult.reason!] ?? 0;
+    if (attempt < maxRetries) {
+      feedback = buildFeedback(gateResult); // injecte les erreurs dans le user message
+      await appendLog(recipeId, logEntry("QualityGate", "retry",
+        `${gateResult.reason}: ${gateResult.errors?.join("; ")} (attempt ${attempt + 1}/${maxRetries})`));
+    }
+  }
+  attempt++;
+} while (gateResult.status === "BLOCK" && attempt <= (MAX_RETRIES[gateResult.reason!] ?? 0));
+```
 5. **Réécrire** `lib/inngest/functions/agents/chef-augustin.ts` (mega-skill call avec structured output + fallback)
 6. **Simplifier** `serp-phase.ts` (nettoyage minimal : titres + snippets top 10 + PAA)
 7. **Simplifier** `persist-phase.ts` (slugify, <img> alt text, sitemap ping)
