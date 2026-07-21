@@ -1,102 +1,101 @@
-/**
- * Steps 1 + 1.5 — SERP Analysis + Data Structuring.
- */
+// Step 1 — SERP Analysis (v14: minimal cleanup, no LLM)
+//
+// Fetches Google SERP via Serper, extracts titles + snippets top 10,
+// PAA questions, and related searches. Formats as plain text for the
+// mega-skill user prompt. No structuring, no matching — the LLM does that.
 
-import { db } from "@/lib/db"
-import { recipes } from "@/lib/db/schema"
-import { eq } from "drizzle-orm"
-import { fetchSerp, type SerpResult } from "@/lib/agents/serp"
-import { structureSerpData, type StructuredSerp } from "@/lib/agents/serp-structurer"
-import { logPipelineError } from "@/lib/queries"
-import { appendLog, logEntry, generateSyntheticPAA, isRecoverableError } from "../helpers"
+import { db } from "@/lib/db";
+import { recipes } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
+import { fetchSerp } from "@/lib/agents/serp";
+import { logPipelineError } from "@/lib/queries";
+import { appendLog, logEntry, generateSyntheticPAA, isRecoverableError } from "../helpers";
 
 export interface SerpPhaseResult {
-  serp: SerpResult
-  structuredSerp: StructuredSerp
-  degraded: boolean
+  serpText: string;
+  degraded: boolean;
+}
+
+function formatSerpForPrompt(raw: Awaited<ReturnType<typeof fetchSerp>>): string {
+  const lines: string[] = [];
+
+  // Top organic results
+  lines.push(`Top ${raw.organic.length} Google results:`);
+  for (const r of raw.organic.slice(0, 10)) {
+    lines.push(`- ${r.title}${r.snippet ? ` | ${r.snippet}` : ""}`);
+  }
+
+  // PAA questions
+  if (raw.relatedQuestions?.length) {
+    lines.push(`\nPeople Also Ask:`);
+    for (const q of raw.relatedQuestions.slice(0, 10)) {
+      lines.push(`- ${q.question}${q.snippet ? ` → ${q.snippet}` : ""}`);
+    }
+  }
+
+  // Related searches
+  if (raw.relatedSearches?.length) {
+    lines.push(`\nRelated Searches: ${raw.relatedSearches.join(", ")}`);
+  }
+
+  return lines.join("\n");
 }
 
 export async function runSerpPhase(
-  step: { run: (name: string, fn: () => Promise<unknown>) => Promise<unknown>; sleep: (name: string, dur: string) => Promise<void> },
+  step: {
+    run: (name: string, fn: () => Promise<unknown>) => Promise<unknown>;
+    sleep: (name: string, dur: string) => Promise<void>;
+  },
   recipeId: number,
   keyword: string,
 ): Promise<SerpPhaseResult> {
-  let degraded = false
+  let degraded = false;
+  let serpText = "";
 
-  // ── Step 1: analyze-serp ────────────────────────────────────────────────
   try {
-    await step.run("analyze-serp", async () => {
-      await appendLog(recipeId, logEntry("SERP", "running", `Google analysis for "${keyword}"`))
-      const result = await fetchSerp(keyword)
+    const raw = await step.run("analyze-serp", async () => {
+      await appendLog(recipeId, logEntry("SERP", "running", `Google analysis for "${keyword}"`));
+
+      const result = await fetchSerp(keyword);
+
+      // PAA fallback
+      if (!result.relatedQuestions || result.relatedQuestions.length < 2) {
+        const syntheticPAA = generateSyntheticPAA(keyword);
+        result.relatedQuestions = syntheticPAA.map((q) => ({
+          question: q,
+          snippet: undefined,
+          sourceUrl: undefined,
+        }));
+        await appendLog(recipeId, logEntry("SERP", "error",
+          `No PAA questions — using ${syntheticPAA.length} synthetic fallbacks`));
+      }
+
+      // Persist raw SERP to DB
       await db
         .update(recipes)
         .set({ serpData: result as unknown as Record<string, unknown> })
-        .where(eq(recipes.id, recipeId))
+        .where(eq(recipes.id, recipeId));
+
       await appendLog(recipeId, logEntry("SERP", "done",
-        `${result.organic.length} results, ${result.relatedQuestions.length} frequently asked questions`))
-    })
+        `${result.organic.length} organic, ${result.relatedQuestions.length} PAA`));
+
+      return result;
+    }) as Awaited<ReturnType<typeof fetchSerp>>;
+
+    serpText = formatSerpForPrompt(raw);
   } catch (err) {
     if (!isRecoverableError(err as Error)) {
       await logPipelineError({
-        recipeId, stepName: "analyze-serp",
-        errorType: "llm_unavailable", message: (err as Error).message,
+        recipeId,
+        stepName: "analyze-serp",
+        errorType: "llm_unavailable",
+        message: (err as Error).message,
         severity: "critical",
-      })
+      });
     }
-    throw err
+    throw err;
   }
-  await step.sleep("sleep-after-serp", "2s")
 
-  // ── Step 1.5: structure-serp-data ───────────────────────────────────────
-  let structuredSerp: StructuredSerp
-  try {
-    structuredSerp = (await step.run("structure-serp-data", async () => {
-      const [row] = await db
-        .select({ serpData: recipes.serpData })
-        .from(recipes)
-        .where(eq(recipes.id, recipeId))
-      const serp = row?.serpData as SerpResult | undefined
-      if (!serp) throw new Error("SERP data not found — workflow may be corrupted.")
-
-      if (!serp.relatedQuestions || serp.relatedQuestions.length < 2) {
-        const syntheticPAA = generateSyntheticPAA(keyword)
-        serp.relatedQuestions = syntheticPAA.map((q) => ({
-          question: q, snippet: undefined, sourceUrl: undefined,
-        }))
-        await appendLog(recipeId, logEntry("SERP", "error",
-          `No PAA questions — using ${syntheticPAA.length} synthetic PAA fallbacks`))
-      }
-
-      await appendLog(recipeId, logEntry("SERP Structurer", "running",
-        `Structuring SERP data — ${serp.organic.length} competitors, ${serp.relatedQuestions.length} questions`))
-
-      return structureSerpData(keyword, serp, { niche: "recipe", audience: "home cooks", contentGoal: "organic SEO" })
-    })) as StructuredSerp
-  } catch (err) {
-    if (isRecoverableError(err as Error)) throw err
-    await logPipelineError({
-      recipeId, stepName: "structure-serp-data",
-      errorType: "unknown", message: (err as Error).message, severity: "warning",
-    })
-    degraded = true
-    const [row] = await db
-      .select({ serpData: recipes.serpData })
-      .from(recipes)
-      .where(eq(recipes.id, recipeId))
-    const serp = row?.serpData as SerpResult | undefined
-    const fallbackSerp: SerpResult = {
-      organic: serp?.organic ?? [],
-      relatedQuestions: generateSyntheticPAA(keyword).map((q) => ({
-        question: q, snippet: undefined, sourceUrl: undefined,
-      })),
-      knowledgeGraph: undefined,
-      relatedSearches: [],
-    }
-    structuredSerp = structureSerpData(keyword, fallbackSerp, { niche: "recipe", audience: "home cooks", contentGoal: "organic SEO" })
-    await appendLog(recipeId, logEntry("SERP Structurer", "error",
-      `Degraded — using synthetic data (${structuredSerp.normalized_competitors.length} competitors, ${structuredSerp.user_questions.length} questions)`))
-  }
-  await step.sleep("sleep-after-structurer", "1s")
-
-  return { serp: (await db.select({ serpData: recipes.serpData }).from(recipes).where(eq(recipes.id, recipeId)).then(r => r[0]?.serpData)) as unknown as SerpResult, structuredSerp, degraded }
+  await step.sleep("sleep-after-serp", "2s");
+  return { serpText, degraded };
 }

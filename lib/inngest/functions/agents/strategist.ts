@@ -32,6 +32,14 @@ export interface StrategyPlan {
   competitorGaps: string[]
   targetWordCount: string
   contentType: string
+  /** Required citations from the EXTERNAL_SOURCES bank.
+   *  The Strategist selects 1-2 verified facts and assigns each to an H2 section.
+   *  The Writer MUST include these exact citationFormat strings in the article. */
+  requiredCitations: {
+    sourceId: string       // e.g. "usda-poultry-165"
+    h2Section: string      // e.g. "Chef's Tips & What I've Learned"
+    citationFormat: string // exact citation text to insert
+  }[]
 }
 
 // ---------------------------------------------------------------------------
@@ -41,12 +49,10 @@ export interface StrategyPlan {
 export async function agentStrategist(params: {
   keyword: string
   format: "google" | "pin-first"
-  serpOrganic: { title: string; snippet: string }[]
-  serpRelatedQuestions: string[]
-  serpRelatedSearches: string[]
+  serpText: string
   cuisineReplacements: Record<string, string>
 }): Promise<StrategyPlan> {
-  const { keyword, format, serpOrganic, serpRelatedQuestions, serpRelatedSearches, cuisineReplacements } = params
+  const { keyword, format, serpText, cuisineReplacements } = params
 
   try {
     const sources = getRelevantSources(keyword)
@@ -57,12 +63,7 @@ export async function agentStrategist(params: {
     let userPrompt = `Plan an article for the keyword "${keyword}" in ${format} format.
 
 ## Google SERP Data
-${JSON.stringify({
-  competitorTitles: serpOrganic.map(o => o.title).slice(0, 10),
-  snippets: serpOrganic.map(o => o.snippet).slice(0, 10),
-  frequentlyAskedQuestions: serpRelatedQuestions.slice(0, 8),
-  relatedSearches: serpRelatedSearches.slice(0, 8),
-}, null, 2)}`
+${serpText}`
 
     if (sources.length > 0) {
       userPrompt += `\n\n## Authoritative External Sources (reference in plan where relevant)\n${sourcesText}`
@@ -88,14 +89,15 @@ ${JSON.stringify({
       primaryKeyword: result.primaryKeyword ?? keyword,
       secondaryKeywords: result.secondaryKeywords ?? [],
       h2Sections: result.h2Sections ?? [],
-      faqQuestions: result.faqQuestions ?? serpRelatedQuestions.slice(0, 5),
+      faqQuestions: result.faqQuestions ?? [],
       semanticEntities: result.semanticEntities ?? [],
       competitorGaps: result.competitorGaps ?? [],
       targetWordCount: result.targetWordCount ?? (format === "pin-first" ? "1200-1500" : "1800-2200"),
       contentType: result.contentType ?? "recipe",
+      requiredCitations: result.requiredCitations ?? [],
     }
   } catch (err) {
-    // Strategist failure is not fatal — return a minimal plan from SERP data
+    // Strategist failure is not fatal — return a minimal plan
     console.error(`[Strategist] LLM call failed: ${(err as Error).message}`)
     return {
       angle: `${keyword} — recipe and technique guide`,
@@ -105,13 +107,14 @@ ${JSON.stringify({
         { heading: "Ingredients", purpose: "List all ingredients with precise measurements", coverPaa: [] },
         { heading: "Instructions", purpose: "Step-by-step cooking instructions", coverPaa: [] },
         { heading: "Chef's Tips", purpose: "Insider techniques and common mistakes", coverPaa: [] },
-        { heading: "FAQ", purpose: "Answer common questions", coverPaa: serpRelatedQuestions.slice(0, 3) },
+        { heading: "FAQ", purpose: "Answer common questions", coverPaa: [] },
       ],
-      faqQuestions: serpRelatedQuestions.slice(0, 5),
+      faqQuestions: [],
       semanticEntities: [],
       competitorGaps: [],
       targetWordCount: format === "pin-first" ? "1200-1500" : "1800-2200",
       contentType: "recipe",
+      requiredCitations: [],
     }
   }
 }

@@ -21,12 +21,14 @@
 
 import { agentStrategist, type StrategyPlan } from "../agents/strategist"
 import { agentChefAugustin, type ChefAugustinOutput } from "../agents/chef-augustin"
-import { checkCitability } from "@/lib/geo-validator"
+import { agentScienceEnricher, formatEnrichmentsForWriter } from "../agents/science-enricher"
+import { checkCitability, validateCitationPresence } from "@/lib/geo-validator"
 import { validateContent } from "@/lib/content-validator"
-import { computeLoopScore } from "@/lib/loop-scorer"
+import { computeQualityScore } from "@/lib/quality-scorer"
 import { startGeneration, finishGeneration, appendRunLog } from "@/lib/loop-state"
 import type { SerpPhaseResult } from "./serp-phase"
 import { appendLog, logEntry } from "../helpers"
+import { insertQualityLog } from "@/lib/queries"
 
 // ---------------------------------------------------------------------------
 // Types
@@ -55,8 +57,8 @@ export async function runContentLoopPhase(
 
   const startedAt = Date.now()
 
-  // Init STATE.json tracking (single pass — was MAX_PASSES in v12)
-  startGeneration(recipeId, keyword, 1)
+  // Init STATE.json tracking (max 2 attempts — initial + retry on truncation)
+  startGeneration(recipeId, keyword, 2)
 
   // ── Step 2.1: Strategist — Plan once ──────────────────────────────────
 
@@ -69,9 +71,7 @@ export async function runContentLoopPhase(
       const plan = await agentStrategist({
         keyword,
         format,
-        serpOrganic: serpResult.serp.organic.map(o => ({ title: o.title, snippet: o.snippet ?? "" })),
-        serpRelatedQuestions: serpResult.serp.relatedQuestions.map(q => q.question),
-        serpRelatedSearches: serpResult.serp.relatedSearches,
+        serpText: serpResult.serpText,
         cuisineReplacements,
       })
 
@@ -92,13 +92,14 @@ export async function runContentLoopPhase(
         { heading: "Ingredients", purpose: "List all ingredients with precise measurements", coverPaa: [] },
         { heading: "Instructions", purpose: "Step-by-step cooking instructions", coverPaa: [] },
         { heading: "Chef's Tips", purpose: "Insider techniques and common mistakes", coverPaa: [] },
-        { heading: "FAQ", purpose: "Answer common questions", coverPaa: serpResult.serp.relatedQuestions.map(q => q.question).slice(0, 3) },
+        { heading: "FAQ", purpose: "Answer common questions", coverPaa: [] },
       ],
-      faqQuestions: serpResult.serp.relatedQuestions.map(q => q.question).slice(0, 5),
+      faqQuestions: [],
       semanticEntities: [],
       competitorGaps: [],
       targetWordCount: format === "pin-first" ? "1200-1500" : "1800-2200",
       contentType: "recipe",
+      requiredCitations: [],
     }
   }
 
@@ -110,11 +111,14 @@ export async function runContentLoopPhase(
 
   const minWords = format === "pin-first" ? 800 : 1200
   let result: ChefAugustinOutput | null = null
-  let loopScore: ReturnType<typeof computeLoopScore> | null = null
+  let qualityScore: ReturnType<typeof computeQualityScore> | null = null
   let citability: ReturnType<typeof checkCitability> | null = null
   let contentValidation: ReturnType<typeof validateContent> | null = null
   let wordCount = 0
   let attempts = 0
+  let scienceFeedback: string | undefined
+
+  const scienceEnricherEnabled = process.env.SCIENCE_ENRICHER_ENABLED !== "false" // default: true
 
   for (let attempt = 1; attempt <= 2; attempt++) {
     const stepName = attempt === 1 ? "agent-writer" : "agent-writer-retry"
@@ -128,6 +132,7 @@ export async function runContentLoopPhase(
         format,
         strategyPlan,
         cuisineReplacements,
+        feedback: attempt > 1 ? scienceFeedback : undefined,
       })
 
       const wc = (res.contentMarkdown ?? "").split(/\s+/).filter(Boolean).length
@@ -141,8 +146,12 @@ export async function runContentLoopPhase(
         instructions: res.instructions,
         contentType: "recipe",
         format,
+        prepTime: res.prepTime,
+        cookTime: res.cookTime,
+        totalTime: res.totalTime,
+        servings: res.servings,
       })
-      const score = computeLoopScore(geo, val)
+      const score = computeQualityScore(geo, val)
 
       const errors = val.errors.filter(e => e.severity === "error")
       const warnings = val.errors.filter(e => e.severity === "warning")
@@ -157,14 +166,14 @@ export async function runContentLoopPhase(
       return { res, score, geo, val, wc }
     }) as {
       res: ChefAugustinOutput
-      score: ReturnType<typeof computeLoopScore>
+      score: ReturnType<typeof computeQualityScore>
       geo: ReturnType<typeof checkCitability>
       val: ReturnType<typeof validateContent>
       wc: number
     }
 
     result = output.res
-    loopScore = output.score
+    qualityScore = output.score
     citability = output.geo
     contentValidation = output.val
     wordCount = output.wc
@@ -184,12 +193,31 @@ export async function runContentLoopPhase(
       await appendLog(recipeId, logEntry("Writer", "error",
         `Truncated output — ${wordCount}w, ${result.ingredients?.length ?? 0} ingredients, ` +
         `${result.instructions?.length ?? 0} instructions. Retrying once.`))
+
+      // Science Enricher: analyze gaps before retry (non-blocking)
+      if (scienceEnricherEnabled && result.contentMarkdown) {
+        try {
+          const enrichment = await agentScienceEnricher({
+            articleMarkdown: result.contentMarkdown,
+            keyword,
+          })
+          if (enrichment && enrichment.enrichments.length > 0) {
+            scienceFeedback = formatEnrichmentsForWriter(enrichment)
+            await appendLog(recipeId, logEntry("ScienceEnricher", "done",
+              `${enrichment.enrichments.length} enrichments injected as retry feedback`))
+          }
+        } catch (err) {
+          // Science Enricher failure is non-fatal — retry without enrichment
+          await appendLog(recipeId, logEntry("ScienceEnricher", "error",
+            `Enrichment failed: ${(err as Error).message}. Retrying without science feedback.`))
+        }
+      }
     }
   }
 
   // Safe: at least one attempt completed
   const finalResult = result!
-  const finalScore = loopScore!
+  const finalScore = qualityScore!
   const finalCitability = citability!
   const finalValidation = contentValidation!
 
@@ -226,6 +254,17 @@ export async function runContentLoopPhase(
 
   finishGeneration(recipeId, keyword, finalScore.total, attempts, outcome, 70)
 
+  // Citation presence check: did the Writer include required citations?
+  let citationVerified = false
+  if (strategyPlan.requiredCitations.length > 0) {
+    const presenceCheck = validateCitationPresence(finalResult.contentMarkdown ?? "", strategyPlan.requiredCitations)
+    citationVerified = presenceCheck.passed
+    if (!presenceCheck.passed) {
+      await appendLog(recipeId, logEntry("Citation Check", "error",
+        presenceCheck.violations.join("; ")))
+    }
+  }
+
   appendRunLog({
     runId: new Date().toISOString(),
     recipeId,
@@ -235,6 +274,17 @@ export async function runContentLoopPhase(
     duration_s: durationS,
     outcome,
     threshold: 70,
+  })
+
+  // DB-backed telemetry — queryable for quality trend analysis
+  await insertQualityLog({
+    keyword,
+    geoScore: finalCitability.score,
+    qualityScore: finalScore.total,
+    llmCalls: attempts,
+    durationMs: durationS * 1000,
+    outcome,
+    citationVerified,
   })
 
   await appendLog(recipeId, logEntry("Content Gen", passed ? "done" : "error",
