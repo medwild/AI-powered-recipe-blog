@@ -121,7 +121,7 @@ export type RecipeDraft = ChefAugustinOutput
  * ChefAugustinOutput format. Ingredients are parsed from strings to
  * { name, quantity? } objects.
  */
-function recipeArticleToChefAugustinOutput(r: RecipeArticle): ChefAugustinOutput {
+export function recipeArticleToChefAugustinOutput(r: RecipeArticle): ChefAugustinOutput {
   return {
     title: r.title,
     metaTitle: r.metaTitle,

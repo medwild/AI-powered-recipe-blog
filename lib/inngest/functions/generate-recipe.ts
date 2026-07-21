@@ -1,33 +1,60 @@
 /**
- * generate-recipe workflow — Pipeline v13 Single-Pass Content Generation
+ * generate-recipe workflow — Pipeline v14 Single-Shot Content Generation
  *
- * 5 pipeline steps:
- *   1. serp-phase       — Google SERP analysis (Serper API)
- *   2. content-loop      — Strategist (LLM) → Writer (LLM, retry once on truncation) → Quality Gate (code)
- *   3. image-phase       — FLUX-1 → Cloudinary
- *   4. persist-phase     — Validation + DB write (double safety net)
- *   5. pin-phase         — Pin Designer (5 pins per recipe)
+ * 4 pipeline steps:
+ *   1. serp-phase       — Google SERP analysis (Serper API, plain text output)
+ *   2. mega-skill       — Single LLM call with retry loop + quality gate feedback
+ *   3. persist-phase    — Save to DB with validation and JSON-LD
+ *   4. image-phase      — Generate hero image (non-blocking)
  *
- * Architecture (v13):
- *   - Single-pass: the LLM generates, code enforces quality. No iterative loop.
- *   - Strategist plans structure once, Writer generates with all quality rules baked in.
- *   - Deterministic fixes in persist-phase: banned-word scrubbing, meta truncation
- *     (autopilot fallback only), internal linking, SEO gate.
- *   - Retry ONLY on structural truncation (missing ingredients/instructions/words).
- *   - Quality gates: Food safety → REJECT. Word count < minimum → REJECT.
+ * Architecture (v14 Karpathy):
+ *   - One mega-skill replaces 4 agents (Strategist, Writer, Science Enricher, Editor).
+ *   - Structured outputs guarantee valid JSON. No truncation retry needed.
+ *   - Quality Gate blocks on critical issues (food safety, banned words, too short).
+ *   - Retry loop with per-reason feedback injected into the LLM call.
+ *   - Pinterest pins, A/B stats, and human review removed.
  */
 
 import { db } from "@/lib/db"
-import { recipes, type ImageVariant } from "@/lib/db/schema"
+import { recipes } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 import { logPipelineError } from "@/lib/queries"
 import { inngest } from "@/lib/inngest/client"
 import { runSerpPhase } from "./steps/serp-phase"
-import { runContentLoopPhase } from "./steps/content-loop-phase"
-import { persistDraftForReview, waitForApproval, persistFinalDraft, initVariantStats } from "./steps/persist-phase"
-import { runImagePhase } from "./steps/image-phase"
-import { generatePins } from "./steps/pin-phase"
+import { agentChefAugustinMega, recipeArticleToChefAugustinOutput } from "./agents/chef-augustin"
+import type { RecipeArticle } from "./agents/chef-augustin"
+import { qualityGate, type GateResult } from "@/lib/quality-gate"
 import { appendLog, logEntry, isRecoverableError } from "./helpers"
+import { persistFinalDraft } from "./steps/persist-phase"
+import { runImagePhase } from "./steps/image-phase"
+
+// ---------------------------------------------------------------------------
+// Retry strategy (max retries after initial attempt)
+// ---------------------------------------------------------------------------
+
+const MAX_RETRIES: Record<string, number> = {
+  duplicate: 0,
+  food_safety: 1,
+  too_short: 1,
+  banned_words: 2,
+}
+
+function buildFeedback(reason: string, errors: string[]): string {
+  switch (reason) {
+    case "food_safety":
+      return `WARNING: Missing USDA food safety temperatures. ${errors.join(" ")} Fix: mention the required temperatures in both the step text and the structured temperature field.`
+    case "too_short":
+      return errors[0]
+    case "banned_words":
+      return `WARNING: Your previous output contained banned health claims: ${errors.join(" ")}. This is a HARD RULE. Do not use these terms. Rewrite without them.`
+    default:
+      return errors.join(" ")
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Workflow
+// ---------------------------------------------------------------------------
 
 export const generateRecipeWorkflow = inngest.createFunction(
   {
@@ -35,93 +62,135 @@ export const generateRecipeWorkflow = inngest.createFunction(
     triggers: [{ event: "recipe/generate" }],
     concurrency: { key: "generate-recipe-active", limit: 3 },
     throttle: { key: "recipe-generation-throttle", limit: 2, period: "1m" },
-    retries: 2,
+    retries: 1,
     cancelOn: [{ event: "recipe/cancel", match: "data.recipeId" }],
   },
   async ({ event, step }) => {
-    const { recipeId, keyword, cuisine, cuisineIngredients, cuisineTechniques, mode } = event.data as {
-      recipeId: number; keyword: string;
-      cuisine?: string; cuisineIngredients?: string; cuisineTechniques?: string;
-      mode?: string;
+    const { recipeId, keyword, cuisine, cuisineIngredients, cuisineTechniques } = event.data as {
+      recipeId: number
+      keyword: string
+      cuisine?: string
+      cuisineIngredients?: string
+      cuisineTechniques?: string
     }
 
-    const cuisineReplacements = {
+    const cuisineDefaults = {
       cuisine: cuisine || "Easy Weeknight Dinners for Two",
-      cuisine_ingredients: cuisineIngredients || "chicken breast, ground beef, pasta, rice, garlic, onion, olive oil, butter, canned tomatoes, frozen vegetables, eggs",
-      cuisine_techniques: cuisineTechniques || "searing, deglazing, one-pan cooking, sheet-pan roasting, slow cooking, quick sauces, portion scaling",
+      cuisineIngredients: cuisineIngredients || "chicken breast, ground beef, pasta, rice, garlic, onion, olive oil, butter, canned tomatoes, frozen vegetables, eggs",
+      cuisineTechniques: cuisineTechniques || "searing, deglazing, one-pan cooking, sheet-pan roasting, slow cooking, quick sauces, portion scaling",
     }
-
-    const format = (mode === "pin-first" ? "pin-first" : "google") as "google" | "pin-first"
 
     let degraded = false
 
     try {
-      // ── Step 1: SERP ───────────────────────────────────────────────────
+      // ── Step 1: SERP ──────────────────────────────────────────────────
       const serpResult = await runSerpPhase(step, recipeId, keyword)
       degraded = degraded || serpResult.degraded
 
-      // ── Step 2: Content Loop (Evaluator-Optimizer — Pipeline v11) ────
-      const agentResult = await runContentLoopPhase(
-        step, recipeId, keyword, serpResult, cuisineReplacements, format,
+      // ── Step 2: Content Generation (Mega-Skill with retry loop) ──────
+      const article = await step.run("generate-content", async () => {
+        await appendLog(recipeId, logEntry("MegaSkill", "running",
+          `Generating article for "${keyword}" with Opus 4.8 mega-skill`))
+
+        let attempt = 0
+        let feedback = ""
+        let article: RecipeArticle | null = null
+        let gateResult: GateResult = { status: "BLOCK", reason: undefined, errors: undefined }
+        let totalAttempts = 1
+
+        do {
+          article = await agentChefAugustinMega({
+            keyword,
+            ...cuisineDefaults,
+            serpData: serpResult.serpText,
+            citations: "", // external sources handled by the mega-skill
+            feedback: feedback || undefined,
+          })
+
+          gateResult = await qualityGate(article)
+
+          if (gateResult.status === "BLOCK") {
+            const maxRetries = MAX_RETRIES[gateResult.reason!] ?? 0
+            if (attempt < maxRetries) {
+              feedback = buildFeedback(gateResult.reason!, gateResult.errors ?? [])
+              await appendLog(recipeId, logEntry("QualityGate", "error",
+                `${gateResult.reason}: ${gateResult.errors?.join("; ")} (attempt ${attempt + 1}/${maxRetries})`))
+            }
+          }
+          attempt++
+          totalAttempts = attempt
+        } while (gateResult.status === "BLOCK" && attempt <= (MAX_RETRIES[gateResult.reason!] ?? 0))
+
+        if (gateResult.status === "BLOCK") {
+          await appendLog(recipeId, logEntry("QualityGate", "error",
+            `BLOCKED (final): ${gateResult.reason} — ${gateResult.errors?.join("; ")} after ${totalAttempts} attempts`))
+        } else {
+          const wordCount = article!.contentMarkdown?.split(/\s+/).filter(Boolean).length ?? 0
+          await appendLog(recipeId, logEntry("QualityGate", "done",
+            `PASS — ${wordCount} words`))
+        }
+
+        return { article: article!, gateResult, attempts: totalAttempts }
+      }) as { article: RecipeArticle; gateResult: { status: string; reason?: string; errors?: string[] }; attempts: number }
+
+      // ── Step 3: Persist ───────────────────────────────────────────────
+      const legacyArticle = recipeArticleToChefAugustinOutput(article.article)
+      const persistResult = await persistFinalDraft(
+        step, recipeId,
+        legacyArticle, "", // no heroImageUrl yet
+        [], // no imageVariants yet
+        keyword, "google", degraded,
       )
-      degraded = degraded || agentResult.degraded
 
-      // ── Step 3: Persist draft for review ───────────────────────────────
-      await persistDraftForReview(step, recipeId, agentResult.output)
-      await step.sleep("sleep-after-draft", "2s")
-
-      // ── Step 4: Wait for approval ──────────────────────────────────────
-      await waitForApproval(step, recipeId)
-      await step.sleep("sleep-after-approval", "5s")
-
-      // ── Step 5: Images ─────────────────────────────────────────────────
-      const imageResult = await runImagePhase(step, recipeId, agentResult.output, keyword)
-      degraded = degraded || imageResult.degraded
-
-      // ── Step 6: Final persist with validation ──────────────────────────
-      await persistFinalDraft(
-        step, recipeId, agentResult.output,
-        imageResult.heroImageUrl, imageResult.imageVariants as ImageVariant[],
-        keyword, format, degraded,
-      )
-
-      // ── Step 7: A/B stats ──────────────────────────────────────────────
-      try {
-        await initVariantStats(step, recipeId, imageResult.imageVariants as ImageVariant[])
-      } catch (err) {
-        await logPipelineError({
-          recipeId, stepName: "init-variant-stats",
-          errorType: "unknown", message: (err as Error).message, severity: "warning",
-        })
+      if (persistResult?.blocked || article.gateResult.status === "BLOCK") {
+        await appendLog(recipeId, logEntry("Workflow", "done",
+          `Content blocked or in draft — skipping image generation`))
+        return
       }
 
-      // ── Step 8: Pin Designer ───────────────────────────────────────────
+      // ── Step 4: Image (non-blocking) ──────────────────────────────────
       try {
-        await generatePins(
-          step, recipeId, agentResult.output,
-          imageResult.heroImageUrl, imageResult.imageVariants as ImageVariant[],
-          cuisine,
-        )
+        const imageResult = await runImagePhase(step, recipeId, article.article, keyword)
+        if (imageResult.heroImageUrl) {
+          await db
+            .update(recipes)
+            .set({ heroImageUrl: imageResult.heroImageUrl, updatedAt: new Date() })
+            .where(eq(recipes.id, recipeId))
+        }
       } catch (err) {
         await logPipelineError({
-          recipeId, stepName: "agent-pin-designer",
-          errorType: "unknown", message: (err as Error).message, severity: "warning",
+          recipeId,
+          stepName: "image-phase",
+          errorType: "unknown",
+          message: (err as Error).message,
+          severity: "warning",
         })
+        await appendLog(recipeId, logEntry("Image", "error",
+          `Image generation failed (non-blocking): ${(err as Error).message}`))
       }
 
-      await appendLog(recipeId, logEntry("Workflow", "done", `Pipeline complete — ${format} format`))
+      await appendLog(recipeId, logEntry("Workflow", "done", "Pipeline v14 complete"))
 
     } catch (err) {
-      if (isRecoverableError(err as Error)) throw err // Inngest will retry
+      if (isRecoverableError(err as Error)) throw err
 
-      await logPipelineError({
-        recipeId, stepName: "generate-recipe",
-        errorType: "unknown", message: (err as Error).message, severity: "critical",
+      await step.run("handle-pipeline-failure", async () => {
+        await logPipelineError({
+          recipeId,
+          stepName: "generate-recipe",
+          errorType: "unknown",
+          message: (err as Error).message,
+          severity: "critical",
+        })
+
+        await db
+          .update(recipes)
+          .set({ status: "draft", updatedAt: new Date() })
+          .where(eq(recipes.id, recipeId))
+
+        await appendLog(recipeId, logEntry("Workflow", "error",
+          `Pipeline failed: ${(err as Error).message.substring(0, 300)}`))
       })
-
-      await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
-      await appendLog(recipeId, logEntry("Workflow", "error",
-        `Pipeline failed: ${(err as Error).message.substring(0, 300)}`))
     }
   },
 )
