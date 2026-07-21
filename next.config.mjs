@@ -13,8 +13,10 @@ const nextConfig = {
     ],
   },
   allowedDevOrigins: [
-    "3000-firebase-ai-blog-builder-1782152933144.cluster-cbeiita7rbe7iuwhvjs5zww2i4.cloudworkstations.dev",
-  ],
+    process.env.NEXT_PUBLIC_SITE_URL ? new URL(process.env.NEXT_PUBLIC_SITE_URL).host : undefined,
+    // Cloud Workstations dynamic ports — match any port prefix on the cluster domain
+    "*.cluster-cbeiita7rbe7iuwhvjs5zww2i4.cloudworkstations.dev",
+  ].filter(Boolean),
   async headers() {
     return [
       {
@@ -38,7 +40,7 @@ const nextConfig = {
               "connect-src 'self' https://res.cloudinary.com",
               "frame-ancestors 'none'",
               "base-uri 'self'",
-              "form-action 'self'",
+              "form-action *",
             ].join("; "),
           },
         ],

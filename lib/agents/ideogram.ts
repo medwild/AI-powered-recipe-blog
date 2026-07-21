@@ -3,15 +3,10 @@
  *
  * Best-in-class food photography: accurate text rendering, natural lighting,
  * 2:3 aspect ratio support (Pinterest standard).
- *
- * Falls back to Cloudflare Workers AI (FLUX-1-Schnell) if IDEOGRAM_API_KEY
- * is not set or if Ideogram returns a non-retryable error.
  */
 
-import { runImage as cfRunImage } from "./cloudflare"
-
-const BASE_URL = "https://api.ideogram.ai/v1"
-const MODEL = process.env.IDEOGRAM_MODEL || "V_4_TURBO"
+const BASE_URL = "https://api.ideogram.ai"
+const MODEL = process.env.IDEOGRAM_MODEL || "V_3"
 const API_KEY = process.env.IDEOGRAM_API_KEY
 
 function isConfigured(): boolean {
@@ -19,10 +14,8 @@ function isConfigured(): boolean {
 }
 
 export async function runImage(prompt: string): Promise<Buffer> {
-  // Fallback to Cloudflare if Ideogram not configured
   if (!isConfigured()) {
-    console.log("[provider] Ideogram not configured — falling back to Cloudflare FLUX")
-    return cfRunImage(prompt)
+    throw new Error("IDEOGRAM_API_KEY must be set for image generation.")
   }
 
   const controller = new AbortController()
@@ -36,22 +29,18 @@ export async function runImage(prompt: string): Promise<Buffer> {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        prompt,
-        model: MODEL,
-        aspect_ratio: "2:3",
-        resolution: "RESOLUTION_1024_1536", // 1024x1536 — Pinterest 2:3
-        magic_prompt_option: "AUTO",
+        image_request: {
+          prompt,
+          model: MODEL,
+          aspect_ratio: "ASPECT_2_3",
+          magic_prompt_option: "AUTO",
+        },
       }),
       signal: controller.signal,
     })
 
     if (!res.ok) {
       const text = await res.text()
-      // Non-retryable errors (4xx except 429) → fallback to Cloudflare
-      if (res.status >= 400 && res.status < 500 && res.status !== 429) {
-        console.warn(`[Ideogram] Non-retryable error (${res.status}): ${text} — falling back to Cloudflare`)
-        return cfRunImage(prompt)
-      }
       throw new Error(`Ideogram image generation failed (${res.status}): ${text}`)
     }
 
@@ -59,25 +48,40 @@ export async function runImage(prompt: string): Promise<Buffer> {
 
     // Ideogram returns { data: [{ url: "..." }] }
     const imageUrl = data?.data?.[0]?.url
-    if (!imageUrl || typeof imageUrl !== "string") {
-      console.warn("[Ideogram] No image URL in response — falling back to Cloudflare")
-      return cfRunImage(prompt)
+    if (imageUrl && typeof imageUrl === "string") {
+      // Download the image buffer
+      const imgRes = await fetch(imageUrl)
+      if (!imgRes.ok) {
+        throw new Error(`Failed to download image from Ideogram CDN (${imgRes.status})`)
+      }
+
+      const arrayBuffer = await imgRes.arrayBuffer()
+      const buffer = Buffer.from(arrayBuffer)
+
+      console.log(`[provider] Ideogram ${MODEL} — success (${buffer.length} bytes)`)
+      return buffer
     }
 
-    // Download the image buffer
-    const imgRes = await fetch(imageUrl)
-    if (!imgRes.ok) {
-      throw new Error(`Failed to download image from Ideogram CDN (${imgRes.status})`)
+    // Fallback: try { url: "..." } (flat response)
+    const flatUrl = data?.url
+    if (flatUrl && typeof flatUrl === "string") {
+      const imgRes = await fetch(flatUrl)
+      if (!imgRes.ok) {
+        throw new Error(`Failed to download image from Ideogram CDN (${imgRes.status})`)
+      }
+
+      const arrayBuffer = await imgRes.arrayBuffer()
+      const buffer = Buffer.from(arrayBuffer)
+
+      console.log(`[provider] Ideogram ${MODEL} — success (${buffer.length} bytes)`)
+      return buffer
     }
 
-    const arrayBuffer = await imgRes.arrayBuffer()
-    const buffer = Buffer.from(arrayBuffer)
-
-    console.log(`[provider] Ideogram ${MODEL} — success (${buffer.length} bytes)`)
-    return buffer
+    throw new Error(`Ideogram returned no image URL in response: ${JSON.stringify(data).substring(0, 300)}`)
   } catch (err) {
-    const msg = (err as Error).message
-    // Retryable errors → throw (Inngest will retry)
+    const normalized = err instanceof Error ? err : new Error(String(err))
+    const msg = normalized.message
+    // Retryable errors (Inngest will retry)
     if (
       msg.includes("429") ||
       msg.includes("500") ||
@@ -89,9 +93,8 @@ export async function runImage(prompt: string): Promise<Buffer> {
     ) {
       throw err
     }
-    // Non-retryable → fallback to Cloudflare
-    console.warn(`[Ideogram] Falling back to Cloudflare after: ${msg}`)
-    return cfRunImage(prompt)
+    // Non-retryable — wrap and throw
+    throw new Error(msg, { cause: err })
   } finally {
     clearTimeout(timer)
   }

@@ -49,7 +49,7 @@
 - Référence : `.claude/rules/security.md`
 
 ### 8. Ne jamais modifier l'ordre des steps du pipeline Inngest
-- Ordre fixe : SERP → Strategist → Writer → Auditor → Human Review → Editor/QA → Image → Persist → A/B Stats → AOR
+- Ordre fixe : SERP → Strategist → Writer → Quality Gate → Persist Draft → Human Review → Images → Final Persist + Validation → A/B Stats → Pin Designer
 - Changer l'ordre casse les dépendances inter-step
 - Référence : `.claude/rules/ai-pipeline.md`
 

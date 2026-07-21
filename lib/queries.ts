@@ -388,3 +388,36 @@ export async function getPinDraftsForRecipe(recipeId: number) {
     .where(eq(pinDrafts.recipeId, recipeId))
     .orderBy(desc(pinDrafts.ptraScore))
 }
+
+/** Insert a pipeline quality telemetry record into self_improvement_logs.
+ *  Queryable via SQL for performance analysis across generations. */
+export async function insertQualityLog(params: {
+  keyword: string
+  geoScore: number
+  qualityScore: number
+  llmCalls: number
+  durationMs: number
+  outcome: string
+  citationVerified: boolean
+}): Promise<void> {
+  try {
+    await db.insert(selfImprovementLogs).values({
+      keyword: params.keyword,
+      recommendation: `Pipeline v13: ${params.outcome}`,
+      criterion: "pipeline_telemetry",
+      score: String(params.qualityScore),
+      tags: [
+        params.outcome,
+        `geo:${params.geoScore}`,
+        `calls:${params.llmCalls}`,
+        `v13`,
+        params.citationVerified ? "citations-ok" : "citation-violation",
+      ],
+      source: "pipeline",
+      aiScore: String(params.geoScore),
+    })
+  } catch {
+    // Telemetry failure is never fatal — log and continue
+    console.error("[queries] Failed to insert quality log")
+  }
+}

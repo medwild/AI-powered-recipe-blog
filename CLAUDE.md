@@ -33,31 +33,6 @@ Validateurs déterministes utilisés :
 - `lib/content-validator.ts` : Banned words, health claims, structure, word count
 - `lib/loop-scorer.ts` : Score composite (GEO 50% + Content 30% + Structure 20%)
 
-### Pin Designer
-
-| Paramètre | Valeur |
-|---|---|
-| Modèle | DeepSeek v4 Pro (via provider) |
-| Skill | `skills/agent-pin-designer.md` |
-| Output | 5 pins par recette (titles, descriptions, image prompts) |
-
-## État réel (post-corrections — 2026-07-17)
-
-✅ Pipeline v13 Single-Pass (Strategist → Writer → Quality Gate)
-✅ Agent unique Chef Augustin (1 LLM call pour le contenu + 1 Strategist pour la structure)
-✅ Quality Gate déterministe (food safety, word count, structure)
-✅ Retry uniquement sur truncation (max 2 tentatives)
-✅ Deterministic fixes post-génération (banned words, internal linking, SEO gate)
-✅ GEO thresholds calibrés pour DeepSeek v4 Pro
-✅ Autopilot mode (AUTOPILOT=true)
-✅ A/B testing images multi-variant
-✅ PAA fallback (8 questions synthétiques si Serper vide)
-✅ ContentValidator + SEO Gate (double filet de sécurité)
-✅ JSON-LD @graph (Recipe + BlogPosting + FAQPage + BreadcrumbList)
-✅ STATE.json pour le suivi d'état (format JSON natif)
-✅ Architecture providers : AnthropicProvider + DeepSeekProvider (défaut DeepSeek)
-✅ JSON repair via jsonrepair library (`lib/agents/json-utils.ts`)
-
 ## Règles globales
 
 - **Avant toute modification** : lire `.claude/rules/global.md` — 15 règles absolues NEVER + checklist
@@ -65,14 +40,6 @@ Validateurs déterministes utilisés :
 - **Après toute modification du pipeline** : `npx tsc --noEmit` obligatoire
 - **Ne jamais modifier un skill Markdown** sans vérifier l'agent runtime correspondant
 - Les variables d'env sont documentées dans `.env.example` — ne pas les hardcoder
-
-## Contrats inter-agents
-
-Deux agents LLM + un Quality Gate déterministe :
-
-- **Strategist → Writer** : `StrategyPlan` (angle, H2s, FAQs, gaps, targetWordCount)
-- **Writer → Quality Gate** : `ChefAugustinOutput` (JSON complet : titre, meta, contenu markdown, ingrédients, instructions, tags, temps, imagePrompt, jsonLd)
-- **Quality Gate → Persist** : Meilleur `ChefAugustinOutput` validé (ou REJECT si food safety / trop court)
 
 ## Self-Improvement (boucle fermée)
 

@@ -1,6 +1,6 @@
 ---
 paths:
-  - "middleware.ts"
+  - "proxy.ts"
   - "app/api/**"
   - "lib/rate-limit.ts"
 ---
@@ -26,9 +26,9 @@ paths:
 - Les opérations DB utilisent les query builders Drizzle, jamais de raw SQL avec input utilisateur
 
 ## Auth
-- `/dashboard` et ses sous-routes sont protégés par `middleware.ts` (cookie `dashboard_auth`)
+- `/dashboard` et ses sous-routes sont protégés par `proxy.ts` (cookie `dashboard_auth`)
 - `DASHBOARD_SECRET_TOKEN` doit être ≥32 caractères hex
 - Les routes API sensibles utilisent `checkRateLimit()` (in-memory, configurable via `RATE_LIMIT_MAX_PER_MINUTE`)
 
 ## Vérification
-- Après toute modification touchant la sécurité : relire `middleware.ts`, `lib/rate-limit.ts`, et les routes API concernées
+- Après toute modification touchant la sécurité : relire `proxy.ts`, `lib/rate-limit.ts`, et les routes API concernées

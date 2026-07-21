@@ -40,7 +40,6 @@ skills/
 ├ README.md                              # This file
 ├ agent-chef-augustin.md                 # Agent unique — Writer
 ├ agent-strategist.md                    # Agent — Content Strategist
-├ agent-judge.md                         # Agent — Quality Evaluator
 ├ agent-science-enricher.md              # Agent — Food Science Enricher (DeepSeek v4 Pro)
 ├ agent-pin-designer.md                  # Agent — Pin Designer (PTRA framework)
 ├ references/                            # Reference documents (loaded by agents)
@@ -63,7 +62,6 @@ skills/
 |---|---|---|---|
 | `agent-chef-augustin` | Chef Augustin | DeepSeek v4 Pro | Writer — full article + image prompt + JSON-LD |
 | `agent-strategist` | Strategist | DeepSeek v4 Pro | Content strategy — SERP analysis + H2 planning |
-| `agent-judge` | Judge v2.0 | DeepSeek v4 Pro | Quality evaluation — 5 dimensions + Voice Authenticity |
 | `agent-science-enricher` | Science Enricher | DeepSeek v4 Pro | Food science gap analysis — 6 enrichment types |
 | `agent-pin-designer` | Pin Designer | DeepSeek v4 Pro | 5 Pinterest Pins — PTRA scoring + Content Graph |
 

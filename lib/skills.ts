@@ -223,7 +223,7 @@ export function buildDefaultPrompt(source: PromptSource): string {
   // -----------------------------------------------------------------------
   // Couche 9 — Format / Ratio
   // -----------------------------------------------------------------------
-  const format = "3:4 vertical aspect ratio, suitable for Pinterest and Instagram"
+  const format = "2:3 vertical aspect ratio, suitable for Pinterest and Instagram"
 
   // -----------------------------------------------------------------------
   // Couche 10 — Exclusions (formulées positivement)

@@ -16,4 +16,5 @@ data/pinterest-clusters.json
 # Common ignores
 node_modules
 .next/
-.DS_Store
+.DS_StoreSTATE.json
+loop-run-log.md

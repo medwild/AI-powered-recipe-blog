@@ -8,9 +8,9 @@
  * Usage: npm run test:pipeline
  */
 
-import { extractJson } from "../lib/agents/cloudflare"
+import { extractJson } from "../lib/agents/json-utils"
 import { slugify } from "../lib/slug"
-import { generateSyntheticPAA } from "../lib/inngest/functions/generate-recipe"
+import { generateSyntheticPAA } from "../lib/inngest/functions/helpers"
 import { checkRateLimit } from "../lib/rate-limit"
 
 // ---------------------------------------------------------------------------
@@ -85,8 +85,8 @@ console.log("── extractJson ──")
 {
   assertThrows(
     () => extractJson("This is just text with no JSON object anywhere."),
-    "No JSON object found",
-    "No JSON present — throws 'No JSON object found'",
+    "No JSON found in model output",
+    "No JSON present — throws 'No JSON found in model output'",
   )
 }
 

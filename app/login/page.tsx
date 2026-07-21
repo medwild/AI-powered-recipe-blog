@@ -1,42 +1,12 @@
-"use client"
-
-import { useState } from "react"
 import { LogIn } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 
-export default function LoginPage() {
-  const [token, setToken] = useState("")
-  const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setError("")
-    setLoading(true)
-
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token }),
-      })
-
-      if (!res.ok) {
-        const data = await res.json()
-        setError(data.error || "Invalid token")
-        setLoading(false)
-        return
-      }
-
-      // Hard navigation pour garantir que le cookie est lu par le middleware
-      window.location.assign("/dashboard")
-    } catch {
-      setError("Connection error. Please try again.")
-      setLoading(false)
-    }
-  }
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>
+}) {
+  const params = await searchParams
+  const error = params.error ? decodeURIComponent(params.error) : null
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -46,17 +16,19 @@ export default function LoginPage() {
           Enter the dashboard access token.
         </p>
 
-        <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
+        <form action="/api/auth/login" method="GET" className="mt-6 flex flex-col gap-4">
           <div className="flex flex-col gap-2">
-            <Label htmlFor="token">Access token</Label>
-            <Input
+            <label htmlFor="token" className="text-sm font-medium leading-none">
+              Access token
+            </label>
+            <input
               id="token"
+              name="token"
               type="password"
-              value={token}
-              onChange={(e) => setToken(e.target.value)}
               placeholder="Enter token..."
-              disabled={loading}
               autoFocus
+              required
+              className="h-8 w-full min-w-0 rounded-lg border border-input bg-transparent px-2.5 py-1 text-base transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm"
             />
           </div>
 
@@ -66,10 +38,13 @@ export default function LoginPage() {
             </p>
           ) : null}
 
-          <Button type="submit" disabled={loading || !token.trim()}>
-            <LogIn className="mr-2 h-4 w-4" aria-hidden="true" />
-            {loading ? "Loading..." : "Access dashboard"}
-          </Button>
+          <button
+            type="submit"
+            className="inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:ring-3 focus-visible:ring-ring/50"
+          >
+            <LogIn className="h-4 w-4" aria-hidden="true" />
+            Access dashboard
+          </button>
         </form>
       </div>
     </div>

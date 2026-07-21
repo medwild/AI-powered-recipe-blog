@@ -103,5 +103,11 @@
       "WebFetch(domain:techcrunch.com)",
       "WebFetch(domain:www.zdnet.com)"
     ]
+  },
+  "skillOverrides": {
+    "seo-organic-rankings-analyzer": "off"
+  },
+  "enabledPlugins": {
+    "skill-creator@claude-plugins-official": false
   }
 }

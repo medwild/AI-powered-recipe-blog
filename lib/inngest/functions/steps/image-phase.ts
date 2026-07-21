@@ -7,7 +7,9 @@
 
 import { runImage } from "@/lib/agents/ideogram"
 import { uploadImage } from "@/lib/agents/cloudinary"
-import { appendLog, logEntry, isRecoverableError } from "../helpers"
+import { optimizeImagePrompt } from "@/lib/skills"
+import { validateImage } from "@/lib/image-validator"
+import { appendLog, logEntry } from "../helpers"
 import { logPipelineError } from "@/lib/queries"
 
 const IMAGE_VARIANT_COUNT = Math.min(
@@ -29,10 +31,13 @@ export async function runImagePhase(
 ): Promise<ImagePhaseResult> {
   let degraded = false
 
-  // Use the unified agent's image prompt, or fall back to a deterministic one
-  const imagePrompt = recipe.imagePrompt?.trim()
-    ? recipe.imagePrompt
-    : `Professional food photography of ${recipe.title}, natural window light, styled on rustic ceramic plate, overhead flat-lay composition, shallow depth of field, warm tones, 2:3 vertical aspect ratio, editorial food photography`
+  // Use the unified agent's image prompt, or fall back to the deterministic 10-layer builder
+  const imagePrompt = optimizeImagePrompt({
+    title: recipe.title,
+    tags: recipe.tags,
+    imagePrompt: recipe.imagePrompt,
+    keyword,
+  })
 
   await appendLog(recipeId, logEntry("Image Prompt", "done", `Using image prompt (${imagePrompt.length} chars)`))
   await step.sleep("sleep-after-image-prompt", "2s")
@@ -58,6 +63,20 @@ export async function runImagePhase(
 
       imageVariants.push({ label: `Variant ${vi + 1}`, url: imageUrl, prompt: imagePrompt })
       if (!heroImageUrl) heroImageUrl = imageUrl
+
+      // Non-blocking image quality validation (v13 — was dead code before Phase 3)
+      try {
+        const imgValidation = await validateImage(imageUrl, { requireAltText: true, altText: recipe.title })
+        if (!imgValidation.passed) {
+          const issues = imgValidation.errors.map(e => e.message).join("; ")
+          await appendLog(recipeId, logEntry("Image Validator", "done",
+            `Variant ${vi + 1} has ${imgValidation.errors.length} issue(s): ${issues}`))
+        }
+      } catch (imgErr) {
+        // Image validation failure is non-blocking — log and continue
+        await appendLog(recipeId, logEntry("Image Validator", "error",
+          `Validation failed for v${vi}: ${(imgErr as Error).message}`))
+      }
     } catch (err) {
       degraded = true
       await logPipelineError({
