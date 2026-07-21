@@ -1,17 +1,16 @@
 /**
- * Steps 5 + 10 + 11 + 12 — Draft persistence, self-improvement, final JSON-LD, stats.
+ * Step 10 — Draft persistence with JSON-LD enrichment, sitemap ping.
  */
 
 import { db } from "@/lib/db"
-import { recipes, imageVariantStats, type ImageVariant } from "@/lib/db/schema"
+import { recipes, type ImageVariant } from "@/lib/db/schema"
 import { eq, desc } from "drizzle-orm"
 import { slugify } from "@/lib/slug"
 import type { RecipeDraft } from "../agents/chef-augustin"
-import { validateContent, scrubBannedWords, checkContentSimilarity } from "@/lib/content-validator"
+import { validateContent, checkContentSimilarity } from "@/lib/content-validator"
 import { checkCitability } from "@/lib/geo-validator"
 import { appendLog, logEntry, SITE_URL, stripHtmlComments, stripBracketTokens } from "../helpers"
 import { runSeoGate } from "@/lib/seo/gate"
-import { insertContextualLinks } from "@/lib/internal-linker"
 
 // ── Duration formatting for JSON-LD ──────────────────────────────────────────
 
@@ -40,55 +39,9 @@ function formatDuration(input: string): string {
   return `PT${totalMinutes}M`
 }
 
-/** Step 5 — Persist draft for human review. */
-export async function persistDraftForReview(
-  step: { run: (name: string, fn: () => Promise<unknown>) => Promise<unknown>; sleep: (name: string, dur: string) => Promise<void> },
-  recipeId: number, draft: RecipeDraft,
-) {
-  await step.run("persist-draft-for-review", async () => {
-    await db.update(recipes).set({
-      title: draft.title, metaTitle: draft.metaTitle, metaDescription: draft.metaDescription,
-      excerpt: draft.excerpt, contentMarkdown: draft.contentMarkdown,
-      prepTime: draft.prepTime, cookTime: draft.cookTime, totalTime: draft.totalTime,
-      servings: draft.servings, difficulty: draft.difficulty,
-      ingredients: draft.ingredients, instructions: draft.instructions, tags: draft.tags,
-      status: "draft_review", updatedAt: new Date(),
-    }).where(eq(recipes.id, recipeId))
-    const wordCount = (draft.contentMarkdown ?? "").split(/\s+/).filter(Boolean).length
-    await appendLog(recipeId, logEntry("Human Review", "running",
-      `Awaiting approval — ${wordCount} words, ${(draft.ingredients ?? []).length} ingredients, ${(draft.instructions ?? []).length} steps`))
-  })
-}
-
-/** Step 6 — Wait for human approval (or auto-approve). Returns true if approved. */
-export async function waitForApproval(
-  step: { run: (name: string, fn: () => Promise<unknown>) => Promise<unknown>; waitForEvent: (name: string, opts: { event: string; timeout: string; if: string }) => Promise<unknown>; sleep: (name: string, dur: string) => Promise<void> },
-  recipeId: number,
-): Promise<boolean> {
-  const autoApprove = process.env.AUTO_APPROVE === "true"
-  if (!autoApprove) {
-    const approval = await step.waitForEvent("wait-for-approval", {
-      event: "recipe/approved", timeout: "7d", if: `event.data.recipeId == ${recipeId}`,
-    })
-    if (!approval) {
-      await step.run("log-approval-expired", async () => {
-        await db.update(recipes).set({ status: "expired", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
-        await appendLog(recipeId, logEntry("Human Review", "error", "7-day approval window expired — recipe expired"))
-      })
-      throw new Error("APPROVAL_TIMEOUT")
-    }
-    await step.run("log-approval-granted", async () => {
-      await appendLog(recipeId, logEntry("Human Review", "done", "Recipe approved — launching final editing"))
-    })
-  } else {
-    await step.run("log-auto-approve", async () => {
-      await appendLog(recipeId, logEntry("Human Review", "done", "Auto-approved (AUTO_APPROVE=true) — launching final editing"))
-    })
-  }
-  return true
-}
-
-/** Step 10 — Persist the final draft with JSON-LD enrichment. */
+/** Step 10 — Persist the final draft with JSON-LD enrichment.
+ * Returns `{ blocked: true }` if content was rejected by quality gates,
+ * so the caller can skip downstream steps (Pin generation, A/B stats). */
 export async function persistFinalDraft(
   step: { run: (name: string, fn: () => Promise<unknown>) => Promise<unknown> },
   recipeId: number, finalRecipe: RecipeDraft,
@@ -96,39 +49,9 @@ export async function persistFinalDraft(
   keyword: string,
   format: "google" | "pin-first" = "google",
   degraded = false,
-) {
-  await step.run("persist-draft-final", async () => {
+): Promise<{ blocked: boolean }> {
+  const result = await step.run("persist-draft-final", async () => {
     const isAutopilot = process.env.AUTOPILOT === "true"
-
-    // SEO guards — meta title / description length validation.
-    // Rule §3.5: mechanical truncation is a LAST-RESORT fallback, never the rule.
-    // Non-autopilot: block publication so a human can rewrite naturally.
-    // Autopilot: truncate as fallback (no human available).
-    if (finalRecipe.metaTitle && finalRecipe.metaTitle.length > 60) {
-      if (isAutopilot) {
-        await appendLog(recipeId, logEntry("Workflow", "error",
-          `Meta title is ${finalRecipe.metaTitle.length} chars (max 60). Autopilot: truncating as last-resort fallback.`))
-        finalRecipe.metaTitle = finalRecipe.metaTitle.substring(0, 57).replace(/\s\S*$/, "") + "…"
-      } else {
-        await appendLog(recipeId, logEntry("Workflow", "error",
-          `Meta title is ${finalRecipe.metaTitle.length} chars (max 60). BLOCKED — requires human rewrite.`))
-        await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
-        return
-      }
-    }
-    if (finalRecipe.metaDescription && finalRecipe.metaDescription.length > 155) {
-      if (isAutopilot) {
-        await appendLog(recipeId, logEntry("Workflow", "error",
-          `Meta description is ${finalRecipe.metaDescription.length} chars (max 155). Autopilot: truncating as last-resort fallback.`))
-        finalRecipe.metaDescription = finalRecipe.metaDescription.substring(0, 152).replace(/\s\S*$/, "") + "…"
-      } else {
-        await appendLog(recipeId, logEntry("Workflow", "error",
-          `Meta description is ${finalRecipe.metaDescription.length} chars (max 155). BLOCKED — requires human rewrite.`))
-        await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
-        return
-      }
-    }
-
     const wordCount = (finalRecipe.contentMarkdown ?? "").split(/\s+/).filter(Boolean).length
 
     // Pin-first IMAGE placeholder validation (warning-only)
@@ -149,15 +72,6 @@ export async function persistFinalDraft(
       finalRecipe.contentMarkdown = sanitizedMarkdown
       await appendLog(recipeId, logEntry("Workflow", "error",
         "HTML comments or bracket tokens stripped at persist — Writer/Editor missed them"))
-    }
-
-    // Deterministic banned-word scrubbing — LAST-RESORT safety net.
-    // The Editor should already have removed these; this catches what slips through.
-    const scrubbed = scrubBannedWords(finalRecipe.contentMarkdown ?? "")
-    if (scrubbed.replacements.length > 0) {
-      finalRecipe.contentMarkdown = scrubbed.scrubbed
-      await appendLog(recipeId, logEntry("Workflow", "error",
-        `Banned words scrubbed (Editor missed): ${scrubbed.replacements.join("; ")}`))
     }
 
     // Content similarity check — catch near-duplicate content before publication.
@@ -181,7 +95,7 @@ export async function persistFinalDraft(
         `Content similarity BLOCKED: ${topMatch.similarity}% similar to "${topMatch.title}" (/${topMatch.slug}). ` +
         similarityResult.matches.map(m => `${m.similarity}% → ${m.title}`).join("; ")))
       await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
-      return
+      return { blocked: true }
     }
     if (similarityResult.matches.length > 0) {
       await appendLog(recipeId, logEntry("Workflow", "error",
@@ -197,23 +111,12 @@ export async function persistFinalDraft(
       finalRecipe.contentMarkdown = finalRecipe.contentMarkdown.replace(/\{\{current_month_year\}\}/g, currentMonthYear)
     }
 
-    // Internal Linking — insert 2-3 contextual links to related recipes.
-    // Runs deterministically (no AI), same-cluster priority.
-    try {
-      const enriched = await insertContextualLinks(
-        finalRecipe.contentMarkdown ?? "",
-        recipeId,
-        finalRecipe.tags ?? [],
+    // Replace [IMAGE:alt text] placeholders with actual <img> tags.
+    if (heroImageUrl && finalRecipe.contentMarkdown?.includes("[IMAGE:")) {
+      finalRecipe.contentMarkdown = finalRecipe.contentMarkdown.replace(
+        /\[IMAGE:\s*(.+?)\]/g,
+        (_, alt) => `<img src="${heroImageUrl}" alt="${alt.trim()}" loading="lazy" />`,
       )
-      if (enriched !== finalRecipe.contentMarkdown) {
-        finalRecipe.contentMarkdown = enriched
-        await appendLog(recipeId, logEntry("Internal Linker", "done",
-          "Contextual links inserted into markdown"))
-      }
-    } catch (err) {
-      // Non-blocking — linker failure should never prevent publication
-      await appendLog(recipeId, logEntry("Internal Linker", "error",
-        `Link insertion failed: ${err instanceof Error ? err.message : String(err)}`))
     }
 
     // GEO Citability check — thresholds configurable via env.
@@ -236,7 +139,7 @@ export async function persistFinalDraft(
           `Attributions: ${citability.attributions.count}/${citability.attributions.minRequired}. ` +
           citability.feedback))
         await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
-        return
+        return { blocked: true }
       }
     }
     if (citability.score < geoWarnThreshold) {
@@ -255,30 +158,6 @@ export async function persistFinalDraft(
     // Deterministic content validation — catches banned words, token leaks,
     // missing fields BEFORE publication. Runs regardless of LLM availability.
     let validation = validateContent({ ...finalRecipe, contentType: "recipe", format })
-
-    // Auto-remediate: if ContentValidator found recoverable errors (banned words,
-    // health claims), use the deterministic scrubber with proper replacements
-    // instead of breaking text with [...]. Re-validate after scrubbing.
-    if (!validation.passed) {
-      const fixableErrors = validation.errors.filter(e =>
-        e.severity === "error" &&
-        (e.message.includes("Banned word") || e.message.includes("Unsourced health claim"))
-      )
-
-      if (fixableErrors.length > 0) {
-        const { scrubbed, replacements } = scrubBannedWords(finalRecipe.contentMarkdown ?? "")
-        if (replacements.length > 0) {
-          finalRecipe.contentMarkdown = scrubbed
-          for (const r of replacements) {
-            await appendLog(recipeId, logEntry("Workflow", "error",
-              `Auto-scrubbed: ${r} (ContentValidator remediation)`))
-          }
-        }
-
-        // Re-validate after deterministic scrubbing
-        validation = validateContent({ ...finalRecipe, contentType: "recipe", format })
-      }
-    }
 
     if (!validation.passed) {
       const errorList = validation.errors
@@ -299,13 +178,13 @@ export async function persistFinalDraft(
         if (hasStructuralErrors) {
           await appendLog(recipeId, logEntry("Workflow", "error", `ContentValidator STRUCTURAL FAIL (autopilot: BLOCKED): ${errorList}. Marking as draft.`))
           await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
-          return
+          return { blocked: true }
         }
         await appendLog(recipeId, logEntry("Workflow", "error", `ContentValidator warnings (autopilot: warn-only): ${errorList}. Publishing with caveats.`))
       } else {
         await appendLog(recipeId, logEntry("Workflow", "error", `ContentValidator FAILED: ${errorList}. Marking as draft.`))
         await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
-        return // Stop — do not publish content that fails deterministic checks
+        return { blocked: true } // Stop — do not publish content that fails deterministic checks
       }
     }
     const warnList = validation.errors.filter((e) => e.severity === "warning")
@@ -314,7 +193,7 @@ export async function persistFinalDraft(
     }
 
     // SEO Gate — deterministic pre-publication checks (schema, meta, cannibalization, etc.)
-    const recipeSlug = slugify(keyword)
+    const recipeSlug = slugify(finalRecipe.title)
     const seoGateResult = await runSeoGate({
       recipeId, title: finalRecipe.title,
       metaTitle: finalRecipe.metaTitle ?? null,
@@ -335,7 +214,7 @@ export async function persistFinalDraft(
       } else {
         await appendLog(recipeId, logEntry("SEO Gate", "error", `BLOCKED — ${blockReasons}`))
         await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
-        return
+        return { blocked: true }
       }
     }
     if (seoGateResult.warnings.length > 0) {
@@ -416,7 +295,7 @@ export async function persistFinalDraft(
         recipeBase,
         ...(blogPostingNode ? [blogPostingNode] : []),
         ...(faqItems.length > 0 && format !== "pin-first" ? [{ "@type": "FAQPage" as const, mainEntity: faqItems.map(f => ({ "@type": "Question" as const, name: f.question, acceptedAnswer: { "@type": "Answer" as const, text: f.answer } })) }] : []),
-        { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` }, { "@type": "ListItem", position: 2, name: "Recipes", item: `${SITE_URL}/recettes` }, { "@type": "ListItem", position: 3, name: finalRecipe.title, item: `${SITE_URL}/recettes/${slugify(keyword)}` }] },
+        { "@type": "BreadcrumbList", itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` }, { "@type": "ListItem", position: 2, name: "Recipes", item: `${SITE_URL}/recettes` }, { "@type": "ListItem", position: 3, name: finalRecipe.title, item: `${SITE_URL}/recettes/${recipeSlug}` }] },
       ],
     }
 
@@ -428,24 +307,23 @@ export async function persistFinalDraft(
       servings: finalRecipe.servings, difficulty: finalRecipe.difficulty,
       ingredients: finalRecipe.ingredients, instructions: finalRecipe.instructions, tags: finalRecipe.tags,
       heroImageUrl, imageVariants, jsonLd: jsonLd as Record<string, unknown>,
+      content_type: "recipe", slug: recipeSlug,
       status: publishStatus, publishedAt: degraded ? null : new Date(), updatedAt: new Date(),
     }).where(eq(recipes.id, recipeId))
 
+    // Ping Google sitemap after successful publish
+    if (publishStatus === "published") {
+      try {
+        await fetch(`https://www.google.com/ping?sitemap=${encodeURIComponent(`${SITE_URL}/sitemap.xml`)}`)
+      } catch {
+        // Sitemap ping failure is non-blocking
+      }
+    }
+
     await appendLog(recipeId, logEntry("Workflow", degraded ? "error" : "done",
       `${degraded ? "Degraded" : "Published"} — ${wordCount} words, ${(finalRecipe.ingredients ?? []).length} ingredients, ${(finalRecipe.instructions ?? []).length} steps, JSON-LD @graph with ${jsonLd["@graph"].length} nodes${degraded ? " — REQUIRES MANUAL REVIEW before publishing" : ""}`))
-  })
-}
 
-/** Step 12 — Initialize A/B variant stats. */
-export async function initVariantStats(
-  step: { run: (name: string, fn: () => Promise<unknown>) => Promise<unknown> },
-  recipeId: number, imageVariants: ImageVariant[],
-) {
-  if (imageVariants.length <= 1) return
-  await step.run("init-variant-stats", async () => {
-    for (const v of imageVariants) {
-      await db.insert(imageVariantStats).values({ recipeId, variantIndex: imageVariants.indexOf(v), impressions: 0, clicks: 0 })
-    }
-    await appendLog(recipeId, logEntry("A/B Stats", "done", `Initialized tracking for ${imageVariants.length} variants`))
+    return { blocked: false }
   })
+  return result as { blocked: boolean }
 }
