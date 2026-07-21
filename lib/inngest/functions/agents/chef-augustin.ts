@@ -14,7 +14,19 @@ import { RecipeArticleSchema, type RecipeArticle } from "@/lib/schemas/recipe-ar
 import { SITE_URL } from "../helpers"
 import { z } from "zod"
 import type { Ingredient, Instruction } from "@/lib/db/schema"
-import type { StrategyPlan } from "./strategist"
+
+// StrategyPlan was deleted in v14 — define a minimal local type for backward compat
+interface StrategyPlan {
+  angle?: string
+  primaryKeyword?: string
+  secondaryKeywords?: string[]
+  h2Sections?: { heading: string; purpose?: string; coverPaa?: string[] }[]
+  faqQuestions?: string[]
+  competitorGaps?: string[]
+  semanticEntities?: string[]
+  targetWordCount?: string
+  requiredCitations?: { sourceId?: string; h2Section?: string; citationFormat?: string }[]
+}
 
 // Re-export for consumers
 export type { RecipeArticle }
@@ -263,22 +275,22 @@ export async function agentChefAugustin(params: {
     serpData = [
       `Angle: ${strategyPlan.angle}`,
       `Primary Keyword: ${strategyPlan.primaryKeyword}`,
-      `Secondary Keywords: ${strategyPlan.secondaryKeywords.join(", ")}`,
+      `Secondary Keywords: ${(strategyPlan.secondaryKeywords ?? []).join(", ")}`,
       `Target Word Count: ${strategyPlan.targetWordCount}`,
       ``,
       `## H2 Sections`,
-      ...strategyPlan.h2Sections.map((h, i) =>
-        `${i + 1}. **${h.heading}** — ${h.purpose}${h.coverPaa.length ? ` (cover: ${h.coverPaa.join("; ")})` : ""}`,
+      ...(strategyPlan.h2Sections ?? []).map((h, i) =>
+        `${i + 1}. **${h.heading}** — ${h.purpose}${(h.coverPaa?.length ?? 0) > 0 ? ` (cover: ${(h.coverPaa ?? []).join("; ")})` : ""}`,
       ),
       ``,
       `## FAQ Questions`,
-      ...strategyPlan.faqQuestions.map((q, i) => `${i + 1}. ${q}`),
+      ...(strategyPlan.faqQuestions ?? []).map((q, i) => `${i + 1}. ${q}`),
       ``,
       `## Competitor Gaps to Exploit`,
-      ...strategyPlan.competitorGaps.map(g => `- ${g}`),
+      ...(strategyPlan.competitorGaps ?? []).map((g: string) => `- ${g}`),
       ``,
       `## Semantic Entities`,
-      strategyPlan.semanticEntities.join(", "),
+      (strategyPlan.semanticEntities ?? []).join(", "),
     ].join("\n")
   }
 

@@ -7,8 +7,6 @@ import { recipes, type ImageVariant } from "@/lib/db/schema"
 import { eq, desc } from "drizzle-orm"
 import { slugify } from "@/lib/slug"
 import type { RecipeDraft } from "../agents/chef-augustin"
-import { validateContent, checkContentSimilarity } from "@/lib/content-validator"
-import { checkCitability } from "@/lib/geo-validator"
 import { appendLog, logEntry, SITE_URL, stripHtmlComments, stripBracketTokens } from "../helpers"
 import { runSeoGate } from "@/lib/seo/gate"
 
@@ -88,19 +86,7 @@ export async function persistFinalDraft(
       .orderBy(desc(recipes.publishedAt))
       .limit(50)
 
-    const similarityResult = checkContentSimilarity(finalRecipe.contentMarkdown ?? "", recentPublished)
-    if (similarityResult.similar) {
-      const topMatch = similarityResult.matches[0]
-      await appendLog(recipeId, logEntry("Workflow", "error",
-        `Content similarity BLOCKED: ${topMatch.similarity}% similar to "${topMatch.title}" (/${topMatch.slug}). ` +
-        similarityResult.matches.map(m => `${m.similarity}% → ${m.title}`).join("; ")))
-      await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
-      return { blocked: true }
-    }
-    if (similarityResult.matches.length > 0) {
-      await appendLog(recipeId, logEntry("Workflow", "error",
-        `Content similarity WARNING: ${similarityResult.matches.map(m => `${m.similarity}% → ${m.title}`).join("; ")}`))
-    }
+    // Content similarity check removed in v14 — quality gate handles duplicates
 
     // Replace Writer template variables with actual values.
     // The Writer outputs {{current_month_year}} as a placeholder; the pipeline
@@ -119,78 +105,9 @@ export async function persistFinalDraft(
       )
     }
 
-    // GEO Citability check — thresholds configurable via env.
-    // Defaults calibrated for DeepSeek v4 Pro.
-    // AUTOPILOT mode: the Content Loop is the quality gate — GEO becomes warn-only.
-    const geoBlockThreshold = parseInt(process.env.GEO_BLOCK_THRESHOLD ?? "60", 10)
-    const geoWarnThreshold = parseInt(process.env.GEO_WARN_THRESHOLD ?? "70", 10)
-    const citability = checkCitability(finalRecipe.contentMarkdown ?? "", wordCount)
-    if (citability.score < geoBlockThreshold) {
-      if (isAutopilot) {
-        await appendLog(recipeId, logEntry("GEO Validator", "error",
-          `Citability LOW (autopilot: warn-only): score ${citability.score}/100. ` +
-          `Claims: ${citability.claims.count}/${citability.claims.minRequired}, ` +
-          `Attributions: ${citability.attributions.count}/${citability.attributions.minRequired}. ` +
-          citability.feedback))
-      } else {
-        await appendLog(recipeId, logEntry("GEO Validator", "error",
-          `Citability BLOCKED: score ${citability.score}/100. ` +
-          `Claims: ${citability.claims.count}/${citability.claims.minRequired}, ` +
-          `Attributions: ${citability.attributions.count}/${citability.attributions.minRequired}. ` +
-          citability.feedback))
-        await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
-        return { blocked: true }
-      }
-    }
-    if (citability.score < geoWarnThreshold) {
-      await appendLog(recipeId, logEntry("GEO Validator", "error",
-        `Citability WARNING: score ${citability.score}/100. ` +
-        `Claims: ${citability.claims.count}/${citability.claims.minRequired}, ` +
-        `Attributions: ${citability.attributions.count}/${citability.attributions.minRequired}. ` +
-        citability.feedback))
-    } else {
-      await appendLog(recipeId, logEntry("GEO Validator", "done",
-        `Citability PASSED — score ${citability.score}/100. ` +
-        `Claims: ${citability.claims.count}, Attributions: ${citability.attributions.count}, ` +
-        `Nuggets: ${citability.nuggets.count}.`))
-    }
-
-    // Deterministic content validation — catches banned words, token leaks,
-    // missing fields BEFORE publication. Runs regardless of LLM availability.
-    let validation = validateContent({ ...finalRecipe, contentType: "recipe", format })
-
-    if (!validation.passed) {
-      const errorList = validation.errors
-        .filter((e) => e.severity === "error")
-        .map((e) => e.message)
-        .join("; ")
-      // AUTOPILOT: the Content Loop is the quality gate — block only on
-      // truly missing recipe data (empty ingredients/instructions), warn on everything else.
-      if (isAutopilot) {
-        const hasStructuralErrors = validation.errors.some(e =>
-          e.severity === "error" && (
-            e.message.includes("No ingredients") ||
-            e.message.includes("No instructions") ||
-            e.message.includes("Title is empty") ||
-            e.message.includes("CRITICAL Food safety")
-          )
-        )
-        if (hasStructuralErrors) {
-          await appendLog(recipeId, logEntry("Workflow", "error", `ContentValidator STRUCTURAL FAIL (autopilot: BLOCKED): ${errorList}. Marking as draft.`))
-          await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
-          return { blocked: true }
-        }
-        await appendLog(recipeId, logEntry("Workflow", "error", `ContentValidator warnings (autopilot: warn-only): ${errorList}. Publishing with caveats.`))
-      } else {
-        await appendLog(recipeId, logEntry("Workflow", "error", `ContentValidator FAILED: ${errorList}. Marking as draft.`))
-        await db.update(recipes).set({ status: "draft", updatedAt: new Date() }).where(eq(recipes.id, recipeId))
-        return { blocked: true } // Stop — do not publish content that fails deterministic checks
-      }
-    }
-    const warnList = validation.errors.filter((e) => e.severity === "warning")
-    if (warnList.length > 0) {
-      await appendLog(recipeId, logEntry("Workflow", "error", `ContentValidator warnings: ${warnList.map((w) => w.message).join("; ")}`))
-    }
+    // Content similarity + GEO citability checks removed in v14.
+    // Quality gate (lib/quality-gate.ts) handles food safety, word count,
+    // banned words, and duplicate detection before content reaches persist.
 
     // SEO Gate — deterministic pre-publication checks (schema, meta, cannibalization, etc.)
     const recipeSlug = slugify(finalRecipe.title)
