@@ -1,9 +1,9 @@
 # Pipeline v14 — Karpathy Simplification
 
-> **Design spec — 2026-07-21 — v1.2 (post-review Kimi 2.6 + Sonnet 4.6)**
+> **Design spec — 2026-07-21 — v1.3 (2ème review Kimi 2.6 + Claude Sonnet 4.6)**
 > Objectif : Simplification radicale du pipeline IA selon les principes Karpathy.
 > Principe fondateur : *"The LLM generates, code enforces quality."*
-> Revue externe : 8.5/10 (Kimi), favorable avec 4 réserves (Sonnet). Corrections intégrées.
+> Revue externe : 9/10 (Kimi) — GO conditionnel. Favorable avec 5 clarifications (Claude). Corrections intégrées.
 
 ## 1. Philosophy
 
@@ -73,27 +73,38 @@ Le pipeline v13 actuel souffre de **complexité accumulée** : 4 agents LLM, 5 s
 │ thinking: { type: "adaptive" }                    │
 │                                                   │
 │ Modèle primaire:    claude-opus-4-8               │
-│ Modèle fallback:    claude-sonnet-5 (même skill,  │
-│   même structured output, moins cher, léger recul │
-│   de qualité rédactionnelle — acceptable)         │
+│ Modèle fallback:    claude-sonnet-5               │
+│   Déclenché sur:  HTTP 429, 529, 5xx, timeout >120s │
+│   Jamais sur:      schema mismatch (bug skill)    │
+│   Même skill, même structured output              │
+│   Cible utilisation: < 5% des recettes            │
 │                                                   │
-│ Output: RecipeArticle (validated by API)          │
+│ → Retourne: RecipeArticle (validé par l'API)      │
 └──────────────────┬───────────────────────────────┘
                    │
                    ▼
 ┌──────────────────────────────────────────────────┐
-│ STEP 3: QUALITY GATE (code, ~70 lignes)          │
+│ STEP 3: QUALITY GATE (code, ~100 lignes)          │
+│   Reçoit: RecipeArticle de Step 2                  │
+│   Retourne: GateResult { status, reason?, errors? }│
 │                                                   │
-│ 1. Duplicate slug? → BLOCK                        │
-│ 2. Food safety temps? → BLOCK                     │
-│ 3. Word count < 1200? → BLOCK                     │
-│ 4. Banned words? → BLOCK (skill §1 prevents them; │
-│    if triggered, le LLM n'a pas suivi le skill)   │
+│ 1. Duplicate slug? → BLOCK immédiat (pas de retry) │
+│ 2. Food safety temps? → BLOCK (retry 1x max)      │
+│ 3. Word count < seuil? → BLOCK (retry 1x max)      │
+│ 4. Banned words? → BLOCK (retry 2x max avec        │
+│    feedback: "WARNING: Your output contained       │
+│    banned claims: [mots]. This is a HARD RULE.")   │
+│                                                   │
+│ Retry géré par Inngest (step.invoke() avec         │
+│ feedback injecté dans le user message).            │
+│ Après max retries → BLOCK définitif = draft.       │
 └──────────────────┬───────────────────────────────┘
                    │
                    ▼
 ┌──────────────────────────────────────────────────┐
 │ STEP 4: PERSIST + IMAGE (code, ~80 lignes)       │
+│   Reçoit: RecipeArticle (de Step 2) +              │
+│           GateResult (de Step 3) — via Inngest     │
 │                                                   │
 │ Persist:                                          │
 │   slugify(title) → slug                          │
@@ -174,11 +185,42 @@ Un seul fichier `skills/chef-augustin-mega.md`, ~200 lignes.
 - **Direct, pas poli** — "Never say..." pas "Please avoid..."
 - **≤ 200 lignes** — si ça dépasse, c'est qu'on met des règles que la gate devrait gérer
 
+### Zod Schema Contract
+
+Le schema `RecipeArticleSchema` est le contrat entre le LLM et le code. Il est défini dans `lib/schemas/recipe-article.ts` et utilisé par `output_config.format` dans l'appel à Opus 4.8. La gate dépend de ce schema.
+
+```typescript
+import { z } from "zod";
+
+export const RecipeArticleSchema = z.object({
+  title: z.string().describe("SEO H1, keyword first"),
+  metaTitle: z.string().max(60).describe("≤60 chars, keyword first"),
+  metaDescription: z.string().min(150).max(160).describe("150-160 chars, actionable"),
+  excerpt: z.string().describe("1-2 sentences, hook the reader"),
+  contentMarkdown: z.string().describe("Full article in markdown: H2 sections, FAQ, [IMAGE:] placeholders, instructions integrated"),
+  ingredients: z.array(z.string()).describe("Each ingredient as 'quantity name, notes' — e.g. '1 cup (140g) all-purpose flour'"),
+  instructions: z.array(z.object({
+    step: z.number(),
+    text: z.string().describe("Step description with temperature and visual cue"),
+    duration: z.string().optional(),
+    temperature: z.string().optional(),
+  })).describe("Step-by-step instructions. Food safety gate scans this array for USDA temps."),
+  tags: z.array(z.string()).describe("Keywords, cuisine, technique"),
+  prepTime: z.string(),
+  cookTime: z.string(),
+  totalTime: z.string(),
+  servings: z.string().describe("e.g. '2 servings'"),
+  difficulty: z.enum(["Easy", "Medium", "Hard"]),
+  imagePrompt: z.string().max(120).describe("Food photography prompt, 60-100 words, ≤120"),
+  jsonLd: z.object({}).passthrough().describe("@graph: Recipe + BlogPosting + FAQPage + BreadcrumbList for Google; Recipe + BreadcrumbList only for Pin-First"),
+});
+```
+
 ---
 
 ## 4. La Quality Gate
 
-Un seul fichier `lib/quality-gate.ts`, ~70 lignes.
+Un seul fichier `lib/quality-gate.ts`, ~100 lignes.
 
 ### Les 4 checks (tous BLOCK — pas de modification silencieuse du contenu)
 
@@ -203,10 +245,11 @@ async function qualityGate(output: RecipeArticle): Promise<GateResult> {
     return { status: "BLOCK", reason: "food_safety", errors: foodSafetyErrors };
   }
 
-  // Check 2: Word Count minimum
+  // Check 2: Word Count minimum (seuils par type de recette)
   const wordCount = output.contentMarkdown.split(/\s+/).filter(Boolean).length;
-  if (wordCount < 1200) {
-    return { status: "BLOCK", reason: "too_short", errors: [`${wordCount} words < 1200 minimum`] };
+  const minWords = getMinWords(output); // ≥30min/plat principal: 1200, express <30min: 800, dessert: 600
+  if (wordCount < minWords) {
+    return { status: "BLOCK", reason: "too_short", errors: [`${wordCount} words < ${minWords} minimum`] };
   }
 
   // Check 3: Banned Words (BLOCK — skill §1 is the prevention layer)
@@ -228,11 +271,91 @@ fat-burning, miracle, superfood, cleanse, cure, heal, treat,
 all-natural (as health claim), clinically proven, scientifically proven
 ```
 
-### Food safety validation (30 lignes)
-- Vérifie les températures USDA pour les protéines nommées
-- Poultry → 165°F/74°C, ground meat → 160°F/71°C, pork → 145°F/63°C, fish → 145°F/63°C
-- Si un ingrédient contient "chicken" ou "poultry", au moins une instruction doit mentionner 165°F ou 74°C
-- Même logique pour chaque protéine
+### Retry strategy
+
+Géré par Inngest (`step.invoke()` avec feedback injecté). Max 3 tentatives au total (initial + 2 retries max).
+
+| Raison du BLOCK | Retries max | Feedback au LLM | Après échec |
+|---|---|---|---|
+| `duplicate` | 0 | Aucun (logique métier) | Draft, revue humaine |
+| `food_safety` | 1 | "Missing USDA temperatures for: [protéines]. Include °F and °C." | Draft, revue humaine |
+| `too_short` | 1 | "Article is ${wc} words. Minimum is ${min}. Expand with more technique detail." | Draft, revue humaine |
+| `banned_words` | 2 | "WARNING: Your output contained banned health claims: [mots]. This is a HARD RULE. Do not use these terms." | Draft, revue humaine |
+
+**Mécanisme** : Le retry Inngest ré-exécute Step 2 avec un `feedback` string injecté dans le user message. Le mega-skill §1 reçoit ce feedback comme contexte additionnel.
+
+---
+
+### Food safety validation (~50 lignes)
+
+Règles de matching des protéines (case-insensitive, supporte °F et °C) :
+
+```typescript
+const PROTEIN_RULES = [
+  // Volaille — USDA: 165°F/74°C (toutes les volailles)
+  { keywords: ["chicken", "turkey", "duck", "goose", "poultry", "quail", "cornish hen"],
+    temp: ["165°F", "74°C"],
+    exclude: ["stock", "broth", "powder", "bouillon", "fat", "liver", "gizzard"] },
+
+  // Viande hachée — USDA: 160°F/71°C
+  { keywords: ["ground beef", "ground pork", "ground lamb", "ground chicken", "ground turkey",
+               "ground meat", "minced beef", "minced pork", "minced lamb"],
+    temp: ["160°F", "71°C"] },
+
+  // Porc (muscles entiers) — USDA: 145°F/63°C + repos 3 min
+  // Bacon/pancetta/guanciale exclus (souvent pré-cuits ou utilisés en petite quantité comme garniture)
+  { keywords: ["pork chop", "pork loin", "pork tenderloin", "pork shoulder", "pork roast",
+               "ham", "prosciutto", "serrano ham", "iberico"],
+    temp: ["145°F", "63°C"],
+    exclude: ["bacon", "pancetta", "guanciale", "lardons", "stock", "broth"] },
+
+  // Bœuf/agneau (muscles entiers) — USDA: 145°F/63°C
+  { keywords: ["steak", "beef", "lamb", "veal", "roast beef", "prime rib", "ribeye",
+               "sirloin", "tenderloin", "filet mignon", "strip steak"],
+    temp: ["145°F", "63°C"],
+    tolerate: "medium-rare" }, // note à 130-135°F → BLOCK si aucune mention de la température USDA
+
+  // Poisson/fruits de mer — USDA: 145°F/63°C
+  { keywords: ["salmon", "tuna", "cod", "halibut", "sea bass", "trout", "mahi mahi",
+               "shrimp", "scallop", "lobster", "crab", "mussel", "clam"],
+    temp: ["145°F", "63°C"] },
+
+  // Œufs — FDA: cuire jusqu'à ce que le blanc et le jaune soient fermes,
+  // ou utiliser des œufs pasteurisés pour les préparations crues
+  { keywords: ["egg", "eggs", "egg yolk", "egg white"],
+    temp: [], // pas de température — vérifier mention "pasteurized" ou "cooked until firm"
+    rule: "fda_egg" },
+];
+
+// Logique de validation :
+// Pour chaque PROTEIN_RULE :
+//   1. Scanner ingredients[] pour les keywords (en excluant les exclude)
+//   2. Si une protéine est trouvée ET qu'elle n'est PAS dans exclude :
+//      → Au moins une instruction doit mentionner une température du tableau temp[]
+//      → OU (pour la règle fda_egg) : mentionner "pasteurized" ou "cooked until firm"
+//      → Si absent → BLOCK
+```
+
+**Cas edge couverts :**
+- `chicken stock` → exclu (exclude) → pas de BLOCK
+- `bacon` dans carbonara → exclu → pas de BLOCK
+- `eggs` dans carbonara → règle fda_egg → vérifie "pasteurized" ou "firm" → BLOCK si absent
+- `salmon medium-rare` → keyword match + tolerate → BLOCK si aucune mention de 145°F
+- `steak medium-rare` → keyword match + tolerate → BLOCK si aucune mention de 145°F
+
+**Impact sur les 10 keywords eval :**
+| Keyword | Protéine | Règle | Statut attendu |
+|---|---|---|---|
+| Roast chicken | chicken | 165°F | ✅ Le LLM mentionne toujours 165°F |
+| Beef bourguignon | beef | 145°F | ✅ Cuisson longue > 145°F, mention attendue |
+| Carbonara | egg + bacon | fda_egg + exclude | ⚠️ Œuf cru → BLOCK si pas "pasteurized" — le skill doit l'exiger |
+| Salmon medium-rare | salmon | 145°F + tolerate | ⚠️ BLOCK si le LLM ne mentionne pas USDA — le skill doit l'exiger |
+| Chickpea curry | aucune | — | ✅ PASS automatique |
+| Caesar salad | egg + chicken | fda_egg + 165°F | ⚠️ Double check : œuf cru + poulet |
+| Medium-rare steak | steak | 145°F + tolerate | ⚠️ BLOCK si le LLM ne mentionne pas USDA |
+| Chocolate mousse | egg (si présent) | fda_egg | ✅ Le LLM peut mentionner œufs pasteurisés |
+| Chicken bacon pasta | chicken + bacon | 165°F + exclude | ✅ Bacon exclu, chicken → 165°F |
+| Garlic shrimp | shrimp | 145°F | ✅ Cuisson rapide > 145°F, mention attendue |
 
 ---
 
@@ -275,7 +398,7 @@ all-natural (as health claim), clinically proven, scientifically proven
 | Fichier | Description |
 |---|---|
 | `skills/chef-augustin-mega.md` | Mega-skill unique (~200 lignes) |
-| `lib/quality-gate.ts` | Quality gate simplifiée (~70 lignes) |
+| `lib/quality-gate.ts` | Quality gate simplifiée (~100 lignes, dont ~50 food safety) |
 | `lib/schemas/recipe-article.ts` | Zod schema pour structured output |
 | `scripts/eval-recipe.ts` | Script de test : génère 10 recettes variées et audite chaque section du mega-skill séparément |
 
@@ -344,6 +467,22 @@ Chaque évaluation loggue :
 | LLM ignore certaines règles du mega-skill | Moyen | Qualité variable | La gate bloque les violations critiques (food safety, banned words, word count). eval-recipe.ts audite §3 (patterns) et §4 (attributions) par section |
 | Internal linking absent du pipeline | Certain | SEO long-terme | **Dette documentée pour v15** — à activer quand le corpus > 30 recettes. Solution probable : script déterministe par matching de tags |
 | Coût Opus 4.8 sous-estimé | Moyen | Budget | Premier run eval-recipe.ts loggue les tokens réels (input/output/thinking/cache) avant de fixer les estimations |
+
+### Observability — Monitoring des 50 premières recettes
+
+Metrics logguées par recette dans `pipeline_logs` (table existante) :
+
+| Métrique | Source | Seuil d'alerte |
+|---|---|---|
+| Statut final (PASS/BLOCK) | Gate | BLOCK > 10% → review du skill |
+| Raison du BLOCK | Gate | food_safety > 5% → revoir les règles de matching |
+| Latence Step 1 (SERP) | Inngest | > 5s → dégrader Serper |
+| Latence Step 2 (LLM) | Inngest | > 120s → timeout, fallback Sonnet 5 |
+| Latence Step 3 (Gate) | Inngest | > 2s → vérifier DB query |
+| Tokens input/output/thinking/cache | API response | Coût > $0.08/article → revoir skill length |
+| Taux fallback Sonnet 5 | Step 2 | > 5% → contacter Anthropic (rate limit anormal) |
+| Human patterns count | eval-recipe (post-hoc) | < 5 → le skill §3 n'est pas suivi |
+| Sitemap ping status | Step 4 | Échec → retry 1x, log |
 
 ---
 
