@@ -6,6 +6,7 @@
 import { db } from "@/lib/db"
 import { recipes, type WorkflowLogEntry } from "@/lib/db/schema"
 import { eq, sql } from "drizzle-orm"
+import { isRecoverable } from "@/lib/agents/provider"
 
 // ── Logging ──────────────────────────────────────────────────────────────────
 
@@ -54,75 +55,11 @@ export function generateSyntheticPAA(keyword: string): string[] {
 // ── Error Classification ─────────────────────────────────────────────────────
 
 export function isRecoverableError(err: Error): boolean {
-  const msg = err.message
-  return (
-    msg.includes("No JSON object") ||
-    msg.includes("Failed to parse JSON") ||
-    msg.includes("aborted") ||
-    msg.includes("returned no response") ||
-    msg.includes("timed out") ||
-    msg.includes("timeout") ||
-    msg.includes("403") ||
-    msg.includes("408") ||
-    msg.includes("429") ||
-    msg.includes("500") ||
-    msg.includes("502") ||
-    msg.includes("503") ||
-    msg.includes("504")
-  )
+  // Delegates to the canonical isRecoverable in provider.ts (single source of truth).
+  return isRecoverable(err?.message ?? "")
 }
 
-// ── Retry Escalation ──────────────────────────────────────────────────────────
-
-export type RetryEscalationResult<T> = {
-  result: T
-  degraded: boolean
-  attemptsUsed: number
-  finalError: string | null
-}
-
-/**
- * Retries a function with exponential backoff and a final fallback value.
- * Complements (does NOT replace) the LLM-level retry in nararouter.ts.
- *
- * Escalation strategy:
- *   1. Primary attempt
- *   2. Retry after 2s delay (transient issues)
- *   3. Retry after 5s delay (intermittent capacity issues)
- *   4. Return fallback value with degraded=true
- *
- * Use for agent calls where the LLM is completely down vs. a transient
- * JSON parse failure. The LLM-level retry handles transient failures fast;
- * this escalation handles systemic failures at the agent level.
- */
-export async function withRetryEscalation<T>(
-  fn: () => Promise<T>,
-  fallbackValue: () => T,
-  agentName: string,
-  maxRetries = 3,
-): Promise<RetryEscalationResult<T>> {
-  let lastError: string | null = null
-
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-      return { result: await fn(), degraded: false, attemptsUsed: attempt, finalError: null }
-    } catch (err) {
-      lastError = (err as Error).message
-      console.warn(`[Retry] ${agentName} attempt ${attempt}/${maxRetries} failed: ${lastError.substring(0, 200)}`)
-      if (attempt < maxRetries) {
-        const delay = Math.min(1000 * Math.pow(2, attempt - 1), 10_000)
-        await new Promise((r) => setTimeout(r, delay))
-      }
-    }
-  }
-
-  return {
-    result: fallbackValue(),
-    degraded: true,
-    attemptsUsed: maxRetries,
-    finalError: lastError,
-  }
-}
+// ── Fallback Image Prompt ──────────────────────────────────────────────────────
 
 export function buildFallbackImagePrompt(title: string, tags: string[]): string {
   const dish = title || "the dish"
@@ -184,5 +121,4 @@ export function logAgentTrace(
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
-export const MAX_EDITOR_PASSES = 3
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com"
