@@ -24,7 +24,7 @@ export async function persistFinalDraft(
 ): Promise<void> {
   await step.run("persist-draft-final", async () => {
     const slug = slugify(finalRecipe.title)
-    const wordCount = finalRecipe.contentMarkdown.split(/\s+/).filter(Boolean).length
+    const wordCount = (finalRecipe.contentMarkdown ?? "").split(/\s+/).filter(Boolean).length
     const status = (gateStatus === "PASS" && !degraded) ? "published" : "draft"
 
     await db.update(recipes).set({
@@ -63,7 +63,7 @@ export async function persistFinalDraft(
     await appendLog(recipeId, logEntry(
       "Workflow",
       status === "published" ? "done" : "error",
-      `${status === "published" ? "Published" : "Draft"} — ${wordCount} words, ${finalRecipe.ingredients.length} ingredients`,
+      `${status === "published" ? "Published" : "Draft"} — ${wordCount} words, ${(finalRecipe.ingredients ?? []).length} ingredients`,
     ))
   })
 }

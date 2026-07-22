@@ -344,10 +344,11 @@ export async function runWithStructuredOutput<T>(
     if (!apiKey) throw new Error("ANTHROPIC_API_KEY or ANTHROPIC_AUTH_TOKEN is required for structured output")
 
     const baseUrl = (process.env.ANTHROPIC_BASE_URL || "https://api.anthropic.com") + "/v1/messages"
-    const isZenMux = baseUrl.includes("zenmux")
+    const isZenMux = baseUrl.includes("zenmux.ai")
+    const defaultModel = isZenMux ? "anthropic/claude-sonnet-5" : "claude-sonnet-5"
 
     const body: Record<string, unknown> = {
-      model: options?.model ?? "claude-sonnet-5",
+      model: options?.model ?? defaultModel,
       max_tokens: options?.maxTokens ?? 32000,
       system: [
         {
@@ -387,10 +388,12 @@ export async function runWithStructuredOutput<T>(
       const text = await res.text()
 
       // Fallback to Sonnet 5 on rate limit / overload / server error
-      const currentModel = options?.model ?? "claude-sonnet-5"
-      const fallbackModel = currentModel.includes("/")
-        ? currentModel.replace(/\/[^/]+$/, "/claude-sonnet-5")
-        : "claude-sonnet-5"
+      const currentModel = options?.model ?? defaultModel
+      const fallbackModel = isZenMux
+        ? "anthropic/claude-sonnet-5"
+        : currentModel.includes("/")
+          ? currentModel.replace(/\/[^/]+$/, "/claude-sonnet-5")
+          : "claude-sonnet-5"
       const isAlreadyFallback = currentModel === fallbackModel || currentModel === "claude-sonnet-5"
       if ((status === 429 || status === 529 || status >= 500) && !isAlreadyFallback) {
         console.warn(`[provider] ${currentModel} returned ${status} — falling back to ${fallbackModel}`)

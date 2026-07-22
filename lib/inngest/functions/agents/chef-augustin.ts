@@ -238,7 +238,7 @@ export async function agentChefAugustinMega(
       userPrompt,
       RECIPE_JSON_SCHEMA,
       {
-        model: "claude-opus-4-8",
+        model: process.env.ANTHROPIC_MODEL || "anthropic/claude-sonnet-5",
         maxTokens: 32000,
         timeout: 180_000, // 3 min
       },
