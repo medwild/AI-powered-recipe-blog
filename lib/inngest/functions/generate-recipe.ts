@@ -1,11 +1,12 @@
 /**
  * generate-recipe workflow — Pipeline v14 Single-Shot Content Generation
  *
- * 4 pipeline steps:
+ * 5 pipeline steps:
  *   1. serp-phase       — Google SERP analysis (Serper API, plain text output)
  *   2. mega-skill       — Single LLM call with retry loop + quality gate feedback
  *   3. persist-phase    — Save to DB with validation and JSON-LD
  *   4. image-phase      — Generate hero image (non-blocking)
+ *   5. seo-gate         — 15 pre-publish SEO checks (non-blocking, BLOCK→draft)
  *
  * Architecture (v14 Karpathy):
  *   - One mega-skill replaces 4 agents (Strategist, Writer, Science Enricher, Editor).
@@ -27,6 +28,7 @@ import { qualityGate, type GateResult } from "@/lib/quality-gate"
 import { appendLog, logEntry, isRecoverableError } from "./helpers"
 import { persistFinalDraft } from "./steps/persist-phase"
 import { runImagePhase } from "./steps/image-phase"
+import { runSeoGate } from "@/lib/seo/gate"
 
 // ---------------------------------------------------------------------------
 // Retry strategy (max retries after initial attempt)
@@ -147,14 +149,16 @@ export const generateRecipeWorkflow = inngest.createFunction(
 
       if (article.gateResult.status === "BLOCK") {
         await appendLog(recipeId, logEntry("Workflow", "done",
-          "Content blocked — skipping image generation"))
+          "Content blocked — skipping image + SEO gate"))
         return
       }
 
       // ── Step 4: Image (non-blocking) ──────────────────────────────────
+      let heroImageUrl: string | null = null
       try {
         const imageResult = await runImagePhase(step, recipeId, article.article, keyword)
         if (imageResult.heroImageUrl) {
+          heroImageUrl = imageResult.heroImageUrl
           // Replace [IMAGE:alt text] placeholders with actual <img> tags
           const contentWithImages = article.article.contentMarkdown.replace(
             /\[IMAGE:\s*(.+?)\]/g,
@@ -179,6 +183,53 @@ export const generateRecipeWorkflow = inngest.createFunction(
         })
         await appendLog(recipeId, logEntry("Image", "error",
           `Image generation failed (non-blocking): ${(err as Error).message}`))
+      }
+
+      // ── Step 5: SEO Gate (non-blocking) ───────────────────────────────
+      try {
+        await step.run("seo-gate", async () => {
+          const slug = article.article.title
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-|-$/g, "")
+            .substring(0, 100)
+
+          const seoResult = await runSeoGate({
+            recipeId,
+            title: article.article.title,
+            metaTitle: article.article.metaTitle,
+            metaDescription: article.article.metaDescription,
+            slug,
+            focusKeyphrase: keyword,
+            contentMarkdown: article.article.contentMarkdown,
+            heroImageUrl,
+            jsonLd: article.article.jsonLd as unknown as Record<string, unknown>,
+            content_type: "recipe",
+          })
+
+          await appendLog(recipeId, logEntry("SeoGate", seoResult.status === "PASS" ? "done" : "error",
+            `${seoResult.summary} (score: ${seoResult.score})`))
+
+          for (const b of seoResult.blockingIssues) {
+            await appendLog(recipeId, logEntry("SeoGate", "error",
+              `BLOCK ${b.code}: ${b.message}`))
+          }
+          for (const w of seoResult.warnings) {
+            await appendLog(recipeId, logEntry("SeoGate", "error",
+              `WARN ${w.code}: ${w.message}`))
+          }
+
+          // BLOCK issues → set recipe to draft for manual review
+          if (seoResult.status === "BLOCK") {
+            await db
+              .update(recipes)
+              .set({ status: "draft", updatedAt: new Date() })
+              .where(eq(recipes.id, recipeId))
+          }
+        })
+      } catch (err) {
+        await appendLog(recipeId, logEntry("SeoGate", "error",
+          `SEO gate failed (non-blocking): ${(err as Error).message}`))
       }
 
       await appendLog(recipeId, logEntry("Workflow", "done", "Pipeline v14 complete"))

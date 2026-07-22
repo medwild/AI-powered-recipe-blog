@@ -109,6 +109,11 @@ Each H2 must have a clear purpose. Required sections:
 - Each answer: 25-120 words, at least one number or named entity
 - Questions from real SERP PAA data when available
 
+### Internal Links (≥2)
+- Weave in 2-3 natural links to related recipes: `[anchor text](/recettes/target-slug)`
+- Link to recipes that share an ingredient, technique, cuisine, or complementary dish
+- Links must feel natural — never "For more recipes, check out..."
+
 ## §6 IMAGE PROMPT
 
 Generate a food photography prompt for 2:3 (Pinterest). Parts: [Subject/Action/Environment]. [Lighting]. [Camera/Lens]. [Style/Colors].

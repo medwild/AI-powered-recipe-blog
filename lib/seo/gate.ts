@@ -46,11 +46,8 @@ function containsKeyword(text: string, keyword: string): boolean {
 function checkRecipeSchema(jsonLd: Record<string, unknown> | null): BlockingIssue | null {
   if (!jsonLd) return block("RECIPE_SCHEMA_MISSING", "No JSON-LD data found. Recipe schema is required for Google rich results.")
 
-  const graph = jsonLd["@graph"] as Record<string, unknown>[] | undefined
-  const nodes = graph ?? [jsonLd]
-  const hasRecipe = nodes.some((n) => n["@type"] === "Recipe")
-
-  if (!hasRecipe) {
+  const recipeNode = findRecipeNode(jsonLd)
+  if (!recipeNode) {
     return block("RECIPE_SCHEMA_MISSING", "No @type: Recipe node found in JSON-LD. Recipe schema is required for Google rich results.")
   }
   return null
@@ -327,14 +324,25 @@ async function checkImageReachable(
 
 // ── Recipe Node Extractor ────────────────────────────────────────────────────
 
-function findRecipeNode(jsonLd: Record<string, unknown> | null): Record<string, unknown> | null {
+function findRecipeNode(jsonLd: unknown): Record<string, unknown> | null {
   if (!jsonLd) return null
-  const graph = jsonLd["@graph"] as Record<string, unknown>[] | undefined
+
+  // ZenMux structured output may return jsonLd as a JSON string
+  let obj: Record<string, unknown> | null = null
+  if (typeof jsonLd === "string") {
+    try { obj = JSON.parse(jsonLd) } catch { return null }
+  } else if (typeof jsonLd === "object") {
+    obj = jsonLd as Record<string, unknown>
+  }
+
+  if (!obj) return null
+
+  const graph = obj["@graph"] as Record<string, unknown>[] | undefined
   if (graph) {
     return (graph.find((n) => n["@type"] === "Recipe") as Record<string, unknown>) ?? null
   }
   // Flat schema (legacy fallback)
-  if (jsonLd["@type"] === "Recipe") return jsonLd
+  if (obj["@type"] === "Recipe") return obj
   return null
 }
 
