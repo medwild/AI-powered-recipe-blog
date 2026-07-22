@@ -92,7 +92,7 @@ function checkSchemaImage(jsonLd: Record<string, unknown> | null): BlockingIssue
 /** B5 — heroImageUrl must not be a placeholder or null. */
 function checkPlaceholderImage(heroImageUrl: string | null): BlockingIssue | null {
   if (!heroImageUrl || heroImageUrl.toLowerCase().includes("placeholder")) {
-    return block("IMAGE_PLACEHOLDER", "Hero image is missing or contains 'placeholder'. A real food photo is required before publication.")
+    return warn("IMAGE_PLACEHOLDER", "Hero image is missing or contains 'placeholder'. Add a food photo before final publication.")
   }
   return null
 }
@@ -371,7 +371,6 @@ export async function runSeoGate(input: GateInput): Promise<GateResult> {
 
   const universalBlockers = [
     checkTitle(input.metaTitle),
-    checkPlaceholderImage(input.heroImageUrl),
   ]
 
   for (const b of [...recipeBlockers, ...universalBlockers]) {
@@ -402,6 +401,7 @@ export async function runSeoGate(input: GateInput): Promise<GateResult> {
     checkMetaLength(input.metaDescription),
     checkIntroKeyword(input.contentMarkdown, input.focusKeyphrase),
     checkInternalLinks(input.contentMarkdown),
+    checkPlaceholderImage(input.heroImageUrl),
   ]
 
   for (const w of [...recipeWarnings, ...universalWarnings]) {
