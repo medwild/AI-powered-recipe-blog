@@ -135,16 +135,16 @@ export const generateRecipeWorkflow = inngest.createFunction(
 
       // ── Step 3: Persist ───────────────────────────────────────────────
       const legacyArticle = recipeArticleToChefAugustinOutput(article.article)
-      const persistResult = await persistFinalDraft(
+      await persistFinalDraft(
         step, recipeId,
-        legacyArticle, "", // no heroImageUrl yet
-        [], // no imageVariants yet
-        keyword, "google", degraded,
+        legacyArticle,
+        article.gateResult.status as "PASS" | "BLOCK",
+        degraded,
       )
 
-      if (persistResult?.blocked || article.gateResult.status === "BLOCK") {
+      if (article.gateResult.status === "BLOCK") {
         await appendLog(recipeId, logEntry("Workflow", "done",
-          `Content blocked or in draft — skipping image generation`))
+          "Content blocked — skipping image generation"))
         return
       }
 
@@ -152,9 +152,18 @@ export const generateRecipeWorkflow = inngest.createFunction(
       try {
         const imageResult = await runImagePhase(step, recipeId, article.article, keyword)
         if (imageResult.heroImageUrl) {
+          // Replace [IMAGE:alt text] placeholders with actual <img> tags
+          const contentWithImages = article.article.contentMarkdown.replace(
+            /\[IMAGE:\s*(.+?)\]/g,
+            (_, alt) => `<img src="${imageResult.heroImageUrl}" alt="${alt.trim()}" loading="lazy" />`,
+          )
           await db
             .update(recipes)
-            .set({ heroImageUrl: imageResult.heroImageUrl, updatedAt: new Date() })
+            .set({
+              heroImageUrl: imageResult.heroImageUrl,
+              contentMarkdown: contentWithImages,
+              updatedAt: new Date(),
+            })
             .where(eq(recipes.id, recipeId))
         }
       } catch (err) {

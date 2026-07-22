@@ -65,7 +65,7 @@ const PROTEIN_RULES: ProteinRule[] = [
 
 const BANNED_WORDS = [
   "probiotics", "gut health", "immune boost", "detox", "anti-inflammatory",
-  "fat-burning", "miracle", "superfood", "cleanse", "cure", "heal", "treat",
+  "fat-burning", "miracle", "superfood", "cleanse", "cure", "heal",
   "all-natural", "clinically proven", "scientifically proven",
 ];
 

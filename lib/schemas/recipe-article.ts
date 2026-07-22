@@ -20,12 +20,7 @@ export const RecipeArticleSchema = z.object({
   servings: z.string().describe("e.g. '2 servings'"),
   difficulty: z.enum(["Easy", "Medium", "Hard"]),
   imagePrompt: z.string().max(120).describe("Food photography prompt, 60-100 words, ≤120"),
-  jsonLd: z.object({
-    "@context": z.literal("https://schema.org"),
-    "@graph": z.array(z.object({
-      "@type": z.enum(["Recipe", "BlogPosting", "FAQPage", "BreadcrumbList"]),
-    }).passthrough()),
-  }).describe("@graph: Recipe + BlogPosting + FAQPage + BreadcrumbList. Validé par eval-recipe.ts, pas par la gate."),
+  jsonLd: z.string().describe("JSON-LD structured data as a JSON string. Include @graph with Recipe, BlogPosting, FAQPage, and BreadcrumbList nodes. Parsed and validated by eval-recipe.ts."),
 });
 
 export type RecipeArticle = z.infer<typeof RecipeArticleSchema>;

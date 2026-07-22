@@ -35,13 +35,13 @@ export class AnthropicProvider implements LlmProvider {
   private defaultModel: string
 
   constructor() {
-    this.baseUrl = "https://api.anthropic.com/v1/messages"
-    this.apiKey = process.env.ANTHROPIC_API_KEY ?? ""
-    // Guard against stale shell env vars (e.g., ANTHROPIC_MODEL=deepseek-v4-pro
-    // when actually configured for Anthropic). Fall back to the latest Claude model
-    // if the configured model name doesn't look like a Claude model.
-    const configured = process.env.ANTHROPIC_MODEL || "claude-sonnet-4-6"
-    this.defaultModel = configured.toLowerCase().startsWith("claude-") ? configured : "claude-sonnet-4-6"
+    // ANTHROPIC_BASE_URL allows pointing to Anthropic-compatible proxies
+    // (e.g., ZenMux: https://zenmux.ai/api/anthropic)
+    this.baseUrl = (process.env.ANTHROPIC_BASE_URL || "https://api.anthropic.com") + "/v1/messages"
+    this.apiKey = process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN || ""
+    const configured = process.env.ANTHROPIC_MODEL || "claude-sonnet-5"
+    // ZenMux prefixes models with "anthropic/" — accept any model name
+    this.defaultModel = configured
   }
 
   async runText(
@@ -340,11 +340,14 @@ export async function runWithStructuredOutput<T>(
   const timer = setTimeout(() => controller.abort(), timeoutMs)
 
   try {
-    const apiKey = process.env.ANTHROPIC_API_KEY ?? ""
-    if (!apiKey) throw new Error("ANTHROPIC_API_KEY is required for structured output")
+    const apiKey = process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN || ""
+    if (!apiKey) throw new Error("ANTHROPIC_API_KEY or ANTHROPIC_AUTH_TOKEN is required for structured output")
 
-    const body = {
-      model: options?.model ?? "claude-opus-4-8",
+    const baseUrl = (process.env.ANTHROPIC_BASE_URL || "https://api.anthropic.com") + "/v1/messages"
+    const isZenMux = baseUrl.includes("zenmux")
+
+    const body: Record<string, unknown> = {
+      model: options?.model ?? "claude-sonnet-5",
       max_tokens: options?.maxTokens ?? 32000,
       system: [
         {
@@ -360,10 +363,15 @@ export async function runWithStructuredOutput<T>(
           schema: jsonSchema,
         },
       },
-      thinking: { type: "adaptive" as const, budget_tokens: 4000 },
     }
 
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
+    // ZenMux doesn't support the `thinking` parameter yet.
+    // Anthropic native API supports adaptive thinking for latency control.
+    if (!isZenMux) {
+      body.thinking = { type: "adaptive", budget_tokens: 4000 }
+    }
+
+    const res = await fetch(baseUrl, {
       method: "POST",
       headers: {
         "anthropic-version": "2023-06-01",
@@ -379,11 +387,16 @@ export async function runWithStructuredOutput<T>(
       const text = await res.text()
 
       // Fallback to Sonnet 5 on rate limit / overload / server error
-      if ((status === 429 || status === 529 || status >= 500) && options?.model !== "claude-sonnet-5") {
-        console.warn(`[provider] Opus 4.8 returned ${status} — falling back to claude-sonnet-5`)
+      const currentModel = options?.model ?? "claude-sonnet-5"
+      const fallbackModel = currentModel.includes("/")
+        ? currentModel.replace(/\/[^/]+$/, "/claude-sonnet-5")
+        : "claude-sonnet-5"
+      const isAlreadyFallback = currentModel === fallbackModel || currentModel === "claude-sonnet-5"
+      if ((status === 429 || status === 529 || status >= 500) && !isAlreadyFallback) {
+        console.warn(`[provider] ${currentModel} returned ${status} — falling back to ${fallbackModel}`)
         return runWithStructuredOutput<T>(systemPrompt, userPrompt, jsonSchema, {
           ...options,
-          model: "claude-sonnet-5",
+          model: fallbackModel,
         })
       }
 

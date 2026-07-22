@@ -16,7 +16,7 @@ export interface SerpPhaseResult {
   degraded: boolean;
 }
 
-function formatSerpForPrompt(raw: Awaited<ReturnType<typeof fetchSerp>>): string {
+export function formatSerpForPrompt(raw: Awaited<ReturnType<typeof fetchSerp>>): string {
   const lines: string[] = [];
 
   // Top organic results

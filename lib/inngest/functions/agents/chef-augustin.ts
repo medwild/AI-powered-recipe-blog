@@ -39,11 +39,12 @@ export { RecipeArticleSchema }
 // ---------------------------------------------------------------------------
 
 function zodToJsonSchema(schema: z.ZodObject<any>): Record<string, unknown> {
-  const shape = schema._def.shape() as Record<string, z.ZodTypeAny>
+  const def = (schema as any)._def
+  const shape = typeof def.shape === "function" ? def.shape() : (def.shape ?? {})
   const properties: Record<string, unknown> = {}
   const required: string[] = []
 
-  for (const [key, field] of Object.entries(shape)) {
+  for (const [key, field] of Object.entries(shape as Record<string, z.ZodTypeAny>)) {
     properties[key] = fieldToJsonSchema(field)
     if (!(field as any)._def?.isOptional) required.push(key)
   }
@@ -86,7 +87,8 @@ function fieldToJsonSchema(field: z.ZodTypeAny): Record<string, unknown> {
       if (unknownKeys === "passthrough") {
         return { type: "object" }
       }
-      const objShape = def.shape() as Record<string, z.ZodTypeAny>
+      const raw = (def as any).shape
+      const objShape: Record<string, z.ZodTypeAny> = typeof raw === "function" ? raw() : (raw ?? {})
       const objProps: Record<string, unknown> = {}
       for (const [k, v] of Object.entries(objShape)) {
         objProps[k] = fieldToJsonSchema(v)
@@ -134,6 +136,14 @@ export type RecipeDraft = ChefAugustinOutput
  * { name, quantity? } objects.
  */
 export function recipeArticleToChefAugustinOutput(r: RecipeArticle): ChefAugustinOutput {
+  // jsonLd is a JSON string from the LLM — parse it to an object for DB storage
+  let parsedJsonLd: Record<string, unknown> = {}
+  if (typeof r.jsonLd === "string") {
+    try { parsedJsonLd = JSON.parse(r.jsonLd) } catch { /* leave empty */ }
+  } else if (typeof r.jsonLd === "object" && r.jsonLd !== null) {
+    parsedJsonLd = r.jsonLd as unknown as Record<string, unknown>
+  }
+
   return {
     title: r.title,
     metaTitle: r.metaTitle,
@@ -149,7 +159,7 @@ export function recipeArticleToChefAugustinOutput(r: RecipeArticle): ChefAugusti
     servings: r.servings,
     difficulty: r.difficulty,
     imagePrompt: r.imagePrompt,
-    jsonLd: r.jsonLd as unknown as Record<string, unknown>,
+    jsonLd: parsedJsonLd,
   }
 }
 
@@ -221,7 +231,7 @@ export async function agentChefAugustinMega(
 
     userPrompt += `\n\n---\nGenerate a complete ${keyword} recipe article. Follow the mega-skill exactly. Output valid JSON only.`
 
-    console.log(`[ChefAugustinMega] Calling Opus 4.8 for "${keyword}" (${systemPrompt.length} chars skill, ${userPrompt.length} chars prompt)`)
+    console.log(`[ChefAugustinMega] Calling ${RECIPE_JSON_SCHEMA ? "structured output" : "LLM"} for "${keyword}" (${systemPrompt.length} chars skill, ${userPrompt.length} chars prompt)`)
 
     const result = await runWithStructuredOutput<RecipeArticle>(
       systemPrompt,
