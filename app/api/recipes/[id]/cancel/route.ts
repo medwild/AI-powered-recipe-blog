@@ -3,7 +3,6 @@ import { cookies } from "next/headers"
 import { db } from "@/lib/db"
 import { recipes } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
-import { inngest } from "@/lib/inngest/client"
 
 export async function POST(
   _req: Request,
@@ -46,12 +45,6 @@ export async function POST(
     .update(recipes)
     .set({ status: "cancelled", updatedAt: new Date() })
     .where(eq(recipes.id, numericId))
-
-  // 2. Envoyer l'événement d'annulation à Inngest
-  await inngest.send({
-    name: "recipe/cancel",
-    data: { recipeId: numericId },
-  })
 
   return NextResponse.json({ status: "cancelled" })
 }

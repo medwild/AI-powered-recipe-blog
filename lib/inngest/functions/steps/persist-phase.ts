@@ -16,54 +16,51 @@ import type { ChefAugustinOutput } from "../agents/chef-augustin"
 import { appendLog, logEntry, SITE_URL } from "../helpers"
 
 export async function persistFinalDraft(
-  step: { run: (name: string, fn: () => Promise<unknown>) => Promise<unknown> },
   recipeId: number,
   finalRecipe: ChefAugustinOutput,
   gateStatus: "PASS" | "BLOCK",
   degraded: boolean,
 ): Promise<void> {
-  await step.run("persist-draft-final", async () => {
-    const slug = slugify(finalRecipe.title)
-    const wordCount = (finalRecipe.contentMarkdown ?? "").split(/\s+/).filter(Boolean).length
-    const status = (gateStatus === "PASS" && !degraded) ? "published" : "draft"
+  const slug = slugify(finalRecipe.title)
+  const wordCount = (finalRecipe.contentMarkdown ?? "").split(/\s+/).filter(Boolean).length
+  const status = (gateStatus === "PASS" && !degraded) ? "published" : "draft"
 
-    await db.update(recipes).set({
-      title: finalRecipe.title,
-      metaTitle: finalRecipe.metaTitle,
-      metaDescription: finalRecipe.metaDescription,
-      excerpt: finalRecipe.excerpt,
-      contentMarkdown: finalRecipe.contentMarkdown,
-      prepTime: finalRecipe.prepTime,
-      cookTime: finalRecipe.cookTime,
-      totalTime: finalRecipe.totalTime,
-      servings: finalRecipe.servings,
-      difficulty: finalRecipe.difficulty,
-      ingredients: finalRecipe.ingredients,
-      instructions: finalRecipe.instructions,
-      tags: finalRecipe.tags,
-      jsonLd: finalRecipe.jsonLd,
-      content_type: "recipe",
-      slug,
-      status,
-      publishedAt: status === "published" ? new Date() : null,
-      updatedAt: new Date(),
-    }).where(eq(recipes.id, recipeId))
+  await db.update(recipes).set({
+    title: finalRecipe.title,
+    metaTitle: finalRecipe.metaTitle,
+    metaDescription: finalRecipe.metaDescription,
+    excerpt: finalRecipe.excerpt,
+    contentMarkdown: finalRecipe.contentMarkdown,
+    prepTime: finalRecipe.prepTime,
+    cookTime: finalRecipe.cookTime,
+    totalTime: finalRecipe.totalTime,
+    servings: finalRecipe.servings,
+    difficulty: finalRecipe.difficulty,
+    ingredients: finalRecipe.ingredients,
+    instructions: finalRecipe.instructions,
+    tags: finalRecipe.tags,
+    jsonLd: finalRecipe.jsonLd,
+    content_type: "recipe",
+    slug,
+    status,
+    publishedAt: status === "published" ? new Date() : null,
+    updatedAt: new Date(),
+  }).where(eq(recipes.id, recipeId))
 
-    // Ping Google sitemap after publish
-    if (status === "published") {
-      try {
-        await fetch(
-          `https://www.google.com/ping?sitemap=${encodeURIComponent(`${SITE_URL}/sitemap.xml`)}`,
-        )
-      } catch {
-        // Non-blocking — sitemap ping failure doesn't affect the article
-      }
+  // Ping Google sitemap after publish
+  if (status === "published") {
+    try {
+      await fetch(
+        `https://www.google.com/ping?sitemap=${encodeURIComponent(`${SITE_URL}/sitemap.xml`)}`,
+      )
+    } catch {
+      // Non-blocking — sitemap ping failure doesn't affect the article
     }
+  }
 
-    await appendLog(recipeId, logEntry(
-      "Workflow",
-      status === "published" ? "done" : "error",
-      `${status === "published" ? "Published" : "Draft"} — ${wordCount} words, ${(finalRecipe.ingredients ?? []).length} ingredients`,
-    ))
-  })
+  await appendLog(recipeId, logEntry(
+    "Workflow",
+    status === "published" ? "done" : "error",
+    `${status === "published" ? "Published" : "Draft"} — ${wordCount} words, ${(finalRecipe.ingredients ?? []).length} ingredients`,
+  ))
 }

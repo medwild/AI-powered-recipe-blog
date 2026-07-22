@@ -24,14 +24,12 @@ export interface ImagePhaseResult {
 }
 
 export async function runImagePhase(
-  step: { run: (name: string, fn: () => Promise<unknown>) => Promise<unknown>; sleep: (name: string, dur: string) => Promise<void> },
   recipeId: number,
   recipe: { title: string; tags: string[]; imagePrompt?: string },
   keyword: string,
 ): Promise<ImagePhaseResult> {
   let degraded = false
 
-  // Use the unified agent's image prompt, or fall back to the deterministic 10-layer builder
   const imagePrompt = optimizeImagePrompt({
     title: recipe.title,
     tags: recipe.tags,
@@ -40,31 +38,24 @@ export async function runImagePhase(
   })
 
   await appendLog(recipeId, logEntry("Image Prompt", "done", `Using image prompt (${imagePrompt.length} chars)`))
-  await step.sleep("sleep-after-image-prompt", "2s")
+  await new Promise((r) => setTimeout(r, 2000)) // rate-limit pause
 
-  // ── Generate and upload image variants ──────────────────────────────────
   const imageVariants: Array<{ label: string; url: string; prompt: string }> = []
   let heroImageUrl: string | null = null
 
   for (let vi = 0; vi < IMAGE_VARIANT_COUNT; vi++) {
     try {
-      const buffer = (await step.run(`gen-image-v${vi}`, async () => {
-        await appendLog(recipeId, logEntry("Image Gen", "running", `Variant ${vi + 1}/${IMAGE_VARIANT_COUNT}`))
-        const result = await runImage(imagePrompt)
-        await appendLog(recipeId, logEntry("Image Gen", "done", `Variant ${vi + 1} generated — ${result.length} bytes`))
-        return result
-      })) as Buffer
+      await appendLog(recipeId, logEntry("Image Gen", "running", `Variant ${vi + 1}/${IMAGE_VARIANT_COUNT}`))
+      const buffer = await runImage(imagePrompt)
+      await appendLog(recipeId, logEntry("Image Gen", "done", `Variant ${vi + 1} generated — ${buffer.length} bytes`))
 
-      const imageUrl = (await step.run(`upload-image-v${vi}`, async () => {
-        const url = await uploadImage(buffer, `${recipe.title}-v${vi}`)
-        await appendLog(recipeId, logEntry("Image Upload", "done", `Uploaded to Cloudinary — v${vi}`))
-        return url
-      })) as string
+      const imageUrl = await uploadImage(buffer, `${recipe.title}-v${vi}`)
+      await appendLog(recipeId, logEntry("Image Upload", "done", `Uploaded to Cloudinary — v${vi}`))
 
       imageVariants.push({ label: `Variant ${vi + 1}`, url: imageUrl, prompt: imagePrompt })
       if (!heroImageUrl) heroImageUrl = imageUrl
 
-      // Non-blocking image quality validation (v13 — was dead code before Phase 3)
+      // Non-blocking image quality validation
       try {
         const imgValidation = await validateImage(imageUrl, { requireAltText: true, altText: recipe.title })
         if (!imgValidation.passed) {
@@ -73,7 +64,6 @@ export async function runImagePhase(
             `Variant ${vi + 1} has ${imgValidation.errors.length} issue(s): ${issues}`))
         }
       } catch (imgErr) {
-        // Image validation failure is non-blocking — log and continue
         await appendLog(recipeId, logEntry("Image Validator", "error",
           `Validation failed for v${vi}: ${(imgErr as Error).message}`))
       }

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { recipes } from "@/lib/db/schema"
 import { slugify } from "@/lib/slug"
-import { inngest } from "@/lib/inngest/client"
+import { generateRecipe } from "@/lib/generate-recipe-pure"
 import { checkRateLimit } from "@/lib/rate-limit"
 import { preGenerationGate } from "@/lib/pre-generation-gate"
 
@@ -180,19 +180,15 @@ export async function POST(req: Request) {
     })
     .returning({ id: recipes.id })
 
-  // Fire-and-forget via Inngest : exécution fiable en arrière-plan
-  // avec retry automatique et observabilité (dashboard Inngest).
-  await inngest.send({
-    name: "recipe/generate",
-    data: {
-      recipeId: created.id,
-      keyword,
-      cuisine,
-      cuisineIngredients,
-      cuisineTechniques,
-      ...(aorCategory ? { aorCategory, aorAngle } : {}),
-      ...(mode ? { mode } : {}),
-    },
+  // Fire-and-forget — pipeline runs async, API returns immediately
+  generateRecipe({
+    recipeId: created.id,
+    keyword,
+    cuisine,
+    cuisineIngredients,
+    cuisineTechniques,
+  }).catch((err) => {
+    console.error(`[generate] Pipeline failed for recipe #${created.id}:`, (err as Error).message)
   })
 
   return NextResponse.json(

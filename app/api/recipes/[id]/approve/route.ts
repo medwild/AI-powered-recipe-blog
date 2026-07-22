@@ -3,7 +3,6 @@ import { cookies } from "next/headers"
 import { db } from "@/lib/db"
 import { recipes } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
-import { inngest } from "@/lib/inngest/client"
 
 export async function POST(
   _req: Request,
@@ -49,13 +48,6 @@ export async function POST(
     .update(recipes)
     .set({ status: "approved", updatedAt: new Date() })
     .where(eq(recipes.id, numericId))
-
-  // 2. Envoyer l'événement d'approbation à Inngest
-  //    Le workflow reprend à l'étape waitForEvent avec Agent 4
-  await inngest.send({
-    name: "recipe/approved",
-    data: { recipeId: numericId },
-  })
 
   return NextResponse.json({ status: "approved" })
 }

@@ -42,10 +42,6 @@ export function formatSerpForPrompt(raw: Awaited<ReturnType<typeof fetchSerp>>):
 }
 
 export async function runSerpPhase(
-  step: {
-    run: (name: string, fn: () => Promise<unknown>) => Promise<unknown>;
-    sleep: (name: string, dur: string) => Promise<void>;
-  },
   recipeId: number,
   keyword: string,
 ): Promise<SerpPhaseResult> {
@@ -53,34 +49,30 @@ export async function runSerpPhase(
   let serpText = "";
 
   try {
-    const raw = await step.run("analyze-serp", async () => {
-      await appendLog(recipeId, logEntry("SERP", "running", `Google analysis for "${keyword}"`));
+    await appendLog(recipeId, logEntry("SERP", "running", `Google analysis for "${keyword}"`));
 
-      const result = await fetchSerp(keyword);
+    const raw = await fetchSerp(keyword);
 
-      // PAA fallback
-      if (!result.relatedQuestions || result.relatedQuestions.length < 2) {
-        const syntheticPAA = generateSyntheticPAA(keyword);
-        result.relatedQuestions = syntheticPAA.map((q) => ({
-          question: q,
-          snippet: undefined,
-          sourceUrl: undefined,
-        }));
-        await appendLog(recipeId, logEntry("SERP", "error",
-          `No PAA questions — using ${syntheticPAA.length} synthetic fallbacks`));
-      }
+    // PAA fallback
+    if (!raw.relatedQuestions || raw.relatedQuestions.length < 2) {
+      const syntheticPAA = generateSyntheticPAA(keyword);
+      raw.relatedQuestions = syntheticPAA.map((q) => ({
+        question: q,
+        snippet: undefined,
+        sourceUrl: undefined,
+      }));
+      await appendLog(recipeId, logEntry("SERP", "error",
+        `No PAA questions — using ${syntheticPAA.length} synthetic fallbacks`));
+    }
 
-      // Persist raw SERP to DB
-      await db
-        .update(recipes)
-        .set({ serpData: result as unknown as Record<string, unknown> })
-        .where(eq(recipes.id, recipeId));
+    // Persist raw SERP to DB
+    await db
+      .update(recipes)
+      .set({ serpData: raw as unknown as Record<string, unknown> })
+      .where(eq(recipes.id, recipeId));
 
-      await appendLog(recipeId, logEntry("SERP", "done",
-        `${result.organic.length} organic, ${result.relatedQuestions.length} PAA`));
-
-      return result;
-    }) as Awaited<ReturnType<typeof fetchSerp>>;
+    await appendLog(recipeId, logEntry("SERP", "done",
+      `${raw.organic.length} organic, ${raw.relatedQuestions.length} PAA`));
 
     serpText = formatSerpForPrompt(raw);
   } catch (err) {
@@ -96,6 +88,6 @@ export async function runSerpPhase(
     throw err;
   }
 
-  await step.sleep("sleep-after-serp", "2s");
+  await new Promise((r) => setTimeout(r, 2000)); // rate-limit pause
   return { serpText, degraded };
 }
