@@ -37,6 +37,7 @@ const MAX_RETRIES: Record<string, number> = {
   food_safety: 1,
   too_short: 1,
   banned_words: 2,
+  meta_title_length: 1,
 }
 
 function buildFeedback(reason: string, errors: string[]): string {
@@ -47,6 +48,8 @@ function buildFeedback(reason: string, errors: string[]): string {
       return errors[0]
     case "banned_words":
       return `WARNING: Your previous output contained banned health claims: ${errors.join(" ")}. This is a HARD RULE. Do not use these terms. Rewrite without them.`
+    case "meta_title_length":
+      return `WARNING: Your metaTitle is too long (>60 chars). Rewrite it under 60 characters, keyword first.`
     default:
       return errors.join(" ")
   }

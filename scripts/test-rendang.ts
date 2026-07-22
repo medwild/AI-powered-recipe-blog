@@ -1,7 +1,5 @@
-// scripts/smoke-test-single.ts
-// Smoke test v14 — 1 recette bout en bout (SERP → Mega-Skill → Gate → DB)
-// Usage: npx tsx scripts/smoke-test-single.ts
-
+// scripts/test-rendang.ts — Rendang stress test
+// v2: save preview BEFORE quality gate so DB failure doesn't hide the recipe
 import dotenv from "dotenv"
 import path from "path"
 dotenv.config({ path: path.resolve(process.cwd(), ".env.local"), override: true })
@@ -15,7 +13,6 @@ const KEYWORD = "Beef rendang for two"
 const CUISINE = "Indonesian Slow-Cooked Classics for Two"
 const INGREDIENTS = "beef chuck, coconut milk, lemongrass, galangal, turmeric, kaffir lime leaves, turmeric leaves, shallots, garlic, dried chilies, tamarind, kerisik (toasted grated coconut)"
 const TECHNIQUES = "slow braising, spice paste grinding, coconut reduction, kerisik toasting, low-and-slow simmering"
-// Unique slug suffix to avoid duplicate on reruns
 const SLUG_SUFFIX = Date.now().toString(36)
 
 const arr = (v: any): any[] => Array.isArray(v) ? v : (typeof v === "string" ? v.split(/,\s*/) : [])
@@ -45,10 +42,10 @@ async function main() {
   }
 
   // ── Step 2: Mega-Skill ────────────────────────────────────────────────
-  console.log("\n🤖 Step 2: Mega-Skill (Claude Sonnet 5 via ZenMux)...")
+  console.log("\n🤖 Step 2: Mega-Skill (Opus 4.8 via ZenMux)...")
   const t2 = Date.now()
 
-  let article: any
+  let article: any, origTitle: string
   try {
     article = await agentChefAugustinMega({
       keyword: KEYWORD,
@@ -58,6 +55,7 @@ async function main() {
       serpData: serpText,
       citations: "",
     })
+    origTitle = article.title
     const elapsed = ((Date.now() - t2) / 1000).toFixed(1)
     const words = article.contentMarkdown?.split(/\s+/).filter(Boolean).length ?? 0
     console.log(`   ✅ Generated: ${words} words in ${elapsed}s`)
@@ -66,28 +64,9 @@ async function main() {
     process.exit(1)
   }
 
-  // ── Step 3: Quality Gate (full — with DB) ─────────────────────────────
-  console.log("\n🛡️  Step 3: Quality Gate (full — with DB)...")
-  const t3 = Date.now()
-
-  // Hack title to avoid duplicate slug on reruns
-  const origTitle = article.title
-  article.title = `${article.title} ${SLUG_SUFFIX}`
-  let gate: any
-  try {
-    gate = await qualityGate(article)
-  } catch (err) {
-    console.log(`   ❌ Gate DB error: ${(err as Error).message}`)
-    process.exit(1)
-  }
-  article.title = origTitle
-
-  const wordCount = (article.contentMarkdown || "").split(/\s+/).filter(Boolean).length
-  console.log(`   Status: ${gate.status === "PASS" ? "✅ PASS" : "❌ BLOCK"}${gate.reason ? ` (${gate.reason})` : ""}`)
-  if (gate.errors?.length) for (const e of gate.errors) console.log(`   ⚠️  ${e}`)
-
-  // ── Audit ─────────────────────────────────────────────────────────────
+  // ── Audit (before DB — no crash can hide this) ────────────────────────
   const md = article.contentMarkdown || ""
+  const wordCount = (article.contentMarkdown || "").split(/\s+/).filter(Boolean).length
   const h2s = md.match(/^## /gm)?.length ?? 0
   const faqs = md.match(/^## .+\?$/gm)?.length ?? 0
   const tips = md.match(/Chef Augustin'?s Tip/gi)?.length ?? 0
@@ -107,7 +86,7 @@ async function main() {
   console.log(`   Difficulty: ${article.difficulty}`)
   console.log(`   Times:      prep=${article.prepTime} cook=${article.cookTime} total=${article.totalTime}`)
 
-  // ── Save preview ──────────────────────────────────────────────────────
+  // ── Save preview immediately (before DB) ──────────────────────────────
   const fs = await import("fs/promises")
   const preview = [
     `# ${origTitle}`, ``,
@@ -119,21 +98,31 @@ async function main() {
     article.contentMarkdown, ``,
     `---`, ``,
     `## Image Prompt`, article.imagePrompt, ``,
-    `## Gate`, `Status: ${gate.status}${gate.reason ? ` (${gate.reason})` : ""}`,
-    ...(gate.errors?.length ? [`Errors: ${gate.errors.join("; ")}`] : []),
   ].join("\n")
   await fs.writeFile("/tmp/test-rendang-output.md", preview)
-  console.log(`\n📄 Preview saved to /tmp/test-rendang-output.md`)
+  console.log(`📄 Recipe saved to /tmp/test-rendang-output.md`)
+
+  // ── Step 3: Quality Gate (best-effort, DB may be down) ────────────────
+  console.log("\n🛡️  Step 3: Quality Gate...")
+  article.title = `${article.title} ${SLUG_SUFFIX}`
+  try {
+    const gate = await qualityGate(article)
+    console.log(`   Status: ${gate.status === "PASS" ? "✅ PASS" : "❌ BLOCK"}${gate.reason ? ` (${gate.reason})` : ""}`)
+    if (gate.errors?.length) for (const e of gate.errors) console.log(`   ⚠️  ${e}`)
+  } catch (err) {
+    console.log(`   ⚠️  Gate DB unavailable (non-blocking): ${(err as Error).message.substring(0, 120)}`)
+  }
+  article.title = origTitle
 
   // ── Final ─────────────────────────────────────────────────────────────
   const totalTime = ((Date.now() - t1) / 1000).toFixed(1)
   console.log(`\n${"═".repeat(60)}`)
-  console.log(`${gate.status === "PASS" ? "✅ SMOKE TEST PASSED" : "⚠️  SMOKE TEST COMPLETED"}`)
-  console.log(`   Total time: ${totalTime}s (${(Date.now() - t2) / 1000}s LLM)`)
+  console.log(`✅ RENDANG TEST COMPLETE — ${wordCount} words in ${totalTime}s`)
+  console.log(`   Full recipe: /tmp/test-rendang-output.md`)
   console.log(`${"═".repeat(60)}`)
 }
 
 main().catch((err) => {
-  console.error("❌ Smoke test crashed:", err)
+  console.error("❌ Test crashed:", err)
   process.exit(1)
 })

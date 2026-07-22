@@ -10,7 +10,7 @@ import type { RecipeArticle } from "@/lib/schemas/recipe-article";
 
 export interface GateResult {
   status: "PASS" | "BLOCK";
-  reason?: "duplicate" | "food_safety" | "too_short" | "banned_words";
+  reason?: "duplicate" | "food_safety" | "too_short" | "banned_words" | "meta_title_length";
   errors?: string[];
 }
 
@@ -203,6 +203,15 @@ export async function qualityGate(output: RecipeArticle): Promise<GateResult> {
       status: "BLOCK",
       reason: "banned_words",
       errors: bannedWordsFound.map((w) => `"${w}" found`),
+    };
+  }
+
+  // Check 4: Meta title length (≤60 chars per Zod schema)
+  if (output.metaTitle && output.metaTitle.length > 60) {
+    return {
+      status: "BLOCK",
+      reason: "meta_title_length",
+      errors: [`Meta title is ${output.metaTitle.length} chars (max 60)`],
     };
   }
 
