@@ -3,15 +3,17 @@
 import dotenv from "dotenv"
 import path from "path"
 dotenv.config({ path: path.resolve(process.cwd(), ".env.local"), override: true })
-import { db } from "../lib/db"
-import { recipes } from "../lib/db/schema"
-import { slugify } from "../lib/slug"
-import { generateRecipe } from "../lib/generate-recipe-pure"
 
 const keyword = process.argv[2]
 if (!keyword) { console.log("Usage: npx tsx scripts/generate.ts \"Your Keyword\""); process.exit(1) }
 
 async function main() {
+  // Dynamic imports — ES modules hoist static imports before dotenv
+  const { db } = await import("../lib/db")
+  const { recipes } = await import("../lib/db/schema")
+  const { slugify } = await import("../lib/slug")
+  const { generateRecipe } = await import("../lib/generate-recipe-pure")
+
   console.log(`\n🔬 Generating: "${keyword}"\n`)
 
   // Create DB entry
