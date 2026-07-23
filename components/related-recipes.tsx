@@ -3,7 +3,7 @@ import Image from "next/image"
 import { resolveCluster } from "@/lib/cluster-resolver"
 import { getRelatedRecipes, getPublishedRecipes } from "@/lib/queries"
 import type { Recipe } from "@/lib/db/schema"
-import { FOOD_BLUR_PLACEHOLDER } from "@/lib/utils"
+import { FOOD_BLUR_PLACEHOLDER } from "@/lib/utils/cn"
 
 export async function RelatedRecipes({ recipe }: { recipe: Recipe }) {
   const tags = (recipe.tags ?? []) as string[]

@@ -3,7 +3,7 @@
  * Usage: npx tsx scripts/test-helpers.ts
  */
 
-import { generateSyntheticPAA, isRecoverableError, buildFallbackImagePrompt } from "../lib/inngest/functions/helpers"
+import { generateSyntheticPAA, isRecoverableError, buildFallbackImagePrompt } from "../lib/pipeline/helpers"
 import { slugify } from "../lib/slug"
 
 let passed = 0, failed = 0

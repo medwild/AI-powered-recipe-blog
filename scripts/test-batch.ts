@@ -4,11 +4,11 @@ import dotenv from "dotenv"
 import path from "path"
 dotenv.config({ path: path.resolve(process.cwd(), ".env.local"), override: true })
 import { fetchSerp } from "../lib/agents/serp"
-import { formatSerpForPrompt } from "../lib/inngest/functions/steps/serp-phase"
-import { agentChefAugustinMega } from "../lib/inngest/functions/agents/chef-augustin"
+import { formatSerpForPrompt } from "../lib/pipeline/steps/serp-phase"
+import { agentChefAugustinMega } from "../lib/pipeline/agents/chef-augustin"
 import { qualityGate } from "../lib/quality-gate"
 import { runSeoGate } from "../lib/seo/gate"
-import { generateSyntheticPAA } from "../lib/inngest/functions/helpers"
+import { generateSyntheticPAA } from "../lib/pipeline/helpers"
 
 const BATCH = [
   {

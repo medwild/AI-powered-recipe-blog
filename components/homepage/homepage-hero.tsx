@@ -2,7 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, Clock, ChefHat, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { FOOD_BLUR_PLACEHOLDER } from "@/lib/utils"
+import { FOOD_BLUR_PLACEHOLDER } from "@/lib/utils/cn"
 
 /**
  * HomepageHero — redesigned following 2025-2026 food blog best practices.

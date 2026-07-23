@@ -5,9 +5,8 @@
  * Designed to exercise different pipeline paths (pass, fail, loop, degraded).
  */
 
-import type { ChefAugustinOutput } from "@/lib/inngest/functions/agents/chef-augustin"
-import type { StrategyPlan } from "@/lib/inngest/functions/agents/strategist"
-import type { SerpPhaseResult } from "@/lib/inngest/functions/steps/serp-phase"
+import type { ChefAugustinOutput, StrategyPlan } from "@/lib/pipeline/agents/chef-augustin"
+import type { SerpPhaseResult } from "@/lib/pipeline/steps/serp-phase"
 
 // ── Strategy Plan ──────────────────────────────────────────────────────────────
 

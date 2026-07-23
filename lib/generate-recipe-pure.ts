@@ -10,13 +10,13 @@ import { db } from "@/lib/db"
 import { recipes } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 import { logPipelineError } from "@/lib/queries"
-import { runSerpPhase } from "./inngest/functions/steps/serp-phase"
-import { agentChefAugustinMega, recipeArticleToChefAugustinOutput } from "./inngest/functions/agents/chef-augustin"
-import type { RecipeArticle } from "./inngest/functions/agents/chef-augustin"
+import { runSerpPhase } from "./pipeline/steps/serp-phase"
+import { agentChefAugustinMega, recipeArticleToChefAugustinOutput } from "./pipeline/agents/chef-augustin"
+import type { RecipeArticle } from "./pipeline/agents/chef-augustin"
 import { qualityGate, type GateResult } from "@/lib/quality-gate"
-import { appendLog, logEntry, isRecoverableError } from "./inngest/functions/helpers"
-import { persistFinalDraft } from "./inngest/functions/steps/persist-phase"
-import { runImagePhase } from "./inngest/functions/steps/image-phase"
+import { appendLog, logEntry, isRecoverableError } from "./pipeline/helpers"
+import { persistFinalDraft } from "./pipeline/steps/persist-phase"
+import { runImagePhase } from "./pipeline/steps/image-phase"
 import { runSeoGate } from "@/lib/seo/gate"
 
 const MAX_RETRIES: Record<string, number> = {
@@ -107,7 +107,7 @@ export async function generateRecipe(input: GenerateRecipeInput): Promise<void> 
         heroImageUrl = imageResult.heroImageUrl
         const contentWithImages = article!.contentMarkdown.replace(
           /\[IMAGE:\s*(.+?)\]/g,
-          (_, alt) => `<img src="${imageResult.heroImageUrl}" alt="${alt.trim()}" loading="lazy" />`,
+          (_: string, alt: string) => `<img src="${imageResult.heroImageUrl}" alt="${alt.trim()}" loading="lazy" />`,
         )
         await db.update(recipes).set({
           heroImageUrl: imageResult.heroImageUrl, contentMarkdown: contentWithImages, updatedAt: new Date(),

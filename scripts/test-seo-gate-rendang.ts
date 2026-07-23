@@ -3,7 +3,7 @@
 import dotenv from "dotenv"
 import path from "path"
 dotenv.config({ path: path.resolve(process.cwd(), ".env.local"), override: true })
-import { agentChefAugustinMega } from "../lib/inngest/functions/agents/chef-augustin"
+import { agentChefAugustinMega } from "../lib/pipeline/agents/chef-augustin"
 import { runSeoGate } from "../lib/seo/gate"
 
 const KEYWORD = "Beef rendang for two"

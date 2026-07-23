@@ -18,3 +18,5 @@ node_modules
 .next/
 .DS_StoreSTATE.json
 loop-run-log.md
+.vercel
+.env*

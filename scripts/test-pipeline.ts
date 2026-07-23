@@ -10,7 +10,7 @@
 
 import { extractJson } from "../lib/agents/json-utils"
 import { slugify } from "../lib/slug"
-import { generateSyntheticPAA } from "../lib/inngest/functions/helpers"
+import { generateSyntheticPAA } from "../lib/pipeline/helpers"
 import { checkRateLimit } from "../lib/rate-limit"
 
 // ---------------------------------------------------------------------------

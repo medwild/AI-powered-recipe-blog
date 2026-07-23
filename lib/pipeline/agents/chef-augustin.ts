@@ -16,7 +16,7 @@ import { z } from "zod"
 import type { Ingredient, Instruction } from "@/lib/db/schema"
 
 // StrategyPlan was deleted in v14 — define a minimal local type for backward compat
-interface StrategyPlan {
+export interface StrategyPlan {
   angle?: string
   primaryKeyword?: string
   secondaryKeywords?: string[]

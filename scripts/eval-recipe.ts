@@ -8,11 +8,11 @@
 import dotenv from "dotenv"
 import path from "path"
 dotenv.config({ path: path.resolve(process.cwd(), ".env.local") })
-import { agentChefAugustinMega } from "../lib/inngest/functions/agents/chef-augustin"
+import { agentChefAugustinMega } from "../lib/pipeline/agents/chef-augustin"
 import { qualityGate } from "../lib/quality-gate"
 import { fetchSerp } from "../lib/agents/serp"
-import { formatSerpForPrompt } from "../lib/inngest/functions/steps/serp-phase"
-import { generateSyntheticPAA } from "../lib/inngest/functions/helpers"
+import { formatSerpForPrompt } from "../lib/pipeline/steps/serp-phase"
+import { generateSyntheticPAA } from "../lib/pipeline/helpers"
 
 const arr = (v: any): any[] => Array.isArray(v) ? v : (typeof v === "string" ? v.split(/,\s*/) : [])
 

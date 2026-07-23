@@ -92,8 +92,8 @@ vi.mock("@/lib/skills", () => ({
 // Imports (after mocks)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { runContentLoopPhase, type ContentLoopResult } from "@/lib/inngest/functions/steps/content-loop-phase"
-import { runImagePhase, type ImagePhaseResult } from "@/lib/inngest/functions/steps/image-phase"
+import { runContentLoopPhase, type ContentLoopResult } from "@/lib/pipeline/steps/content-loop-phase"
+import { runImagePhase, type ImagePhaseResult } from "@/lib/pipeline/steps/image-phase"
 import { checkCitability } from "@/lib/geo-validator"
 import { validateContent, validateFoodSafety } from "@/lib/content-validator"
 import { computeQualityScore } from "@/lib/quality-scorer"
@@ -118,11 +118,11 @@ const { mockChefAugustin, mockStrategist } = vi.hoisted(() => ({
   mockStrategist: vi.fn(),
 }))
 
-vi.mock("@/lib/inngest/functions/agents/chef-augustin", () => ({
+vi.mock("@/lib/pipeline/agents/chef-augustin", () => ({
   agentChefAugustin: mockChefAugustin,
 }))
 
-vi.mock("@/lib/inngest/functions/agents/strategist", () => ({
+vi.mock("@/lib/pipeline/agents/strategist", () => ({
   agentStrategist: mockStrategist,
 }))
 
