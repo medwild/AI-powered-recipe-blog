@@ -1,4 +1,5 @@
 import { Suspense } from "react"
+import dynamic from "next/dynamic"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
@@ -6,8 +7,9 @@ import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { RecipeCard } from "@/components/recipe-card"
 import { ArticleCard } from "@/components/article-card"
-import { RecipeSearch } from "@/components/recipe-search"
 import { Breadcrumbs } from "@/components/breadcrumbs"
+
+const RecipeSearch = dynamic(() => import("@/components/recipe-search").then((m) => m.RecipeSearch))
 import { searchPublishedRecipes, getRecipeCategories, getPublishedArticles } from "@/lib/queries"
 import { resolveCluster, getClusterById, getAllClusters } from "@/lib/cluster-resolver"
 

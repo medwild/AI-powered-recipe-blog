@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation"
+import { cookies } from "next/headers"
 import type { Metadata } from "next"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
@@ -14,6 +16,12 @@ export const metadata: Metadata = {
 }
 
 export default async function DashboardPage() {
+  const cookieStore = await cookies()
+  const token = cookieStore.get("dashboard_auth")?.value
+  if (!token || token !== process.env.DASHBOARD_SECRET_TOKEN) {
+    redirect("/login")
+  }
+
   const recipes = await getAllRecipes()
   const published = recipes.filter((r) => r.status === "published").length
   const drafts = recipes.filter((r) => r.status === "draft").length
