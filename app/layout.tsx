@@ -72,6 +72,14 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${geistSans.variable} ${playfair.variable} bg-background`}
     >
+      <head>
+        {/* Prevent white flash on slow connections: set bg before CSS loads */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `html{background:#fdfaf4;color:#3d3328}@media(prefers-color-scheme:dark){html{background:#1a1614;color:#f5efe6}}`,
+          }}
+        />
+      </head>
       <body className="font-sans antialiased">
         {/* Skip to content — WCAG 2.1 AA (bypass blocks) */}
         <a
