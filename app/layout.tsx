@@ -37,12 +37,22 @@ export const metadata: Metadata = {
     title: 'Chef Augustin — Easy Weeknight Dinners for Two',
     description:
       'Simple small-batch dinner recipes for two people. Practical weeknight meals from a French-trained chef.',
+    url: '/',
+    images: [
+      {
+        url: '/hero-kitchen.png',
+        width: 1200,
+        height: 630,
+        alt: 'Chef Augustin — Easy Weeknight Dinners for Two',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Chef Augustin — Easy Weeknight Dinners for Two',
     description:
       'Simple small-batch dinner recipes for two people.',
+    images: ['/hero-kitchen.png'],
   },
 }
 
