@@ -73,6 +73,8 @@ export default function RootLayout({
       className={`${geistSans.variable} ${playfair.variable} bg-background`}
     >
       <head>
+        {/* Pinterest domain verification */}
+        <meta name="p:domain_verify" content="c587a32b74cfe3cf4891ca6ddd5a347b" />
         {/* Prevent white flash on slow connections: set bg before CSS loads */}
         <style
           dangerouslySetInnerHTML={{
