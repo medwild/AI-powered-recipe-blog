@@ -20,6 +20,25 @@ export async function getPublishedRecipes() {
     .orderBy(desc(recipes.publishedAt))
 }
 
+/** Lightweight: only the latest recipe's hero fields — for streaming the hero before below-fold content resolves. */
+export async function getLatestRecipeHero() {
+  return db
+    .select({
+      title: recipes.title,
+      heroImageUrl: recipes.heroImageUrl,
+    })
+    .from(recipes)
+    .where(
+      and(
+        eq(recipes.status, "published"),
+        eq(recipes.content_type, "recipe"),
+      ),
+    )
+    .orderBy(desc(recipes.publishedAt))
+    .limit(1)
+    .then((rows) => rows[0] ?? null)
+}
+
 export async function searchPublishedRecipes(query?: string, category?: string) {
   const conditions = [
     eq(recipes.status, "published"),

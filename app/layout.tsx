@@ -1,9 +1,9 @@
-import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Geist, Playfair_Display } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
-import { Toaster } from '@/components/ui/sonner'
 import { CookieBanner } from '@/components/cookie-banner'
+import { DynamicToaster } from '@/components/dynamic-toaster'
+import { DynamicAnalytics } from '@/components/dynamic-analytics'
 import './globals.css'
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'], display: 'swap' })
@@ -84,9 +84,9 @@ export default function RootLayout({
           <div id="main-content" tabIndex={-1}>
             {children}
           </div>
-          <Toaster position="top-center" richColors />
+          <DynamicToaster />
           <CookieBanner />
-          {process.env.NODE_ENV === 'production' && <Analytics />}
+          {process.env.NODE_ENV === 'production' && <DynamicAnalytics />}
         </ThemeProvider>
       </body>
     </html>

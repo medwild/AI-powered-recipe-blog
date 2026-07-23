@@ -29,7 +29,7 @@ export function CookieBanner() {
             href="/privacy"
             className="font-medium text-primary underline hover:text-primary/80"
           >
-            Learn more
+            Read our Privacy Policy
           </Link>
         </p>
         <button
