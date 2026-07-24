@@ -177,11 +177,16 @@ export function normalizeRecipeArticle(raw: Record<string, unknown>): RecipeArti
       fromJson.push(...v.split(/\n|•|-|\*/).map(s => s.trim()).filter(Boolean))
     }
 
+    const jsonCount = fromJson.filter(Boolean).length
     // If JSON parsing produced ≤3 items but markdown has more, use markdown
-    if (fromJson.filter(Boolean).length <= 3 && fallbackMd) {
+    if (jsonCount <= 3 && fallbackMd) {
       const mdIngredients = extractMdIngredients(fallbackMd)
-      if (mdIngredients.length > fromJson.filter(Boolean).length) return mdIngredients
+      if (mdIngredients.length > jsonCount) {
+        console.log(`[normalize] Ingredients: markdown fallback (${mdIngredients.length} items) > JSON (${jsonCount} items)`)
+        return mdIngredients
+      }
     }
+    console.log(`[normalize] Ingredients: using JSON (${jsonCount} items)`)
     return fromJson.filter(Boolean)
   }
 
@@ -217,11 +222,16 @@ export function normalizeRecipeArticle(raw: Record<string, unknown>): RecipeArti
       }
     }
 
+    const jsonSteps = fromJson.filter(x => x.text.length > 0).length
     // If JSON produced 0 instructions but markdown has steps, use markdown
-    if (fromJson.filter(x => x.text.length > 0).length === 0 && fallbackMd) {
+    if (jsonSteps === 0 && fallbackMd) {
       const mdSteps = extractMdInstructions(fallbackMd)
-      if (mdSteps.length > 0) return mdSteps
+      if (mdSteps.length > 0) {
+        console.log(`[normalize] Instructions: markdown fallback (${mdSteps.length} steps) > JSON (${jsonSteps} steps)`)
+        return mdSteps
+      }
     }
+    console.log(`[normalize] Instructions: using JSON (${jsonSteps} steps)`)
     return fromJson.filter(x => x.text.length > 0)
   }
 

@@ -8,7 +8,21 @@ async function main() {
   const { recipes } = await import("../lib/db/schema")
   const { eq } = await import("drizzle-orm")
 
-  for (const id of [65]) {
+  for (const id of [66]) {
+  const r = await db.query.recipes.findFirst({ where: (r, { eq }) => eq(r.id, id) })
+  if (!r) { console.log(`\n#${id} NOT FOUND`); continue }
+  // Find the Ingredients section in raw markdown
+  const md = r.contentMarkdown ?? ""
+  const idx = md.search(/ingredients/i)
+  if (idx >= 0) {
+    console.log(`\n--- Raw markdown around 'Ingredients' (${idx}) ---`)
+    console.log(md.substring(Math.max(0, idx - 50), idx + 600))
+  }
+  // Test extraction regex
+  const section = md.match(/^##\s+Ingredients?\b.*?\n([\s\S]*?)(?=^##\s|\Z)/im)
+  console.log(`\nRegex match: ${section ? `✅ ${section[1].substring(0, 200)}` : "❌ NO MATCH"}`)
+  process.exit(0)
+}
   const r = await db.query.recipes.findFirst({ where: (r, { eq }) => eq(r.id, id) })
   if (!r) { console.log(`\n#${id} NOT FOUND`); continue }
   const wc = (r.contentMarkdown ?? "").split(/\s+/).filter(Boolean).length
