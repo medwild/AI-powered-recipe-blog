@@ -135,6 +135,74 @@ export type RecipeDraft = ChefAugustinOutput
  * ChefAugustinOutput format. Ingredients are parsed from strings to
  * { name, quantity? } objects.
  */
+/**
+ * Normalizes a RecipeArticle from LLM output — coerces all fields to their
+ * expected types. LLMs (especially in text+parse mode) sometimes return
+ * strings where arrays are expected, objects instead of strings, or null
+ * in required fields. This runs before quality gate or persist so downstream
+ * code can trust the types.
+ */
+export function normalizeRecipeArticle(raw: Record<string, unknown>): RecipeArticle {
+  const str = (v: unknown, fallback = ""): string =>
+    typeof v === "string" ? v : (v != null ? String(v) : fallback)
+
+  const strArr = (v: unknown): string[] => {
+    if (Array.isArray(v)) return v.map(x => typeof x === "string" ? x : String(x?.name ?? x?.text ?? x ?? ""))
+    if (typeof v === "string") return v.split(/\n|•|-|\*/).map(s => s.trim()).filter(Boolean)
+    return []
+  }
+
+  const instructionsArr = (v: unknown): { step: number; text: string; duration?: string; temperature?: string }[] => {
+    if (!Array.isArray(v)) return []
+    return v.map((i: unknown) => {
+      if (typeof i === "string") return { step: 0, text: i }
+      if (i && typeof i === "object") {
+        const o = i as Record<string, unknown>
+        return {
+          step: typeof o.step === "number" ? o.step : Number(o.step ?? 0),
+          text: str(o.text ?? o.instruction ?? o.description, ""),
+          ...(o.duration ? { duration: str(o.duration) } : {}),
+          ...(o.temperature ? { temperature: str(o.temperature) } : {}),
+        }
+      }
+      return { step: 0, text: String(i ?? "") }
+    }).filter(x => x.text.length > 0)
+  }
+
+  const tagsArr = (v: unknown): string[] => {
+    if (Array.isArray(v)) {
+      const flat = v.flatMap((x: unknown) => {
+        if (typeof x === "string") {
+          return x.includes(",") ? x.split(",").map(t => t.trim()).filter(Boolean) : [x]
+        }
+        if (x && typeof x === "object") return [str((x as Record<string, unknown>).name ?? x, "")]
+        return []
+      })
+      return [...new Set(flat.map(t => t.toLowerCase()).filter(Boolean))]
+    }
+    if (typeof v === "string") return v.split(",").map(t => t.trim()).filter(Boolean)
+    return []
+  }
+
+  return {
+    title: str(raw.title, raw.keyword as string ?? "Untitled"),
+    metaTitle: str(raw.metaTitle, str(raw.title, "")).substring(0, 60),
+    metaDescription: str(raw.metaDescription),
+    excerpt: str(raw.excerpt),
+    contentMarkdown: str(raw.contentMarkdown),
+    ingredients: strArr(raw.ingredients),
+    instructions: instructionsArr(raw.instructions),
+    tags: tagsArr(raw.tags),
+    prepTime: str(raw.prepTime, "PT15M"),
+    cookTime: str(raw.cookTime, "PT30M"),
+    totalTime: str(raw.totalTime, "PT45M"),
+    servings: str(raw.servings, "2"),
+    difficulty: (["Easy", "Medium", "Hard"].includes(String(raw.difficulty ?? "")) ? String(raw.difficulty) : "Easy") as "Easy" | "Medium" | "Hard",
+    imagePrompt: str(raw.imagePrompt).substring(0, 120),
+    jsonLd: str(raw.jsonLd),
+  }
+}
+
 export function recipeArticleToChefAugustinOutput(r: RecipeArticle): ChefAugustinOutput {
   // jsonLd is a JSON string from the LLM — parse it to an object for DB storage
   let parsedJsonLd: Record<string, unknown> = {}
@@ -150,8 +218,21 @@ export function recipeArticleToChefAugustinOutput(r: RecipeArticle): ChefAugusti
     metaDescription: r.metaDescription,
     excerpt: r.excerpt,
     contentMarkdown: r.contentMarkdown,
-    ingredients: r.ingredients.map(i => parseIngredient(i)),
-    instructions: r.instructions.map(i => ({ step: i.step, text: i.text })),
+    ingredients: Array.isArray(r.ingredients) ? r.ingredients.map((i: unknown) => {
+      if (typeof i === "string") return parseIngredient(i)
+      if (i && typeof i === "object") {
+        const obj = i as Record<string, unknown>
+        return { name: String(obj.name ?? obj.ingredient ?? ""), quantity: String(obj.quantity ?? obj.amount ?? "") }
+      }
+      return { name: String(i ?? "") }
+    }) : [],
+    instructions: Array.isArray(r.instructions) ? r.instructions.map((i: unknown) => {
+      if (i && typeof i === "object") {
+        const obj = i as Record<string, unknown>
+        return { step: Number(obj.step ?? 0), text: String(obj.text ?? obj.instruction ?? "") }
+      }
+      return { step: 0, text: String(i ?? "") }
+    }) : [],
     tags: r.tags,
     prepTime: r.prepTime,
     cookTime: r.cookTime,
@@ -233,7 +314,7 @@ export async function agentChefAugustinMega(
 
     console.log(`[ChefAugustinMega] Calling ${RECIPE_JSON_SCHEMA ? "structured output" : "LLM"} for "${keyword}" (${systemPrompt.length} chars skill, ${userPrompt.length} chars prompt)`)
 
-    const result = await runWithStructuredOutput<RecipeArticle>(
+    const raw = await runWithStructuredOutput<RecipeArticle>(
       systemPrompt,
       userPrompt,
       RECIPE_JSON_SCHEMA,
@@ -243,6 +324,9 @@ export async function agentChefAugustinMega(
         timeout: 180_000, // 3 min
       },
     )
+
+    // Normalize — LLM output in text+parse mode may not conform to schema
+    const result = normalizeRecipeArticle(raw as unknown as Record<string, unknown>)
 
     console.log(`[ChefAugustinMega] Success — ${result.contentMarkdown?.split(/\s+/).filter(Boolean).length ?? 0} words, ${result.tags?.length ?? 0} tags`)
 

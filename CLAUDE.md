@@ -11,8 +11,9 @@ SERP → Mega-Skill (1 LLM call, Opus 4.8) → Quality Gate (4 checks) → Persi
 
 | Paramètre | Valeur |
 |---|---|
-| Modèle primaire | Claude Opus 4.8 |
-| Modèle fallback | Claude Sonnet 5 |
+| Modèle primaire | Gemini Flash 3 (gratuit — ~1M tokens/jour, structured output natif) |
+| Modèle fallback | gpt-oss-120b (Cloudflare Workers AI, gratuit) |
+| Modèle escalation | Claude Opus 4.8 (via ZenMux, payant — pages piliers) |
 | Thinking | Adaptive, budget 4000 tokens |
 | Max tokens | 32000 |
 | Skill | `skills/chef-augustin-mega.md` |

@@ -5,8 +5,7 @@
  * 2:3 aspect ratio support (Pinterest standard).
  */
 
-const BASE_URL = "https://api.ideogram.ai"
-const MODEL = process.env.IDEOGRAM_MODEL || "V_3"
+const BASE_URL = "https://api.ideogram.ai/v1/ideogram-v4/generate"
 const API_KEY = process.env.IDEOGRAM_API_KEY
 
 function isConfigured(): boolean {
@@ -22,20 +21,18 @@ export async function runImage(prompt: string): Promise<Buffer> {
   const timer = setTimeout(() => controller.abort(), 120_000) // 2 min timeout
 
   try {
-    const res = await fetch(`${BASE_URL}/generate`, {
+    const formData = new FormData()
+    formData.append("text_prompt", prompt)
+    formData.append("aspect_ratio", "2x3")
+    formData.append("rendering_speed", "TURBO")
+    formData.append("style_type", "AUTO")
+
+    const res = await fetch(BASE_URL, {
       method: "POST",
       headers: {
         "Api-Key": API_KEY!,
-        "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        image_request: {
-          prompt,
-          model: MODEL,
-          aspect_ratio: "ASPECT_2_3",
-          magic_prompt_option: "AUTO",
-        },
-      }),
+      body: formData,
       signal: controller.signal,
     })
 
@@ -58,7 +55,7 @@ export async function runImage(prompt: string): Promise<Buffer> {
       const arrayBuffer = await imgRes.arrayBuffer()
       const buffer = Buffer.from(arrayBuffer)
 
-      console.log(`[provider] Ideogram ${MODEL} — success (${buffer.length} bytes)`)
+      console.log(`[provider] Ideogram V4 — success (${buffer.length} bytes)`)
       return buffer
     }
 
@@ -73,7 +70,7 @@ export async function runImage(prompt: string): Promise<Buffer> {
       const arrayBuffer = await imgRes.arrayBuffer()
       const buffer = Buffer.from(arrayBuffer)
 
-      console.log(`[provider] Ideogram ${MODEL} — success (${buffer.length} bytes)`)
+      console.log(`[provider] Ideogram V4 — success (${buffer.length} bytes)`)
       return buffer
     }
 

@@ -69,7 +69,7 @@ export async function generateRecipe(input: GenerateRecipeInput): Promise<void> 
         serpData: serpResult.serpText, citations: "",
         feedback: feedback || undefined,
       })
-      gateResult = await qualityGate(article)
+      gateResult = await qualityGate(article, { skipDuplicateCheck: attempt > 0, selfId: recipeId })
       if (gateResult.status === "BLOCK") {
         const maxRetries = MAX_RETRIES[gateResult.reason!] ?? 0
         if (attempt < maxRetries) {

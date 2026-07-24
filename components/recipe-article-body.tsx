@@ -4,12 +4,44 @@ const ReactMarkdownContent = dynamic(
   () => import("@/components/react-markdown-content").then((m) => m.ReactMarkdownContent),
 )
 
+/** Sections already handled by dedicated components — strip from article body to avoid duplication. */
+const DUPLICATE_HEADINGS = [
+  /^##\s+Ingredients?\b/i,
+  /^##\s+Instructions?\b/i,
+  /^##\s+Directions?\b/i,
+  /^##\s+Method\b/i,
+  /^##\s+Steps?\b/i,
+]
+
+/** Extract only the narrative/FAQ/tips portions of the markdown, skipping
+ *  sections that are already rendered by RecipeIngredients/RecipeInstructions. */
+function stripDuplicateSections(md: string): string {
+  const lines = md.split("\n")
+  const result: string[] = []
+  let skipping = false
+
+  for (const line of lines) {
+    if (/^##\s+/.test(line)) {
+      skipping = DUPLICATE_HEADINGS.some(r => r.test(line))
+    }
+    if (!skipping) result.push(line)
+  }
+
+  // If stripping removed everything, return original (safety net)
+  const out = result.join("\n").trim()
+  return out.length > 100 ? out : md
+}
+
 export function RecipeArticleBody({
   contentMarkdown,
 }: {
   contentMarkdown: string | null
 }) {
   if (!contentMarkdown) return null
+
+  const bodyContent = stripDuplicateSections(contentMarkdown)
+
+  if (bodyContent.length < 50) return null
 
   return (
     <section
@@ -22,7 +54,7 @@ export function RecipeArticleBody({
       </h2>
       <div className="prose prose-lg prose-neutral max-w-none prose-headings:font-serif prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-5 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4 prose-p:text-base prose-p:leading-relaxed prose-p:my-4 prose-ul:my-4 prose-ul:list-disc prose-ul:pl-6 prose-ol:my-4 prose-ol:list-decimal prose-ol:pl-6 prose-li:my-2 prose-strong:font-semibold prose-a:text-primary prose-a:underline hover:prose-a:text-primary/80">
         <ReactMarkdownContent>
-          {contentMarkdown}
+          {bodyContent}
         </ReactMarkdownContent>
       </div>
     </section>

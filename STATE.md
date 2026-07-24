@@ -1,95 +1,79 @@
 # AI AutoBlog — Project State
-> Last updated: 2026-07-21 | Session: Préparation déploiement Hostinger
+> Last updated: 2026-07-24 | Session: Rich Pins (automatique) + Implémentation Pinterest
 
-## ⛔ Critical Blocker
-**ANTHROPIC_AUTH_TOKEN** — DeepSeek v4 Pro API key required for content generation.
-Anthropic Claude available as secondary provider via `LLM_PROVIDER=anthropic`.
+## Pipeline v14 — Ready ✅
+- 5 steps: SERP → Mega-Skill → Quality Gate → Persist → Image → SEO Gate
+- All env vars present
+- **Primary model: Gemini Flash 3** (gratuit, ~1M tokens/jour, structured output natif)
+- **Fallback: gpt-oss-120b** (Cloudflare Workers AI, gratuit)
+- **Escalade: Claude Opus 4.8** (via ZenMux, payant — 20% pages piliers)
+- CLI: `npx tsx scripts/generate.ts "keyword"` — generates 1 recipe end-to-end (~60s, 1500+ mots)
+- Batch: `npx tsx scripts/weekly-generate.ts` — to be created
 
-## Architecture Status
+## Deployment — Vercel ✅
+- Domain: chefaugustin.com
+- Auto-deploy from GitHub main branch
+- Commit f51ce00: Pinterest domain verification meta tag added
 
-### Pipeline v13 — Single-Pass ✅
-5 steps: SERP → Strategist → Writer → Quality Gate → Persist → Images → Pins
-2 agents: Strategist (LLM plan) → Chef Augustin (LLM write)
-Science Enricher (LLM, retry-only, food science enrichment)
-4 validators: GEO, Content (654 lines), Loop Scorer, Culinary, Image
+## Pinterest Strategy — In Progress
 
-### Audit Karpathy v13 (2026-07-18) ✅
-- Score initial: 72/100 → Score final: **92/100** (+20 points)
-- 6 phases de corrections, 27 fichiers modifiés
-- 3 bugs critiques corrigés (scoring, culinary dead, tests cassés)
-- 3 fichiers morts archivés: `serp-structurer.ts` (1448 lignes), `judge.ts` (129 lignes), `agent-judge.md` (97 lignes)
-- Science Enricher intégré dans la boucle de retry (non-bloquant)
-- Pipeline Inngest: error handler memoized, pin inserts idempotent, structuredSERP supprimé
+### Done
+- 13/13 boards created ✅
+- Domain verified (meta tag deployed, verified on Pinterest)
+- Design spec: `docs/superpowers/specs/2026-07-23-pinterest-strategy-design.md` — **V2 (2026-07-24)** corrigée : Mediavine, brevet, Rich Pins + nouvelle §6 Monétisation (AdSense + Mediavine + Affiliation)
+- Implementation plan: `docs/superpowers/plans/2026-07-23-pinterest-implementation.md`
+- **Rich Pins**: Automatiques depuis sept. 2022 — plus besoin d'activation manuelle. Il suffit de générer du contenu réel.
+- **Monétisation V2**: 3 couches — Affiliation J+1 → AdSense dès ~25 articles (S8) → Journey Mediavine dès 1K sessions (M3-M4)
 
-### Historique (2026-07-13)
-- ✅ P0 — USDA CRITICAL tier: Food safety violations now ERROR (block even in Autopilot)
-- ✅ P1 — Judge rebalancing (v12, superseded by v13 single-pass without Judge)
-- ✅ Route `/idees`: New category route created
+### Created today (2026-07-24)
+- `data/pinterest-boards.json` — 13 board definitions validés ✅
+- `scripts/pin-brief.ts` — générateur de 5 variants par recette ✅
+- `lib/agents/provider.ts` — **+GeminiProvider** (Flash 3, structured output natif) + CloudflareProvider (gpt-oss-120b)
+- `scripts/_test-models.ts` — testeur de disponibilité des modèles Cloudflare
+- `scripts/_test-gemini.ts` / `_debug-gemini.ts` — debug Gemini API
 
-### Topical Authority Architecture ✅
-- Central entity: "Easy Weeknight Dinners for Two"
-- 5 clusters (3 Core + 2 Outer), 5 pillar pages, Hub & Spokes linking
-- 70 keywords niche-pure mapped, 146,980 vol/mensuel
-- Full architecture: `docs/topical-authority-architecture.md`
+### Bug fixes & enhancements today
+- `lib/quality-gate.ts` — défense types (instructions, ingredients, tags, contentMarkdown)
+- `lib/pipeline/agents/chef-augustin.ts` — `normalizeRecipeArticle()` + parsing défensif
+- `lib/agents/provider.ts` — injection JSON schema dans text+parse (fix Cloudflare)
+- `lib/agents/provider.ts` — strip `additionalProperties` pour Gemini
 
-### Keyword Research ✅
-- 178 keywords analyzed across 5 CSVs + ~40 manual curation
-- 70 niche-pure keywords identified
-- 20 quick wins (KD < 20), 32 mid tier (KD 20-25), 18 high KD (26+)
-- Launch plan JSON: `data/launch-plan.json`
-- Batch script: `scripts/generate-launch-batch.mjs`
-  - Usage: `node scripts/generate-launch-batch.mjs --wave 1 [--dry-run]`
+### Next (priorisé)
 
-### Deployment ✅
-- Cible : **Hostinger Business** (Node.js) — pas Vercel
-- `vercel.json` conservé comme backup
-- Routes ready: `/`, `/recettes`, `/recettes/[slug]`, `/idees`, `/idees/[slug]`, `/guides`, `/guides/[slug]`, `/about`, `/dashboard`
-- Sitemap, robots.txt, RSS, JSON-LD all configured
+**Blocage actuel :** classifieur DeepSeek down → impossible de lancer `npx tsx` pour le moment.
 
-## Next Actions — 2026-07-22
+**Dès que le classifieur revient :**
+1. **Nettoyer la DB**: `npx tsx scripts/_cleanup-db.ts` (recette #36 + 3 "generating")
+2. **Générer 2 recettes pilotes**: `npx tsx scripts/generate.ts "easy chicken parmesan for two"` puis `"one pan garlic herb chicken thighs for two"`
+3. **Créer pin briefs**: `npx tsx scripts/pin-brief.ts <slug>` pour chaque recette
+4. **Créer `scripts/weekly-generate.ts`** (Task 5 du plan)
 
-### Déploiement Hostinger Business (Node.js)
-**Prérequis déjà remplis :**
-- [x] `engines.node: ">=20.9"` dans `package.json`
-- [x] `build` + `start` scripts OK
-- [x] `package-lock.json` présent (npm détecté automatiquement)
-- [x] Bloc `pnpm.overrides` nettoyé
-- [x] Pages publiques lisent PostgreSQL directement (Server Components + ISR)
-- [x] Aucune API LLM/Inngest nécessaire côté production
+**Nouvelles tâches (Spec V2) :**
+5. **Ajouter email capture** (popup/inline ConvertKit) dans le template recette — avant le 1er article
+6. **Ajouter bloc "Shop this recipe"** (Amazon Associates) dans le template recette
+7. **Créer les pages statiques manquantes** (About, Contact) pour AdSense
 
-**À faire sur hPanel :**
-1. **Add Website → Node.js Web App** → Connect with GitHub → repo + branche `main`
-2. **Node.js version** : sélectionner **22.x**
-3. **Variables d'environnement** :
-   - `DATABASE_URL` = `postgresql://...` (Neon, serveur uniquement)
-   - `NEXT_PUBLIC_SITE_URL` = `https://chefaugustin.com`
-4. **Déployer**
-5. **Vérifier** le build log — si échec, debugger
-6. **Tester** : homepage, /recettes, /recettes/{slug}, /techniques, /guides, etc.
+**Manuel (Pinterest) :**
+8. ~~Créer board #13: "Balanced Dinners for Two"~~ ✅ Déjà fait
+9. **Vérifier Rich Pins automatiques**: 24h après 1er Pin sauvegardé → check metadata enrichies
 
-**Architecture hybride :**
-```
-Local (dev) : Pipeline IA complet → Inngest → LLM → génération → Neon DB
-Hostinger (prod) : Next.js SSR/ISR → lecture Neon DB → pages publiques
-```
+### Strategy Summary
+- 13 boards keyword-rich, PTRA-aligned
+- 5 pin variants per recipe (different text overlay angles)
+- 1-3 fresh pins/day, 3 articles/week cadence
+- 70 articles planned across 5 clusters
+- Pinterest (amorçage M1-M6) → Google SEO (relais M6+)
 
-### Content Generation (quand API keys dispo)
-1. Set `ANTHROPIC_API_KEY` ou `DEEPSEEK_API_KEY` dans `.env.local`
-2. Start server: `npm run dev` + Inngest Dev
-3. Dry-run test: `node scripts/generate-launch-batch.mjs --wave 1 --dry-run`
-4. Generate Wave 1: `node scripts/generate-launch-batch.mjs --wave 1`
-5. Monitor: `http://localhost:8288` (Inngest Dev)
-6. Submit sitemap to Google Search Console
-7. Create Pinterest account + 6 boards + seed engagement
+## DB State
+- 2 published (banana bread, sourdough bread — old niche, incomplete JSON-LD)
+- 1 failed draft (#36 easy chicken parmesan — to delete)
+- ~3 stuck in "generating"
 
-## Important Files
-
+## Key Files
 | File | Purpose |
 |---|---|
-| `docs/topical-authority-architecture.md` | Complete semantic architecture |
-| `docs/rapport-maturite-ai-autoblog-2026-07-13.md` | Maturity report for LLM peer review |
-| `data/launch-plan.json` | 70 articles in 4 waves |
-| `data/enriched-briefs.json` | 14 DUAL_CHAMPION briefs with SEO/Pinterest/GEO strategy |
-| `scripts/generate-launch-batch.mjs` | Batch generator from launch-plan.json |
-| `scripts/analyze-cross-channel.ts` | Permanent cross-channel analysis tool |
-| `.env.example` | All required environment variables |
+| `docs/superpowers/specs/2026-07-23-pinterest-strategy-design.md` | Full Pinterest strategy (13 boards, specs, timeline) |
+| `docs/superpowers/plans/2026-07-23-pinterest-implementation.md` | Implementation plan (7 tasks, Rich Pins step OBSOLETE) |
+| `data/pinterest-boards.json` | Board definitions (13 boards) ✅ |
+| `scripts/pin-brief.ts` | Pin brief generator — 5 variants per recipe ✅ |
+| `scripts/weekly-generate.ts` | Weekly batch generator (to be created) |

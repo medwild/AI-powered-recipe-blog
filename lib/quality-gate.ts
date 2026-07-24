@@ -1,7 +1,7 @@
 // lib/quality-gate.ts
 import { db } from "@/lib/db";
 import { recipes } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, and, ne } from "drizzle-orm";
 import type { RecipeArticle } from "@/lib/schemas/recipe-article";
 
 // ---------------------------------------------------------------------------
@@ -65,7 +65,7 @@ const PROTEIN_RULES: ProteinRule[] = [
 
 const BANNED_WORDS = [
   "probiotics", "gut health", "immune boost", "detox", "anti-inflammatory",
-  "fat-burning", "miracle", "superfood", "cleanse", "cure", "heal",
+  "fat-burning", "miracle", "superfood", "cleanse", "cure", "heal your", "heal the body",
   "all-natural", "clinically proven", "scientifically proven",
 ];
 
@@ -84,8 +84,9 @@ function slugify(text: string): string {
 function getMinWords(output: RecipeArticle): number {
   const totalMatch = (output.prepTime + output.cookTime).match(/(\d+)/g);
   const minutes = totalMatch ? totalMatch.reduce((sum, n) => sum + parseInt(n), 0) : 999;
-  const isDessert = output.tags.some((t: string) =>
-    /dessert|mousse|cake|cookie|tart|pie|pudding/i.test(t)
+  const tags = Array.isArray(output.tags) ? output.tags : [];
+  const isDessert = tags.some((t: unknown) =>
+    /dessert|mousse|cake|cookie|tart|pie|pudding/i.test(String(t ?? ""))
   );
   if (isDessert) return 600;
   if (minutes <= 30) return 800;
@@ -102,7 +103,10 @@ export function validateFoodSafety(
 ): string[] {
   const errors: string[] = [];
   const lowerText = allText.toLowerCase();
-  const lowerIngredients = ingredients.map((i) => i.toLowerCase()).join(" ");
+  // Defensive: LLM may return objects or nulls despite Zod schema typing
+  const lowerIngredients = ingredients
+    .map((i) => (typeof i === "string" ? i.toLowerCase() : ""))
+    .join(" ");
 
   for (const rule of PROTEIN_RULES) {
     // Check if any keyword matches in ingredients
@@ -163,22 +167,26 @@ export function detectBannedWords(text: string): string[] {
 // Quality Gate
 // ---------------------------------------------------------------------------
 
-export async function qualityGate(output: RecipeArticle): Promise<GateResult> {
-  // Check 0: Duplicate slug
-  const slug = slugify(output.title);
-  const existing = await db
-    .select()
-    .from(recipes)
-    .where(eq(recipes.slug, slug))
-    .limit(1);
-  if (existing.length > 0) {
-    return { status: "BLOCK", reason: "duplicate", errors: [`Slug "${slug}" exists`] };
+export async function qualityGate(output: RecipeArticle, opts?: { skipDuplicateCheck?: boolean; selfId?: number }): Promise<GateResult> {
+  // Check 0: Duplicate slug (skip on retries. Exclude self so the recipe
+  // doesn't block itself — the recipe row is created before the gate runs.)
+  if (!opts?.skipDuplicateCheck) {
+    const slug = slugify(output.title);
+    const existing = await db
+      .select()
+      .from(recipes)
+      .where(and(eq(recipes.slug, slug), opts?.selfId != null ? ne(recipes.id, opts.selfId) : undefined))
+      .limit(1);
+    if (existing.length > 0) {
+      return { status: "BLOCK", reason: "duplicate", errors: [`Slug "${slug}" exists`] };
+    }
   }
 
   // Check 1: Food Safety — scan BOTH instructions[].text AND contentMarkdown
+  const instructionsArr = Array.isArray(output.instructions) ? output.instructions : [];
   const allText = [
-    ...output.instructions.map((i) => i.text),
-    output.contentMarkdown,
+    ...instructionsArr.map((i: { text?: string }) => i.text ?? String(i)),
+    output.contentMarkdown ?? "",
   ].join(" ");
   const foodSafetyErrors = validateFoodSafety(allText, output.ingredients);
   if (foodSafetyErrors.length > 0) {
@@ -186,7 +194,7 @@ export async function qualityGate(output: RecipeArticle): Promise<GateResult> {
   }
 
   // Check 2: Word Count minimum
-  const wordCount = output.contentMarkdown.split(/\s+/).filter(Boolean).length;
+  const wordCount = (output.contentMarkdown ?? "").split(/\s+/).filter(Boolean).length;
   const minWords = getMinWords(output);
   if (wordCount < minWords) {
     return {
@@ -197,7 +205,7 @@ export async function qualityGate(output: RecipeArticle): Promise<GateResult> {
   }
 
   // Check 3: Banned Words
-  const bannedWordsFound = detectBannedWords(output.contentMarkdown);
+  const bannedWordsFound = detectBannedWords(output.contentMarkdown ?? "");
   if (bannedWordsFound.length > 0) {
     return {
       status: "BLOCK",
