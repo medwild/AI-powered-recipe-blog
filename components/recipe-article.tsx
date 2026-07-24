@@ -22,7 +22,7 @@ export function RecipeArticle({ recipe }: { recipe: Recipe }) {
       <RecipeInstructions instructions={recipe.instructions ?? []} />
 
       {/* Section 5: Article Body — markdown FAQ, tips, nutrition */}
-      <RecipeArticleBody contentMarkdown={recipe.contentMarkdown} />
+      <RecipeArticleBody contentMarkdown={recipe.contentMarkdown} ingredients={recipe.ingredients} instructions={recipe.instructions} />
 
       {/* Section 6: Related Recipes — cluster-aware sidebar */}
       <RelatedRecipes recipe={recipe} />

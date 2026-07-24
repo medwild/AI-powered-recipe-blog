@@ -1,10 +1,12 @@
 import dynamic from "next/dynamic"
+import type { Ingredient, Instruction } from "@/lib/db/schema"
 
 const ReactMarkdownContent = dynamic(
   () => import("@/components/react-markdown-content").then((m) => m.ReactMarkdownContent),
 )
 
-/** Sections already handled by dedicated components — strip from article body to avoid duplication. */
+/** Sections already handled by dedicated components — strip from article body
+ *  ONLY when the corresponding structured data is present (non-empty). */
 const DUPLICATE_HEADINGS = [
   /^##\s+Ingredients?\b/i,
   /^##\s+Instructions?\b/i,
@@ -13,33 +15,44 @@ const DUPLICATE_HEADINGS = [
   /^##\s+Steps?\b/i,
 ]
 
-/** Extract only the narrative/FAQ/tips portions of the markdown, skipping
- *  sections that are already rendered by RecipeIngredients/RecipeInstructions. */
-function stripDuplicateSections(md: string): string {
+function stripDuplicateSections(
+  md: string,
+  hasIngredients: boolean,
+  hasInstructions: boolean,
+): string {
+  if (!hasIngredients && !hasInstructions) return md
+
   const lines = md.split("\n")
   const result: string[] = []
   let skipping = false
 
   for (const line of lines) {
     if (/^##\s+/.test(line)) {
-      skipping = DUPLICATE_HEADINGS.some(r => r.test(line))
+      const isIngredientHeading = DUPLICATE_HEADINGS[0]!.test(line) || DUPLICATE_HEADINGS[1]!.test(line)
+      const isInstructionHeading = DUPLICATE_HEADINGS.slice(2).some(r => r.test(line))
+      skipping = (isIngredientHeading && hasIngredients) || (isInstructionHeading && hasInstructions)
     }
     if (!skipping) result.push(line)
   }
 
-  // If stripping removed everything, return original (safety net)
   const out = result.join("\n").trim()
   return out.length > 100 ? out : md
 }
 
 export function RecipeArticleBody({
   contentMarkdown,
+  ingredients,
+  instructions,
 }: {
   contentMarkdown: string | null
+  ingredients?: Ingredient[] | null
+  instructions?: Instruction[] | null
 }) {
   if (!contentMarkdown) return null
 
-  const bodyContent = stripDuplicateSections(contentMarkdown)
+  const hasIngredients = (ingredients?.length ?? 0) > 0
+  const hasInstructions = (instructions?.length ?? 0) > 0
+  const bodyContent = stripDuplicateSections(contentMarkdown, hasIngredients, hasInstructions)
 
   if (bodyContent.length < 50) return null
 
