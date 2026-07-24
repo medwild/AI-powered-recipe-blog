@@ -223,5 +223,16 @@ export async function qualityGate(output: RecipeArticle, opts?: { skipDuplicateC
     };
   }
 
+  // Check 5: Minimum H2 headings — ensures the article has visual hierarchy
+  // (prevents wall-of-text rendering). Require ≥3 H2 sections for scannability.
+  const h2Count = (output.contentMarkdown.match(/^## /gm) ?? []).length
+  if (h2Count < 3) {
+    return {
+      status: "BLOCK",
+      reason: "too_short",
+      errors: [`Only ${h2Count} H2 heading(s) found — need ≥3 for scannable structure. Add ## sections (Why This Works, Ingredients, Instructions, FAQ, Chef Tips, etc.).`],
+    };
+  }
+
   return { status: "PASS" };
 }

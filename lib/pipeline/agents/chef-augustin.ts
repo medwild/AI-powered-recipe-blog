@@ -147,7 +147,21 @@ export function normalizeRecipeArticle(raw: Record<string, unknown>): RecipeArti
     typeof v === "string" ? v : (v != null ? String(v) : fallback)
 
   const strArr = (v: unknown): string[] => {
-    if (Array.isArray(v)) return v.map(x => typeof x === "string" ? x : String(x?.name ?? x?.text ?? x ?? ""))
+    if (Array.isArray(v)) {
+      // Each element may itself be a concatenated list (e.g. "a; b; c")
+      const result: string[] = []
+      for (const x of v) {
+        const s = typeof x === "string" ? x : String(x?.name ?? x?.text ?? x ?? "")
+        // If a single item contains 3+ semicolons, it's likely multiple ingredients
+        // that got concatenated. Split and keep.
+        if (s.includes(";") && (s.match(/;/g) ?? []).length >= 2) {
+          result.push(...s.split(";").map(p => p.trim()).filter(Boolean))
+        } else {
+          result.push(s)
+        }
+      }
+      return result.filter(Boolean)
+    }
     if (typeof v === "string") return v.split(/\n|•|-|\*/).map(s => s.trim()).filter(Boolean)
     return []
   }
