@@ -167,11 +167,12 @@ export function detectBannedWords(text: string): string[] {
 // Quality Gate
 // ---------------------------------------------------------------------------
 
-export async function qualityGate(output: RecipeArticle, opts?: { skipDuplicateCheck?: boolean; selfId?: number }): Promise<GateResult> {
-  // Check 0: Duplicate slug (skip on retries. Exclude self so the recipe
-  // doesn't block itself — the recipe row is created before the gate runs.)
+export async function qualityGate(output: RecipeArticle, opts?: { skipDuplicateCheck?: boolean; selfId?: number; selfSlug?: string }): Promise<GateResult> {
+  // Check 0: Duplicate slug — use the recipe's own slug if available
+  // (generate.ts creates a unique slug before the pipeline runs; the title
+  //  may produce a different slug that conflicts with another recipe).
   if (!opts?.skipDuplicateCheck) {
-    const slug = slugify(output.title);
+    const slug = opts?.selfSlug ?? slugify(output.title);
     const existing = await db
       .select()
       .from(recipes)

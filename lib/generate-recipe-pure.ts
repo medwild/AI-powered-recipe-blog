@@ -69,7 +69,12 @@ export async function generateRecipe(input: GenerateRecipeInput): Promise<void> 
         serpData: serpResult.serpText, citations: "",
         feedback: feedback || undefined,
       })
-      gateResult = await qualityGate(article, { skipDuplicateCheck: attempt > 0, selfId: recipeId })
+      const recipeRow = await db.query.recipes.findFirst({ where: (r, { eq }) => eq(r.id, recipeId) })
+      gateResult = await qualityGate(article, {
+        skipDuplicateCheck: attempt > 0,
+        selfId: recipeId,
+        selfSlug: recipeRow?.slug ?? undefined,
+      })
       if (gateResult.status === "BLOCK") {
         const maxRetries = MAX_RETRIES[gateResult.reason!] ?? 0
         if (attempt < maxRetries) {

@@ -8,7 +8,7 @@ async function main() {
   const { recipes } = await import("../lib/db/schema")
   const { eq } = await import("drizzle-orm")
 
-  for (const id of [59, 62]) {
+  for (const id of [63]) {
   const r = await db.query.recipes.findFirst({ where: (r, { eq }) => eq(r.id, id) })
   if (!r) { console.log(`\n#${id} NOT FOUND`); continue }
   const wc = (r.contentMarkdown ?? "").split(/\s+/).filter(Boolean).length
@@ -29,6 +29,10 @@ async function main() {
   console.log(`Ingredient lines in markdown: ${mdIngredientLines.length}`)
   if (mdIngredientLines.length > 0) console.log(`  First: ${mdIngredientLines[0]!.substring(0, 80)}`)
   console.log(`H2 headings in markdown: ${md.match(/^## /gm)?.length ?? 0}`)
+  if ((r.workflowLog ?? []).length > 0) {
+    console.log(`Workflow:`)
+    for (const e of r.workflowLog as any[]) console.log(`  [${e.status}] ${e.step}: ${(e.message ?? "").substring(0, 200)}`)
+  }
 }
 }
 
