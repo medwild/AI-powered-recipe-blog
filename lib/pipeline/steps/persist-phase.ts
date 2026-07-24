@@ -21,7 +21,10 @@ export async function persistFinalDraft(
   gateStatus: "PASS" | "BLOCK",
   degraded: boolean,
 ): Promise<void> {
-  const slug = slugify(finalRecipe.title)
+  // Keep the recipe's existing slug — generate.ts already created a unique one.
+  // Deriving from the title risks collisions with other recipes sharing the same keyword.
+  const existing = await db.query.recipes.findFirst({ where: (r, { eq }) => eq(r.id, recipeId) })
+  const slug = existing?.slug ?? slugify(finalRecipe.title)
   const wordCount = (finalRecipe.contentMarkdown ?? "").split(/\s+/).filter(Boolean).length
   const status = (gateStatus === "PASS" && !degraded) ? "published" : "draft"
 

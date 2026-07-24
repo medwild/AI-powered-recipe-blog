@@ -8,7 +8,7 @@ async function main() {
   const { recipes } = await import("../lib/db/schema")
   const { eq } = await import("drizzle-orm")
 
-  for (const id of [63]) {
+  for (const id of [64]) {
   const r = await db.query.recipes.findFirst({ where: (r, { eq }) => eq(r.id, id) })
   if (!r) { console.log(`\n#${id} NOT FOUND`); continue }
   const wc = (r.contentMarkdown ?? "").split(/\s+/).filter(Boolean).length

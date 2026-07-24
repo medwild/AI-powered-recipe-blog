@@ -20,7 +20,7 @@ import { runImagePhase } from "./pipeline/steps/image-phase"
 import { runSeoGate } from "@/lib/seo/gate"
 
 const MAX_RETRIES: Record<string, number> = {
-  duplicate: 0, food_safety: 1, too_short: 1, banned_words: 2, meta_title_length: 1,
+  food_safety: 1, too_short: 1, banned_words: 2, meta_title_length: 1,
 }
 
 function buildFeedback(reason: string, errors: string[]): string {
@@ -69,12 +69,7 @@ export async function generateRecipe(input: GenerateRecipeInput): Promise<void> 
         serpData: serpResult.serpText, citations: "",
         feedback: feedback || undefined,
       })
-      const recipeRow = await db.query.recipes.findFirst({ where: (r, { eq }) => eq(r.id, recipeId) })
-      gateResult = await qualityGate(article, {
-        skipDuplicateCheck: attempt > 0,
-        selfId: recipeId,
-        selfSlug: recipeRow?.slug ?? undefined,
-      })
+      gateResult = await qualityGate(article)
       if (gateResult.status === "BLOCK") {
         const maxRetries = MAX_RETRIES[gateResult.reason!] ?? 0
         if (attempt < maxRetries) {

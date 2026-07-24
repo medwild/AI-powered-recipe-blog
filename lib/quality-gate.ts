@@ -1,7 +1,4 @@
 // lib/quality-gate.ts
-import { db } from "@/lib/db";
-import { recipes } from "@/lib/db/schema";
-import { eq, and, ne } from "drizzle-orm";
 import type { RecipeArticle } from "@/lib/schemas/recipe-article";
 
 // ---------------------------------------------------------------------------
@@ -72,14 +69,6 @@ const BANNED_WORDS = [
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "")
-    .substring(0, 100);
-}
 
 function getMinWords(output: RecipeArticle): number {
   const totalMatch = (output.prepTime + output.cookTime).match(/(\d+)/g);
@@ -167,21 +156,10 @@ export function detectBannedWords(text: string): string[] {
 // Quality Gate
 // ---------------------------------------------------------------------------
 
-export async function qualityGate(output: RecipeArticle, opts?: { skipDuplicateCheck?: boolean; selfId?: number; selfSlug?: string }): Promise<GateResult> {
-  // Check 0: Duplicate slug — use the recipe's own slug if available
-  // (generate.ts creates a unique slug before the pipeline runs; the title
-  //  may produce a different slug that conflicts with another recipe).
-  if (!opts?.skipDuplicateCheck) {
-    const slug = opts?.selfSlug ?? slugify(output.title);
-    const existing = await db
-      .select()
-      .from(recipes)
-      .where(and(eq(recipes.slug, slug), opts?.selfId != null ? ne(recipes.id, opts.selfId) : undefined))
-      .limit(1);
-    if (existing.length > 0) {
-      return { status: "BLOCK", reason: "duplicate", errors: [`Slug "${slug}" exists`] };
-    }
-  }
+export async function qualityGate(output: RecipeArticle): Promise<GateResult> {
+  // Note: slug uniqueness is guaranteed by generate.ts before the pipeline runs.
+  // This gate focuses on content quality only — food safety, word count, banned words,
+  // meta title length, and H2 heading structure.
 
   // Check 1: Food Safety — scan BOTH instructions[].text AND contentMarkdown
   const instructionsArr = Array.isArray(output.instructions) ? output.instructions : [];
