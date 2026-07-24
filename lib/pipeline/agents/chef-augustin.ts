@@ -35,53 +35,55 @@ export type { RecipeArticle }
 export { RecipeArticleSchema }
 
 // ---------------------------------------------------------------------------
-// zod-to-JSON-Schema converter
+// zod-to-JSON-Schema converter (Zod v4)
 // ---------------------------------------------------------------------------
-
-function zodToJsonSchema(schema: z.ZodObject<any>): Record<string, unknown> {
-  const def = (schema as any)._def
-  const shape = typeof def.shape === "function" ? def.shape() : (def.shape ?? {})
-  const properties: Record<string, unknown> = {}
-  const required: string[] = []
-
-  for (const [key, field] of Object.entries(shape as Record<string, z.ZodTypeAny>)) {
-    properties[key] = fieldToJsonSchema(field)
-    if (!(field as any)._def?.isOptional) required.push(key)
-  }
-
-  return {
-    type: "object",
-    properties,
-    required,
-    additionalProperties: false,
-  }
-}
+// Zod v4 uses def.type (lowercase strings: "string","number","array","object",
+// "enum","boolean","optional") instead of Zod v3's def.typeName ("ZodString", etc.).
+// Every v3-based field fell through to default: { type: "string" }, so Gemini's
+// responseSchema told it ingredients and instructions are plain strings — not arrays.
 
 function fieldToJsonSchema(field: z.ZodTypeAny): Record<string, unknown> {
   const def = (field as any)._def
   if (!def) return { type: "string" }
 
-  switch (def.typeName) {
-    case "ZodString": {
-      const checks = def.checks || []
-      const maxCheck = checks.find((c: any) => c.kind === "max")
-      const minCheck = checks.find((c: any) => c.kind === "min")
-      const result: Record<string, unknown> = { type: "string" }
-      if (maxCheck) result.maxLength = maxCheck.value
-      if (minCheck) result.minLength = minCheck.value
-      return result
+  // Unwrap optional — actual type is in innerType
+  if (def.type === "optional" && def.innerType) {
+    return fieldToJsonSchema(def.innerType)
+  }
+
+  const desc = (field as any).description as string | undefined
+  const t = def.type as string
+
+  switch (t) {
+    case "string": {
+      const maxLen = (field as any).maxLength as number | null | undefined
+      const minLen = (field as any).minLength as number | null | undefined
+      return {
+        type: "string",
+        ...(maxLen != null ? { maxLength: maxLen } : {}),
+        ...(minLen != null ? { minLength: minLen } : {}),
+        ...(desc ? { description: desc } : {}),
+      }
     }
-    case "ZodNumber":
-      return { type: "number" }
-    case "ZodBoolean":
-      return { type: "boolean" }
-    case "ZodArray":
-      return { type: "array", items: fieldToJsonSchema(def.type) }
-    case "ZodEnum":
-      return { type: "string", enum: def.values }
-    case "ZodLiteral":
+    case "number":
+      return { type: "number", ...(desc ? { description: desc } : {}) }
+    case "boolean":
+      return { type: "boolean", ...(desc ? { description: desc } : {}) }
+    case "array":
+      return {
+        type: "array",
+        items: fieldToJsonSchema(def.element),
+        ...(desc ? { description: desc } : {}),
+      }
+    case "enum":
+      return {
+        type: "string",
+        enum: def.entries ? Object.keys(def.entries) : [],
+        ...(desc ? { description: desc } : {}),
+      }
+    case "literal":
       return { type: "string", const: def.value }
-    case "ZodObject": {
+    case "object": {
       // passthrough objects → allow any keys (no strict validation)
       const unknownKeys = (def as any).unknownKeys
       if (unknownKeys === "passthrough") {
@@ -93,10 +95,30 @@ function fieldToJsonSchema(field: z.ZodTypeAny): Record<string, unknown> {
       for (const [k, v] of Object.entries(objShape)) {
         objProps[k] = fieldToJsonSchema(v)
       }
-      return { type: "object", properties: objProps }
+      return { type: "object", properties: objProps, ...(desc ? { description: desc } : {}) }
     }
     default:
       return { type: "string" }
+  }
+}
+
+function zodToJsonSchema(schema: z.ZodObject<any>): Record<string, unknown> {
+  const def = (schema as any)._def
+  const shape = typeof def.shape === "function" ? def.shape() : (def.shape ?? {})
+  const properties: Record<string, unknown> = {}
+  const required: string[] = []
+
+  for (const [key, field] of Object.entries(shape as Record<string, z.ZodTypeAny>)) {
+    properties[key] = fieldToJsonSchema(field)
+    // Zod v4: isOptional() is a method on the ZodType instance
+    if (!(field as any).isOptional?.()) required.push(key)
+  }
+
+  return {
+    type: "object",
+    properties,
+    required,
+    additionalProperties: false,
   }
 }
 
@@ -146,12 +168,20 @@ export function normalizeRecipeArticle(raw: Record<string, unknown>): RecipeArti
   const str = (v: unknown, fallback = ""): string =>
     typeof v === "string" ? v : (v != null ? String(v) : fallback)
 
-  /** Extract ingredient lines from markdown (## Ingredients section). */
+  /** Extract ingredient lines from markdown (any heading containing "ingredient"). */
   const extractMdIngredients = (md: string): string[] => {
-    // Find the Ingredients heading and capture bullet lines until next ## heading
-    const section = md.match(/^##\s+Ingredients?\b.*?\n([\s\S]*?)(?=^##\s|\Z)/im)
-    if (!section?.[1]) return []
-    const lines = section[1].split("\n")
+    // Find the ingredient heading, then capture text until the next H2/H3 heading.
+    // Using indexOf instead of a regex lookahead — the non-greedy [\s\S]*?(?=^#)
+    // pattern is unreliable across multiple newlines in JS.
+    const headingRe = /^#{1,3}\s+[^#\n]*ingredients?[^#\n]*$/im
+    const headingMatch = md.match(headingRe)
+    if (!headingMatch) return []
+    const startIdx = md.indexOf(headingMatch[0]) + headingMatch[0].length
+    const rest = md.substring(startIdx)
+    // Stop at next H2 (or H1), NOT H3 — H3 sub-headings (### Step N) belong inside the section.
+    const nextHeading = rest.search(/^#{1,2}\s/m)
+    const sectionText = nextHeading >= 0 ? rest.substring(0, nextHeading) : rest
+    const lines = sectionText.split("\n")
     const bullets: string[] = []
     for (const line of lines) {
       const trimmed = line.replace(/^[-*•]\s+/, "").replace(/\*\*/g, "").trim()
@@ -166,23 +196,17 @@ export function normalizeRecipeArticle(raw: Record<string, unknown>): RecipeArti
     const fromJson: string[] = []
     if (Array.isArray(v)) {
       for (const x of v) {
-        const s = typeof x === "string" ? x : String(x?.name ?? x?.text ?? x ?? "")
-        if (s.includes(";") && (s.match(/;/g) ?? []).length >= 2) {
-          fromJson.push(...s.split(";").map(p => p.trim()).filter(Boolean))
-        } else {
-          fromJson.push(s)
-        }
+        fromJson.push(typeof x === "string" ? x : String(x?.name ?? x?.text ?? x ?? ""))
       }
-    } else if (typeof v === "string") {
-      fromJson.push(...v.split(/\n|•|-|\*/).map(s => s.trim()).filter(Boolean))
     }
 
     const jsonCount = fromJson.filter(Boolean).length
-    // If JSON parsing produced ≤3 items but markdown has more, use markdown
-    if (jsonCount <= 3 && fallbackMd) {
+    // Fall back to markdown ONLY when JSON is completely empty (structured output failure).
+    // When JSON has items, trust the structured data — the markdown extraction is a safety net.
+    if (jsonCount === 0 && fallbackMd) {
       const mdIngredients = extractMdIngredients(fallbackMd)
-      if (mdIngredients.length > jsonCount) {
-        console.log(`[normalize] Ingredients: markdown fallback (${mdIngredients.length} items) > JSON (${jsonCount} items)`)
+      if (mdIngredients.length > 0) {
+        console.log(`[normalize] Ingredients: markdown fallback (${mdIngredients.length} items) — JSON was empty`)
         return mdIngredients
       }
     }
@@ -190,19 +214,48 @@ export function normalizeRecipeArticle(raw: Record<string, unknown>): RecipeArti
     return fromJson.filter(Boolean)
   }
 
-  /** Extract numbered instruction steps from markdown (## Instructions section). */
+  /** Extract numbered instruction steps from markdown (any heading containing "instruction"). */
   const extractMdInstructions = (md: string): { step: number; text: string }[] => {
-    const section = md.match(/^##\s+Instructions?\b.*?\n([\s\S]*?)(?=^##\s|\Z)/im)
-    if (!section?.[1]) return []
-    // Match "Step 1 — text" or "**Step 1**" or "1. text" patterns
-    const steps = section[1].match(/(?:\*\*Step\s+(\d+)\*\*[:\-—]\s*(.+?)(?=\n|$)|Step\s+(\d+)\s*[—\-]\s*(.+?)(?=\n|$)|^(\d+)\.\s+(.+?)$)/gm)
-    if (!steps) return []
-    return steps.map((s, i) => {
-      const match = s.match(/Step\s+(\d+)|^(\d+)\./)
-      const num = match ? parseInt(match[1] ?? match[2] ?? "0", 10) : i + 1
-      const text = s.replace(/^(\*\*)?Step\s+\d+(\*\*)?[:\-—]\s*/, "").replace(/^\d+\.\s*/, "").trim()
-      return { step: num, text }
-    }).filter(x => x.text.length > 10)
+    // Find the instruction heading, then capture text until the next H2 heading.
+    const headingRe = /^#{1,3}\s+[^#\n]*instructions?[^#\n]*$/im
+    const headingMatch = md.match(headingRe)
+    if (!headingMatch) return []
+    const startIdx = md.indexOf(headingMatch[0]) + headingMatch[0].length
+    const rest = md.substring(startIdx)
+    // Stop at next H2 (or H1), NOT H3 — H3 sub-headings (### Step N) are the steps we want to parse.
+    const nextHeading = rest.search(/^#{1,2}\s/m)
+    const sectionText = nextHeading >= 0 ? rest.substring(0, nextHeading) : rest
+    // Extract step blocks — split by "### N." or "### Step N" boundaries.
+    // Gemini uses both formats: "### Step 1: Title" and "### 1. Title".
+    const stepBlocks = sectionText.split(/\n(?=###\s+(?:Step\s+)?\d+[\.:\-—])/)
+    const result: { step: number; text: string }[] = []
+    for (const block of stepBlocks) {
+      const trimmed = block.trim()
+      if (!trimmed) continue
+      // First line is "### Step N: Title" or "### N. Title" or "### N — Title"
+      const firstLineEnd = trimmed.indexOf("\n")
+      const firstLine = firstLineEnd >= 0 ? trimmed.substring(0, firstLineEnd) : trimmed
+      const body = firstLineEnd >= 0 ? trimmed.substring(firstLineEnd + 1).trim() : ""
+      // Match "### Step N: Title" or "### N. Title" or "### N — Title"
+      const stepMatch = firstLine.match(/^###\s+(?:Step\s+)?(\d+)[\.:\-—\s]+(.+)/)
+      if (!stepMatch) {
+        // Fallback: try older patterns like "**Step N**" or "N. text"
+        const altMatch = trimmed.match(/^(?:\*\*Step\s+(\d+)\*\*[:\-—]\s*(.+)|Step\s+(\d+)\s*[—\-]\s*(.+)|^(\d+)\.\s+(.+))/m)
+        if (altMatch) {
+          const num = parseInt(altMatch[1] ?? altMatch[3] ?? altMatch[5] ?? "0", 10)
+          const title = (altMatch[2] ?? altMatch[4] ?? altMatch[6] ?? "").trim()
+          const altBody = trimmed.substring(altMatch[0].length).trim()
+          const fullText = (title + "\n" + altBody).trim()
+          if (fullText.length > 10) result.push({ step: num || result.length + 1, text: fullText })
+        }
+        continue
+      }
+      const num = parseInt(stepMatch[1], 10)
+      const title = stepMatch[2].trim()
+      const fullText = (title + "\n" + body).trim()
+      if (fullText.length > 10) result.push({ step: num, text: fullText })
+    }
+    return result
   }
 
   const instructionsArr = (v: unknown, fallbackMd?: string): { step: number; text: string; duration?: string; temperature?: string }[] => {
@@ -223,11 +276,11 @@ export function normalizeRecipeArticle(raw: Record<string, unknown>): RecipeArti
     }
 
     const jsonSteps = fromJson.filter(x => x.text.length > 0).length
-    // If JSON produced 0 instructions but markdown has steps, use markdown
+    // Fall back to markdown ONLY when JSON is completely empty
     if (jsonSteps === 0 && fallbackMd) {
       const mdSteps = extractMdInstructions(fallbackMd)
       if (mdSteps.length > 0) {
-        console.log(`[normalize] Instructions: markdown fallback (${mdSteps.length} steps) > JSON (${jsonSteps} steps)`)
+        console.log(`[normalize] Instructions: markdown fallback (${mdSteps.length} steps) — JSON was empty`)
         return mdSteps
       }
     }
@@ -322,7 +375,7 @@ function parseIngredient(s: string): Ingredient {
   //   "3 large eggs, room temperature"   → qty: "3 large"          name: "eggs, room temperature"
   //   "Salt to taste"                    → qty: undefined          name: "Salt to taste"
   const match = s.match(
-    /^([\d¼½¾⅓⅔⅛⅜⅝⅞][\.\d\/\s]*(?:\s*(?:cup|tablespoon|teaspoon|ounce|oz|pound|lb|gram|g|kilogram|kg|ml|liter|piece|slice|clove|pinch|dash|bag|can|jar|bunch|small|medium|large)s?)?(?:\([^)]+\))?\s*)\s+(.+)/i,
+    /^([\d¼½¾⅓⅔⅛⅜⅝⅞][\.\d\/\s]*(?:\s*(?:cup|tablespoon|teaspoon|ounce|oz|pound|lb|gram|g|kilogram|kg|ml|liter|piece|slice|clove|pinch|dash|bag|can|jar|bunch|small|medium|large)s?)?(?:\s*\([^)]+\))*\s*)\s*(.+)/i,
   )
   if (match) {
     return { quantity: match[1].trim(), name: match[2].trim() }

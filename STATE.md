@@ -1,14 +1,34 @@
 # AI AutoBlog — Project State
-> Last updated: 2026-07-24 | Session: Rich Pins (automatique) + Implémentation Pinterest
+> Last updated: 2026-07-24 | Session: Pipeline v14.1 — Root Cause Fix + Karpathy Simplification
 
-## Pipeline v14 — Ready ✅
-- 5 steps: SERP → Mega-Skill → Quality Gate → Persist → Image → SEO Gate
-- All env vars present
-- **Primary model: Gemini Flash 3** (gratuit, ~1M tokens/jour, structured output natif)
-- **Fallback: gpt-oss-120b** (Cloudflare Workers AI, gratuit)
-- **Escalade: Claude Opus 4.8** (via ZenMux, payant — 20% pages piliers)
-- CLI: `npx tsx scripts/generate.ts "keyword"` — generates 1 recipe end-to-end (~60s, 1500+ mots)
-- Batch: `npx tsx scripts/weekly-generate.ts` — to be created
+## Pipeline v14.1 — Stable ✅
+
+### Root cause fix (Zod v4)
+- `zodToJsonSchema` in `chef-augustin.ts` was written for Zod v3 API (`def.typeName`)
+- Zod v4 uses `def.type` — every field fell through to `{ type: "string" }`
+- Gemini's `responseSchema` told it `ingredients` and `instructions` were strings, not arrays
+- **Fixed**: converter rewritten for Zod v4 — `def.type`, `def.element`, `field.description`
+
+### Before/After (recipe #70 — "lemon butter shrimp pasta for two")
+| Metric | Before (avg #67-#69) | After (#70) |
+|--------|---------------------|-------------|
+| Ingredients (JSON) | 1.7 items (semicolon-packed) | 11 items (clean strings) |
+| Instructions (JSON) | 0.7 steps | 6 steps (structured objects) |
+| Parse quality | Garbage | Clean quantity/name pairs |
+
+### Changes — 2026-07-24
+| File | Change |
+|------|--------|
+| `lib/pipeline/agents/chef-augustin.ts` | Zod v4 converter, removed semicolon hack, simplified fallback, fixed parseIngredient regex |
+| `lib/quality-gate.ts` | Include `instructions[].temperature` in USDA food safety scan (P0 audit) |
+| `skills/chef-augustin-mega.md` | New §7 (HARD CONSTRAINT — templates, quantity targets), §3/§5 dual-output language |
+
+### 5-step pipeline
+SERP → Mega-Skill (Gemini Flash 3) → Quality Gate (4 checks) → Persist → Image (Ideogram V4) → SEO Gate
+- CLI: `npx tsx scripts/generate.ts "keyword"` — ~70s, 1200-1500+ mots
+- Primary model: Gemini Flash 3 (gratuit, 4-key rotation, structured output)
+- Fallback: gpt-oss-120b (Cloudflare Workers AI)
+- Escalade: Claude Opus 4.8 (via ZenMux — pages piliers)
 
 ## Deployment — Vercel ✅
 - Domain: chefaugustin.com
@@ -32,30 +52,26 @@
 - `scripts/_test-models.ts` — testeur de disponibilité des modèles Cloudflare
 - `scripts/_test-gemini.ts` / `_debug-gemini.ts` — debug Gemini API
 
-### Bug fixes & enhancements today
-- `lib/quality-gate.ts` — défense types (instructions, ingredients, tags, contentMarkdown)
-- `lib/pipeline/agents/chef-augustin.ts` — `normalizeRecipeArticle()` + parsing défensif
-- `lib/agents/provider.ts` — injection JSON schema dans text+parse (fix Cloudflare)
-- `lib/agents/provider.ts` — strip `additionalProperties` pour Gemini
+### Bug fixes & enhancements (2026-07-24)
+- **ROOT CAUSE**: `zodToJsonSchema` Zod v3→v4 — Gemini recevait `{ type: "string" }` pour les arrays
+- `lib/pipeline/agents/chef-augustin.ts` — `normalizeRecipeArticle()`, extraction markdown (indexOf, pas regex lookahead), `### N.` + `### Step N` support
+- `lib/quality-gate.ts` — défense types, scan `temperature` field, minimum 3 H2
+- `lib/agents/provider.ts` — GeminiProvider (structured output natif, key rotation 4 clés), cleanSchema
+- `lib/agents/ideogram.ts` — V4 upgrade (multipart/form-data, `text_prompt`)
+- `components/recipe-article-body.tsx` — `stripDuplicateSections()` conditionnel
 
-### Next (priorisé)
+### Created (2026-07-24)
+- `data/pinterest-boards.json` — 13 board definitions ✅
+- `scripts/pin-brief.ts` — 5 variants par recette ✅
+- `lib/agents/provider.ts` — GeminiProvider + CloudflareProvider
+- Tested: 3 recipes generated (#67-#69), root cause identified, #70 validates the fix
 
-**Blocage actuel :** classifieur DeepSeek down → impossible de lancer `npx tsx` pour le moment.
-
-**Dès que le classifieur revient :**
-1. **Nettoyer la DB**: `npx tsx scripts/_cleanup-db.ts` (recette #36 + 3 "generating")
-2. **Générer 2 recettes pilotes**: `npx tsx scripts/generate.ts "easy chicken parmesan for two"` puis `"one pan garlic herb chicken thighs for two"`
-3. **Créer pin briefs**: `npx tsx scripts/pin-brief.ts <slug>` pour chaque recette
-4. **Créer `scripts/weekly-generate.ts`** (Task 5 du plan)
-
-**Nouvelles tâches (Spec V2) :**
-5. **Ajouter email capture** (popup/inline ConvertKit) dans le template recette — avant le 1er article
-6. **Ajouter bloc "Shop this recipe"** (Amazon Associates) dans le template recette
-7. **Créer les pages statiques manquantes** (About, Contact) pour AdSense
-
-**Manuel (Pinterest) :**
-8. ~~Créer board #13: "Balanced Dinners for Two"~~ ✅ Déjà fait
-9. **Vérifier Rich Pins automatiques**: 24h après 1er Pin sauvegardé → check metadata enrichies
+### Next
+1. **Générer volume** — ~25 articles pour candidature AdSense
+2. **Créer `scripts/weekly-generate.ts`** — batch generator
+3. **Vérifier Rich Pins** — 24h après 1er Pin → check metadata
+4. **Ajouter email capture + Shop this recipe** (Spec V2)
+5. **Créer pages About/Contact** pour AdSense
 
 ### Strategy Summary
 - 13 boards keyword-rich, PTRA-aligned
@@ -65,9 +81,9 @@
 - Pinterest (amorçage M1-M6) → Google SEO (relais M6+)
 
 ## DB State
-- 2 published (banana bread, sourdough bread — old niche, incomplete JSON-LD)
-- 1 failed draft (#36 easy chicken parmesan — to delete)
-- ~3 stuck in "generating"
+- 9 published (legacy bread + test recipes)
+- 1 draft (#70 — lemon butter shrimp pasta, clean structured data — validates v14.1 fix)
+- ~6 drafts from failed Zod v3 attempts (#61-#67 "one pan garlic herb" — cannibalization, can be cleaned)
 
 ## Key Files
 | File | Purpose |

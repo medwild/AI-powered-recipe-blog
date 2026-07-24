@@ -161,10 +161,13 @@ export async function qualityGate(output: RecipeArticle): Promise<GateResult> {
   // This gate focuses on content quality only — food safety, word count, banned words,
   // meta title length, and H2 heading structure.
 
-  // Check 1: Food Safety — scan BOTH instructions[].text AND contentMarkdown
+  // Check 1: Food Safety — scan instructions[].text, instructions[].temperature, AND contentMarkdown
+  // The temperature field is a dedicated structured field — it must be scanned too.
   const instructionsArr = Array.isArray(output.instructions) ? output.instructions : [];
   const allText = [
-    ...instructionsArr.map((i: { text?: string }) => i.text ?? String(i)),
+    ...instructionsArr.map((i: { text?: string; temperature?: string }) =>
+      [i.text ?? "", i.temperature ?? ""].join(" ")
+    ),
     output.contentMarkdown ?? "",
   ].join(" ");
   const foodSafetyErrors = validateFoodSafety(allText, output.ingredients);
