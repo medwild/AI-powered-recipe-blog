@@ -146,41 +146,83 @@ export function normalizeRecipeArticle(raw: Record<string, unknown>): RecipeArti
   const str = (v: unknown, fallback = ""): string =>
     typeof v === "string" ? v : (v != null ? String(v) : fallback)
 
-  const strArr = (v: unknown): string[] => {
-    if (Array.isArray(v)) {
-      // Each element may itself be a concatenated list (e.g. "a; b; c")
-      const result: string[] = []
-      for (const x of v) {
-        const s = typeof x === "string" ? x : String(x?.name ?? x?.text ?? x ?? "")
-        // If a single item contains 3+ semicolons, it's likely multiple ingredients
-        // that got concatenated. Split and keep.
-        if (s.includes(";") && (s.match(/;/g) ?? []).length >= 2) {
-          result.push(...s.split(";").map(p => p.trim()).filter(Boolean))
-        } else {
-          result.push(s)
-        }
+  /** Extract ingredient lines from markdown (## Ingredients section). */
+  const extractMdIngredients = (md: string): string[] => {
+    // Find the Ingredients heading and capture bullet lines until next ## heading
+    const section = md.match(/^##\s+Ingredients?\b.*?\n([\s\S]*?)(?=^##\s|\Z)/im)
+    if (!section?.[1]) return []
+    const lines = section[1].split("\n")
+    const bullets: string[] = []
+    for (const line of lines) {
+      const trimmed = line.replace(/^[-*•]\s+/, "").replace(/\*\*/g, "").trim()
+      if (trimmed && !trimmed.startsWith("#") && trimmed.length > 3) {
+        bullets.push(trimmed)
       }
-      return result.filter(Boolean)
     }
-    if (typeof v === "string") return v.split(/\n|•|-|\*/).map(s => s.trim()).filter(Boolean)
-    return []
+    return bullets
   }
 
-  const instructionsArr = (v: unknown): { step: number; text: string; duration?: string; temperature?: string }[] => {
-    if (!Array.isArray(v)) return []
-    return v.map((i: unknown) => {
-      if (typeof i === "string") return { step: 0, text: i }
-      if (i && typeof i === "object") {
-        const o = i as Record<string, unknown>
-        return {
-          step: typeof o.step === "number" ? o.step : Number(o.step ?? 0),
-          text: str(o.text ?? o.instruction ?? o.description, ""),
-          ...(o.duration ? { duration: str(o.duration) } : {}),
-          ...(o.temperature ? { temperature: str(o.temperature) } : {}),
+  const strArr = (v: unknown, fallbackMd?: string): string[] => {
+    const fromJson: string[] = []
+    if (Array.isArray(v)) {
+      for (const x of v) {
+        const s = typeof x === "string" ? x : String(x?.name ?? x?.text ?? x ?? "")
+        if (s.includes(";") && (s.match(/;/g) ?? []).length >= 2) {
+          fromJson.push(...s.split(";").map(p => p.trim()).filter(Boolean))
+        } else {
+          fromJson.push(s)
         }
       }
-      return { step: 0, text: String(i ?? "") }
-    }).filter(x => x.text.length > 0)
+    } else if (typeof v === "string") {
+      fromJson.push(...v.split(/\n|•|-|\*/).map(s => s.trim()).filter(Boolean))
+    }
+
+    // If JSON parsing produced ≤3 items but markdown has more, use markdown
+    if (fromJson.filter(Boolean).length <= 3 && fallbackMd) {
+      const mdIngredients = extractMdIngredients(fallbackMd)
+      if (mdIngredients.length > fromJson.filter(Boolean).length) return mdIngredients
+    }
+    return fromJson.filter(Boolean)
+  }
+
+  /** Extract numbered instruction steps from markdown (## Instructions section). */
+  const extractMdInstructions = (md: string): { step: number; text: string }[] => {
+    const section = md.match(/^##\s+Instructions?\b.*?\n([\s\S]*?)(?=^##\s|\Z)/im)
+    if (!section?.[1]) return []
+    // Match "Step 1 — text" or "**Step 1**" or "1. text" patterns
+    const steps = section[1].match(/(?:\*\*Step\s+(\d+)\*\*[:\-—]\s*(.+?)(?=\n|$)|Step\s+(\d+)\s*[—\-]\s*(.+?)(?=\n|$)|^(\d+)\.\s+(.+?)$)/gm)
+    if (!steps) return []
+    return steps.map((s, i) => {
+      const match = s.match(/Step\s+(\d+)|^(\d+)\./)
+      const num = match ? parseInt(match[1] ?? match[2] ?? "0", 10) : i + 1
+      const text = s.replace(/^(\*\*)?Step\s+\d+(\*\*)?[:\-—]\s*/, "").replace(/^\d+\.\s*/, "").trim()
+      return { step: num, text }
+    }).filter(x => x.text.length > 10)
+  }
+
+  const instructionsArr = (v: unknown, fallbackMd?: string): { step: number; text: string; duration?: string; temperature?: string }[] => {
+    const fromJson: { step: number; text: string; duration?: string; temperature?: string }[] = []
+    if (Array.isArray(v)) {
+      for (const i of v) {
+        if (typeof i === "string") { fromJson.push({ step: fromJson.length + 1, text: i }); continue }
+        if (i && typeof i === "object") {
+          const o = i as Record<string, unknown>
+          fromJson.push({
+            step: typeof o.step === "number" ? o.step : Number(o.step ?? fromJson.length + 1),
+            text: str(o.text ?? o.instruction ?? o.description, ""),
+            ...(o.duration ? { duration: str(o.duration) } : {}),
+            ...(o.temperature ? { temperature: str(o.temperature) } : {}),
+          })
+        }
+      }
+    }
+
+    // If JSON produced 0 instructions but markdown has steps, use markdown
+    if (fromJson.filter(x => x.text.length > 0).length === 0 && fallbackMd) {
+      const mdSteps = extractMdInstructions(fallbackMd)
+      if (mdSteps.length > 0) return mdSteps
+    }
+    return fromJson.filter(x => x.text.length > 0)
   }
 
   const tagsArr = (v: unknown): string[] => {
@@ -204,8 +246,8 @@ export function normalizeRecipeArticle(raw: Record<string, unknown>): RecipeArti
     metaDescription: str(raw.metaDescription),
     excerpt: str(raw.excerpt),
     contentMarkdown: str(raw.contentMarkdown),
-    ingredients: strArr(raw.ingredients),
-    instructions: instructionsArr(raw.instructions),
+    ingredients: strArr(raw.ingredients, str(raw.contentMarkdown)),
+    instructions: instructionsArr(raw.instructions, str(raw.contentMarkdown)),
     tags: tagsArr(raw.tags),
     prepTime: str(raw.prepTime, "PT15M"),
     cookTime: str(raw.cookTime, "PT30M"),
