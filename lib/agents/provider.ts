@@ -33,17 +33,102 @@ export interface LlmProvider {
 
 export class AnthropicProvider implements LlmProvider {
   private baseUrl: string
-  private apiKey: string
+  private keys: Array<{ key: string; exhausted: boolean }>
   private defaultModel: string
+  private isFlatKey: boolean
 
   constructor() {
     // ANTHROPIC_BASE_URL allows pointing to Anthropic-compatible proxies
-    // (e.g., ZenMux: https://zenmux.ai/api/anthropic)
+    // (e.g., FlatKey: https://router.flatkey.ai, ZenMux: https://zenmux.ai/api/anthropic)
     this.baseUrl = (process.env.ANTHROPIC_BASE_URL || "https://api.anthropic.com") + "/v1/messages"
-    this.apiKey = process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN || ""
+    this.isFlatKey = this.baseUrl.includes("flatkey.ai")
+
+    // Multi-key support — read all ANTHROPIC_API_KEY* env vars (like GeminiProvider)
+    const seen = new Set<string>()
+    const keys: Array<{ key: string; exhausted: boolean }> = []
+    for (const [envName, envVal] of Object.entries(process.env)) {
+      if (envName.startsWith("ANTHROPIC_API_KEY") && envVal && !seen.has(envVal)) {
+        seen.add(envVal)
+        keys.push({ key: envVal, exhausted: false })
+      }
+    }
+    // Fallback: ANTHROPIC_AUTH_TOKEN for backward compatibility
+    if (keys.length === 0 && process.env.ANTHROPIC_AUTH_TOKEN) {
+      keys.push({ key: process.env.ANTHROPIC_AUTH_TOKEN, exhausted: false })
+    }
+    if (keys.length === 0) {
+      console.warn("[provider] Anthropic — no API keys found. Set ANTHROPIC_API_KEY.")
+    } else {
+      console.log(`[provider] Anthropic — ${keys.length} key(s) loaded${this.isFlatKey ? " (FlatKey)" : ""}`)
+    }
+    this.keys = keys
+
     const configured = process.env.ANTHROPIC_MODEL || "claude-sonnet-5"
-    // ZenMux prefixes models with "anthropic/" — accept any model name
     this.defaultModel = configured
+  }
+
+  private pickKey(): string {
+    const active = this.keys.filter(k => !k.exhausted)
+    if (active.length === 0) throw new Error("All Anthropic API keys exhausted.")
+    const idx = Math.floor(Math.random() * active.length * 1.5) % active.length
+    return active[idx].key
+  }
+
+  private markExhausted(usedKey: string, reason: string): void {
+    const entry = this.keys.find(k => k.key === usedKey)
+    if (entry && !entry.exhausted) {
+      entry.exhausted = true
+      const rem = this.keys.filter(k => !k.exhausted).length
+      console.warn(`[provider] Anthropic key exhausted (${reason}). ${rem}/${this.keys.length} keys left.`)
+    }
+  }
+
+  private async fetchWithRotation(
+    body: Record<string, unknown>,
+    timeoutMs: number,
+    signal: AbortSignal,
+  ): Promise<Response> {
+    let lastText = ""
+    let lastStatus = 0
+    const maxAttempts = Math.min(3, Math.max(1, this.keys.length))
+    for (let a = 0; a < maxAttempts; a++) {
+      const apiKey = this.pickKey()
+      try {
+        const res = await fetch(this.baseUrl, {
+          method: "POST",
+          headers: {
+            "anthropic-version": "2023-06-01",
+            "content-type": "application/json",
+            "x-api-key": apiKey,
+          },
+          body: JSON.stringify(body),
+          signal,
+        })
+
+        // FlatKey: 401 + "insufficient_balance" → key exhausted, rotate
+        if (res.status === 401) {
+          const text = await res.text()
+          if (text.includes("insufficient_balance")) {
+            this.markExhausted(apiKey, "insufficient_balance")
+            lastText = text
+            lastStatus = 401
+            continue
+          }
+          // Other 401 (bad key) — throw immediately
+          throw new Error(`Anthropic API error (401): ${text}`)
+        }
+
+        return res
+      } catch (err) {
+        if (err instanceof Error && err.message.startsWith("Anthropic API error")) throw err
+        // Network error — try next key
+        lastText = (err as Error).message
+        if (a < maxAttempts - 1) {
+          console.warn(`[provider] Anthropic fetch failed (${lastText}) — rotating key`)
+        }
+      }
+    }
+    throw new Error(`Anthropic API error (${lastStatus || "network"}): ${lastText}`)
   }
 
   async runText(
@@ -51,7 +136,7 @@ export class AnthropicProvider implements LlmProvider {
     userPrompt: string,
     options?: LlmProviderOptions,
   ): Promise<string> {
-    if (!this.apiKey) {
+    if (this.keys.length === 0) {
       throw new Error("ANTHROPIC_API_KEY must be set.")
     }
 
@@ -60,30 +145,24 @@ export class AnthropicProvider implements LlmProvider {
     const timer = setTimeout(() => controller.abort(), timeoutMs)
 
     try {
-      const body = {
+      // FlatKey: disable cache_control (not supported)
+      const systemBlock: Record<string, unknown> = {
+        type: "text" as const,
+        text: systemPrompt,
+      }
+      if (!this.isFlatKey) {
+        systemBlock.cache_control = { type: "ephemeral" as const }
+      }
+
+      const body: Record<string, unknown> = {
         model: options?.model ?? this.defaultModel,
         max_tokens: options?.maxTokens ?? 3072,
-        system: [
-          {
-            type: "text" as const,
-            text: systemPrompt,
-            cache_control: { type: "ephemeral" as const },
-          },
-        ],
+        system: [systemBlock],
         messages: [{ role: "user" as const, content: userPrompt }],
         ...(options?.temperature != null ? { temperature: options.temperature } : {}),
       }
 
-      const res = await fetch(this.baseUrl, {
-        method: "POST",
-        headers: {
-          "anthropic-version": "2023-06-01",
-          "content-type": "application/json",
-          "x-api-key": this.apiKey,
-        },
-        body: JSON.stringify(body),
-        signal: controller.signal,
-      })
+      const res = await this.fetchWithRotation(body, timeoutMs, controller.signal)
 
       if (!res.ok) {
         const text = await res.text()
@@ -101,14 +180,15 @@ export class AnthropicProvider implements LlmProvider {
         throw new Error("Anthropic returned no text content.")
       }
 
-      // Log cache status
+      // Log cache status (n/a for FlatKey)
       const cacheRead = data?.usage?.cache_read_input_tokens ?? 0
       const cacheCreate = data?.usage?.cache_creation_input_tokens ?? 0
-      const cacheLabel = cacheRead > 0
-        ? `cache HIT (${cacheRead} tokens read)`
-        : cacheCreate > 0
-          ? `cache MISS (${cacheCreate} tokens written)`
-          : "cache n/a"
+      const cacheLabel = this.isFlatKey ? "cache n/a (FlatKey)"
+        : cacheRead > 0
+          ? `cache HIT (${cacheRead} tokens read)`
+          : cacheCreate > 0
+            ? `cache MISS (${cacheCreate} tokens written)`
+            : "cache n/a"
       console.log(`[provider] Anthropic ${options?.model ?? this.defaultModel} — success (${cacheLabel})`)
 
       return out
@@ -649,11 +729,9 @@ export async function runWithStructuredOutput<T>(
   const timer = setTimeout(() => controller.abort(), timeoutMs)
 
   try {
-    const apiKey = process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN || ""
-    if (!apiKey) throw new Error("ANTHROPIC_API_KEY or ANTHROPIC_AUTH_TOKEN is required for structured output")
-
     const baseUrl = (process.env.ANTHROPIC_BASE_URL || "https://api.anthropic.com") + "/v1/messages"
     const isZenMux = baseUrl.includes("zenmux.ai")
+    const isFlatKey = baseUrl.includes("flatkey.ai")
     const defaultModel = isZenMux ? "anthropic/claude-sonnet-5" : "claude-sonnet-5"
 
     const body: Record<string, unknown> = {
@@ -663,7 +741,8 @@ export async function runWithStructuredOutput<T>(
         {
           type: "text" as const,
           text: systemPrompt,
-          cache_control: { type: "ephemeral" as const },
+          // FlatKey doesn't support prompt caching
+          ...(isFlatKey ? {} : { cache_control: { type: "ephemeral" as const } }),
         },
       ],
       messages: [{ role: "user" as const, content: userPrompt }],
@@ -675,71 +754,100 @@ export async function runWithStructuredOutput<T>(
       },
     }
 
-    // ZenMux doesn't support the `thinking` parameter yet.
+    // ZenMux and FlatKey don't support the `thinking` parameter.
     // Anthropic native API supports adaptive thinking for latency control.
-    if (!isZenMux) {
+    if (!isZenMux && !isFlatKey) {
       body.thinking = { type: "adaptive", budget_tokens: 4000 }
     }
 
-    const res = await fetch(baseUrl, {
-      method: "POST",
-      headers: {
-        "anthropic-version": "2023-06-01",
-        "content-type": "application/json",
-        "x-api-key": apiKey,
-      },
-      body: JSON.stringify(body),
-      signal: controller.signal,
-    })
+    // FlatKey: key rotation on 401 insufficient_balance
+    let apiKey = process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN || ""
+    if (!apiKey) throw new Error("ANTHROPIC_API_KEY or ANTHROPIC_AUTH_TOKEN is required for structured output")
 
-    if (!res.ok) {
-      const status = res.status
-      const text = await res.text()
+    // Collect all keys for rotation
+    const seenKeys = new Set<string>()
+    const allKeys: string[] = []
+    for (const [envName, envVal] of Object.entries(process.env)) {
+      if (envName.startsWith("ANTHROPIC_API_KEY") && envVal && !seenKeys.has(envVal)) {
+        seenKeys.add(envVal)
+        allKeys.push(envVal)
+      }
+    }
+    if (allKeys.length === 0 && process.env.ANTHROPIC_AUTH_TOKEN) {
+      allKeys.push(process.env.ANTHROPIC_AUTH_TOKEN)
+    }
 
-      // Fallback to Sonnet 5 on rate limit / overload / server error
-      const currentModel = options?.model ?? defaultModel
-      const fallbackModel = isZenMux
-        ? "anthropic/claude-sonnet-5"
-        : currentModel.includes("/")
-          ? currentModel.replace(/\/[^/]+$/, "/claude-sonnet-5")
-          : "claude-sonnet-5"
-      const isAlreadyFallback = currentModel === fallbackModel || currentModel === "claude-sonnet-5"
-      if ((status === 429 || status === 529 || status >= 500) && !isAlreadyFallback) {
-        console.warn(`[provider] ${currentModel} returned ${status} — falling back to ${fallbackModel}`)
-        return runWithStructuredOutput<T>(systemPrompt, userPrompt, jsonSchema, {
-          ...options,
-          model: fallbackModel,
-        })
+    const maxAttempts = Math.min(3, Math.max(1, allKeys.length))
+    for (let keyIdx = 0; keyIdx < maxAttempts; keyIdx++) {
+      const currentKey = allKeys[keyIdx]
+      const res = await fetch(baseUrl, {
+        method: "POST",
+        headers: {
+          "anthropic-version": "2023-06-01",
+          "content-type": "application/json",
+          "x-api-key": currentKey,
+        },
+        body: JSON.stringify(body),
+        signal: controller.signal,
+      })
+
+      if (!res.ok) {
+        const status = res.status
+        const text = await res.text()
+
+        // FlatKey: 401 + "insufficient_balance" → rotate key
+        if (isFlatKey && status === 401 && text.includes("insufficient_balance")) {
+          console.warn(`[provider] FlatKey key exhausted (insufficient_balance) — rotating`)
+          continue
+        }
+
+        // Fallback to Sonnet 5 on rate limit / overload / server error
+        const currentModel = options?.model ?? defaultModel
+        const fallbackModel = isZenMux
+          ? "anthropic/claude-sonnet-5"
+          : currentModel.includes("/")
+            ? currentModel.replace(/\/[^/]+$/, "/claude-sonnet-5")
+            : "claude-sonnet-5"
+        const isAlreadyFallback = currentModel === fallbackModel || currentModel === "claude-sonnet-5"
+        if ((status === 429 || status === 529 || status >= 500) && !isAlreadyFallback) {
+          console.warn(`[provider] ${currentModel} returned ${status} — falling back to ${fallbackModel}`)
+          return runWithStructuredOutput<T>(systemPrompt, userPrompt, jsonSchema, {
+            ...options,
+            model: fallbackModel,
+          })
+        }
+
+        throw new Error(`Anthropic API error (${status}): ${text.substring(0, 500)}`)
       }
 
-      throw new Error(`Anthropic API error (${status}): ${text.substring(0, 500)}`)
+      const data = await res.json()
+      const contentBlocks: Array<Record<string, unknown>> = Array.isArray(data?.content)
+        ? data.content as Array<Record<string, unknown>>
+        : []
+      const textBlock = contentBlocks.find((b) => b.type === "text")
+      const out = typeof textBlock?.text === "string" ? textBlock.text as string : ""
+
+      if (out.trim().length === 0) {
+        throw new Error("Anthropic structured output: no text content returned")
+      }
+
+      const parsed = JSON.parse(out) as T
+
+      // Log cache + token usage
+      const usage = data?.usage as Record<string, number> | undefined
+      const cacheRead = usage?.cache_read_input_tokens ?? 0
+      const cacheCreate = usage?.cache_creation_input_tokens ?? 0
+      const inputTokens = usage?.input_tokens ?? 0
+      const outputTokens = usage?.output_tokens ?? 0
+      console.log(
+        `[provider] Anthropic ${body.model} structured output — success ` +
+        `(in:${inputTokens} out:${outputTokens} ${isFlatKey ? "cache n/a (FlatKey)" : cacheRead > 0 ? `cache HIT(${cacheRead})` : `cache MISS(${cacheCreate})`})`,
+      )
+
+      return parsed
     }
 
-    const data = await res.json()
-    const contentBlocks: Array<Record<string, unknown>> = Array.isArray(data?.content)
-      ? data.content as Array<Record<string, unknown>>
-      : []
-    const textBlock = contentBlocks.find((b) => b.type === "text")
-    const out = typeof textBlock?.text === "string" ? textBlock.text as string : ""
-
-    if (out.trim().length === 0) {
-      throw new Error("Anthropic structured output: no text content returned")
-    }
-
-    const parsed = JSON.parse(out) as T
-
-    // Log cache + token usage
-    const usage = data?.usage as Record<string, number> | undefined
-    const cacheRead = usage?.cache_read_input_tokens ?? 0
-    const cacheCreate = usage?.cache_creation_input_tokens ?? 0
-    const inputTokens = usage?.input_tokens ?? 0
-    const outputTokens = usage?.output_tokens ?? 0
-    console.log(
-      `[provider] Anthropic ${body.model} structured output — success ` +
-      `(in:${inputTokens} out:${outputTokens} ${cacheRead > 0 ? `cache HIT(${cacheRead})` : `cache MISS(${cacheCreate})`})`,
-    )
-
-    return parsed
+    throw new Error("All FlatKey keys exhausted for structured output")
   } finally {
     clearTimeout(timer)
   }

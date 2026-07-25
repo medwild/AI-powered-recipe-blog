@@ -69,12 +69,23 @@ function fieldToJsonSchema(field: z.ZodTypeAny): Record<string, unknown> {
       return { type: "number", ...(desc ? { description: desc } : {}) }
     case "boolean":
       return { type: "boolean", ...(desc ? { description: desc } : {}) }
-    case "array":
+    case "array": {
+      // Zod v4 stores min/max on checks with _zod.def.{minimum,maximum}
+      const checks: Array<{ _zod?: { def?: { check?: string; minimum?: number; maximum?: number } } }> = def.checks ?? []
+      let minItems: number | undefined
+      let maxItems: number | undefined
+      for (const c of checks) {
+        if (c._zod?.def?.check === "min_length") minItems = c._zod.def.minimum
+        if (c._zod?.def?.check === "max_length") maxItems = c._zod.def.maximum
+      }
       return {
         type: "array",
         items: fieldToJsonSchema(def.element),
+        ...(minItems != null ? { minItems } : {}),
+        ...(maxItems != null ? { maxItems } : {}),
         ...(desc ? { description: desc } : {}),
       }
+    }
     case "enum":
       return {
         type: "string",
@@ -95,7 +106,7 @@ function fieldToJsonSchema(field: z.ZodTypeAny): Record<string, unknown> {
       for (const [k, v] of Object.entries(objShape)) {
         objProps[k] = fieldToJsonSchema(v)
       }
-      return { type: "object", properties: objProps, ...(desc ? { description: desc } : {}) }
+      return { type: "object", properties: objProps, additionalProperties: false, ...(desc ? { description: desc } : {}) }
     }
     default:
       return { type: "string" }
@@ -164,6 +175,14 @@ export type RecipeDraft = ChefAugustinOutput
  * in required fields. This runs before quality gate or persist so downstream
  * code can trust the types.
  */
+function parseJsonLd(v: unknown): Record<string, unknown> {
+  if (typeof v === "object" && v !== null) return v as Record<string, unknown>
+  if (typeof v === "string") {
+    try { return JSON.parse(v) as Record<string, unknown> } catch { /* fall through */ }
+  }
+  return {}
+}
+
 export function normalizeRecipeArticle(raw: Record<string, unknown>): RecipeArticle {
   const str = (v: unknown, fallback = ""): string =>
     typeof v === "string" ? v : (v != null ? String(v) : fallback)
@@ -317,8 +336,8 @@ export function normalizeRecipeArticle(raw: Record<string, unknown>): RecipeArti
     totalTime: str(raw.totalTime, "PT45M"),
     servings: str(raw.servings, "2"),
     difficulty: (["Easy", "Medium", "Hard"].includes(String(raw.difficulty ?? "")) ? String(raw.difficulty) : "Easy") as "Easy" | "Medium" | "Hard",
-    imagePrompt: str(raw.imagePrompt).substring(0, 120),
-    jsonLd: str(raw.jsonLd),
+    imagePrompt: str(raw.imagePrompt).substring(0, 200),
+    jsonLd: parseJsonLd(raw.jsonLd),
   }
 }
 
