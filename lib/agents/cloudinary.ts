@@ -41,7 +41,15 @@ export async function uploadImage(
             reject(error ?? new Error("Cloudinary upload returned no result."))
             return
           }
-          resolve(result.secure_url)
+          // Inject f_auto (WebP/AVIF auto-format) and q_auto (quality auto) into the URL
+          const url = new URL(result.secure_url)
+          const parts = url.pathname.split("/")
+          const uploadIdx = parts.indexOf("upload")
+          if (uploadIdx !== -1 && !parts[uploadIdx + 1]?.startsWith("f_auto")) {
+            parts.splice(uploadIdx + 1, 0, "f_auto,q_auto")
+            url.pathname = parts.join("/")
+          }
+          resolve(url.toString())
         },
       )
       .end(buffer)

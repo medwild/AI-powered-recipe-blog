@@ -1,10 +1,13 @@
 import type { MetadataRoute } from "next"
-import { eq, and } from "drizzle-orm"
+import { eq, and, notLike } from "drizzle-orm"
 import { db } from "@/lib/db"
 import { recipes } from "@/lib/db/schema"
 import { getPublishedRecipes } from "@/lib/queries"
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com"
+
+// Force dynamic — Vercel caches the sitemap otherwise (x-vercel-cache: HIT)
+export const dynamic = "force-dynamic"
 
 const CATEGORY_PAGES = ["techniques", "guides", "histoire", "equipement", "idees"]
 const STATIC_PAGES = ["privacy", "terms"]
@@ -21,7 +24,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       )),
   ])
 
-  const recipeEntries: MetadataRoute.Sitemap = allRecipes.map((recipe) => ({
+  // Exclude test pages and ghost recipes (no ingredients AND no instructions) from the sitemap
+  const cleanRecipes = allRecipes.filter((r) => {
+    if (r.slug.startsWith("test-")) return false
+    const hasContent = (r.ingredients?.length ?? 0) > 0 || (r.instructions?.length ?? 0) > 0
+    return hasContent
+  })
+
+  const recipeEntries: MetadataRoute.Sitemap = cleanRecipes.map((recipe) => ({
     url: `${BASE_URL}/recettes/${recipe.slug}`,
     lastModified: recipe.updatedAt ? new Date(recipe.updatedAt) : new Date(),
     changeFrequency: "weekly" as const,

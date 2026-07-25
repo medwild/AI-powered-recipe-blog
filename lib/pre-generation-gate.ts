@@ -14,7 +14,7 @@
 
 import { db } from "@/lib/db"
 import { recipes } from "@/lib/db/schema"
-import { eq, and, sql } from "drizzle-orm"
+import { eq, and, ne, sql, notLike } from "drizzle-orm"
 import { slugify } from "@/lib/slug"
 
 // ---------------------------------------------------------------------------
@@ -140,10 +140,13 @@ function predictTags(keyword: string): string[] {
  */
 async function checkExactSlug(slug: string): Promise<GateResult | null> {
   try {
+    // Check ALL non-deleted recipes — not just published.
+    // Checking only "published" caused races: two recipes with the same keyword
+    // could both pass the gate when the first was still "generating" or "draft".
     const [match] = await db
       .select({ id: recipes.id, slug: recipes.slug, title: recipes.title, keyword: recipes.keyword })
       .from(recipes)
-      .where(and(eq(recipes.slug, slug), eq(recipes.status, "published")))
+      .where(and(eq(recipes.slug, slug), notLike(recipes.status, "deleted")))
       .limit(1)
 
     if (match) {

@@ -59,8 +59,19 @@ function RecipeJsonLd({
   // v5.2+ pipeline: @graph container with Recipe + BlogPosting + FAQPage + BreadcrumbList
   if (base["@graph"] && Array.isArray(base["@graph"])) {
     const graph = base["@graph"] as Record<string, unknown>[]
-    // Merge dynamic fields into the Recipe node
-    const enrichedGraph = graph.map((node) => {
+    // Merge dynamic fields into the Recipe node, deduplicate BreadcrumbList
+    const seenTypes = new Set<string>()
+    const enrichedGraph = graph
+      .filter((node) => {
+        const type = node["@type"] as string | undefined
+        if (!type) return true
+        // Breadcrumbs component already emits BreadcrumbList globally — skip to avoid duplicate
+        if (type === "BreadcrumbList") return false
+        if (seenTypes.has(type)) return false // skip duplicates
+        seenTypes.add(type)
+        return true
+      })
+      .map((node) => {
       if (node["@type"] === "BlogPosting") {
         return {
           ...node,
