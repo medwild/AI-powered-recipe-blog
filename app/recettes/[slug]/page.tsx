@@ -6,7 +6,6 @@ import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { RecipeArticle } from "@/components/recipe-article"
 import { RecipeRelated } from "@/components/recipe-related"
-import { Breadcrumbs } from "@/components/breadcrumbs"
 import { JumpToRecipeDesktop, JumpToRecipeMobile } from "@/components/jump-to-recipe"
 import { getRecipeBySlug, getPublishedRecipes, getRelatedRecipes, getLinkedArticle } from "@/lib/queries"
 
@@ -79,6 +78,8 @@ function RecipeJsonLd({
             ? (recipe.heroImageUrl ? [recipe.heroImageUrl] : undefined)
             : node.image,
           mainEntity: { "@id": "#recipe" },
+          datePublished: recipe.publishedAt?.toISOString(),
+          dateModified: recipe.updatedAt?.toISOString(),
           publisher: {
             "@type": "Organization",
             name: "Chef Augustin",
@@ -87,8 +88,12 @@ function RecipeJsonLd({
         }
       }
       if (node["@type"] === "Recipe") {
+        // Strip recipeCuisine from LLM output — the mega-skill often fills this with
+        // tag-like values ("Easy Weeknight Dinners for Two") instead of a valid cuisine
+        // ("American", "French"). Invalid cuisine → Google Rich Results warning.
+        const { recipeCuisine: _cuisine, ...cleanNode } = node as Record<string, unknown> & { recipeCuisine?: unknown }
         return {
-          ...node,
+          ...cleanNode,
           "@id": "#recipe",
           name: recipe.title,
           description: recipe.metaDescription || recipe.excerpt || undefined,
@@ -194,13 +199,7 @@ export default async function RecipePage({
       <SiteHeader actions={<JumpToRecipeDesktop />} />
       <JumpToRecipeMobile />
       <main className="flex-1">
-        <Breadcrumbs
-          crumbs={[
-            { label: "Home", href: "/" },
-            { label: "Recipes", href: "/recettes" },
-            { label: recipe.title, href: `/recettes/${recipe.slug}` },
-          ]}
-        />
+        {/* Breadcrumbs are rendered inside RecipeHero with cluster path for richer SEO */}
         <RecipeArticle recipe={recipe} />
 
         {/* Linked AOR Article */}
