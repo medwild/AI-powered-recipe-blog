@@ -75,6 +75,9 @@ function RecipeJsonLd({
       if (node["@type"] === "BlogPosting") {
         return {
           ...node,
+          image: (node.image === "<placeholder>" || !node.image)
+            ? (recipe.heroImageUrl ? [recipe.heroImageUrl] : undefined)
+            : node.image,
           mainEntity: { "@id": "#recipe" },
           publisher: {
             "@type": "Organization",

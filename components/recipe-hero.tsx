@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Clock, Flame, Users, ChefHat, ArrowDown, Sparkles } from "lucide-react"
 import type { Recipe } from "@/lib/db/schema"
 import { FOOD_BLUR_PLACEHOLDER } from "@/lib/utils/cn"
+import { fromIsoDuration, parseDurationMinutes } from "@/lib/utils/duration"
 import { PinButton } from "@/components/pin-button"
 import { CookModeToggle } from "@/components/cook-mode-toggle"
 import { Breadcrumbs } from "@/components/breadcrumbs"
@@ -52,12 +53,12 @@ function extractValueProp(contentMarkdown: string | null, excerpt: string | null
 function inferBadges(recipe: Recipe): { label: string; icon?: string }[] {
   const badges: { label: string; icon?: string }[] = []
   const tags = (recipe.tags ?? []).map(t => t.toLowerCase())
-  const totalTime = recipe.totalTime?.toLowerCase() ?? ""
+  const totalMinutes = parseDurationMinutes(recipe.totalTime)
 
   // Speed badge
-  if (totalTime.includes("15 min") || totalTime.includes("20 min")) {
+  if (totalMinutes !== null && totalMinutes <= 20) {
     badges.push({ label: "Quick & Easy", icon: "clock" })
-  } else if (totalTime.includes("30 min")) {
+  } else if (totalMinutes !== null && totalMinutes <= 30) {
     badges.push({ label: "30 Minutes", icon: "clock" })
   }
 
@@ -171,7 +172,7 @@ export function RecipeHero({ recipe }: { recipe: Recipe }) {
           {recipe.totalTime ? (
             <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1.5 text-xs font-medium text-secondary-foreground">
               <Clock className="h-3 w-3" aria-hidden="true" />
-              {recipe.totalTime}
+              {fromIsoDuration(recipe.totalTime)}
             </span>
           ) : null}
         </div>
@@ -242,10 +243,10 @@ export function RecipeHero({ recipe }: { recipe: Recipe }) {
       {(recipe.prepTime || recipe.cookTime || recipe.servings || recipe.difficulty) ? (
         <div className="mt-4 flex flex-wrap gap-2.5">
           {recipe.prepTime ? (
-            <MetaPill icon={Clock} label="Prep" value={recipe.prepTime} />
+            <MetaPill icon={Clock} label="Prep" value={fromIsoDuration(recipe.prepTime) ?? recipe.prepTime} />
           ) : null}
           {recipe.cookTime ? (
-            <MetaPill icon={Flame} label="Cook" value={recipe.cookTime} />
+            <MetaPill icon={Flame} label="Cook" value={fromIsoDuration(recipe.cookTime) ?? recipe.cookTime} />
           ) : null}
           {recipe.servings ? (
             <MetaPill icon={Users} label="Servings" value={recipe.servings} />

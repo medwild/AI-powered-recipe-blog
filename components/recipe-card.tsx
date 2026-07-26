@@ -3,6 +3,7 @@ import Link from "next/link"
 import { Clock, Users } from "lucide-react"
 import type { RecipeCardData } from "@/lib/types"
 import { PinButton } from "@/components/pin-button"
+import { fromIsoDuration } from "@/lib/utils/duration"
 
 export function RecipeCard({ recipe, aspectRatio }: { recipe: RecipeCardData; aspectRatio?: string }) {
   const ratio = aspectRatio ?? "2/3"
@@ -59,7 +60,7 @@ export function RecipeCard({ recipe, aspectRatio }: { recipe: RecipeCardData; as
           {recipe.totalTime ? (
             <span className="flex items-center gap-1.5">
               <Clock className="h-3.5 w-3.5" aria-hidden="true" />
-              {recipe.totalTime}
+              {fromIsoDuration(recipe.totalTime)}
             </span>
           ) : null}
           {recipe.servings ? (

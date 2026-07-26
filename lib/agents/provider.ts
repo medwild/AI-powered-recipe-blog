@@ -714,12 +714,16 @@ export async function runWithStructuredOutput<T>(
     throw lastErr ?? new Error("Gemini structured output: all attempts failed")
   }
 
-  // Non-Anthropic providers: fall back to text + JSON parse.
+  // Non-Anthropic providers AND FlatKey: fall back to text + JSON parse.
+  // FlatKey's structured output is unreliable — fields come back empty,
+  // garbled, or as literal "undefined"/"placeholder". Text mode gives us
+  // the full markdown and we extract what we need in normalizeRecipeArticle.
   // Inject the JSON schema into the prompt — without it the model
   // has no idea what structure to produce (only Anthropic sends
   // the schema via output_config).
-  if (!(provider instanceof AnthropicProvider)) {
-    console.log("[provider] Structured output not supported by current provider — falling back to text+parse")
+  const isFlatKey = (process.env.ANTHROPIC_BASE_URL || "").includes("flatkey.ai")
+  if (!(provider instanceof AnthropicProvider) || isFlatKey) {
+    console.log(`[provider] ${isFlatKey ? "FlatKey" : "Non-Anthropic"} — falling back to text+parse (structured output ${isFlatKey ? "disabled for FlatKey" : "not supported"})`)
     const schemaPrompt = `\n\n---\nOUTPUT FORMAT — You MUST return valid JSON matching this schema exactly:\n${JSON.stringify(jsonSchema, null, 2)}\n\nReturn ONLY the JSON object, no markdown fences, no extra text.`
     return runTextAndParseJson<T>(systemPrompt, userPrompt + schemaPrompt, options)
   }

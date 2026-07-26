@@ -103,10 +103,17 @@ function fieldToJsonSchema(field: z.ZodTypeAny): Record<string, unknown> {
       const raw = (def as any).shape
       const objShape: Record<string, z.ZodTypeAny> = typeof raw === "function" ? raw() : (raw ?? {})
       const objProps: Record<string, unknown> = {}
+      const objRequired: string[] = []
       for (const [k, v] of Object.entries(objShape)) {
         objProps[k] = fieldToJsonSchema(v)
+        // Zod v4: isOptional() is a method on the ZodType instance
+        if (!(v as any).isOptional?.()) objRequired.push(k)
       }
-      return { type: "object", properties: objProps, additionalProperties: false, ...(desc ? { description: desc } : {}) }
+      return {
+        type: "object", properties: objProps, additionalProperties: false,
+        ...(objRequired.length > 0 ? { required: objRequired } : {}),
+        ...(desc ? { description: desc } : {}),
+      }
     }
     default:
       return { type: "string" }
@@ -336,7 +343,7 @@ export function normalizeRecipeArticle(raw: Record<string, unknown>): RecipeArti
     totalTime: str(raw.totalTime, "PT45M"),
     servings: str(raw.servings, "2"),
     difficulty: (["Easy", "Medium", "Hard"].includes(String(raw.difficulty ?? "")) ? String(raw.difficulty) : "Easy") as "Easy" | "Medium" | "Hard",
-    imagePrompt: str(raw.imagePrompt).substring(0, 200),
+    imagePrompt: (() => { const s = str(raw.imagePrompt); return (s && s !== "undefined") ? s.substring(0, 200) : ""; })(),
     jsonLd: parseJsonLd(raw.jsonLd),
   }
 }
@@ -448,7 +455,7 @@ export async function agentChefAugustinMega(
       userPrompt += `\n\n---\nQUALITY GATE FEEDBACK (fix these issues):\n${feedback}`
     }
 
-    userPrompt += `\n\n---\nGenerate a complete ${keyword} recipe article. Follow the mega-skill exactly. Output valid JSON only.`
+    userPrompt += `\n\n---\nGenerate a complete ${keyword} recipe article. Follow the mega-skill exactly. Output valid JSON only.\n\nCRITICAL — imagePrompt: Write a 100-150 word food photography prompt following §6 of the system instructions. Use Canon EOS R5, directional lighting, specific surface (material+texture), hex colors from real ingredients, and the mandatory negative tail verbatim. Do NOT write "undefined" or leave empty.`
 
     console.log(`[ChefAugustinMega] Calling ${RECIPE_JSON_SCHEMA ? "structured output" : "LLM"} for "${keyword}" (${systemPrompt.length} chars skill, ${userPrompt.length} chars prompt)`)
 

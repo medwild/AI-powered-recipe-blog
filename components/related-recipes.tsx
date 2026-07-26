@@ -4,6 +4,7 @@ import { resolveCluster } from "@/lib/cluster-resolver"
 import { getRelatedRecipes, getPublishedRecipes } from "@/lib/queries"
 import type { Recipe } from "@/lib/db/schema"
 import { FOOD_BLUR_PLACEHOLDER } from "@/lib/utils/cn"
+import { fromIsoDuration } from "@/lib/utils/duration"
 
 export async function RelatedRecipes({ recipe }: { recipe: Recipe }) {
   const tags = (recipe.tags ?? []) as string[]
@@ -67,7 +68,7 @@ export async function RelatedRecipes({ recipe }: { recipe: Recipe }) {
                 {r.title}
               </h3>
               {r.totalTime ? (
-                <p className="mt-1.5 text-xs text-muted-foreground">{r.totalTime}</p>
+                <p className="mt-1.5 text-xs text-muted-foreground">{fromIsoDuration(r.totalTime)}</p>
               ) : null}
             </div>
           </Link>
