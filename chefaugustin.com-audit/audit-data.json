@@ -1,0 +1,268 @@
+{
+  "summary": {
+    "health_score": 52,
+    "business_type": "Recipe/Food Blog (Pinterest-first)",
+    "url": "https://chefaugustin.com",
+    "pages_crawled": 18,
+    "top_findings": [
+      "Aucun JSON-LD Recipe schema détecté — zéro rich results Google possibles",
+      "Sitemap incomplet : 2 recettes publiées manquantes, page test incluse",
+      "5 pages catégories vides (0 articles) indexées",
+      "Meta descriptions absentes sur toutes les pages",
+      "Slugs dupliqués (one-pot-lemon-chicken ×2)"
+    ],
+    "quick_wins": [
+      { "action": "Activer JSON-LD Recipe schema", "effort": "30min", "impact": "Schema score 10→80" },
+      { "action": "Régénérer le sitemap", "effort": "15min", "impact": "Indexation corrigée" },
+      { "action": "Supprimer test-1784300112023", "effort": "15min", "impact": "Contenu poubelle retiré" },
+      { "action": "Noindex pages vides", "effort": "15min", "impact": "Thin content masqué" },
+      { "action": "Ajouter f_auto Cloudinary", "effort": "15min", "impact": "Images WebP/AVIF" }
+    ]
+  },
+  "categories": [
+    {
+      "name": "Technical SEO",
+      "score": 48,
+      "weight": 22,
+      "what_works": [
+        "Robots.txt bien configuré — bloque /dashboard et /api/ pour crawlers génériques",
+        "Headers sécurité complets : CSP, HSTS preload, X-Frame-Options: DENY, X-Content-Type-Options: nosniff",
+        "Vercel CDN avec cache HIT, ISR 300s",
+        "Next.js 16 — framework moderne et performant"
+      ],
+      "findings": [
+        {
+          "title": "Sitemap incomplet",
+          "severity": "Critical",
+          "description": "18 URLs dans le sitemap mais les 2 recettes publiées (honey-garlic-salmon-for-two, creamy-mushroom-pasta-for-two) sont absentes. Google ne peut pas les découvrir.",
+          "recommendation": "Régénérer le sitemap avec toutes les recettes publiées."
+        },
+        {
+          "title": "Page test dans le sitemap",
+          "severity": "Critical",
+          "description": "test-1784300112023 (swedish meatballs sans contenu) est dans le sitemap. Contenu poubelle indexé.",
+          "recommendation": "Retirer du sitemap et supprimer la page."
+        },
+        {
+          "title": "Slugs dupliqués dans le sitemap",
+          "severity": "Critical",
+          "description": "one-pot-lemon-chicken-for-two ET one-pot-lemon-chicken-for-two-1 sont tous les deux dans le sitemap.",
+          "recommendation": "Garder un seul slug canonique, 301 redirect l'autre."
+        },
+        {
+          "title": "Redirection 308 vers www",
+          "severity": "Info",
+          "description": "Le domaine racine redirige (308) vers www.chefaugustin.com. Comportement normal si intentionnel.",
+          "recommendation": "Confirmer que la préférence www est voulue."
+        }
+      ]
+    },
+    {
+      "name": "On-Page SEO",
+      "score": 45,
+      "weight": 20,
+      "what_works": [
+        "URL structure propre avec slugs en français (/recettes/)",
+        "H1 présents sur toutes les pages",
+        "Bon maillage interne entre recettes"
+      ],
+      "findings": [
+        {
+          "title": "Meta descriptions absentes",
+          "severity": "Critical",
+          "description": "Aucune page ne semble avoir de balise meta description. Impact direct sur le CTR dans les SERP.",
+          "recommendation": "Ajouter des meta descriptions uniques (140-160 chars) pour chaque page."
+        },
+        {
+          "title": "Pages catégories vides indexées",
+          "severity": "High",
+          "description": "/techniques, /equipement, /histoire, /idees, /guides ont 0 article chacune. Thin content signal fort.",
+          "recommendation": "Ajouter noindex temporaire ou créer du contenu pour ces catégories."
+        },
+        {
+          "title": "Slugs trop longs",
+          "severity": "Medium",
+          "description": "one-pan-garlic-herb-chicken-thighs-for-two-the-cold-pan-secret = 73 caractères. Google tronque les URLs longues.",
+          "recommendation": "Limiter les slugs à 60 caractères max."
+        },
+        {
+          "title": "Title tag homepage perfectible",
+          "severity": "Medium",
+          "description": "Chef Augustin — Easy Weeknight Dinners for Two (52 chars). Pourrait inclure un keyword secondaire.",
+          "recommendation": "Ajouter '30-Minute' ou 'French-Inspired' dans le title."
+        }
+      ]
+    },
+    {
+      "name": "Schema / Structured Data",
+      "score": 10,
+      "weight": 10,
+      "what_works": [
+        "Le pipeline génère du JSON-LD (vérifié dans le code)"
+      ],
+      "findings": [
+        {
+          "title": "Zéro JSON-LD détecté sur le site live",
+          "severity": "Critical",
+          "description": "Aucune page n'a de @type: Recipe, Organization, BreadcrumbList, ou WebSite. Perte totale des rich results Google (recettes, étoiles, temps).",
+          "recommendation": "Vérifier que RecipeArticleBody injecte le JSON-LD dans <head> via generateMetadata() ou un <Script> tag."
+        }
+      ]
+    },
+    {
+      "name": "Content Quality",
+      "score": 55,
+      "weight": 23,
+      "what_works": [
+        "Structure H1→H2→H3 cohérente",
+        "Sections FAQ ciblant People Also Ask",
+        "Angle unique dinners-for-two + French technique",
+        "Ton cohérent Chef Augustin",
+        "Explications scientifiques (Why This Works)"
+      ],
+      "findings": [
+        {
+          "title": "Contenu principal potentiellement JS-only",
+          "severity": "High",
+          "description": "Les ingrédients et instructions n'apparaissent pas dans les extractions HTML statiques. Si le contenu est render côté client uniquement, Google peut avoir du mal à l'indexer.",
+          "recommendation": "Vérifier avec curl + View Source que le contenu est dans le HTML initial."
+        },
+        {
+          "title": "Pas de nutrition facts",
+          "severity": "Medium",
+          "description": "Aucune recette n'affiche de données nutritionnelles. Important pour les rich results.",
+          "recommendation": "Ajouter calories, protéines, lipides, glucides par portion."
+        },
+        {
+          "title": "Photo coming soon sur test page",
+          "severity": "High",
+          "description": "La page test-1784300112023 affiche 'Photo coming soon'. Signal de faible qualité.",
+          "recommendation": "Supprimer cette page."
+        }
+      ]
+    },
+    {
+      "name": "Images",
+      "score": 60,
+      "weight": 5,
+      "what_works": [
+        "Alt text descriptifs sur toutes les images",
+        "Cloudinary CDN avec optimisation (w=1536&q=75)",
+        "Next.js next/image pour responsive",
+        "Pinterest save button intégré"
+      ],
+      "findings": [
+        {
+          "title": "Pas de f_auto Cloudinary",
+          "severity": "Medium",
+          "description": "Les URLs Cloudinary n'utilisent pas f_auto pour servir WebP/AVIF automatiquement.",
+          "recommendation": "Ajouter f_auto dans les paramètres Cloudinary."
+        }
+      ]
+    },
+    {
+      "name": "AI Search Readiness (GEO)",
+      "score": 55,
+      "weight": 10,
+      "what_works": [
+        "llms.txt présent et bien structuré",
+        "Robots.txt autorise OAI-SearchBot et PerplexityBot",
+        "API JSON des recettes mentionnée dans llms.txt"
+      ],
+      "findings": [
+        {
+          "title": "Pas de données structurées pour AI Overviews",
+          "severity": "High",
+          "description": "Sans JSON-LD Recipe, les AI Overviews ne peuvent pas citer les recettes de façon structurée.",
+          "recommendation": "Activer le JSON-LD (c'est le même fix que Schema)."
+        },
+        {
+          "title": "6 recettes N/A dans llms.txt",
+          "severity": "Medium",
+          "description": "La moitié des recettes dans llms.txt ont temps/difficulté = N/A. Information incomplète pour les LLMs.",
+          "recommendation": "Renseigner les métadonnées manquantes."
+        }
+      ]
+    },
+    {
+      "name": "Performance (Core Web Vitals)",
+      "score": 70,
+      "weight": 10,
+      "what_works": [
+        "Vercel CDN (CDG1) — faible latence",
+        "ISR 300s — pages servies statiquement",
+        "CSP en place — pas de scripts tiers lourds"
+      ],
+      "findings": [
+        {
+          "title": "CWV non mesurés avec données terrain",
+          "severity": "Medium",
+          "description": "Pas de données CrUX ou Lighthouse. L'estimation est basée sur l'architecture uniquement.",
+          "recommendation": "Exécuter un audit Lighthouse et connecter Google Search Console."
+        }
+      ]
+    }
+  ],
+  "action_plan": {
+    "phases": [
+      {
+        "name": "Phase 1: Critical Fixes",
+        "timeframe": "Week 1",
+        "items": [
+          "Activer le JSON-LD Recipe schema dans le frontend",
+          "Régénérer le sitemap (inclure recettes publiées, exclure pages test)",
+          "Supprimer la page test-1784300112023",
+          "Dédupliquer les slugs one-pot-lemon-chicken",
+          "Ajouter les meta descriptions"
+        ]
+      },
+      {
+        "name": "Phase 2: High-Impact Improvements",
+        "timeframe": "Weeks 2-3",
+        "items": [
+          "Noindex les 5 pages catégories vides",
+          "Ajouter Organization + BreadcrumbList JSON-LD",
+          "Vérifier le rendu SSR des ingrédients/instructions",
+          "Ajouter les nutrition facts aux recettes",
+          "Corriger les liens cassés (white rice, sheet pan veggies)"
+        ]
+      },
+      {
+        "name": "Phase 3: Content & Authority",
+        "timeframe": "Month 2",
+        "items": [
+          "Activer f_auto Cloudinary pour WebP/AVIF",
+          "Améliorer les titles tags",
+          "Ajouter WebSite + SearchAction schema",
+          "Enrichir llms.txt (métadonnées complètes)",
+          "Ajouter des blocs Key Takeaways pour GEO"
+        ]
+      },
+      {
+        "name": "Phase 4: Monitoring & Iteration",
+        "timeframe": "Ongoing",
+        "items": [
+          "Connecter Google Search Console",
+          "Automatiser Lighthouse CI",
+          "SEO drift monitoring avant/après déploiements"
+        ]
+      }
+    ]
+  },
+  "artifacts": {
+    "findings_dir": "findings/",
+    "screenshots_dir": "screenshots/"
+  },
+  "positifs": [
+    "Robots.txt excellent — OAI-SearchBot, PerplexityBot, Googlebot, Bingbot tous autorisés",
+    "llms.txt présent — le site est AI-crawler ready",
+    "Headers sécurité exemplaires (CSP, HSTS preload, X-Frame-Options, X-Content-Type-Options)",
+    "Infrastructure solide : Vercel + Next.js 16 + ISR",
+    "Bon maillage interne entre recettes",
+    "Images avec alt text systématiques",
+    "FAQ bien structurées pour People Also Ask",
+    "Angle éditorial unique : dinners for two + French technique",
+    "Pinterest intégration native",
+    "Pipeline qui génère du JSON-LD (juste pas encore exposé côté frontend)"
+  ]
+}
