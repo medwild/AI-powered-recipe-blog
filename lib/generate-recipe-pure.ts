@@ -20,12 +20,12 @@ import { runImagePhase } from "./pipeline/steps/image-phase"
 import { runSeoGate } from "@/lib/seo/gate"
 
 const MAX_RETRIES: Record<string, number> = {
-  food_safety: 1, too_short: 1, banned_words: 2, meta_title_length: 1,
+  food_safety: 2, too_short: 1, banned_words: 2, meta_title_length: 1,
 }
 
 function buildFeedback(reason: string, errors: string[]): string {
   switch (reason) {
-    case "food_safety": return `WARNING: Missing USDA food safety temperatures. ${errors.join(" ")} Fix: mention the required temperatures in both the step text and the structured temperature field.`
+    case "food_safety": return `REJECTED — USDA food safety violation. ${errors.join(" ")} You MUST write the EXACT temperature number (e.g., "165°F / 74°C") in the step text. For beef, write "cook until internal temperature reaches 145°F / 63°C" verbatim in the instruction step where the beef is cooked. Also set the \`temperature\` field to "145°F / 63°C" for that step. Without the exact number, your article is automatically rejected.`
     case "too_short": return errors[0]
     case "banned_words": return `WARNING: Your previous output contained banned health claims: ${errors.join(" ")}. This is a HARD RULE. Do not use these terms. Rewrite without them.`
     case "meta_title_length": return `WARNING: Your metaTitle is too long (>60 chars). Rewrite it under 60 characters, keyword first.`
