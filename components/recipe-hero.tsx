@@ -19,21 +19,26 @@ import { resolveCluster } from "@/lib/cluster-resolver"
 function extractValueProp(contentMarkdown: string | null, excerpt: string | null): string | null {
   if (!contentMarkdown) return excerpt ?? null
 
-  // Try "Why This Works" section first
-  const whyMatch = contentMarkdown.match(/\*\*Why This Works\*\*[:\s]*\n+(.+?)(?:\n|$)/i)
-  if (whyMatch && whyMatch[1].trim().length > 30) {
-    // Truncate at last word boundary before 200 chars (not mid-word)
-    const raw = whyMatch[1].trim()
-    if (raw.length <= 200) return raw
-    const cut = raw.substring(0, 200)
+  // Helper: truncate at last word boundary, append ellipsis if needed
+  const smartTruncate = (text: string, maxLen: number): string => {
+    if (text.length <= maxLen) return text
+    const cut = text.substring(0, maxLen)
     const lastSpace = cut.lastIndexOf(" ")
-    return (lastSpace > 100 ? cut.substring(0, lastSpace) : cut) + "…"
+    return (lastSpace > maxLen * 0.6 ? cut.substring(0, lastSpace) : cut) + "…"
   }
 
-  // Try the H2 "Why This Works" variant
-  const h2Match = contentMarkdown.match(/## Why This Works\s*\n+(.+?)(?:\n|$)/i)
+  // Try "**Why This Recipe Works:**" or "**Why This Works**" bold pattern
+  // Capture the FULL paragraph after the heading (until blank line or next heading)
+  const boldMatch = contentMarkdown.match(/\*\*Why This (?:Recipe )?Works\*\*[:\s]*\n+([\s\S]+?)(?=\n\n|\n##|\n\*\*|$)/i)
+  if (boldMatch && boldMatch[1].trim().length > 30) {
+    return smartTruncate(boldMatch[1].trim().replace(/\n/g, " "), 250)
+  }
+
+  // Try the H2 "## Why This Works" or "## Why This Recipe Works" variant
+  // Same: capture full paragraph until blank line or next heading
+  const h2Match = contentMarkdown.match(/## Why This (?:Recipe )?Works\s*\n+([\s\S]+?)(?=\n\n|\n##|$)/i)
   if (h2Match && h2Match[1].trim().length > 30) {
-    return h2Match[1].trim().substring(0, 200)
+    return smartTruncate(h2Match[1].trim().replace(/\n/g, " "), 250)
   }
 
   // Fall back to excerpt
