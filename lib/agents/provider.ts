@@ -36,12 +36,14 @@ export class AnthropicProvider implements LlmProvider {
   private keys: Array<{ key: string; exhausted: boolean }>
   private defaultModel: string
   private isFlatKey: boolean
+  private isKieAi: boolean
 
   constructor() {
     // ANTHROPIC_BASE_URL allows pointing to Anthropic-compatible proxies
-    // (e.g., FlatKey: https://router.flatkey.ai, ZenMux: https://zenmux.ai/api/anthropic)
+    // (e.g., FlatKey: https://router.flatkey.ai, kie.ai: https://api.kie.ai/claude)
     this.baseUrl = (process.env.ANTHROPIC_BASE_URL || "https://api.anthropic.com") + "/v1/messages"
     this.isFlatKey = this.baseUrl.includes("flatkey.ai")
+    this.isKieAi = this.baseUrl.includes("kie.ai")
 
     // Multi-key support — read all ANTHROPIC_API_KEY* env vars (like GeminiProvider)
     const seen = new Set<string>()
@@ -59,7 +61,7 @@ export class AnthropicProvider implements LlmProvider {
     if (keys.length === 0) {
       console.warn("[provider] Anthropic — no API keys found. Set ANTHROPIC_API_KEY.")
     } else {
-      console.log(`[provider] Anthropic — ${keys.length} key(s) loaded${this.isFlatKey ? " (FlatKey)" : ""}`)
+      console.log(`[provider] Anthropic — ${keys.length} key(s) loaded${this.isFlatKey ? " (FlatKey)" : this.isKieAi ? " (kie.ai)" : ""}`)
     }
     this.keys = keys
 
@@ -99,26 +101,53 @@ export class AnthropicProvider implements LlmProvider {
           headers: {
             "anthropic-version": "2023-06-01",
             "content-type": "application/json",
-            "x-api-key": apiKey,
+            ...(this.isKieAi ? { Authorization: `Bearer ${apiKey}` } : { "x-api-key": apiKey }),
           },
           body: JSON.stringify(body),
           signal,
         })
 
-        // FlatKey: 401 + "insufficient_balance" → key exhausted, rotate
-        if (res.status === 401) {
+        // FlatKey/kie.ai: quota exhaustion → rotate key
+        const isQuota401 = res.status === 401
+        const isQuota402 = res.status === 402
+        const isQuota403 = res.status === 403
+        if (isQuota401 || isQuota402 || isQuota403) {
           const text = await res.text()
-          if (text.includes("insufficient_balance")) {
+          const exhausted = (isQuota401 && text.includes("insufficient_balance"))
+            || (isQuota402 && /credits?\s*insufficient/i.test(text))
+            || (isQuota403 && /insufficient.*quota/i.test(text))
+          if (exhausted) {
             this.markExhausted(apiKey, "insufficient_balance")
             lastText = text
-            lastStatus = 401
+            lastStatus = res.status
             continue
           }
-          // Other 401 (bad key) — throw immediately
-          throw new Error(`Anthropic API error (401): ${text}`)
+          // Other auth errors (401/403) — throw immediately
+          throw new Error(`Anthropic API error (${res.status}): ${text}`)
         }
 
-        return res
+        // Server errors (500/502/503) — transient, retry fetch up to 3 times
+        if (res.status >= 500 && res.status < 600) {
+          for (let sr = 0; sr < 2; sr++) {
+            const delayMs = (sr + 1) * 5000
+            console.warn(`[provider] Server error ${res.status} — retry ${sr + 1}/2 in ${delayMs / 1000}s`)
+            await new Promise((r) => setTimeout(r, delayMs))
+            const retryRes = await fetch(this.baseUrl, {
+              method: "POST",
+              headers: {
+                "anthropic-version": "2023-06-01",
+                "content-type": "application/json",
+                ...(this.isKieAi ? { Authorization: `Bearer ${apiKey}` } : { "x-api-key": apiKey }),
+              },
+              body: JSON.stringify(body),
+              signal,
+            })
+            if (retryRes.ok) return retryRes
+          }
+          lastStatus = 500
+          lastText = "Server error after 3 retries"
+          continue
+        }
       } catch (err) {
         if (err instanceof Error && err.message.startsWith("Anthropic API error")) throw err
         // Network error — try next key
@@ -722,8 +751,10 @@ export async function runWithStructuredOutput<T>(
   // has no idea what structure to produce (only Anthropic sends
   // the schema via output_config).
   const isFlatKey = (process.env.ANTHROPIC_BASE_URL || "").includes("flatkey.ai")
-  if (!(provider instanceof AnthropicProvider) || isFlatKey) {
-    console.log(`[provider] ${isFlatKey ? "FlatKey" : "Non-Anthropic"} — falling back to text+parse (structured output ${isFlatKey ? "disabled for FlatKey" : "not supported"})`)
+  const isKieAi = (process.env.ANTHROPIC_BASE_URL || "").includes("kie.ai")
+  if (!(provider instanceof AnthropicProvider) || isFlatKey || isKieAi) {
+    const label = isKieAi ? "kie.ai" : isFlatKey ? "FlatKey" : "Non-Anthropic"
+    console.log(`[provider] ${label} — falling back to text+parse (structured output not supported)`)
     const schemaPrompt = `\n\n---\nOUTPUT FORMAT — You MUST return valid JSON matching this schema exactly:\n${JSON.stringify(jsonSchema, null, 2)}\n\nReturn ONLY the JSON object, no markdown fences, no extra text.`
     return runTextAndParseJson<T>(systemPrompt, userPrompt + schemaPrompt, options)
   }
@@ -736,6 +767,7 @@ export async function runWithStructuredOutput<T>(
     const baseUrl = (process.env.ANTHROPIC_BASE_URL || "https://api.anthropic.com") + "/v1/messages"
     const isZenMux = baseUrl.includes("zenmux.ai")
     const isFlatKey = baseUrl.includes("flatkey.ai")
+    const isKieAi = baseUrl.includes("kie.ai")
     const defaultModel = isZenMux ? "anthropic/claude-sonnet-5" : "claude-sonnet-5"
 
     const body: Record<string, unknown> = {
@@ -758,8 +790,9 @@ export async function runWithStructuredOutput<T>(
       },
     }
 
-    // ZenMux and FlatKey don't support the `thinking` parameter.
-    // Anthropic native API supports adaptive thinking for latency control.
+    // ZenMux, FlatKey, and kie.ai don't support Anthropic-native `thinking` parameter.
+    // (kie.ai uses its own `thinkingFlag` boolean instead — we don't set it,
+    // defaulting to off for predictable structured JSON output.)
     if (!isZenMux && !isFlatKey) {
       body.thinking = { type: "adaptive", budget_tokens: 4000 }
     }
@@ -789,7 +822,7 @@ export async function runWithStructuredOutput<T>(
         headers: {
           "anthropic-version": "2023-06-01",
           "content-type": "application/json",
-          "x-api-key": currentKey,
+          ...(isKieAi ? { Authorization: `Bearer ${currentKey}` } : { "x-api-key": currentKey }),
         },
         body: JSON.stringify(body),
         signal: controller.signal,
@@ -799,9 +832,11 @@ export async function runWithStructuredOutput<T>(
         const status = res.status
         const text = await res.text()
 
-        // FlatKey: 401 + "insufficient_balance" → rotate key
-        if (isFlatKey && status === 401 && text.includes("insufficient_balance")) {
-          console.warn(`[provider] FlatKey key exhausted (insufficient_balance) — rotating`)
+        // FlatKey/kie.ai: quota exhaustion → rotate key
+        const isQuotaExhausted = (isFlatKey && status === 401 && text.includes("insufficient_balance"))
+          || (isKieAi && ((status === 402 && /credits?\s*insufficient/i.test(text)) || (status === 403 && /insufficient.*quota/i.test(text))))
+        if (isQuotaExhausted) {
+          console.warn(`[provider] ${isKieAi ? "kie.ai" : "FlatKey"} key exhausted — rotating`)
           continue
         }
 
@@ -851,7 +886,7 @@ export async function runWithStructuredOutput<T>(
       return parsed
     }
 
-    throw new Error("All FlatKey keys exhausted for structured output")
+    throw new Error(`All ${isKieAi ? "kie.ai" : isFlatKey ? "FlatKey" : "Anthropic"} keys exhausted for structured output`)
   } finally {
     clearTimeout(timer)
   }
