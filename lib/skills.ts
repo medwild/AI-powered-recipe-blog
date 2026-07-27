@@ -117,7 +117,7 @@ export async function getSkillMeta(
 }
 
 // ---------------------------------------------------------------------------
-// Image Prompt Optimizer
+// Image Prompt Optimizer — Ideogram 4 template-based (v14.2 §6)
 // ---------------------------------------------------------------------------
 
 interface PromptSource {
@@ -129,118 +129,147 @@ interface PromptSource {
   imagePrompt?: string | null
 }
 
-/** Prompt de secours absolu — utilisé si TOUTES les données sont absentes */
-const FALLBACK_PROMPT =
-  "Rustic gourmet food photography of a delicious homemade dish, " +
-  "natural window lighting, wooden table surface, " +
-  "top-down composition, warm and inviting atmosphere, " +
-  "high detail, appetizing, shot on Sony A7R IV 90mm macro lens"
+// Mandatory negative tail per mega-skill §6 — appended to every prompt
+const NEGATIVE_TAIL =
+  "No text, no labels, no logos, no watermarks, no hands, no fingers, no human limbs, no silverware visible"
+
+// Ingredient → hex color map for extracting palette from recipe data
+const COLOR_MAP: Record<string, string> = {
+  chicken: "#D4954B", lemon: "#F5D44B", tomato: "#D32F2F", garlic: "#F5E6D3",
+  beef: "#8B3A3A", steak: "#8B3A3A", pork: "#D4956B", salmon: "#FA8072",
+  shrimp: "#FA8072", rice: "#F5F5DC", pasta: "#F5D76E", cheese: "#FFD700",
+  parmesan: "#FFD700", mozzarella: "#FFF8E7", cream: "#FFFDD0", butter: "#FFF8B0",
+  egg: "#FFF4B0", basil: "#4A7C3F", parsley: "#4A7C3F", cilantro: "#3B7A3B",
+  rosemary: "#5C6B3C", thyme: "#4A7C3F", mushroom: "#C4A882", onion: "#D4A76A",
+  pepper: "#27AE60", carrot: "#E85D04", broccoli: "#3A7D2C", spinach: "#3B6E2C",
+  potato: "#C4A46C", avocado: "#5A7D2C", chocolate: "#4A2C1A", berry: "#8C0032",
+  strawberry: "#D53032", blueberry: "#2C3E6B", vanilla: "#F5E6CC", cinnamon: "#9A6B3B",
+  curry: "#D4950A", soy: "#3B2314", ginger: "#E8C96A", noodle: "#F5D76E",
+  bread: "#D4956B", bacon: "#B8423A", corn: "#F0D060", lime: "#88C840",
+  coconut: "#F5E8C8", honey: "#D4950A", maple: "#B8860B", sesame: "#E8C96A",
+}
+
+type DishProfile = {
+  surface: string
+  angle: string
+  aperture: string
+  lighting: string
+  moisture: string
+  microDetail: string
+}
+
+const DISH_TEMPLATES: Record<string, DishProfile> = {
+  skillet: {
+    surface: "dark cast iron skillet with seasoned patina, scattered coarse salt at edges",
+    angle: "slightly angled 45-degree shot, f/2.8 shallow depth of field",
+    aperture: "f/2.8",
+    lighting: "overhead kitchen spotlight, side rim light carving texture, warm 3500K",
+    moisture: "glistening sauce pooling at edges, a single herb leaf clinging to the surface",
+    microDetail: "a single flake of sea salt catching the rim light",
+  },
+  soup: {
+    surface: "matte ceramic bowl with subtle glaze, dark linen napkin beneath",
+    angle: "45° close-up showing texture and depth, f/2.8",
+    aperture: "f/2.8",
+    lighting: "overhead kitchen spotlight, side rim light, warm 3500K",
+    moisture: "steam rising from center, glossy droplets on bowl rim",
+    microDetail: "a single fresh herb leaf floating on the surface",
+  },
+  baked: {
+    surface: "seamless cream marble with faint grey veining",
+    angle: "overhead flat lay, f/5.6 deep depth of field",
+    aperture: "f/5.6",
+    lighting: "natural window light from left, 3500K, diffused through linen",
+    moisture: "crackled golden crust, melting butter pooling in crevices",
+    microDetail: "a single flake of finishing salt on a golden edge",
+  },
+  grilled: {
+    surface: "dark walnut cutting board with deep grain, rustic linen beside it",
+    angle: "slightly angled 45-degree shot, f/2.8 shallow depth of field",
+    aperture: "f/2.8",
+    lighting: "overhead kitchen spotlight, warm 3500K, rim light on char marks",
+    moisture: "glistening juices at the surface, charred edges with pink center",
+    microDetail: "a single rosemary needle resting on a char mark",
+  },
+  default: {
+    surface: "dark walnut countertop with subtle grain, warm tones",
+    angle: "slightly angled 45-degree shot, f/2.8",
+    aperture: "f/2.8",
+    lighting: "overhead kitchen spotlight, side rim light, warm 3500K",
+    moisture: "glistening finish catching the overhead light, fresh garnish scattered naturally",
+    microDetail: "a single salt flake resting on the surface",
+  },
+}
+
+function detectDishType(tags: string[]): string {
+  const t = tags.map(t => t.toLowerCase()).join(" ")
+  if (/skillet|cast.iron|one.pan|pan.sear|sauté|stir.fry/i.test(t)) return "skillet"
+  if (/soup|stew|curry|ramen|broth|chili|bisque/i.test(t)) return "soup"
+  if (/baked|bake|roast|oven|casserole|sheet.pan/i.test(t)) return "baked"
+  if (/grill|bbq|barbecue|char|smok/i.test(t)) return "grilled"
+  return "default"
+}
+
+/** Extract 2-3 hex colors from recipe title + tags by matching known ingredients. */
+function extractColors(title: string, tags: string[]): string[] {
+  const text = `${title} ${tags.join(" ")}`.toLowerCase()
+  const seen = new Set<string>()
+  for (const [ingredient, hex] of Object.entries(COLOR_MAP)) {
+    if (text.includes(ingredient)) seen.add(`${ingredient.replace(/_/g, " ")} ${hex}`)
+    if (seen.size >= 3) break
+  }
+  if (seen.size === 0) return ["warm amber #D4954B", "herb green #4A7C3F", "golden brown #C08040"]
+  return [...seen]
+}
 
 /**
- * Construit un prompt d'image professionnel à partir des données de la recette.
+ * Template-based Ideogram 4 food photography prompt generator.
  *
- * Architecture 10 couches (sujet → contexte → cadrage → style → éclairage →
- * composition → couleur → technique → format → exclusions) pour produire un
- * prompt de qualité professionnelle quand le Writer n'a pas généré de prompt.
+ * Replaces the old 10-layer generic prompt with mega-skill §6 rules applied
+ * deterministically: Canon EOS R5, directional lighting, surface specificity,
+ * moisture vocabulary, micro-detail, hex colors, mandatory negative tail.
+ *
+ * Never returns empty or "undefined" — 100% deterministic, no LLM dependency.
  */
 export function buildDefaultPrompt(source: PromptSource): string {
   const dishName = source.title ?? source.keyword
+  const tags = source.tags ?? []
 
-  // Si même le nom du plat est absent, utiliser le prompt de secours absolu
-  if (!dishName) return FALLBACK_PROMPT
+  if (!dishName) {
+    return [
+      "Rustic gourmet food photography of a delicious homemade dish.",
+      "Dark walnut countertop with subtle grain.",
+      "Slightly angled 45-degree shot.",
+      "Overhead kitchen spotlight, side rim light, warm 3500K.",
+      "Canon EOS R5, 85mm, f/2.8, ISO 400.",
+      "Warm amber #D4954B, herb green #4A7C3F.",
+      NEGATIVE_TAIL,
+    ].join(" ")
+  }
 
-  // Extraction des données de la recette
+  const p = DISH_TEMPLATES[detectDishType(tags)] ?? DISH_TEMPLATES.default
+  const colors = extractColors(dishName, tags)
+
   const mainIngredients = (source.ingredients ?? [])
-    .slice(0, 3)
-    .map((i) => i.name)
+    .slice(0, 2)
+    .map(i => i.name)
     .filter(Boolean)
-  const tags = (source.tags ?? []).slice(0, 2)
-  const isItalian = tags.some((t) => /italian|pasta|pizza/i.test(t))
-  const isDessert = tags.some((t) => /dessert|cake|sweet|baking/i.test(t))
 
-  // -----------------------------------------------------------------------
-  // Couche 1 — Sujet principal (attributs spécifiques)
-  // -----------------------------------------------------------------------
-  const subject = mainIngredients.length > 0
-    ? `${dishName} with ${mainIngredients.slice(0, 2).join(" and ")}`
-    : dishName
+  const anchors = mainIngredients.length >= 2
+    ? `${mainIngredients[0]} and ${mainIngredients[1]}`
+    : mainIngredients[0] ?? dishName
 
-  // -----------------------------------------------------------------------
-  // Couche 2 — Action / Contexte (environnement)
-  // -----------------------------------------------------------------------
-  const context = isDessert
-    ? "on a rustic ceramic plate, garnished, elegant presentation"
-    : isItalian
-      ? "served on a rustic wooden board, fresh garnish scattered around"
-      : "beautifully plated on artisanal ceramic, fresh herbs as garnish"
-
-  // -----------------------------------------------------------------------
-  // Couche 3 — Cadrage + Angle
-  // -----------------------------------------------------------------------
-  const framing = isDessert
-    ? "medium close-up shot, 45-degree angle"
-    : "overhead top-down shot, bird's eye view"
-
-  // -----------------------------------------------------------------------
-  // Couche 4 — Style visuel
-  // -----------------------------------------------------------------------
-  const visualStyle = "professional food photography, editorial culinary style, " +
-    "magazine-quality, rustic gourmet aesthetic"
-
-  // -----------------------------------------------------------------------
-  // Couche 5 — Éclairage (source, direction, qualité, température)
-  // -----------------------------------------------------------------------
-  const lighting = "natural soft window lighting from the left, " +
-    "diffused through a linen curtain, warm 3500K color temperature, " +
-    "gentle fill light from a white reflector on the right, " +
-    "soft directional shadows adding depth"
-
-  // -----------------------------------------------------------------------
-  // Couche 6 — Composition
-  // -----------------------------------------------------------------------
-  const composition = isDessert
-    ? "rule of thirds, subject offset right, negative space on the left, " +
-      "leading lines from plate edge to focal point"
-    : "overhead flat lay composition, ingredients artfully scattered, " +
-      "rule of thirds placement, negative space around the dish"
-
-  // -----------------------------------------------------------------------
-  // Couche 7 — Couleur / Palette
-  // -----------------------------------------------------------------------
-  const colorPalette = isDessert
-    ? "warm golden browns, creamy whites, subtle berry accents, " +
-      "harmonious earth tones"
-    : "warm vibrant colors, rich reds and greens, " +
-      "golden crust tones, natural wood browns"
-
-  // -----------------------------------------------------------------------
-  // Couche 8 — Détails techniques
-  // -----------------------------------------------------------------------
-  const technical = "shot on Sony A7R IV, 90mm macro lens, f/2.8, " +
-    "shallow depth of field, ISO 400, crisp focus on the main dish, " +
-    "subtle film grain texture"
-
-  // -----------------------------------------------------------------------
-  // Couche 9 — Format / Ratio
-  // -----------------------------------------------------------------------
-  const format = "2:3 vertical aspect ratio, suitable for Pinterest and Instagram"
-
-  // -----------------------------------------------------------------------
-  // Couche 10 — Exclusions (formulées positivement)
-  // -----------------------------------------------------------------------
-  const exclusions = "clean background only, no text overlay, " +
-    "no artificial plastic props, no harsh flash lighting, no hands visible"
-
-  // Assemblage final — les couches sont dans l'ordre de pondération décroissante
   return [
-    `${visualStyle} of ${subject}, ${context},`,
-    `${framing},`,
-    `${lighting},`,
-    `${composition},`,
-    `${colorPalette},`,
-    `${technical},`,
-    `${format},`,
-    exclusions,
+    `${dishName}.`,
+    `${anchors}.`,
+    p.surface + ".",
+    p.angle + ",",
+    p.lighting + ".",
+    p.moisture + ",",
+    p.microDetail + ".",
+    `Canon EOS R5, 85mm, ${p.aperture}, ISO 400.`,
+    colors.join(", ") + ".",
+    NEGATIVE_TAIL,
   ].join(" ")
 }
 
