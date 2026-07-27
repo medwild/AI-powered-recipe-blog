@@ -455,7 +455,7 @@ export async function agentChefAugustinMega(
       userPrompt += `\n\n---\nQUALITY GATE FEEDBACK (fix these issues):\n${feedback}`
     }
 
-    userPrompt += `\n\n---\nGenerate a complete ${keyword} recipe article. Follow the mega-skill exactly. Output valid JSON only.\n\nCRITICAL — imagePrompt: Write a 100-150 word food photography prompt following §6 of the system instructions. Use Canon EOS R5, directional lighting, specific surface (material+texture), hex colors from real ingredients, and the mandatory negative tail verbatim. Do NOT write "undefined" or leave empty.`
+    userPrompt += `\n\n---\nGenerate a complete ${keyword} recipe article. Follow the mega-skill exactly. Output valid JSON only.\n\nCRITICAL — USDA food safety temperatures (MANDATORY): Every protein in your ingredients must have its USDA-safe internal temperature mentioned in BOTH the step text AND the structured \`temperature\` field. Poultry (chicken/turkey/duck) → 165°F / 74°C. Ground meat (beef/pork/lamb) → 160°F / 71°C. Beef/lamb/veal whole muscle → 145°F / 63°C. Pork whole muscle → 145°F / 63°C. Fish/seafood → 145°F / 63°C. Missing any required temperature = automatic rejection. No exceptions.\n\nCRITICAL — imagePrompt: Write a 100-150 word food photography prompt following §6 of the system instructions. Use Canon EOS R5, directional lighting, specific surface (material+texture), hex colors from real ingredients, and the mandatory negative tail verbatim. Do NOT write "undefined" or leave empty.`
 
     console.log(`[ChefAugustinMega] Calling ${RECIPE_JSON_SCHEMA ? "structured output" : "LLM"} for "${keyword}" (${systemPrompt.length} chars skill, ${userPrompt.length} chars prompt)`)
 
