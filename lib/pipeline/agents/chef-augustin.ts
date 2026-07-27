@@ -348,6 +348,82 @@ export function normalizeRecipeArticle(raw: Record<string, unknown>): RecipeArti
   }
 }
 
+// USDA protein → temperature map (same as quality-gate.ts PROTEIN_RULES)
+const PROTEIN_TEMPS: Record<string, string> = {
+  chicken: "165°F / 74°C", turkey: "165°F / 74°C", duck: "165°F / 74°C",
+  poultry: "165°F / 74°C", quail: "165°F / 74°C",
+  "ground beef": "160°F / 71°C", "ground pork": "160°F / 71°C",
+  "ground lamb": "160°F / 71°C", "ground meat": "160°F / 71°C",
+  beef: "145°F / 63°C", steak: "145°F / 63°C", lamb: "145°F / 63°C",
+  veal: "145°F / 63°C",
+  pork: "145°F / 63°C", ham: "145°F / 63°C",
+  salmon: "145°F / 63°C", tuna: "145°F / 63°C", cod: "145°F / 63°C",
+  halibut: "145°F / 63°C", trout: "145°F / 63°C",
+  shrimp: "145°F / 63°C", scallop: "145°F / 63°C",
+  fish: "145°F / 63°C", seafood: "145°F / 63°C",
+}
+
+/**
+ * Injects missing USDA temperatures into instruction text and temperature field.
+ * Opus 4.8 consistently fails to include beef/pork/fish temps (chicken is fine).
+ * This is a deterministic safety net — same principle as buildDefaultPrompt().
+ */
+function injectUsdaTemps(
+  instructions: { step: number; text: string; temperature?: string }[],
+  ingredients: string[],
+): { step: number; text: string; temperature?: string }[] {
+  const lowerText = ingredients.join(" ").toLowerCase()
+
+  // Find which proteins need temperatures
+  const requiredTemps = new Set<string>()
+  for (const [protein, temp] of Object.entries(PROTEIN_TEMPS)) {
+    if (lowerText.includes(protein)) requiredTemps.add(temp)
+  }
+
+  if (requiredTemps.size === 0) return instructions
+
+  // Check if all required temps are already present in any instruction text or temperature field
+  const existingTemps = new Set(
+    instructions.flatMap(i => {
+      const temps: string[] = []
+      const combined = `${i.text} ${i.temperature ?? ""}`.toLowerCase()
+      for (const t of requiredTemps) {
+        // Match "145°F" or "145°F / 63°C" or "63°C" — any variation
+        const parts = t.split(" / ")
+        if (parts.some(p => combined.includes(p.toLowerCase()))) temps.push(t)
+      }
+      return temps
+    })
+  )
+
+  const missing = new Set([...requiredTemps].filter(t => !existingTemps.has(t)))
+  if (missing.size === 0) return instructions
+
+  // Inject missing temps into the most relevant step (first step mentioning cooking/heat)
+  return instructions.map((inst) => {
+    const text = inst.text.toLowerCase()
+    const isCookingStep = /cook|sear|grill|roast|bake|fry|sauté|brown|heat|sizzle|flip|internal|thermometer/i.test(text)
+    const alreadyHasTemp = inst.text.includes("°F") || inst.text.includes("°C") || (inst.temperature?.length ?? 0) > 0
+    const needsInjection = isCookingStep && !alreadyHasTemp && missing.size > 0
+
+    if (!needsInjection) return inst
+
+    // Take one missing temp and inject it
+    const temp = [...missing][0]
+    missing.delete(temp)
+    const tempSuffix = ` until the internal temperature reaches ${temp} on an instant-read thermometer`
+
+    // Don't add if text already ends similarly
+    if (inst.text.toLowerCase().includes("internal temperature")) return inst
+
+    return {
+      ...inst,
+      text: inst.text.replace(/\.\s*$/, "") + tempSuffix + ".",
+      temperature: inst.temperature || temp,
+    }
+  })
+}
+
 export function recipeArticleToChefAugustinOutput(r: RecipeArticle): ChefAugustinOutput {
   // jsonLd is a JSON string from the LLM — parse it to an object for DB storage
   let parsedJsonLd: Record<string, unknown> = {}
@@ -356,6 +432,21 @@ export function recipeArticleToChefAugustinOutput(r: RecipeArticle): ChefAugusti
   } else if (typeof r.jsonLd === "object" && r.jsonLd !== null) {
     parsedJsonLd = r.jsonLd as unknown as Record<string, unknown>
   }
+
+  const rawInstructions = Array.isArray(r.instructions) ? r.instructions.map((i: unknown) => {
+    if (i && typeof i === "object") {
+      const obj = i as Record<string, unknown>
+      return { step: Number(obj.step ?? 0), text: String(obj.text ?? obj.instruction ?? ""), temperature: obj.temperature ? String(obj.temperature) : undefined }
+    }
+    return { step: 0, text: String(i ?? "") }
+  }) : []
+
+  const ingredientNames = Array.isArray(r.ingredients)
+    ? r.ingredients.map((i: unknown) => typeof i === "string" ? i : String((i as any)?.name ?? (i as any)?.ingredient ?? ""))
+    : []
+
+  // Inject missing USDA temperatures — safety net for Opus blind spot on beef/pork/fish
+  const enrichedInstructions = injectUsdaTemps(rawInstructions, ingredientNames)
 
   return {
     title: r.title,
@@ -371,13 +462,7 @@ export function recipeArticleToChefAugustinOutput(r: RecipeArticle): ChefAugusti
       }
       return { name: String(i ?? "") }
     }) : [],
-    instructions: Array.isArray(r.instructions) ? r.instructions.map((i: unknown) => {
-      if (i && typeof i === "object") {
-        const obj = i as Record<string, unknown>
-        return { step: Number(obj.step ?? 0), text: String(obj.text ?? obj.instruction ?? "") }
-      }
-      return { step: 0, text: String(i ?? "") }
-    }) : [],
+    instructions: enrichedInstructions,
     tags: r.tags,
     prepTime: r.prepTime,
     cookTime: r.cookTime,
