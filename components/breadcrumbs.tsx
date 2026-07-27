@@ -4,7 +4,7 @@ import { ChevronRight } from "lucide-react"
 type Crumb = { label: string; href: string }
 
 function BreadcrumbJsonLd({ crumbs }: { crumbs: Crumb[] }) {
-  const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com"
+  const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://www.chefaugustin.com"
   return (
     <script
       type="application/ld+json"

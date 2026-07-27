@@ -13,7 +13,7 @@ export function HomepageCategories({ categories }: { categories: string[] }) {
         {categories.slice(0, 15).map((cat) => (
           <Link
             key={cat}
-            href={`/recettes?cat=${encodeURIComponent(cat)}`}
+            href={`/recipes?cat=${encodeURIComponent(cat)}`}
             className="rounded-full border border-border bg-card px-4 py-2 text-sm font-medium transition-colors hover:border-primary hover:text-primary"
           >
             {cat}
@@ -21,7 +21,7 @@ export function HomepageCategories({ categories }: { categories: string[] }) {
         ))}
         {categories.length > 15 ? (
           <Link
-            href="/recettes"
+            href="/recipes"
             className="rounded-full border border-primary/30 bg-primary/5 px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/10"
           >
             View all {categories.length} categories →

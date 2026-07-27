@@ -31,7 +31,7 @@ export async function generateMetadata({
     title: recipe.metaTitle || recipe.title,
     description: recipe.metaDescription || recipe.excerpt || undefined,
     alternates: {
-      canonical: `/recettes/${recipe.slug}`,
+      canonical: `/recipes/${recipe.slug}`,
     },
     openGraph: {
       title: recipe.metaTitle || recipe.title,

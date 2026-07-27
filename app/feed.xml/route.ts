@@ -1,6 +1,6 @@
 import { getPublishedRecipes } from "@/lib/queries"
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com"
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.chefaugustin.com"
 
 export async function GET() {
   const recipes = await getPublishedRecipes()
@@ -10,8 +10,8 @@ export async function GET() {
       (recipe) => `
     <item>
       <title><![CDATA[${recipe.title}]]></title>
-      <link>${BASE_URL}/recettes/${recipe.slug}</link>
-      <guid isPermaLink="true">${BASE_URL}/recettes/${recipe.slug}</guid>
+      <link>${BASE_URL}/recipes/${recipe.slug}</link>
+      <guid isPermaLink="true">${BASE_URL}/recipes/${recipe.slug}</guid>
       <description><![CDATA[${recipe.excerpt || ""}]]></description>
       ${recipe.heroImageUrl ? `<enclosure url="${recipe.heroImageUrl}" type="image/jpeg" />` : ""}
       <pubDate>${new Date(recipe.createdAt).toUTCString()}</pubDate>

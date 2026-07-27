@@ -27,7 +27,7 @@ export function HomepageStartCooking({ recipes }: { recipes: Recipe[] }) {
             </p>
           </div>
           <Link
-            href="/recettes"
+            href="/recipes"
             className="hidden sm:flex items-center gap-1 text-sm font-medium text-primary hover:underline"
           >
             View all
@@ -43,7 +43,7 @@ export function HomepageStartCooking({ recipes }: { recipes: Recipe[] }) {
 
         <div className="mt-6 sm:hidden text-center">
           <Link
-            href="/recettes"
+            href="/recipes"
             className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
           >
             View all recipes

@@ -50,6 +50,12 @@ const nextConfig = {
       },
     ]
   },
+  async redirects() {
+    return [
+      { source: "/recettes", destination: "/recipes", permanent: true },
+      { source: "/recettes/:path*", destination: "/recipes/:path*", permanent: true },
+    ]
+  },
   async rewrites() {
     return []
   },

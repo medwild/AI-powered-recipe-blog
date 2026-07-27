@@ -22,7 +22,7 @@ export function HomepageFeatured({
           </p>
         </div>
         <Link
-          href="/recettes"
+          href="/recipes"
           className="flex items-center gap-1 text-sm font-medium text-primary hover:underline"
         >
           View all

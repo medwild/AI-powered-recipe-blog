@@ -155,7 +155,7 @@ export function RecipeRow({ recipe }: { recipe: Recipe }) {
               title="View recipe"
               nativeButton={false}
               render={
-                <Link href={`/recettes/${recipe.slug}`} target="_blank" />
+                <Link href={`/recipes/${recipe.slug}`} target="_blank" />
               }
             >
               <ExternalLink className="h-4 w-4" aria-hidden="true" />

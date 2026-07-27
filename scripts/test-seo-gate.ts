@@ -42,7 +42,7 @@ const validInput: GateInput = {
   metaDescription: "Authentic Swedish meatballs with cream sauce. Ready in 45 minutes, tested 200+ times for foolproof results every time.",
   slug: "swedish-meatballs-recipe",
   focusKeyphrase: "swedish meatballs recipe",
-  contentMarkdown: "## Why This Swedish Meatballs Recipe Actually Works\n\nSwedish meatballs are the ultimate comfort food. At 450 calories per serving, this dish is rated 4.8 stars by readers. Check out our [lingonberry sauce recipe](/recettes/lingonberry-sauce) and [mashed potatoes guide](/recettes/mashed-potatoes).",
+  contentMarkdown: "## Why This Swedish Meatballs Recipe Actually Works\n\nSwedish meatballs are the ultimate comfort food. At 450 calories per serving, this dish is rated 4.8 stars by readers. Check out our [lingonberry sauce recipe](/recipes/lingonberry-sauce) and [mashed potatoes guide](/recipes/mashed-potatoes).",
   heroImageUrl: "https://res.cloudinary.com/test/meatballs.jpg",
   jsonLd: validJsonLd,
   content_type: "recipe",
@@ -162,7 +162,7 @@ async function main() {
     const r = await runSeoGate({ ...validInput, contentMarkdown: "Just some text without any links." })
     assert(r.warnings.some(w => w.code === "LOW_INTERNAL_LINKS"), "no internal links → warning")
 
-    const r2 = await runSeoGate({ ...validInput, contentMarkdown: "Check [this](/recettes/meatballs) and [this](/recettes/sauce) for more." })
+    const r2 = await runSeoGate({ ...validInput, contentMarkdown: "Check [this](/recipes/meatballs) and [this](/recipes/sauce) for more." })
     assert(!r2.warnings.some(w => w.code === "LOW_INTERNAL_LINKS"), "2+ links → no warning")
   })
 

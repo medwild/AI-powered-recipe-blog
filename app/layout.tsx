@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   description:
     'Simple small-batch dinner recipes for two people. Chef Augustin Lefevre shares practical weeknight meals with clear serving sizes and Pinterest-friendly inspiration.',
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || 'https://chefaugustin.com',
+    process.env.NEXT_PUBLIC_SITE_URL || 'https://www.chefaugustin.com',
   ),
   // Google Search Console — set NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION in .env.local
   verification: {

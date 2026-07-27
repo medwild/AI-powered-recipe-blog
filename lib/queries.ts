@@ -193,7 +193,7 @@ export async function getRelatedForArticle(linkedRecipeId: number | null) {
   if (!linkedRecipeId) return []
   // Return the linked recipe + up to 2 other published recipes.
   // Must filter by content_type = "recipe" — if linked_content_id points to an
-  // article, RecipeCard would render /recettes/{article-slug} → 404.
+  // article, RecipeCard would render /recipes/{article-slug} → 404.
   const linked = await db
     .select()
     .from(recipes)

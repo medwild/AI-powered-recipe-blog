@@ -18,7 +18,7 @@ export default function NotFound() {
           <Button render={<Link href="/" />} nativeButton={false}>
             Back to home
           </Button>
-          <Button render={<Link href="/recettes" />} nativeButton={false} variant="outline">
+          <Button render={<Link href="/recipes" />} nativeButton={false} variant="outline">
             View recipes
           </Button>
         </div>

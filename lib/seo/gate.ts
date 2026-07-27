@@ -212,7 +212,7 @@ function checkRating(jsonLd: Record<string, unknown> | null): Warning | null {
 function checkInternalLinks(contentMarkdown: string | null): Warning | null {
   if (!contentMarkdown) return null
   // Count markdown links to the same domain (relative URLs or chefaugustin.com)
-  const internalPattern = /\]\(\/(?:recettes|techniques|guides|histoire|equipement)\/[^)]+\)/gi
+  const internalPattern = /\]\(\/(?:recipes|recettes|techniques|guides|histoire|equipement)\/[^)]+\)/gi
   const matches = contentMarkdown.match(internalPattern)
   const count = matches ? matches.length : 0
   if (count < 2) {

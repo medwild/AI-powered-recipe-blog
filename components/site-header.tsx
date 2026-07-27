@@ -6,7 +6,7 @@ import { ChefHat, Menu, X } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 
 const NAV_LINKS = [
-  { href: "/recettes", label: "Recipes" },
+  { href: "/recipes", label: "Recipes" },
   { href: "/techniques", label: "Techniques" },
   { href: "/guides", label: "Guides" },
   { href: "/about", label: "About" },

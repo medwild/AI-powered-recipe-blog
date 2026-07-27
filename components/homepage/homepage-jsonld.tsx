@@ -1,5 +1,5 @@
 export function HomepageJsonLd() {
-  const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com"
+  const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://www.chefaugustin.com"
 
   return (
     <script
@@ -29,7 +29,7 @@ export function HomepageJsonLd() {
               "@type": "SearchAction",
               target: {
                 "@type": "EntryPoint",
-                urlTemplate: `${SITE}/recettes?q={search_term_string}`,
+                urlTemplate: `${SITE}/recipes?q={search_term_string}`,
               },
               "query-input": "required name=search_term_string",
             },

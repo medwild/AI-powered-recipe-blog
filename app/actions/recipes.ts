@@ -75,8 +75,8 @@ export async function publishRecipe(id: number): Promise<{ ok: boolean; gate?: G
       revalidatePath(`/${row.category}`)
       revalidatePath(`/${row.category}/${row.slug}`)
     } else {
-      revalidatePath("/recettes")
-      revalidatePath(`/recettes/${row.slug}`)
+      revalidatePath("/recipes")
+      revalidatePath(`/recipes/${row.slug}`)
     }
   }
 
@@ -98,8 +98,8 @@ export async function unpublishRecipe(id: number) {
       revalidatePath(`/${row.category}`)
       revalidatePath(`/${row.category}/${row.slug}`)
     } else {
-      revalidatePath("/recettes")
-      revalidatePath(`/recettes/${row.slug}`)
+      revalidatePath("/recipes")
+      revalidatePath(`/recipes/${row.slug}`)
     }
   }
 }
@@ -117,8 +117,8 @@ export async function deleteRecipe(id: number) {
       revalidatePath(`/${row.category}`)
       revalidatePath(`/${row.category}/${row.slug}`)
     } else {
-      revalidatePath("/recettes")
-      revalidatePath(`/recettes/${row.slug}`)
+      revalidatePath("/recipes")
+      revalidatePath(`/recipes/${row.slug}`)
     }
   }
 }

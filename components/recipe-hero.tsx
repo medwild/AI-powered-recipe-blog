@@ -104,8 +104,8 @@ function MetaPill({ icon: Icon, label, value }: { icon: typeof Clock; label: str
 export function RecipeHero({ recipe }: { recipe: Recipe }) {
   const badges = inferBadges(recipe)
   const valueProp = extractValueProp(recipe.contentMarkdown ?? null, recipe.excerpt ?? null)
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com"
-  const recipeUrl = `${siteUrl}/recettes/${recipe.slug}`
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.chefaugustin.com"
+  const recipeUrl = `${siteUrl}/recipes/${recipe.slug}`
   const pinterestShareUrl = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(recipeUrl)}&description=${encodeURIComponent(recipe.title)}`
 
   // Resolve cluster for breadcrumbs
@@ -119,14 +119,14 @@ export function RecipeHero({ recipe }: { recipe: Recipe }) {
           cluster
             ? [
                 { label: "Home", href: "/" },
-                { label: "Recipes", href: "/recettes" },
-                { label: cluster.name, href: `/recettes?cluster=${cluster.id}` },
-                { label: recipe.title, href: `/recettes/${recipe.slug}` },
+                { label: "Recipes", href: "/recipes" },
+                { label: cluster.name, href: `/recipes?cluster=${cluster.id}` },
+                { label: recipe.title, href: `/recipes/${recipe.slug}` },
               ]
             : [
                 { label: "Home", href: "/" },
-                { label: "Recipes", href: "/recettes" },
-                { label: recipe.title, href: `/recettes/${recipe.slug}` },
+                { label: "Recipes", href: "/recipes" },
+                { label: recipe.title, href: `/recipes/${recipe.slug}` },
               ]
         }
       />
@@ -146,7 +146,7 @@ export function RecipeHero({ recipe }: { recipe: Recipe }) {
           />
           <PinButton
             imageUrl={recipe.heroImageUrl}
-            pageUrl={`${process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com"}/recettes/${recipe.slug}`}
+            pageUrl={`${process.env.NEXT_PUBLIC_SITE_URL || "https://www.chefaugustin.com"}/recipes/${recipe.slug}`}
             title={recipe.title}
           />
           <figcaption className="sr-only">Photo: {recipe.title}</figcaption>

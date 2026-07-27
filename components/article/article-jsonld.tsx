@@ -5,7 +5,7 @@ type ArticleData = NonNullable<Awaited<ReturnType<typeof getArticleBySlug>>>
 
 export function ArticleJsonLd({ article }: { article: ArticleData }) {
   const base = (article.jsonLd as Record<string, unknown>) ?? {}
-  const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com"
+  const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://www.chefaugustin.com"
   const categoryLabel = CATEGORY_LABELS[article.category ?? ""] ?? article.category ?? "Blog"
 
   if (base["@graph"] && Array.isArray(base["@graph"])) {

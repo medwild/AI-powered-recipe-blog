@@ -29,7 +29,7 @@ export async function generateMetadata({
       return {
         title: `${c.name} | Chef Augustin`,
         description: c.description,
-        alternates: { canonical: `/recettes?cluster=${cluster}` },
+        alternates: { canonical: `/recipes?cluster=${cluster}` },
         robots: "index, follow",
         openGraph: {
           title: `${c.name} | Chef Augustin`,
@@ -44,7 +44,7 @@ export async function generateMetadata({
     title: "All recipes",
     description:
       "Browse our collection of French cooking recipes, optimized and explained step by step.",
-    alternates: { canonical: "/recettes" },
+    alternates: { canonical: "/recipes" },
     robots: isFiltered ? { index: false, follow: true } : undefined,
     openGraph: {
       title: "All recipes | Chef Augustin",
@@ -113,12 +113,12 @@ export default async function RecipesPage({
             clusterData
               ? [
                   { label: "Home", href: "/" },
-                  { label: "Recipes", href: "/recettes" },
-                  { label: clusterData.name, href: `/recettes?cluster=${cluster}` },
+                  { label: "Recipes", href: "/recipes" },
+                  { label: clusterData.name, href: `/recipes?cluster=${cluster}` },
                 ]
               : [
                   { label: "Home", href: "/" },
-                  { label: "Recipes", href: "/recettes" },
+                  { label: "Recipes", href: "/recipes" },
                 ]
           }
         />
@@ -195,7 +195,7 @@ export default async function RecipesPage({
               {siblingClusters.map((sibling) => (
                 <Link
                   key={sibling.id}
-                  href={`/recettes?cluster=${sibling.id}`}
+                  href={`/recipes?cluster=${sibling.id}`}
                   className="group rounded-xl border border-border bg-card p-5 transition-all hover:border-primary/30 hover:shadow-md"
                 >
                   <h3 className="font-serif text-lg group-hover:text-primary transition-colors">

@@ -4,7 +4,7 @@ import { db } from "@/lib/db"
 import { recipes } from "@/lib/db/schema"
 import { getPublishedRecipes } from "@/lib/queries"
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com"
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.chefaugustin.com"
 
 // Force dynamic — Vercel caches the sitemap otherwise (x-vercel-cache: HIT)
 export const dynamic = "force-dynamic"
@@ -32,7 +32,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   })
 
   const recipeEntries: MetadataRoute.Sitemap = cleanRecipes.map((recipe) => ({
-    url: `${BASE_URL}/recettes/${recipe.slug}`,
+    url: `${BASE_URL}/recipes/${recipe.slug}`,
     lastModified: recipe.updatedAt ? new Date(recipe.updatedAt) : new Date(),
     changeFrequency: "weekly" as const,
     priority: 0.8,
@@ -67,7 +67,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1,
     },
     {
-      url: `${BASE_URL}/recettes`,
+      url: `${BASE_URL}/recipes`,
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 0.9,

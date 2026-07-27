@@ -34,7 +34,7 @@ export async function GET() {
   const recipeList = publishedRecipes
     .map(
       (r) =>
-        `- [${r.title}](${BASE_URL}/recettes/${r.slug}): ${r.excerpt ?? "Small-batch dinner recipe for two."} (${r.totalTime ?? "N/A"}, ${r.difficulty ?? "N/A"}, ${r.servings ?? 2} servings)`,
+        `- [${r.title}](${BASE_URL}/recipes/${r.slug}): ${r.excerpt ?? "Small-batch dinner recipe for two."} (${r.totalTime ?? "N/A"}, ${r.difficulty ?? "N/A"}, ${r.servings ?? 2} servings)`,
     )
     .join("\n")
 
@@ -53,7 +53,7 @@ Small-batch recipes designed for two people — one-pan meals, mini slow cooker 
 
 ## Key Pages
 - [Homepage](${BASE_URL}/)
-- [All Recipes](${BASE_URL}/recettes)
+- [All Recipes](${BASE_URL}/recipes)
 - [Cooking Techniques](${BASE_URL}/techniques)
 - [Guides](${BASE_URL}/guides)
 - [About Chef Augustin](${BASE_URL}/about)

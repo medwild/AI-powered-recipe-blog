@@ -71,7 +71,7 @@ export async function ArticleDetail({ slug }: { slug: string }) {
               />
               <PinButton
                 imageUrl={article.heroImageUrl}
-                pageUrl={`${process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com"}/${article.category}/${article.slug}`}
+                pageUrl={`${process.env.NEXT_PUBLIC_SITE_URL || "https://www.chefaugustin.com"}/${article.category}/${article.slug}`}
                 title={article.title}
               />
             </div>

@@ -89,7 +89,7 @@ export function HomepageHero({
             {/* CTA */}
             <div className="mt-2">
               <Button
-                render={<Link href="/recettes" />}
+                render={<Link href="/recipes" />}
                 nativeButton={false}
                 size="lg"
                 className="group"

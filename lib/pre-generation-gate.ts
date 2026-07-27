@@ -153,7 +153,7 @@ async function checkExactSlug(slug: string): Promise<GateResult | null> {
       return {
         verdict: "block",
         check: "slug_exact",
-        suggestion: `/recettes/${match.slug}`,
+        suggestion: `/recipes/${match.slug}`,
         existingArticle: {
           id: match.id,
           slug: match.slug,
@@ -199,7 +199,7 @@ async function checkKeywordFuzzy(keyword: string): Promise<GateResult | null> {
         verdict: "block",
         check: "keyword_fuzzy",
         similarity: Math.round(Number(m.similarity) * 100),
-        suggestion: `/recettes/${m.slug}`,
+        suggestion: `/recipes/${m.slug}`,
         existingArticle: {
           id: m.id,
           slug: m.slug,

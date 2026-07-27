@@ -42,7 +42,7 @@ export function SiteFooter() {
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Explore
             </p>
-            <Link href="/recettes" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+            <Link href="/recipes" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
               All Recipes
             </Link>
             <Link href="/techniques" className="text-sm text-muted-foreground transition-colors hover:text-foreground">

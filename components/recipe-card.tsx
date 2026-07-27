@@ -10,7 +10,7 @@ export function RecipeCard({ recipe, aspectRatio }: { recipe: RecipeCardData; as
   return (
     <article className="card-hover group flex flex-col overflow-hidden rounded-2xl border border-border bg-card">
       <Link
-        href={`/recettes/${recipe.slug}`}
+        href={`/recipes/${recipe.slug}`}
         className={`relative overflow-hidden bg-muted block aspect-[${ratio}]`}
         tabIndex={-1}
       >
@@ -25,7 +25,7 @@ export function RecipeCard({ recipe, aspectRatio }: { recipe: RecipeCardData; as
             />
             <PinButton
               imageUrl={recipe.heroImageUrl}
-              pageUrl={`${process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com"}/recettes/${recipe.slug}`}
+              pageUrl={`${process.env.NEXT_PUBLIC_SITE_URL || "https://www.chefaugustin.com"}/recipes/${recipe.slug}`}
               title={recipe.title}
             />
           </>
@@ -45,7 +45,7 @@ export function RecipeCard({ recipe, aspectRatio }: { recipe: RecipeCardData; as
       <div className="flex flex-1 flex-col gap-3 p-5">
         <h3 className="font-serif text-xl leading-snug text-balance">
           <Link
-            href={`/recettes/${recipe.slug}`}
+            href={`/recipes/${recipe.slug}`}
             className="group-hover:text-primary"
           >
             {recipe.title}

@@ -26,7 +26,7 @@ export function ArticleCard({ article }: { article: Recipe }) {
             />
             <PinButton
               imageUrl={article.heroImageUrl}
-              pageUrl={`${process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com"}/${article.category ?? "techniques"}/${article.slug}`}
+              pageUrl={`${process.env.NEXT_PUBLIC_SITE_URL || "https://www.chefaugustin.com"}/${article.category ?? "techniques"}/${article.slug}`}
               title={article.title}
             />
           </>

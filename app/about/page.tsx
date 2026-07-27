@@ -122,7 +122,7 @@ export default function AboutPage() {
 
           <section className="mt-12 text-center">
             <Button
-              render={<Link href="/recettes" />}
+              render={<Link href="/recipes" />}
               nativeButton={false}
               size="lg"
             >
@@ -141,7 +141,7 @@ export default function AboutPage() {
             "@context": "https://schema.org",
             "@type": "Organization",
             name: "Chef Augustin",
-            url: process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com",
+            url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.chefaugustin.com",
             description:
               "Practical small-batch dinner recipes for two, grounded in French cooking technique and real-world kitchen experience.",
             founder: {

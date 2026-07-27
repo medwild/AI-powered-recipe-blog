@@ -15,7 +15,7 @@ export function HomepageCTA() {
         </p>
         <div className="mt-6 flex justify-center gap-3">
           <Button
-            render={<Link href="/recettes" />}
+            render={<Link href="/recipes" />}
             nativeButton={false}
             size="lg"
           >

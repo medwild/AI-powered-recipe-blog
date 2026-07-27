@@ -43,7 +43,7 @@ export async function RelatedRecipes({ recipe }: { recipe: Recipe }) {
         {allRelated.map((r) => (
           <Link
             key={r.id}
-            href={`/recettes/${r.slug}`}
+            href={`/recipes/${r.slug}`}
             className="group rounded-xl border border-border bg-card overflow-hidden transition-all hover:shadow-md hover:border-primary/20"
           >
             {r.heroImageUrl ? (
