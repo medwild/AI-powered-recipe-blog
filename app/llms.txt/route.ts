@@ -5,6 +5,8 @@ import { desc, eq, and } from "drizzle-orm"
 
 export const dynamic = "force-dynamic"
 
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.chefaugustin.com"
+
 export async function GET() {
   const all = await db
     .select({
@@ -32,34 +34,34 @@ export async function GET() {
   const recipeList = publishedRecipes
     .map(
       (r) =>
-        `- [${r.title}](https://chefaugustin.com/recettes/${r.slug}): ${r.excerpt ?? "Small-batch dinner recipe for two."} (${r.totalTime ?? "N/A"}, ${r.difficulty ?? "N/A"}, ${r.servings ?? 2} servings)`,
+        `- [${r.title}](${BASE_URL}/recettes/${r.slug}): ${r.excerpt ?? "Small-batch dinner recipe for two."} (${r.totalTime ?? "N/A"}, ${r.difficulty ?? "N/A"}, ${r.servings ?? 2} servings)`,
     )
     .join("\n")
 
   const articleList = publishedArticles
     .map(
       (a) =>
-        `- [${a.title}](https://chefaugustin.com/${a.category}/${a.slug}): ${a.excerpt ?? "Cooking guide."}`,
+        `- [${a.title}](${BASE_URL}/${a.category}/${a.slug}): ${a.excerpt ?? "Cooking guide."}`,
     )
     .join("\n")
 
   const content = `# Chef Augustin — Easy Weeknight Dinners for Two
 
 ## About
-Chef Augustin is a Pinterest-first recipe blog focused on [Easy Weeknight Dinners for Two](https://chefaugustin.com/).
+Chef Augustin is a Pinterest-first recipe blog focused on [Easy Weeknight Dinners for Two](${BASE_URL}/).
 Small-batch recipes designed for two people — one-pan meals, mini slow cooker dishes, budget-friendly options, and quick 30-minute dinners.
 
 ## Key Pages
-- [Homepage](https://chefaugustin.com/)
-- [All Recipes](https://chefaugustin.com/recettes)
-- [Cooking Techniques](https://chefaugustin.com/techniques)
-- [Guides](https://chefaugustin.com/guides)
-- [About Chef Augustin](https://chefaugustin.com/about)
-- [Privacy Policy](https://chefaugustin.com/privacy)
+- [Homepage](${BASE_URL}/)
+- [All Recipes](${BASE_URL}/recettes)
+- [Cooking Techniques](${BASE_URL}/techniques)
+- [Guides](${BASE_URL}/guides)
+- [About Chef Augustin](${BASE_URL}/about)
+- [Privacy Policy](${BASE_URL}/privacy)
 
 ## For LLMs
-- [Raw Recipes API](https://chefaugustin.com/api/recipes/raw): All published recipes as JSON with full fields (ingredients, instructions, contentMarkdown).
-- [XML Sitemap](https://chefaugustin.com/sitemap.xml)
+- [Raw Recipes API](${BASE_URL}/api/recipes/raw): All published recipes as JSON with full fields (ingredients, instructions, contentMarkdown).
+- [XML Sitemap](${BASE_URL}/sitemap.xml)
 
 ## Published Recipes (${publishedRecipes.length})
 

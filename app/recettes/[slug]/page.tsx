@@ -72,8 +72,14 @@ function RecipeJsonLd({
       })
       .map((node) => {
       if (node["@type"] === "BlogPosting") {
+        // Enrich author with url for E-E-A-T signal
+        const author = (node.author as Record<string, unknown>) ?? {}
         return {
           ...node,
+          author: {
+            ...author,
+            url: author.url || `${process.env.NEXT_PUBLIC_SITE_URL || "https://www.chefaugustin.com"}/about`,
+          },
           image: (node.image === "<placeholder>" || !node.image)
             ? (recipe.heroImageUrl ? [recipe.heroImageUrl] : undefined)
             : node.image,
@@ -83,7 +89,7 @@ function RecipeJsonLd({
           publisher: {
             "@type": "Organization",
             name: "Chef Augustin",
-            url: process.env.NEXT_PUBLIC_SITE_URL || "https://chefaugustin.com",
+            url: process.env.NEXT_PUBLIC_SITE_URL || "https://www.chefaugustin.com",
           },
         }
       }
@@ -107,6 +113,14 @@ function RecipeJsonLd({
           recipeInstructions: (recipe.instructions ?? []).map((s) => ({
             "@type": "HowToStep",
             position: s.step,
+            name: (() => {
+              // Extract a short name from the instruction text (first sentence, max 80 chars)
+              const firstSentence = s.text.split(/[.!?][\s\n]/)[0] ?? s.text
+              if (firstSentence.length <= 80) return firstSentence
+              const cut = firstSentence.substring(0, 80)
+              const lastSpace = cut.lastIndexOf(" ")
+              return (lastSpace > 40 ? cut.substring(0, lastSpace) : cut) + "…"
+            })(),
             text: s.text,
           })),
         }

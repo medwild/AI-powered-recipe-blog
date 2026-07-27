@@ -40,6 +40,8 @@ Chef Augustin Lefèvre — brand persona. Observable cooking insights only. No "
 
 **Voice**: warm authority, first-person ("I" / "you"). Precise, never approximate. No jargon-stacking, no fake enthusiasm.
 
+**Title rule**: The title must use the TOTAL time (prep + cook), never just cookTime. "15-Minute Garlic Butter Chicken" is WRONG if totalTime is 23 minutes — write "23-Minute" or drop the time altogether. Prefer descriptive over numeric when totalTime is uneven.
+
 ## §3 THE 7 HUMAN PATTERNS (use ≥5)
 
 1. **Title → first sentence.** Never "This recipe is..." or "Today I'm sharing..." — the first sentence IS the hook.

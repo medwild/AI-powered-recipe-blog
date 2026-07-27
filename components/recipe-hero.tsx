@@ -22,7 +22,12 @@ function extractValueProp(contentMarkdown: string | null, excerpt: string | null
   // Try "Why This Works" section first
   const whyMatch = contentMarkdown.match(/\*\*Why This Works\*\*[:\s]*\n+(.+?)(?:\n|$)/i)
   if (whyMatch && whyMatch[1].trim().length > 30) {
-    return whyMatch[1].trim().substring(0, 200)
+    // Truncate at last word boundary before 200 chars (not mid-word)
+    const raw = whyMatch[1].trim()
+    if (raw.length <= 200) return raw
+    const cut = raw.substring(0, 200)
+    const lastSpace = cut.lastIndexOf(" ")
+    return (lastSpace > 100 ? cut.substring(0, lastSpace) : cut) + "…"
   }
 
   // Try the H2 "Why This Works" variant
@@ -55,11 +60,9 @@ function inferBadges(recipe: Recipe): { label: string; icon?: string }[] {
   const tags = (recipe.tags ?? []).map(t => t.toLowerCase())
   const totalMinutes = parseDurationMinutes(recipe.totalTime)
 
-  // Speed badge
+  // Speed badge — only for truly quick recipes (≤20 min)
   if (totalMinutes !== null && totalMinutes <= 20) {
     badges.push({ label: "Quick & Easy", icon: "clock" })
-  } else if (totalMinutes !== null && totalMinutes <= 30) {
-    badges.push({ label: "30 Minutes", icon: "clock" })
   }
 
   // Technique badge
@@ -231,7 +234,7 @@ export function RecipeHero({ recipe }: { recipe: Recipe }) {
               <p className="text-xs font-semibold uppercase tracking-wide text-primary mb-1">
                 Why This Recipe Works
               </p>
-              <p className="text-sm leading-relaxed text-foreground/85 text-pretty">
+              <p className="text-sm leading-relaxed text-foreground/85 text-pretty line-clamp-3">
                 {valueProp}
               </p>
             </div>
