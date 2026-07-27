@@ -558,6 +558,13 @@ export async function agentChefAugustinMega(
     // Normalize — LLM output in text+parse mode may not conform to schema
     const result = normalizeRecipeArticle(raw as unknown as Record<string, unknown>)
 
+    // Safety net: inject missing USDA temperatures before quality gate sees the output
+    // (Opus 4.8 has a blind spot for beef/pork/fish temps)
+    result.instructions = injectUsdaTemps(
+      result.instructions as Array<{ step: number; text: string; temperature?: string }>,
+      result.ingredients as string[],
+    ) as typeof result.instructions
+
     console.log(`[ChefAugustinMega] Success — ${result.contentMarkdown?.split(/\s+/).filter(Boolean).length ?? 0} words, ${result.tags?.length ?? 0} tags`)
 
     return result
