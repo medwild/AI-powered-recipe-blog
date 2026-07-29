@@ -9,7 +9,7 @@
 //   Output        ← RecipeArticle via structured output
 
 import { loadSkillContent, ensureFAQPage } from "@/lib/skills"
-import { runWithStructuredOutput } from "@/lib/agents/provider"
+import { runWithStructuredOutput, runTextAndParseJson } from "@/lib/agents/provider"
 import { RecipeArticleSchema, type RecipeArticle } from "@/lib/schemas/recipe-article"
 import { SITE_URL } from "../helpers"
 import { z } from "zod"
@@ -338,7 +338,8 @@ export function normalizeRecipeArticle(raw: Record<string, unknown>): RecipeArti
   })()
   const title = str(raw.title)
     || extractedH1
-    || str(raw.metaTitle).replace(/\s*[|—-].*$/, "").trim()
+    // Only strip after em-dash (—) or pipe (|), not regular hyphens (25-Min, etc.)
+    || str(raw.metaTitle).replace(/\s*[|—].*$/, "").replace(/\s+—\s+.*$/, "").trim()
     || str(raw.keyword)
     || "Recipe"
   return {
@@ -554,18 +555,32 @@ export async function agentChefAugustinMega(
 
     userPrompt += `\n\n---\nGenerate a complete ${keyword} recipe article. Follow the mega-skill exactly. Output valid JSON only.\n\nCRITICAL — USDA food safety temperatures (MANDATORY): Every protein in your ingredients must have its USDA-safe internal temperature mentioned in BOTH the step text AND the structured \`temperature\` field. Poultry (chicken/turkey/duck) → 165°F / 74°C. Ground meat (beef/pork/lamb) → 160°F / 71°C. Beef/lamb/veal whole muscle → 145°F / 63°C. Pork whole muscle → 145°F / 63°C. Fish/seafood → 145°F / 63°C. Missing any required temperature = automatic rejection. No exceptions.\n\nCRITICAL — imagePrompt: Write a 100-150 word food photography prompt following §6 of the system instructions. Use Canon EOS R5, directional lighting, specific surface (material+texture), hex colors from real ingredients, and the mandatory negative tail verbatim. Do NOT write "undefined" or leave empty.`
 
-    console.log(`[ChefAugustinMega] Calling ${RECIPE_JSON_SCHEMA ? "structured output" : "LLM"} for "${keyword}" (${systemPrompt.length} chars skill, ${userPrompt.length} chars prompt)`)
+    // On retry (feedback present), use text+parse mode — the feedback can
+    // cause strict JSON schema validation to reject valid responses.
+    const useStructured = RECIPE_JSON_SCHEMA && !feedback
+    console.log(`[ChefAugustinMega] Calling ${useStructured ? "structured output" : "text+parse"} for "${keyword}" (${systemPrompt.length} chars skill, ${userPrompt.length} chars prompt)${feedback ? " [retry]" : ""}`)
 
-    const raw = await runWithStructuredOutput<RecipeArticle>(
-      systemPrompt,
-      userPrompt,
-      RECIPE_JSON_SCHEMA,
-      {
-        model: process.env.ANTHROPIC_MODEL || "anthropic/claude-sonnet-5",
-        maxTokens: 32000,
-        timeout: 180_000, // 3 min
-      },
-    )
+    let raw: RecipeArticle
+    if (useStructured) {
+      raw = await runWithStructuredOutput<RecipeArticle>(
+        systemPrompt,
+        userPrompt,
+        RECIPE_JSON_SCHEMA!,
+        {
+          model: process.env.ANTHROPIC_MODEL || "anthropic/claude-sonnet-5",
+          maxTokens: 32000,
+          timeout: 180_000,
+        },
+      )
+    } else {
+      // Text mode — append schema to prompt, let extractJson handle parsing
+      const schemaPrompt = `\n\n---\nOUTPUT FORMAT — You MUST return valid JSON matching this schema exactly:\n${JSON.stringify(RECIPE_JSON_SCHEMA, null, 2)}\n\nReturn ONLY the JSON object, no markdown fences, no extra text.`
+      raw = await runTextAndParseJson<RecipeArticle>(
+        systemPrompt,
+        userPrompt + schemaPrompt,
+        { model: process.env.ANTHROPIC_MODEL || "anthropic/claude-sonnet-5", maxTokens: 32000, timeout: 180_000 },
+      )
+    }
 
     // Normalize — LLM output in text+parse mode may not conform to schema
     const result = normalizeRecipeArticle(raw as unknown as Record<string, unknown>)
