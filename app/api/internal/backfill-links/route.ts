@@ -1,8 +1,10 @@
 /**
  * POST /api/internal/backfill-links
  *
- * One-shot endpoint to apply internal linking to all published recipes.
- * Called via curl for the initial backfill, then the pipeline handles new recipes.
+ * Two-step backfill:
+ * 1. Strip ALL old internal links from every recipe (clean slate)
+ * 2. Run v2 contextual linker on every recipe
+ * 3. Save all recipes (quality over quantity — if 0 natural links, keep 0)
  */
 
 import { NextResponse } from "next/server"
@@ -33,30 +35,43 @@ export async function POST() {
   let totalLinks = 0
 
   for (const recipe of all) {
-    const content = recipe.contentMarkdown ?? ""
+    let content = recipe.contentMarkdown ?? ""
     if (content.length === 0) {
       results.push({ id: recipe.id, slug: recipe.slug, before: 0, after: 0, added: 0 })
       continue
     }
 
+    // Step 1: Strip ALL existing internal links — both v1 fallback sections
+    // AND v2 contextual links. We want a clean slate.
+    let cleaned = content
+      // Remove "📖 Related Recipes" fallback section (v1)
+      .replace(/\n\n---\n\n## 📖 Related Recipes\n\n[\s\S]*$/, "")
+      // Remove any remaining "- Try our [...]" list items at the end
+      .replace(/\n- Try our \[.+?\]\(\/recettes\/.+?\)\n?/g, "")
+      // Remove ALL existing markdown links to /recettes/ (any format)
+      // But preserve the anchor text (remove just the link syntax)
+      .replace(/\[(.+?)\]\(\/recettes\/[^)]+\)/g, "$1")
+
     const beforeCount = (content.match(/\[.+?\]\(\/recettes\/.+?\)/g) ?? []).length
 
+    // Step 2: Run v2 contextual linker
     const result = insertContextualLinksBatch(
-      content,
+      cleaned,
       recipe.id,
       (recipe.tags ?? []) as string[],
       linkTargets,
     )
 
     const afterCount = (result.markdown.match(/\[.+?\]\(\/recettes\/.+?\)/g) ?? []).length
-    const added = afterCount - beforeCount
+    const added = afterCount // links after cleanup is count of new links
+
+    // Always save — even if 0 links (clean slate is better than stale v1 links)
+    await db.update(recipes).set({
+      contentMarkdown: result.markdown,
+      updatedAt: new Date(),
+    }).where(eq(recipes.id, recipe.id))
 
     if (added > 0) {
-      await db.update(recipes).set({
-        contentMarkdown: result.markdown,
-        updatedAt: new Date(),
-      }).where(eq(recipes.id, recipe.id))
-
       await logInternalLinks(recipe.id, result.links, "batch")
     }
 
@@ -65,10 +80,12 @@ export async function POST() {
   }
 
   const updatedCount = results.filter((r) => r.added > 0).length
+  const zeroLinkCount = results.filter((r) => r.added === 0).length
 
   return NextResponse.json({
     totalRecipes: all.length,
     updatedRecipes: updatedCount,
+    zeroLinkRecipes: zeroLinkCount,
     totalLinksAdded: totalLinks,
     results,
   })
