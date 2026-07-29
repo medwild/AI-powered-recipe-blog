@@ -25,7 +25,6 @@ export async function RelatedRecipes({ recipe }: { recipe: Recipe }) {
         const rc = resolveCluster((r.tags ?? []) as string[])
         return rc?.id !== cluster.id
       })
-      .filter((r) => r.heroImageUrl)
       .slice(0, 2)
   }
 

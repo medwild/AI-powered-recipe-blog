@@ -73,10 +73,10 @@ export default async function RecipesPage({
     ? recipes.filter((r) => {
         const rc = resolveCluster((r.tags ?? []) as string[])
         return rc?.id === cluster
-      }).filter((r) => r.heroImageUrl)
-    : recipes.filter((r) => r.heroImageUrl)
+      })
+    : recipes
 
-  const displayArticles = articles.filter((a) => a.heroImageUrl).slice(0, 3)
+  const displayArticles = articles.slice(0, 3)
 
   // Hub page stats
   const totalTimeMinutes = clusterData

@@ -70,10 +70,11 @@ async function main() {
   console.log("\n🛡️  Step 3: Quality Gate...")
   const t3 = Date.now()
 
+  const origTitle = article.title
   let gate: any
   try {
     // Hack title to avoid duplicate slug on reruns
-    const origTitle = article.title
+    article.title = `${article.title} ${SLUG_SUFFIX}`
     article.title = `${article.title} ${SLUG_SUFFIX}`
     gate = await qualityGate(article)
     article.title = origTitle

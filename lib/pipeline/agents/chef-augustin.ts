@@ -329,8 +329,20 @@ export function normalizeRecipeArticle(raw: Record<string, unknown>): RecipeArti
     return []
   }
 
+  // Fallback: extract H1 from content, then keyword, then metaTitle.
+  // Never fall back to "Untitled" — it's a visible user-facing title.
+  const extractedH1 = (() => {
+    const md = str(raw.contentMarkdown)
+    const match = md.match(/^#\s+(.+)$/m)
+    return match ? match[1].trim() : ""
+  })()
+  const title = str(raw.title)
+    || extractedH1
+    || str(raw.metaTitle).replace(/\s*[|—-].*$/, "").trim()
+    || str(raw.keyword)
+    || "Recipe"
   return {
-    title: str(raw.title, raw.keyword as string ?? "Untitled"),
+    title,
     metaTitle: str(raw.metaTitle, str(raw.title, "")).substring(0, 60),
     metaDescription: str(raw.metaDescription),
     excerpt: str(raw.excerpt),
