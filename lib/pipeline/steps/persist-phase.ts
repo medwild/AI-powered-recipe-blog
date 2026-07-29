@@ -14,6 +14,7 @@ import { eq } from "drizzle-orm"
 import { slugify } from "@/lib/slug"
 import type { ChefAugustinOutput } from "../agents/chef-augustin"
 import { appendLog, logEntry, SITE_URL } from "../helpers"
+import { insertContextualLinks, logInternalLinks } from "@/lib/internal-linker"
 
 export async function persistFinalDraft(
   recipeId: number,
@@ -28,12 +29,27 @@ export async function persistFinalDraft(
   const wordCount = (finalRecipe.contentMarkdown ?? "").split(/\s+/).filter(Boolean).length
   const status = (gateStatus === "PASS" && !degraded) ? "published" : "draft"
 
+  // Internal Linking — insert 2-3 contextual links to related recipes.
+  // Same-cluster priority, max 1 link/paragraph, 200+ word spacing.
+  let markdown = finalRecipe.contentMarkdown ?? ""
+  try {
+    const enriched = await insertContextualLinks(markdown, recipeId, finalRecipe.tags ?? [])
+    if (enriched !== markdown) {
+      markdown = enriched
+      // Count links in the enriched content for the log
+      const linkCount = (markdown.match(/\[.+?\]\(\/recettes\/.+?\)/g) ?? []).length
+      await appendLog(recipeId, logEntry("Internal Linker", "done", `${linkCount} contextual links inserted`))
+    }
+  } catch (err) {
+    await appendLog(recipeId, logEntry("Internal Linker", "error", (err as Error).message))
+  }
+
   await db.update(recipes).set({
     title: finalRecipe.title,
     metaTitle: finalRecipe.metaTitle,
     metaDescription: finalRecipe.metaDescription,
     excerpt: finalRecipe.excerpt,
-    contentMarkdown: finalRecipe.contentMarkdown,
+    contentMarkdown: markdown,
     prepTime: finalRecipe.prepTime,
     cookTime: finalRecipe.cookTime,
     totalTime: finalRecipe.totalTime,
