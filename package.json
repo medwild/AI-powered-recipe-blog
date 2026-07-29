@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint .",
+    "lint": "next lint",
     "test:e2e": "npx tsx scripts/test-workflow.ts",
     "test:pipeline": "npx tsx scripts/test-pipeline.ts",
     "test": "npx tsx scripts/test-helpers.ts && npx tsx scripts/test-seo-gate.ts",

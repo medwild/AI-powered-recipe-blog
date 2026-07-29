@@ -8,7 +8,7 @@
 //   System prompt ← loadSkillContent("chef-augustin-mega")
 //   Output        ← RecipeArticle via structured output
 
-import { loadSkillContent } from "@/lib/skills"
+import { loadSkillContent, ensureFAQPage } from "@/lib/skills"
 import { runWithStructuredOutput } from "@/lib/agents/provider"
 import { RecipeArticleSchema, type RecipeArticle } from "@/lib/schemas/recipe-article"
 import { SITE_URL } from "../helpers"
@@ -470,7 +470,7 @@ export function recipeArticleToChefAugustinOutput(r: RecipeArticle): ChefAugusti
     servings: r.servings,
     difficulty: r.difficulty,
     imagePrompt: r.imagePrompt,
-    jsonLd: parsedJsonLd,
+    jsonLd: ensureFAQPage(parsedJsonLd, r.contentMarkdown),
   }
 }
 

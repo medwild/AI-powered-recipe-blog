@@ -39,7 +39,7 @@
 - Framework : Next.js 16 App Router
 - ORM : Drizzle (pas Prisma, pas Knex)
 - Styling : Tailwind CSS 4 + shadcn/ui
-- Background jobs : Inngest
+- Background jobs : N/A (plus utilisé)
 - DB : Neon PostgreSQL
 - Référence : `CLAUDE.md` Stack
 
@@ -48,48 +48,38 @@
 - Les variables exposées au client sont dans `NEXT_PUBLIC_*`
 - Référence : `.claude/rules/security.md`
 
-### 8. Ne jamais modifier l'ordre des steps du pipeline Inngest
-- Ordre fixe : SERP → Strategist → Writer → Quality Gate → Persist Draft → Human Review → Images → Final Persist + Validation → A/B Stats → Pin Designer
-- Changer l'ordre casse les dépendances inter-step
-- Référence : `.claude/rules/ai-pipeline.md`
-
-### 9. Ne jamais renommer un step Inngest existant
-- Le versioning Inngest dépend des noms de steps
-- Un rename = nouveau step = anciens workflows orphelins
-- Référence : `.claude/rules/ai-pipeline.md`
-
-### 10. Ne jamais commit, log, ou exposer un secret
+### 8. Ne jamais commit, log, ou exposer un secret
 - Pas de `.env.local` dans git
 - Pas de `console.log(process.env.DATABASE_URL)`
 - Pas de clé API dans le code source
 - Référence : `.claude/rules/security.md`
 
-### 11. Ne jamais désactiver TypeScript ou ESLint pour faire passer du code
+### 9. Ne jamais désactiver TypeScript ou ESLint pour faire passer du code
 - Pas de `// @ts-ignore`, `// @ts-expect-error`, `as any`
 - Pas de `eslint-disable`
 - Si le code ne compile pas, le corriger — pas le supprimer
 - Référence : `.claude/rules/karpathy.md`
 
-### 12. Ne jamais modifier le schema DB sans backup explicite
+### 10. Ne jamais modifier le schema DB sans backup explicite
 - `drizzle-kit push` applique directement — pas de rollback
 - Pas de `DROP TABLE` ou `DROP COLUMN` sans backup
 - Nouvelles colonnes : `nullable` ou `.default()` obligatoire
 - Référence : `.claude/rules/database.md`
 
-### 13. Ne jamais ajouter de dépendance sans justification documentée
+### 11. Ne jamais ajouter de dépendance sans justification documentée
 - La tâche ne peut PAS être résolue avec les dépendances existantes
 - La dépendance est activement maintenue
 - Elle n'ajoute pas de poids inutile au bundle
 - Expliquer le choix dans le commit message
 - Référence : `.claude/rules/karpathy.md` §2
 
-### 14. Ne jamais refactorer du code non lié à la tâche
+### 12. Ne jamais refactorer du code non lié à la tâche
 - Modifications chirurgicales : toucher uniquement ce qui est nécessaire
 - Ne pas "améliorer" le code adjacent, les commentaires, le formatage
 - Si un refacto plus large semble nécessaire : expliquer pourquoi, proposer un plan, **ne pas exécuter sans approbation**
 - Référence : `.claude/rules/karpathy.md` §3
 
-### 15. Ne jamais générer de fausses credentials auteur
+### 13. Ne jamais générer de fausses credentials auteur
 - Pas de "French-trained baker" si le persona est fictif
 - Pas de "tested 200+ times" sans log de test réel
 - Pas de "20 years of experience" sans source vérifiable
@@ -113,9 +103,8 @@
 1. **`global.md`** (ce fichier) — règles absolues, prime sur tout
 2. **`routing-seo.md`** — architecture de routing, SEO, content_type
 3. **`security.md`** — secrets, auth, validation
-4. **`ai-pipeline.md`** — steps Inngest, contrats inter-agents
-5. **`database.md`** — schema Drizzle, queries
-6. **`api.md`** — conventions API routes
-7. **`frontend.md`** — composants, App Router, styling
-8. **`karpathy.md`** — qualité de code, simplicité
-9. **`accuracy.md`** — honnêteté intellectuelle, ne pas inventer
+4. **`database.md`** — schema Drizzle, queries
+5. **`api.md`** — conventions API routes
+6. **`frontend.md`** — composants, App Router, styling
+7. **`karpathy.md`** — qualité de code, simplicité
+8. **`accuracy.md`** — honnêteté intellectuelle, ne pas inventer

@@ -20,7 +20,7 @@
     # To use the Fireworks.ai config below, comment out this block.
     DEEPSEEK_API_KEY = ""; # Set in environment or .env.local — do not commit
     ANTHROPIC_BASE_URL = "https://api.deepseek.com/anthropic";
-    ANTHROPIC_AUTH_TOKEN = "sk-8be3fed95701464c8e99c3c70d820bd0";
+    ANTHROPIC_AUTH_TOKEN = "sk-d45ca42e6b2c47439e25ffb7dc87679a"; # Set in environment or .env.local — do not commit
     ANTHROPIC_MODEL = "deepseek-v4-pro";
     ANTHROPIC_DEFAULT_OPUS_MODEL = "deepseek-v4-pro";
     ANTHROPIC_DEFAULT_SONNET_MODEL = "deepseek-v4-pro";
@@ -33,7 +33,7 @@
     # To use this, uncomment this block and comment out the DeepSeek block above.
     # WARNING: This configuration is likely incompatible.
     /*
-    FIREWORKS_API_KEY = "fw_BcrBeXPtbvSXscNeUX5VSu";
+    FIREWORKS_API_KEY = ""; # Set in environment or .env.local — do not commit
     ANTHROPIC_BASE_URL = "https://api.fireworks.ai/inference";
     ANTHROPIC_AUTH_TOKEN = "Bearer ${FIREWORKS_API_KEY}";
     ANTHROPIC_MODEL = "accounts/fireworks/models/glm-5p2";

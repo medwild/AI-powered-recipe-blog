@@ -105,7 +105,33 @@
     ]
   },
   "skillOverrides": {
-    "seo-organic-rankings-analyzer": "off"
+    "seo-organic-rankings-analyzer": "off",
+    "seo": "off",
+    "seo-backlinks": "off",
+    "seo-cluster": "off",
+    "seo-competitor-pages": "off",
+    "seo-content": "off",
+    "seo-content-brief": "off",
+    "seo-dataforseo": "off",
+    "seo-drift": "off",
+    "seo-ecommerce": "off",
+    "seo-flow": "off",
+    "seo-geo": "off",
+    "seo-google": "off",
+    "seo-hreflang": "off",
+    "seo-image-gen": "off",
+    "seo-images": "off",
+    "seo-local": "off",
+    "seo-maps": "off",
+    "seo-page": "off",
+    "seo-plan": "off",
+    "seo-programmatic": "off",
+    "seo-schema": "off",
+    "seo-sitemap": "off",
+    "seo-sxo": "off",
+    "seo-technical": "off",
+    "ideogram-prompt": "off",
+    "web-design-guidelines": "off"
   },
   "enabledPlugins": {
     "skill-creator@claude-plugins-official": false

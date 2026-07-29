@@ -579,6 +579,244 @@ class GeminiProvider implements LlmProvider {
 }
 
 // ---------------------------------------------------------------------------
+// Tokenmix Provider (OpenAI-compatible — multi-key rotation)
+// ---------------------------------------------------------------------------
+// Reads TOKENMIX_API_KEY* env vars. Rotates on 402 (quota) and 429 (rate limit).
+// Supports OpenAI-style structured output via response_format.json_schema.
+// ---------------------------------------------------------------------------
+
+class TokenmixProvider implements LlmProvider {
+  supportsStructuredOutput = true
+  private baseUrl: string
+  private keys: Array<{ key: string; exhausted: boolean }> = []
+  private defaultModel: string
+
+  constructor() {
+    this.baseUrl = (process.env.TOKENMIX_BASE_URL || "https://api.tokenmix.ai/v1") + "/chat/completions"
+
+    // Multi-key rotation — read all TOKENMIX_API_KEY* env vars
+    const seen = new Set<string>()
+    for (const [envName, envVal] of Object.entries(process.env)) {
+      if (envName.startsWith("TOKENMIX_API_KEY") && envVal && !seen.has(envVal)) {
+        seen.add(envVal)
+        this.keys.push({ key: envVal, exhausted: false })
+      }
+    }
+    this.defaultModel = process.env.TOKENMIX_MODEL || "claude-opus-4.8"
+    if (this.keys.length === 0) {
+      console.warn("[provider] Tokenmix — no API keys found. Set TOKENMIX_API_KEY.")
+    } else {
+      console.log(`[provider] Tokenmix — ${this.keys.length} key(s) loaded, model: ${this.defaultModel}`)
+    }
+  }
+
+  private pickKey(): string {
+    const active = this.keys.filter(k => !k.exhausted)
+    if (active.length === 0) throw new Error("All Tokenmix API keys exhausted.")
+    const idx = Math.floor(Math.random() * active.length * 1.5) % active.length
+    return active[idx].key
+  }
+
+  private markExhausted(usedKey: string, reason: string): void {
+    const entry = this.keys.find(k => k.key === usedKey)
+    if (entry && !entry.exhausted) {
+      entry.exhausted = true
+      const rem = this.keys.filter(k => !k.exhausted).length
+      console.warn(`[provider] Tokenmix key exhausted (${reason}). ${rem}/${this.keys.length} keys left.`)
+    }
+  }
+
+  private async fetchWithRotation(
+    body: Record<string, unknown>,
+    timeoutMs: number,
+    signal: AbortSignal,
+  ): Promise<Response> {
+    let lastText = ""
+    let lastStatus = 0
+    const maxAttempts = Math.min(3, Math.max(1, this.keys.length))
+    for (let a = 0; a < maxAttempts; a++) {
+      const apiKey = this.pickKey()
+      try {
+        const res = await fetch(this.baseUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${apiKey}`,
+          },
+          body: JSON.stringify(body),
+          signal,
+        })
+
+        // Quota exhaustion → rotate key
+        if (res.status === 402 || res.status === 429) {
+          const text = await res.text()
+          const exhausted = res.status === 402
+            || (res.status === 429 && /quota/i.test(text))
+          if (exhausted) {
+            this.markExhausted(apiKey, `HTTP ${res.status}`)
+            lastText = text
+            lastStatus = res.status
+            continue
+          }
+        }
+
+        // Server errors (5xx) — retry with backoff
+        if (res.status >= 500 && res.status < 600) {
+          for (let sr = 0; sr < 2; sr++) {
+            const delayMs = (sr + 1) * 5000
+            console.warn(`[provider] Tokenmix server error ${res.status} — retry ${sr + 1}/2 in ${delayMs / 1000}s`)
+            await new Promise(r => setTimeout(r, delayMs))
+            const retryRes = await fetch(this.baseUrl, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${apiKey}`,
+              },
+              body: JSON.stringify(body),
+              signal,
+            })
+            if (retryRes.ok) return retryRes
+          }
+          lastStatus = 500
+          lastText = "Server error after 3 retries"
+          continue
+        }
+
+        return res
+      } catch (err) {
+        if (err instanceof Error && err.message.startsWith("Tokenmix API error")) throw err
+        lastText = (err as Error).message
+        if (a < maxAttempts - 1) {
+          console.warn(`[provider] Tokenmix fetch failed (${lastText}) — rotating key`)
+        }
+      }
+    }
+    throw new Error(`Tokenmix API error (${lastStatus || "network"}): ${lastText}`)
+  }
+
+  async runText(
+    systemPrompt: string,
+    userPrompt: string,
+    options?: LlmProviderOptions,
+  ): Promise<string> {
+    if (this.keys.length === 0) {
+      throw new Error("TOKENMIX_API_KEY must be set for Tokenmix provider.")
+    }
+
+    const timeoutMs = options?.timeout ?? 300_000
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), timeoutMs)
+
+    try {
+      const model = options?.model ?? this.defaultModel
+      const body = {
+        model,
+        messages: [
+          { role: "system" as const, content: systemPrompt },
+          { role: "user" as const, content: userPrompt },
+        ],
+        max_tokens: options?.maxTokens ?? 16384,
+        temperature: options?.temperature ?? 1,
+        top_p: 0.95,
+        stream: false,
+      }
+
+      const res = await this.fetchWithRotation(body, timeoutMs, controller.signal)
+
+      if (!res.ok) {
+        const text = await res.text()
+        throw new Error(`Tokenmix API error (${res.status}): ${text.substring(0, 500)}`)
+      }
+
+      const data = (await res.json()) as Record<string, unknown>
+      const choices = data?.choices as Array<Record<string, unknown>> | undefined
+      const message = choices?.[0]?.message as Record<string, unknown> | undefined
+      const out = typeof message?.content === "string" ? (message.content as string) : ""
+
+      if (out.trim().length === 0) {
+        throw new Error(`Tokenmix returned no content. Model: ${model}`)
+      }
+
+      const usage = data?.usage as Record<string, number> | undefined
+      console.log(
+        `[provider] Tokenmix ${model} — success ` +
+        `(in:${usage?.prompt_tokens ?? "?"} out:${usage?.completion_tokens ?? "?"})`,
+      )
+
+      return out
+    } finally {
+      clearTimeout(timer)
+    }
+  }
+
+  /** Native structured output via OpenAI response_format.json_schema. */
+  async runStructured<T>(
+    systemPrompt: string,
+    userPrompt: string,
+    jsonSchema: Record<string, unknown>,
+    options?: LlmProviderOptions,
+  ): Promise<T> {
+    if (this.keys.length === 0) {
+      throw new Error("TOKENMIX_API_KEY must be set for Tokenmix structured output.")
+    }
+
+    const timeoutMs = options?.timeout ?? 300_000
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), timeoutMs)
+
+    try {
+      const model = options?.model ?? this.defaultModel
+      const body = {
+        model,
+        messages: [
+          { role: "system" as const, content: systemPrompt },
+          { role: "user" as const, content: userPrompt },
+        ],
+        max_tokens: options?.maxTokens ?? 16384,
+        temperature: options?.temperature ?? 1,
+        top_p: 0.95,
+        stream: false,
+        response_format: {
+          type: "json_schema" as const,
+          json_schema: {
+            name: "response",
+            strict: true,
+            schema: jsonSchema,
+          },
+        },
+      }
+
+      const res = await this.fetchWithRotation(body, timeoutMs, controller.signal)
+
+      if (!res.ok) {
+        const text = await res.text()
+        throw new Error(`Tokenmix API error (${res.status}): ${text.substring(0, 500)}`)
+      }
+
+      const data = (await res.json()) as Record<string, unknown>
+      const choices = data?.choices as Array<Record<string, unknown>> | undefined
+      const message = choices?.[0]?.message as Record<string, unknown> | undefined
+      const out = typeof message?.content === "string" ? (message.content as string) : ""
+
+      if (out.trim().length === 0) {
+        throw new Error(`Tokenmix structured output: no content returned. Model: ${model}`)
+      }
+
+      const parsed = JSON.parse(out) as T
+      const usage = data?.usage as Record<string, number> | undefined
+      console.log(
+        `[provider] Tokenmix ${model} structured — success ` +
+        `(in:${usage?.prompt_tokens ?? "?"} out:${usage?.completion_tokens ?? "?"})`,
+      )
+
+      return parsed
+    } finally {
+      clearTimeout(timer)
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Provider factory
 // ---------------------------------------------------------------------------
 
@@ -586,7 +824,7 @@ let _provider: LlmProvider | null = null
 
 /**
  * Returns the configured LLM provider. Selection is based on
- * LLM_PROVIDER env var ("anthropic" | "deepseek" | "cloudflare" | "gemini").
+ * LLM_PROVIDER env var ("anthropic" | "deepseek" | "cloudflare" | "gemini" | "tokenmix").
  */
 export function getProvider(): LlmProvider {
   if (_provider) return _provider
@@ -605,15 +843,18 @@ export function getProvider(): LlmProvider {
     || (configuredModel.startsWith("claude-") ? "anthropic" : null)
 
   // Reject unrecognized explicit provider values
-  const VALID = new Set(["deepseek", "anthropic", "cloudflare", "gemini"])
+  const VALID = new Set(["deepseek", "anthropic", "cloudflare", "gemini", "tokenmix"])
   if (explicitProvider && !VALID.has(resolve ?? "")) {
     throw new Error(
       `Unsupported LLM_PROVIDER: "${explicitProvider}". ` +
-      `Supported values: "anthropic", "deepseek", "cloudflare".`
+      `Supported values: "anthropic", "deepseek", "cloudflare", "gemini", "tokenmix".`
     )
   }
 
-  if (resolve === "cloudflare") {
+  if (resolve === "tokenmix") {
+    console.log("[provider] → TokenmixProvider")
+    _provider = new TokenmixProvider()
+  } else if (resolve === "cloudflare") {
     console.log("[provider] → CloudflareProvider")
     _provider = new CloudflareProvider()
   } else if (resolve === "gemini") {
@@ -741,6 +982,27 @@ export async function runWithStructuredOutput<T>(
       }
     }
     throw lastErr ?? new Error("Gemini structured output: all attempts failed")
+  }
+
+  // Tokenmix native structured output (OpenAI response_format.json_schema)
+  if (provider instanceof TokenmixProvider) {
+    console.log("[provider] Tokenmix structured output (response_format)")
+    let lastErr: Error | null = null
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        return await provider.runStructured<T>(systemPrompt, userPrompt, jsonSchema, options)
+      } catch (err) {
+        lastErr = err as Error
+        const msg = (err as Error).message
+        if (!isRecoverable(msg)) throw lastErr
+        if (attempt < 3) {
+          const delay = attempt * 5_000
+          console.warn(`[provider] Tokenmix attempt ${attempt} failed: ${msg.substring(0, 100)} — retrying in ${delay / 1000}s`)
+          await new Promise(r => setTimeout(r, delay))
+        }
+      }
+    }
+    throw lastErr ?? new Error("Tokenmix structured output: all attempts failed")
   }
 
   // Non-Anthropic providers AND FlatKey: fall back to text + JSON parse.

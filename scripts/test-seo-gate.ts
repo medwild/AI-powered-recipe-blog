@@ -32,6 +32,13 @@ const validJsonLd = {
     prepTime: "PT15M",
     nutrition: { calories: "450 kcal" },
     aggregateRating: { ratingValue: "4.8", reviewCount: "24" },
+  }, {
+    "@type": "FAQPage",
+    mainEntity: [{
+      "@type": "Question",
+      name: "Can I freeze these meatballs?",
+      acceptedAnswer: { "@type": "Answer", text: "Yes, freeze for up to 3 months in an airtight container." },
+    }],
   }],
 }
 

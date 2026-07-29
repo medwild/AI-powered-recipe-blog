@@ -1,7 +1,7 @@
 /**
  * Pre-Production SEO Gate — Deterministic validation
  *
- * 15 criteria (8 BLOCK + 7 WARNING), research-backed against:
+ * 16 criteria (8 BLOCK + 8 WARNING), research-backed against:
  * - Google Recipe Schema requirements 2026
  * - E-E-A-T framework (Marie Haynes, Lily Ray, Danny Sullivan)
  * - 40-site SEO data analysis 2026
@@ -221,7 +221,26 @@ function checkInternalLinks(contentMarkdown: string | null): Warning | null {
   return null
 }
 
-/** W7 — Recipe schema should include cookTime/prepTime. */
+/** W7 — FAQPage schema should be present for AI parsing (Google deprecated FAQ rich results in 2025). */
+function checkFAQPage(jsonLd: Record<string, unknown> | null): Warning | null {
+  if (!jsonLd) return null
+  const graph = jsonLd["@graph"] as Record<string, unknown>[] | undefined
+  if (!Array.isArray(graph)) return null
+
+  const faqNode = graph.find(n => n["@type"] === "FAQPage")
+  if (!faqNode) {
+    return warn("FAQPAGE_MISSING", "No FAQPage node in JSON-LD @graph. Recommended for AI parsing (ChatGPT, Perplexity) even though Google deprecated FAQ rich results.")
+  }
+
+  const mainEntity = faqNode["mainEntity"]
+  if (!Array.isArray(mainEntity) || mainEntity.length === 0) {
+    return warn("FAQPAGE_EMPTY", "FAQPage node has no mainEntity questions. Add at least 3 questions for AI citability.")
+  }
+
+  return null
+}
+
+/** W8 — Recipe schema should include cookTime/prepTime. */
 function checkCookTime(jsonLd: Record<string, unknown> | null): Warning | null {
   const recipeNode = findRecipeNode(jsonLd)
   if (!recipeNode) return null
@@ -232,7 +251,7 @@ function checkCookTime(jsonLd: Record<string, unknown> | null): Warning | null {
   return null
 }
 
-/** W8 — Schema data must match visible content (Google SD policies). */
+/** W9 — Schema data must match visible content (Google SD policies). */
 function checkSchemaContentMismatch(
   jsonLd: Record<string, unknown> | null,
   contentMarkdown: string | null,
@@ -391,6 +410,7 @@ export async function runSeoGate(input: GateInput): Promise<GateResult> {
     ? [
         checkNutrition(input.jsonLd),
         checkRating(input.jsonLd),
+        checkFAQPage(input.jsonLd),
         checkCookTime(input.jsonLd),
         checkSchemaContentMismatch(input.jsonLd, input.contentMarkdown),
       ]

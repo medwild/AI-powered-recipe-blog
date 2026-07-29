@@ -292,3 +292,119 @@ export function optimizeImagePrompt(source: PromptSource): string {
   // Sinon, construire un prompt à partir des données disponibles
   return buildDefaultPrompt(source)
 }
+
+// ---------------------------------------------------------------------------
+// FAQPage Schema Generator — extractive from markdown (v14.3)
+// ---------------------------------------------------------------------------
+
+interface FAQItem {
+  question: string
+  answer: string
+}
+
+/**
+ * Extracts FAQ question/answer pairs from markdown content.
+ *
+ * Matches the mega-skill §5 required format: `## Specific Question?`
+ * followed by answer text (25-120 words). Each answer ends at the next
+ * `##` heading, `---` horizontal rule, or end of string.
+ *
+ * Returns an array of {question, answer} objects. Empty if no FAQs found.
+ */
+export function extractFAQFromMarkdown(markdown: string): FAQItem[] {
+  if (!markdown) return []
+
+  // Match ## headings ending with ? — the mega-skill FAQ format
+  // Capture: ## Some Question?\n(answer text until next ## or --- or EOF)
+  const faqRegex = /^##\s+(.+?\?)\s*\n([\s\S]*?)(?=\n##\s|\n---\s|\n*$)/gm
+  const faqs: FAQItem[] = []
+
+  let match: RegExpExecArray | null
+  while ((match = faqRegex.exec(markdown)) !== null) {
+    const question = match[1].trim()
+    const answer = match[2].trim()
+
+    // Skip empty answers or ones that are clearly not FAQ (just a heading)
+    if (answer.length < 20) continue
+    // Skip if the "question" is actually a section heading (> 100 chars = not a question)
+    if (question.length > 100) continue
+
+    // Clean the answer: strip any trailing markdown artifacts
+    const cleanAnswer = answer
+      .replace(/\n*$/, "")
+      .replace(/\n{3,}/g, "\n\n")
+
+    faqs.push({ question, answer: cleanAnswer })
+  }
+
+  return faqs
+}
+
+/**
+ * Builds a Schema.org FAQPage node from FAQ Q&A pairs.
+ *
+ * Format per schema.org:
+ * ```json
+ * {
+ *   "@type": "FAQPage",
+ *   "mainEntity": [
+ *     { "@type": "Question", "name": "...", "acceptedAnswer": { "@type": "Answer", "text": "..." } }
+ *   ]
+ * }
+ * ```
+ */
+export function buildFAQPageNode(faqs: FAQItem[]): Record<string, unknown> | null {
+  if (!faqs || faqs.length === 0) return null
+
+  return {
+    "@type": "FAQPage",
+    mainEntity: faqs.map(faq => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  }
+}
+
+/**
+ * Ensures a FAQPage node exists in the JSON-LD @graph.
+ *
+ * Strategy (same pattern as optimizeImagePrompt):
+ * 1. If a valid FAQPage already exists in @graph (has mainEntity with items) → keep it
+ * 2. Otherwise, extract FAQ Q&A from markdown content → build FAQPage node
+ * 3. If no FAQs in markdown either → return unchanged (don't fabricate)
+ *
+ * Called after parseJsonLd() during recipe normalization.
+ */
+export function ensureFAQPage(
+  jsonLd: Record<string, unknown>,
+  contentMarkdown: string,
+): Record<string, unknown> {
+  if (!jsonLd || !contentMarkdown) return jsonLd
+
+  const graph = jsonLd["@graph"] as Record<string, unknown>[] | undefined
+  if (!Array.isArray(graph)) return jsonLd
+
+  // Check if a valid FAQPage already exists
+  const existingFAQ = graph.find(
+    n => n["@type"] === "FAQPage" && Array.isArray(n["mainEntity"]) && (n["mainEntity"] as unknown[]).length > 0
+  )
+  if (existingFAQ) return jsonLd // already valid, nothing to do
+
+  // Extract FAQs from markdown and build FAQPage node
+  const faqs = extractFAQFromMarkdown(contentMarkdown)
+  if (faqs.length === 0) return jsonLd // no FAQ content to structure
+
+  const faqNode = buildFAQPageNode(faqs)
+  if (!faqNode) return jsonLd
+
+  // Remove any existing empty/invalid FAQPage nodes, then append the new one
+  const cleanedGraph = graph.filter(n => n["@type"] !== "FAQPage")
+  return {
+    ...jsonLd,
+    "@graph": [...cleanedGraph, faqNode],
+  }
+}

@@ -4,7 +4,7 @@
 
 import dotenv from "dotenv"
 import path from "path"
-dotenv.config({ path: path.resolve(process.cwd(), ".env.local") })
+dotenv.config({ path: path.resolve(process.cwd(), ".env.local"), override: true })
 import { fetchSerp } from "../lib/agents/serp"
 import { formatSerpForPrompt } from "../lib/pipeline/steps/serp-phase"
 import { agentChefAugustinMega } from "../lib/pipeline/agents/chef-augustin"

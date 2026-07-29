@@ -20,3 +20,8 @@ node_modules
 loop-run-log.md
 .vercel
 .env*
+.env.local
+
+# Standalone Go proxy — not part of the blog pipeline.
+# Keep out of this repo to prevent keys from leaking on `git add .`.
+claude-nvidia-proxy/
