@@ -8,7 +8,6 @@ import { RecipeArticle } from "@/components/recipe-article"
 import { RecipeRelated } from "@/components/recipe-related"
 import { JumpToRecipeDesktop, JumpToRecipeMobile } from "@/components/jump-to-recipe"
 import { getRecipeBySlug, getPublishedRecipes, getRelatedRecipes, getLinkedArticle, getRecipeRating } from "@/lib/queries"
-import { RecipeRating } from "@/components/recipe-rating"
 
 export const revalidate = 300
 export const dynamicParams = true
@@ -230,15 +229,6 @@ export default async function RecipePage({
       <main className="flex-1">
         {/* Breadcrumbs are rendered inside RecipeHero with cluster path for richer SEO */}
         <RecipeArticle recipe={recipe} />
-
-        {/* Star rating — right after the recipe, before related content */}
-        <section className="mx-auto max-w-3xl px-4 pb-10">
-          <RecipeRating
-            recipeId={recipe.id}
-            initialAvg={ratings.avg ?? 0}
-            initialCount={ratings.count}
-          />
-        </section>
 
         {/* Linked AOR Article */}
         {linkedArticle ? (
