@@ -55,7 +55,7 @@ const nextConfig = {
       { source: "/recettes", destination: "/recipes", permanent: true },
       { source: "/recettes/:path*", destination: "/recipes/:path*", permanent: true },
       // Deleted slugs — 301 to replacement recipes (2026-07-29 chicken-orzo dedup)
-      { source: "/recipes/healthy-dinner-ideas-for-two", destination: "/recipes/garlic-shrimp-orzo-cherry-tomatoes-for-two", permanent: true },
+      { source: "/recipes/healthy-dinner-ideas-for-two", destination: "/recipes/garlic-shrimp-orzo-with-cherry-tomatoes-for-two", permanent: true },
       { source: "/recipes/healthy-dinner-recipes-for-2", destination: "/recipes/salmon-orzo-with-dill-and-capers-for-two", permanent: true },
     ]
   },
