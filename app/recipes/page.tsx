@@ -29,12 +29,12 @@ export async function generateMetadata({
     const c = getClusterById(cluster)
     if (c) {
       return {
-        title: `${c.name} | Chef Augustin`,
+        title: c.name,
         description: c.description,
         alternates: { canonical: `/recipes?cluster=${cluster}` },
         robots: "index, follow",
         openGraph: {
-          title: `${c.name} | Chef Augustin`,
+          title: c.name,
           description: c.description,
           type: "website",
         },

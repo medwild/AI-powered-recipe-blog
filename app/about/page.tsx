@@ -7,12 +7,12 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "About Chef Augustin Lefèvre",
+  title: "About the Chef Behind the Recipes",
   description:
     "French-trained chef sharing practical small-batch dinner recipes for two. Professional technique, tested recipes, no food fads.",
   alternates: { canonical: "/about" },
   openGraph: {
-    title: "About Chef Augustin Lefèvre",
+    title: "About the Chef Behind the Recipes",
     description:
       "French-trained chef sharing practical small-batch dinner recipes for two.",
     type: "profile",
