@@ -31,7 +31,7 @@ export async function generateMetadata({
   const categories = await getRecipeCategories()
   const tag = slugToTag(slug, categories)
 
-  if (!tag) return { title: "Category not found" }
+  if (!tag) notFound()
 
   return {
     title: tag,
