@@ -20,13 +20,15 @@ function stripDuplicateSections(
   hasIngredients: boolean,
   hasInstructions: boolean,
 ): string {
-  if (!hasIngredients && !hasInstructions) return md
-
   const lines = md.split("\n")
   const result: string[] = []
   let skipping = false
 
   for (const line of lines) {
+    // Always strip H1 headings — the title is rendered by RecipeHero.
+    // A duplicate H1 in the markdown body causes "Too many H1 headings" SEO warnings.
+    if (/^#\s+/.test(line) && !/^##\s+/.test(line)) continue
+
     if (/^##\s+/.test(line)) {
       const isIngredientHeading = DUPLICATE_HEADINGS[0]!.test(line) || DUPLICATE_HEADINGS[1]!.test(line)
       const isInstructionHeading = DUPLICATE_HEADINGS.slice(2).some(r => r.test(line))
