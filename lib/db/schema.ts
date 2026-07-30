@@ -55,24 +55,6 @@ export const selfImprovementLogs = pgTable(
 export type SelfImprovementLog = typeof selfImprovementLogs.$inferSelect
 export type NewSelfImprovementLog = typeof selfImprovementLogs.$inferInsert
 
-export const imageVariantStats = pgTable(
-  "image_variant_stats",
-  {
-    id: serial("id").primaryKey(),
-    recipeId: integer("recipe_id").notNull(),
-    variantIndex: integer("variant_index").notNull(),
-    impressions: integer("impressions").notNull().default(0),
-    clicks: integer("clicks").notNull().default(0),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .notNull()
-      .defaultNow(),
-  },
-  (table) => ({
-    recipeIdx: index("idx_ivs_recipe").on(table.recipeId),
-    uniqueVariant: index("idx_ivs_recipe_variant").on(table.recipeId, table.variantIndex),
-  }),
-)
-
 export const pipelineErrors = pgTable(
   "pipeline_errors",
   {
@@ -96,8 +78,25 @@ export const pipelineErrors = pgTable(
 export type PipelineError = typeof pipelineErrors.$inferSelect
 export type NewPipelineError = typeof pipelineErrors.$inferInsert
 
-export type ImageVariantStat = typeof imageVariantStats.$inferSelect
-export type NewImageVariantStat = typeof imageVariantStats.$inferInsert
+export const recipeRatings = pgTable(
+  "recipe_ratings",
+  {
+    id: serial("id").primaryKey(),
+    recipeId: integer("recipe_id").notNull(),
+    rating: integer("rating").notNull(),
+    ipHash: text("ip_hash").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => ({
+    recipeIdx: index("idx_rr_recipe").on(table.recipeId),
+    uniqueVote: index("idx_rr_recipe_ip").on(table.recipeId, table.ipHash),
+  }),
+)
+
+export type RecipeRating = typeof recipeRatings.$inferSelect
+export type NewRecipeRating = typeof recipeRatings.$inferInsert
 
 export const pinDrafts = pgTable(
   "pin_drafts",

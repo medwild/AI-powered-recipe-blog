@@ -27,6 +27,9 @@ export async function uploadImage(
   configure()
   const UPLOAD_TIMEOUT_MS = 30_000
 
+  // Sanitize publicId — Cloudinary only allows alphanumeric, underscore, hyphen, slash
+  const safeId = publicId.replace(/[^a-zA-Z0-9_-]/g, "-").replace(/-{2,}/g, "-").replace(/^-|-$/g, "")
+
   return new Promise<string>((resolve, reject) => {
     const timer = setTimeout(() => {
       reject(new Error(`Cloudinary upload timed out after ${UPLOAD_TIMEOUT_MS / 1000}s`))
@@ -34,7 +37,7 @@ export async function uploadImage(
 
     cloudinary.uploader
       .upload_stream(
-        { folder: "recipes", public_id: publicId, overwrite: true },
+        { folder: "recipes", public_id: safeId, overwrite: true },
         (error, result) => {
           clearTimeout(timer)
           if (error || !result) {

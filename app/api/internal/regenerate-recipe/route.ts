@@ -13,6 +13,7 @@ import { runSerpPhase } from "@/lib/pipeline/steps/serp-phase"
 import { agentChefAugustinMega, recipeArticleToChefAugustinOutput } from "@/lib/pipeline/agents/chef-augustin"
 import { persistFinalDraft } from "@/lib/pipeline/steps/persist-phase"
 import { appendLog, logEntry } from "@/lib/pipeline/helpers"
+import { qualityGate } from "@/lib/quality-gate"
 
 export async function POST(req: Request) {
   const body = await req.json()
@@ -66,13 +67,22 @@ async function runRegeneration(id: number, newKeyword: string, newAngle: string)
       feedback: anglePrompt || undefined,
     })
 
-    await appendLog(id, logEntry("MegaSkill", "done",
-      `${article.contentMarkdown?.split(/\s+/).filter(Boolean).length ?? 0} words`))
+    const wc = article.contentMarkdown?.split(/\s+/).filter(Boolean).length ?? 0
+    await appendLog(id, logEntry("MegaSkill", "done", `${wc} words`))
+
+    // Quality gate — same checks as normal pipeline (v14.3 fix: was hardcoded "PASS")
+    const gateResult = await qualityGate(article)
+    if (gateResult.status === "BLOCK") {
+      await appendLog(id, logEntry("QualityGate", "error",
+        `BLOCKED: ${gateResult.reason} — ${gateResult.errors?.join("; ")}`))
+    } else {
+      await appendLog(id, logEntry("QualityGate", "done", `PASS — ${wc} words`))
+    }
 
     const legacyArticle = recipeArticleToChefAugustinOutput(article)
-    await persistFinalDraft(id, legacyArticle, "PASS", false)
-    await db.update(recipes).set({ keyword: newKeyword, status: "published", updatedAt: new Date() }).where(eq(recipes.id, id))
-    await appendLog(id, logEntry("Workflow", "done", `Regenerated with keyword "${newKeyword}"`))
+    await persistFinalDraft(id, legacyArticle, gateResult.status as "PASS" | "BLOCK", false)
+    await db.update(recipes).set({ keyword: newKeyword, updatedAt: new Date() }).where(eq(recipes.id, id))
+    await appendLog(id, logEntry("Workflow", "done", `Regenerated — ${gateResult.status} (${wc} words)`))
 
     console.log(`[regenerate] #${id} done — "${newKeyword}"`)
   } catch (err) {

@@ -1,6 +1,7 @@
 import { Suspense } from "react"
 import dynamic from "next/dynamic"
 import type { Metadata } from "next"
+import { permanentRedirect } from "next/navigation"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { SiteHeader } from "@/components/site-header"
@@ -12,6 +13,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs"
 const RecipeSearch = dynamic(() => import("@/components/recipe-search").then((m) => m.RecipeSearch))
 import { searchPublishedRecipes, getRecipeCategories, getPublishedArticles } from "@/lib/queries"
 import { resolveCluster, getClusterById, getAllClusters } from "@/lib/cluster-resolver"
+import { tagToSlug } from "@/lib/tag-utils"
 
 export const revalidate = 60
 
@@ -61,6 +63,12 @@ export default async function RecipesPage({
   searchParams: Promise<{ q?: string; cat?: string; cluster?: string }>
 }) {
   const { q, cat, cluster } = await searchParams
+
+  // Redirect ?cat=X to /recipes/category/{slug} (301 permanent)
+  if (cat) {
+    permanentRedirect(`/recipes/category/${tagToSlug(cat)}`)
+  }
+
   const [recipes, categories, articles] = await Promise.all([
     searchPublishedRecipes(q, cat),
     getRecipeCategories(),

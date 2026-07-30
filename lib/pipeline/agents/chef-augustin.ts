@@ -163,7 +163,7 @@ export type ChefAugustinOutput = {
   totalTime: string
   servings: string
   difficulty: string
-  imagePrompt: string
+  imagePrompt?: string // DEPRECATED v14.3: image prompts are now generated deterministically
   jsonLd: Record<string, unknown>
 }
 
@@ -356,7 +356,6 @@ export function normalizeRecipeArticle(raw: Record<string, unknown>): RecipeArti
     totalTime: str(raw.totalTime, "PT45M"),
     servings: str(raw.servings, "2"),
     difficulty: (["Easy", "Medium", "Hard"].includes(String(raw.difficulty ?? "")) ? String(raw.difficulty) : "Easy") as "Easy" | "Medium" | "Hard",
-    imagePrompt: (() => { const s = str(raw.imagePrompt); return (s && s !== "undefined") ? s.substring(0, 200) : ""; })(),
     jsonLd: parseJsonLd(raw.jsonLd),
   }
 }
@@ -482,7 +481,7 @@ export function recipeArticleToChefAugustinOutput(r: RecipeArticle): ChefAugusti
     totalTime: r.totalTime,
     servings: r.servings,
     difficulty: r.difficulty,
-    imagePrompt: r.imagePrompt,
+    imagePrompt: undefined, // v14.3: image prompts are generated deterministically, not by the LLM
     jsonLd: ensureFAQPage(parsedJsonLd, r.contentMarkdown),
   }
 }
@@ -553,7 +552,7 @@ export async function agentChefAugustinMega(
       userPrompt += `\n\n---\nQUALITY GATE FEEDBACK (fix these issues):\n${feedback}`
     }
 
-    userPrompt += `\n\n---\nGenerate a complete ${keyword} recipe article. Follow the mega-skill exactly. Output valid JSON only.\n\nCRITICAL — USDA food safety temperatures (MANDATORY): Every protein in your ingredients must have its USDA-safe internal temperature mentioned in BOTH the step text AND the structured \`temperature\` field. Poultry (chicken/turkey/duck) → 165°F / 74°C. Ground meat (beef/pork/lamb) → 160°F / 71°C. Beef/lamb/veal whole muscle → 145°F / 63°C. Pork whole muscle → 145°F / 63°C. Fish/seafood → 145°F / 63°C. Missing any required temperature = automatic rejection. No exceptions.\n\nCRITICAL — imagePrompt: Write a 100-150 word food photography prompt following §6 of the system instructions. Use Canon EOS R5, directional lighting, specific surface (material+texture), hex colors from real ingredients, and the mandatory negative tail verbatim. Do NOT write "undefined" or leave empty.`
+    userPrompt += `\n\n---\nGenerate a complete ${keyword} recipe article. Follow the mega-skill exactly. Output valid JSON only.\n\nCRITICAL — USDA food safety temperatures (MANDATORY): Every protein in your ingredients must have its USDA-safe internal temperature mentioned in BOTH the step text AND the structured \`temperature\` field. Poultry (chicken/turkey/duck) → 165°F / 74°C. Ground meat (beef/pork/lamb) → 160°F / 71°C. Beef/lamb/veal whole muscle → 145°F / 63°C. Pork whole muscle → 145°F / 63°C. Fish/seafood → 145°F / 63°C. Missing any required temperature = automatic rejection. No exceptions.`
 
     // On retry (feedback present), use text+parse mode — the feedback can
     // cause strict JSON schema validation to reject valid responses.

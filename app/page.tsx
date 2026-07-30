@@ -38,6 +38,32 @@ export default async function HomePage() {
           heroImage={latestRecipe?.heroImageUrl ?? undefined}
           heroAlt={latestRecipe?.title ?? undefined}
         />
+        {/* Editorial intro — signals topic authority and E-E-A-T to search engines */}
+        <section className="border-b border-border bg-background">
+          <div className="mx-auto max-w-5xl px-4 py-10">
+            <div className="mx-auto max-w-3xl text-center">
+              <p className="text-sm font-medium text-primary tracking-wide uppercase">
+                By Chef Augustin Lefèvre
+              </p>
+              <h2 className="mt-2 font-serif text-2xl text-balance">
+                Small-batch cooking, big French technique
+              </h2>
+              <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground">
+                Most recipes are written for four to six people. Scaling down isn&apos;t
+                just division — it&apos;s a different way of cooking. A pan that&apos;s too
+                wide burns the sauce. A roast for two dries out faster than one for six.
+                Every recipe here is developed and tested specifically for two people:
+                the right pan size, the right timing, the right ingredient quantities.
+                No guessing, no waste, no sad leftovers wilting in the fridge.
+                Just practical weeknight dinners that work the first time.
+              </p>
+              <p className="mt-5 text-sm text-muted-foreground">
+                <span className="font-semibold text-foreground">{recipes.length}+ recipes</span>{" "}
+                tested and scaled for two — with new additions every month.
+              </p>
+            </div>
+          </div>
+        </section>
         <HomepageStartCooking recipes={recent} />
         <HomepageCategories categories={categories} />
         <HomepageFeatured featured={featured} recent={recent} />

@@ -35,6 +35,12 @@ export function SiteFooter() {
               Small-batch dinner recipes for two, grounded in French technique and
               real-world kitchen experience.
             </p>
+            <a
+              href="mailto:hello@chefaugustin.com"
+              className="text-sm text-muted-foreground underline underline-offset-2 transition-colors hover:text-foreground"
+            >
+              hello@chefaugustin.com
+            </a>
           </div>
 
           {/* Quick Links */}
@@ -89,7 +95,7 @@ export function SiteFooter() {
               </SocialIcon>
             </div>
             <p className="mt-2 text-xs text-muted-foreground">
-              AI-assisted recipes · Human-tested &amp; verified ·{" "}
+              Regularly updated · Human-tested &amp; verified ·{" "}
               {new Date().getFullYear()}
             </p>
           </div>

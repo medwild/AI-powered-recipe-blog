@@ -24,7 +24,6 @@ export const RecipeArticleSchema = z.object({
   totalTime: z.string().describe("ISO 8601 duration, e.g. PT40M"),
   servings: z.string().describe("e.g. '2 servings'"),
   difficulty: z.enum(["Easy", "Medium", "Hard"]),
-  imagePrompt: z.string().describe("Food photography prompt optimized for Ideogram 4. 100-150 words. Follow mega-skill §6 anatomy exactly."),
   jsonLd: z.record(z.string(), z.unknown()).describe("JSON-LD as an object with @graph array: Recipe, BlogPosting, FAQPage, BreadcrumbList nodes. Use '<placeholder>' for image URL."),
 });
 

@@ -15,11 +15,11 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Chef Augustin — Easy Weeknight Dinners for Two',
+    default: 'Chef Augustin — Small-Batch Dinner Recipes for Two',
     template: '%s | Chef Augustin',
   },
   description:
-    'Simple small-batch dinner recipes for two people. Chef Augustin Lefevre shares practical weeknight meals with clear serving sizes and Pinterest-friendly inspiration.',
+    'Simple small-batch dinner recipes for two people. Chef Augustin Lefevre shares practical weeknight meals with clear portions and tested techniques.',
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || 'https://www.chefaugustin.com',
   ),
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     siteName: 'Chef Augustin',
-    title: 'Chef Augustin — Easy Weeknight Dinners for Two',
+    title: 'Chef Augustin — Small-Batch Dinner Recipes for Two',
     description:
       'Simple small-batch dinner recipes for two people. Practical weeknight meals from a French-trained chef.',
     url: '/',
@@ -43,13 +43,13 @@ export const metadata: Metadata = {
         url: '/hero-kitchen.png',
         width: 1200,
         height: 630,
-        alt: 'Chef Augustin — Easy Weeknight Dinners for Two',
+        alt: 'Chef Augustin — Small-Batch Dinner Recipes for Two',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Chef Augustin — Easy Weeknight Dinners for Two',
+    title: 'Chef Augustin — Small-Batch Dinner Recipes for Two',
     description:
       'Simple small-batch dinner recipes for two people.',
     images: ['/hero-kitchen.png'],

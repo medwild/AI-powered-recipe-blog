@@ -7,7 +7,8 @@ import { SiteFooter } from "@/components/site-footer"
 import { RecipeArticle } from "@/components/recipe-article"
 import { RecipeRelated } from "@/components/recipe-related"
 import { JumpToRecipeDesktop, JumpToRecipeMobile } from "@/components/jump-to-recipe"
-import { getRecipeBySlug, getPublishedRecipes, getRelatedRecipes, getLinkedArticle } from "@/lib/queries"
+import { getRecipeBySlug, getPublishedRecipes, getRelatedRecipes, getLinkedArticle, getRecipeRating } from "@/lib/queries"
+import { RecipeRating } from "@/components/recipe-rating"
 
 export const revalidate = 300
 export const dynamicParams = true
@@ -50,8 +51,12 @@ export async function generateMetadata({
 
 function RecipeJsonLd({
   recipe,
+  ratingAvg,
+  ratingCount,
 }: {
   recipe: NonNullable<Awaited<ReturnType<typeof getRecipeBySlug>>>
+  ratingAvg: number | null
+  ratingCount: number
 }) {
   const base = (recipe.jsonLd as Record<string, unknown>) ?? {}
 
@@ -107,6 +112,15 @@ function RecipeJsonLd({
           datePublished: recipe.publishedAt?.toISOString(),
           recipeYield: recipe.servings || node.recipeYield || undefined,
           keywords: (recipe.tags ?? []).join(", ") || recipe.keyword,
+          ...(ratingAvg !== null && ratingCount > 0 ? {
+            aggregateRating: {
+              "@type": "AggregateRating",
+              ratingValue: String(ratingAvg),
+              ratingCount,
+              bestRating: "5",
+              worstRating: "1",
+            },
+          } : {}),
           recipeIngredient: (recipe.ingredients ?? []).map((i) =>
             [i.quantity, i.name].filter(Boolean).join(" "),
           ),
@@ -188,9 +202,10 @@ export default async function RecipePage({
     notFound()
   }
 
-  const [relatedRecipes, linkedArticle] = await Promise.all([
+  const [relatedRecipes, linkedArticle, ratings] = await Promise.all([
     getRelatedRecipes(recipe.id, recipe.tags ?? []),
     getLinkedArticle(recipe.id),
+    getRecipeRating(recipe.id),
   ])
 
   // Rich Pin readiness check (server-side quality gate)
@@ -215,6 +230,15 @@ export default async function RecipePage({
       <main className="flex-1">
         {/* Breadcrumbs are rendered inside RecipeHero with cluster path for richer SEO */}
         <RecipeArticle recipe={recipe} />
+
+        {/* Star rating — right after the recipe, before related content */}
+        <section className="mx-auto max-w-3xl px-4 pb-10">
+          <RecipeRating
+            recipeId={recipe.id}
+            initialAvg={ratings.avg ?? 0}
+            initialCount={ratings.count}
+          />
+        </section>
 
         {/* Linked AOR Article */}
         {linkedArticle ? (
@@ -243,7 +267,11 @@ export default async function RecipePage({
 
         <RecipeRelated recipes={relatedRecipes} />
       </main>
-      <RecipeJsonLd recipe={recipe} />
+      <RecipeJsonLd
+        recipe={recipe}
+        ratingAvg={ratings.avg}
+        ratingCount={ratings.count}
+      />
       <SiteFooter />
     </div>
   )

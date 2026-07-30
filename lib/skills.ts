@@ -117,7 +117,13 @@ export async function getSkillMeta(
 }
 
 // ---------------------------------------------------------------------------
-// Image Prompt Optimizer — Ideogram 4 template-based (v14.2 §6)
+// Image Prompt Generator — Ideogram 4 template-based (v14.3)
+// ---------------------------------------------------------------------------
+//
+// Image prompts are generated deterministically from recipe data.
+// The mega-skill no longer produces imagePrompt — buildDefaultPrompt() is the
+// single source of truth. Dish type detection → template profile → hex colors.
+//
 // ---------------------------------------------------------------------------
 
 interface PromptSource {
@@ -126,7 +132,7 @@ interface PromptSource {
   difficulty?: string | null
   ingredients?: { name: string; quantity?: string }[] | null
   keyword?: string | null
-  imagePrompt?: string | null
+  imagePrompt?: string | null // DEPRECATED: kept for backward compat, always ignored
 }
 
 // Mandatory negative tail per mega-skill §6 — appended to every prompt
@@ -274,22 +280,10 @@ export function buildDefaultPrompt(source: PromptSource): string {
 }
 
 /**
- * Optimise et garantit un prompt d'image non vide.
- *
- * Règles :
- * 1. Si imagePrompt est valide (> 10 chars) → l'utiliser
- * 2. Sinon → construire un prompt à partir des données de la recette
- * 3. En dernier recours → prompt de secours absolu
+ * Generate an image prompt from recipe data. Always uses the deterministic
+ * template — the mega-skill no longer produces imagePrompt (v14.3).
  */
 export function optimizeImagePrompt(source: PromptSource): string {
-  const raw = source.imagePrompt?.trim()
-
-  // Si le prompt est valide, l'utiliser
-  if (raw && raw.length > 10) {
-    return raw
-  }
-
-  // Sinon, construire un prompt à partir des données disponibles
   return buildDefaultPrompt(source)
 }
 

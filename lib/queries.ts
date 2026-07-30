@@ -1,5 +1,5 @@
 import { db } from "@/lib/db"
-import { recipes, selfImprovementLogs, pinDrafts } from "@/lib/db/schema"
+import { recipes, selfImprovementLogs, pinDrafts, recipeRatings } from "@/lib/db/schema"
 import type { Recipe } from "@/lib/db/schema"
 import { desc, eq, and, ne, ilike, or, sql } from "drizzle-orm"
 
@@ -438,5 +438,22 @@ export async function insertQualityLog(params: {
   } catch {
     // Telemetry failure is never fatal — log and continue
     console.error("[queries] Failed to insert quality log")
+  }
+}
+
+export async function getRecipeRating(
+  recipeId: number,
+): Promise<{ avg: number | null; count: number }> {
+  const [row] = await db
+    .select({
+      avg: sql<string>`ROUND(AVG(${recipeRatings.rating})::numeric, 1)`,
+      count: sql<number>`COUNT(*)::int`,
+    })
+    .from(recipeRatings)
+    .where(eq(recipeRatings.recipeId, recipeId))
+
+  return {
+    avg: row ? parseFloat(row.avg) : null,
+    count: row ? row.count : 0,
   }
 }

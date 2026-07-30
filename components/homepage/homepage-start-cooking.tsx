@@ -21,7 +21,7 @@ export function HomepageStartCooking({ recipes }: { recipes: Recipe[] }) {
       <div className="mx-auto max-w-5xl px-4 py-12">
         <div className="mb-8 flex items-end justify-between">
           <div>
-            <h2 className="font-serif text-2xl">Start cooking</h2>
+            <h2 className="font-serif text-2xl">Easy Dinner Recipes for Two</h2>
             <p className="mt-1 text-sm text-muted-foreground">
               Tested, scaled for two, ready tonight.
             </p>
