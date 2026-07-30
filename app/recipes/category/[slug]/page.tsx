@@ -78,10 +78,23 @@ export default async function CategoryPage({
 
         <header className="mt-4 mb-8">
           <h1 className="font-serif text-4xl text-balance">{tag}</h1>
-          <p className="mt-3 max-w-2xl text-muted-foreground leading-relaxed">
-            Browse our collection of {tag.toLowerCase()} recipes — tested, scaled for
-            two, and ready for your weeknight table.
-          </p>
+          <div className="mt-3 max-w-2xl text-muted-foreground leading-relaxed space-y-3">
+            <p>
+              Looking for the best <strong>{tag.toLowerCase()}</strong> for two people?
+              You&rsquo;re in the right place. Our collection of {recipes.length}{" "}
+              {tag.toLowerCase()} recipe{recipes.length !== 1 ? "s" : ""} brings
+              professional French technique to your weeknight table — scaled down,
+              tested, and ready when you are.
+            </p>
+            <p>
+              Every recipe is developed for couples and small households: no
+              leftovers that die in the back of the fridge, no ingredient waste,
+              and no compromising on the flavors that make a dish worth cooking
+              twice. Whether you&rsquo;re after a quick 30-minute dinner or a
+              slow-cooked weekend project, these recipes prove that cooking for
+              two is the best way to cook.
+            </p>
+          </div>
           <div className="mt-5 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary">
               {recipes.length} recipe{recipes.length !== 1 ? "s" : ""}
