@@ -34,7 +34,7 @@ export async function generateMetadata({
   if (!tag) return { title: "Category not found" }
 
   return {
-    title: `${tag} | Chef Augustin`,
+    title: tag,
     description: `Browse our collection of ${tag.toLowerCase()} recipes — tested, scaled for two, ready tonight.`,
     alternates: { canonical: `/recipes/category/${slug}` },
     robots: "index, follow",

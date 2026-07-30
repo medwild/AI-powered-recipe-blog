@@ -23,10 +23,12 @@ export function tagToSlug(tag: string): string {
  */
 export function slugToTag(slug: string, knownTags: string[]): string | null {
   const normalized = slug.toLowerCase().replace(/-/g, " ")
-  // Exact match first
-  const exact = knownTags.find((t) => t.toLowerCase() === normalized)
+  // Normalize tags the same way (spaces and hyphens become interchangeable)
+  const normTag = (t: string) => t.toLowerCase().replace(/-/g, " ")
+  // Exact match first (both normalized)
+  const exact = knownTags.find((t) => normTag(t) === normalized)
   if (exact) return exact
-  // Fuzzy: check if normalized is a substring of any tag
-  const fuzzy = knownTags.find((t) => t.toLowerCase().includes(normalized))
+  // Fuzzy: check if normalized slug is a substring of any normalized tag
+  const fuzzy = knownTags.find((t) => normTag(t).includes(normalized))
   return fuzzy ?? null
 }
