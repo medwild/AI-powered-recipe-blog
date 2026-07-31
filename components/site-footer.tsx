@@ -57,6 +57,15 @@ export function SiteFooter() {
             <Link href="/guides" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
               Guides
             </Link>
+            <Link href="/histoire" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+              Histoire
+            </Link>
+            <Link href="/equipement" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+              Équipement
+            </Link>
+            <Link href="/idees" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+              Idées
+            </Link>
             <Link href="/about" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
               About
             </Link>

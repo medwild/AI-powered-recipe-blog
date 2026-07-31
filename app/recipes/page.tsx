@@ -12,7 +12,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs"
 
 const RecipeSearch = dynamic(() => import("@/components/recipe-search").then((m) => m.RecipeSearch))
 import { searchPublishedRecipes, getRecipeCategories, getPublishedArticles } from "@/lib/queries"
-import { getClusterById } from "@/lib/cluster-resolver"
+import { getClusterById, getAllClusters } from "@/lib/cluster-resolver"
 import { tagToSlug } from "@/lib/tag-utils"
 
 export const revalidate = 60
@@ -69,6 +69,7 @@ export default async function RecipesPage({
   ])
 
   const displayArticles = articles.slice(0, 3)
+  const clusters = getAllClusters()
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -117,6 +118,50 @@ export default async function RecipesPage({
             ))}
           </div>
         )}
+
+        {/* Browse by category */}
+        {!q && !cat ? (
+          <section className="mt-16 border-t border-border pt-14 text-center">
+            <h2 className="font-serif text-2xl">Browse by category</h2>
+            <p className="mt-2 mb-6 text-muted-foreground">
+              Explore recipes by ingredient, cuisine, or technique.
+            </p>
+            <div className="flex flex-wrap justify-center gap-2">
+              {categories.map((cat) => (
+                <Link
+                  key={cat}
+                  href={`/recipes/category/${tagToSlug(cat)}`}
+                  className="rounded-full border border-border bg-card px-4 py-2 text-sm font-medium transition-colors hover:border-primary hover:text-primary"
+                >
+                  {cat}
+                </Link>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
+        {/* Browse by collection */}
+        {!q && !cat && clusters.length > 0 ? (
+          <section className="mt-16 border-t border-border pt-14">
+            <h2 className="font-serif text-2xl text-center mb-6">Browse by collection</h2>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {clusters.map((c) => (
+                <Link
+                  key={c.id}
+                  href={`/recipes/cluster/${c.id}`}
+                  className="group rounded-xl border border-border bg-card p-5 transition-all hover:border-primary/30 hover:shadow-md"
+                >
+                  <h3 className="font-serif text-lg group-hover:text-primary transition-colors">
+                    {c.name}
+                  </h3>
+                  <p className="mt-1.5 text-sm text-muted-foreground line-clamp-2">
+                    {c.description}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </section>
+        ) : null}
 
         {/* Cross-link: Related Articles (default mode only) */}
         {displayArticles.length > 0 && !q && !cat ? (

@@ -176,6 +176,30 @@ export async function CategoryListing({ category }: { category: string }) {
             </div>
           </section>
         ) : null}
+
+        {/* Cross-category links — ensures every article category links to every other */}
+        <section className="mt-14 border-t border-border pt-12 text-center">
+          <h2 className="font-serif text-2xl mb-4">Explore more</h2>
+          <div className="flex flex-wrap justify-center gap-2">
+            {Object.entries(CATEGORY_LABELS)
+              .filter(([key]) => key !== category)
+              .map(([key, label]) => (
+                <Link
+                  key={key}
+                  href={`/${key}`}
+                  className="rounded-full border border-border bg-card px-4 py-2 text-sm font-medium transition-colors hover:border-primary hover:text-primary"
+                >
+                  {label}
+                </Link>
+              ))}
+            <Link
+              href="/recipes"
+              className="rounded-full border border-border bg-card px-4 py-2 text-sm font-medium transition-colors hover:border-primary hover:text-primary"
+            >
+              All Recipes
+            </Link>
+          </div>
+        </section>
       </main>
       <SiteFooter />
     </div>

@@ -167,7 +167,7 @@ export default async function CategoryPage({
             Explore more dinner-for-two recipes by ingredient, technique, or occasion.
           </p>
           <div className="flex flex-wrap justify-center gap-2">
-            {categories.slice(0, 20).map((cat) => (
+            {categories.map((cat) => (
               <Link
                 key={cat}
                 href={`/recipes/category/${tagToSlug(cat)}`}
