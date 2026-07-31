@@ -50,13 +50,7 @@ export function ArticleCard({ article }: { article: Recipe }) {
             {article.title}
           </Link>
         </h3>
-        {article.excerpt ? (
-          <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
-            {article.excerpt.length > 120
-              ? article.excerpt.slice(0, 120).replace(/\s+\S*$/, "") + "…"
-              : article.excerpt}
-          </p>
-        ) : null}
+        {/* Excerpt omitted — same rationale as RecipeCard */}
         {article.publishedAt ? (
           <div className="mt-auto pt-2 text-xs text-muted-foreground">
             {new Date(article.publishedAt).toLocaleDateString("en-US", {

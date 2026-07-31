@@ -144,6 +144,22 @@ export default async function CategoryPage({
           </section>
         ) : null}
 
+        {/* BreadcrumbList JSON-LD */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Home", item: "https://www.chefaugustin.com/" },
+                { "@type": "ListItem", position: 2, name: "Recipes", item: "https://www.chefaugustin.com/recipes" },
+                { "@type": "ListItem", position: 3, name: tag, item: `https://www.chefaugustin.com/recipes/category/${slug}` },
+              ],
+            }),
+          }}
+        />
+
         {/* Cross-link to all categories */}
         <section className="mt-16 border-t border-border pt-14 text-center">
           <h2 className="font-serif text-2xl">Browse all categories</h2>

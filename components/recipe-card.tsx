@@ -51,13 +51,8 @@ export function RecipeCard({ recipe, aspectRatio }: { recipe: RecipeCardData; as
             {recipe.title}
           </Link>
         </h3>
-        {recipe.excerpt ? (
-          <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
-            {recipe.excerpt.length > 80
-              ? recipe.excerpt.slice(0, 80).replace(/\s+\S*$/, "") + "…"
-              : recipe.excerpt}
-          </p>
-        ) : null}
+        {/* Excerpt intentionally omitted from listing cards — avoids 260+ duplicate content blocks.
+             The full excerpt is displayed on the recipe's own page via RecipeHero. */}
         <div className="mt-auto flex items-center gap-4 pt-2 text-xs text-muted-foreground">
           {recipe.totalTime ? (
             <span className="flex items-center gap-1.5">

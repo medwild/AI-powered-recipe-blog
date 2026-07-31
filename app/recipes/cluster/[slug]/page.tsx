@@ -161,6 +161,22 @@ export default async function ClusterPage({
           </section>
         ) : null}
 
+        {/* BreadcrumbList JSON-LD */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Home", item: "https://www.chefaugustin.com/" },
+                { "@type": "ListItem", position: 2, name: "Recipes", item: "https://www.chefaugustin.com/recipes" },
+                { "@type": "ListItem", position: 3, name: cluster.name, item: `https://www.chefaugustin.com/recipes/cluster/${slug}` },
+              ],
+            }),
+          }}
+        />
+
         {/* Cross-links to sibling clusters */}
         {siblingClusters.length > 0 ? (
           <section className="mt-16 border-t border-border pt-14">
