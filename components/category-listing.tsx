@@ -27,7 +27,7 @@ export function categoryMetadata(category: string): Metadata {
     title: label,
     description: `Browse our ${label.toLowerCase()} articles — French cooking tips, techniques, and guides.`,
     alternates: { canonical: `/${category}` },
-    robots: { index: false }, // categories are empty until article pipeline exists
+    robots: "index, follow",
     openGraph: {
       title: `${label} | Chef Augustin`,
       description: `Browse our ${label.toLowerCase()} articles — French cooking tips, techniques, and guides.`,
