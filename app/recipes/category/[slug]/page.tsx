@@ -80,7 +80,7 @@ export default async function CategoryPage({
           <h1 className="font-serif text-4xl text-balance">{tag} Recipes for Two</h1>
           <div className="mt-3 max-w-2xl text-muted-foreground leading-relaxed space-y-3">
             <p>
-              Looking for the best <strong>{tag.toLowerCase()}</strong> for two people?
+              Looking for the best <strong>{tag}</strong> recipes for two people?
               You&rsquo;re in the right place. Our collection of {recipes.length}{" "}
               {tag.toLowerCase()} recipe{recipes.length !== 1 ? "s" : ""} brings
               professional French technique to your weeknight table — scaled down,
