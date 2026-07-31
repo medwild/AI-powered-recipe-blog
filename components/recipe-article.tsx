@@ -26,7 +26,7 @@ export async function RecipeArticle({ recipe }: { recipe: Recipe }) {
       <RecipeInstructions instructions={recipe.instructions ?? []} />
 
       {/* Section 5: Article Body — markdown FAQ, tips, nutrition */}
-      <RecipeArticleBody contentMarkdown={recipe.contentMarkdown} ingredients={recipe.ingredients} instructions={recipe.instructions} />
+      <RecipeArticleBody contentMarkdown={recipe.contentMarkdown} ingredients={recipe.ingredients} instructions={recipe.instructions} title={recipe.title} />
 
       {/* Section 6: Rate this recipe — before related recipes */}
       <section className="mx-auto max-w-3xl px-4 pb-10">

@@ -34,7 +34,7 @@ export async function generateMetadata({
   if (!tag) notFound()
 
   return {
-    title: tag,
+    title: `${tag} Recipes for Two — Easy Weeknight Dinners`,
     description: `Browse our collection of ${tag.toLowerCase()} recipes — tested, scaled for two, ready tonight.`,
     alternates: { canonical: `/recipes/category/${slug}` },
     robots: "index, follow",
@@ -77,7 +77,7 @@ export default async function CategoryPage({
         />
 
         <header className="mt-4 mb-8">
-          <h1 className="font-serif text-4xl text-balance">{tag}</h1>
+          <h1 className="font-serif text-4xl text-balance">{tag} Recipes for Two</h1>
           <div className="mt-3 max-w-2xl text-muted-foreground leading-relaxed space-y-3">
             <p>
               Looking for the best <strong>{tag.toLowerCase()}</strong> for two people?
@@ -87,12 +87,10 @@ export default async function CategoryPage({
               tested, and ready when you are.
             </p>
             <p>
-              Every recipe is developed for couples and small households: no
-              leftovers that die in the back of the fridge, no ingredient waste,
-              and no compromising on the flavors that make a dish worth cooking
-              twice. Whether you&rsquo;re after a quick 30-minute dinner or a
-              slow-cooked weekend project, these recipes prove that cooking for
-              two is the best way to cook.
+              {recipes.length === 1
+                ? `This ${tag.toLowerCase()} recipe is the only one you need — developed, tested, and scaled for two people with no leftovers and no wasted ingredients.`
+                : `All ${recipes.length} ${tag.toLowerCase()} recipes are developed for two people: no leftovers that die in the back of the fridge, no ingredient waste, and no compromise on flavor. Whether you're after a quick weeknight fix or a slow-cooked weekend project, each recipe is tested at two-serving scale so it works the first time.`
+              }
             </p>
           </div>
           <div className="mt-5 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
@@ -102,6 +100,7 @@ export default async function CategoryPage({
           </div>
         </header>
 
+        <h2 className="sr-only">{tag} recipes</h2>
         {recipes.length === 0 ? (
           <div className="rounded-xl border border-dashed border-border bg-card p-12 text-center">
             <p className="text-muted-foreground">
@@ -116,7 +115,36 @@ export default async function CategoryPage({
           </div>
         )}
 
-        {/* Cross-link to all recipes */}
+        {/* Why this category works for two */}
+        {recipes.length > 0 ? (
+          <section className="mt-14 border-t border-border pt-12">
+            <div className="mx-auto max-w-2xl">
+              <h2 className="font-serif text-2xl">Why {tag} recipes work for two</h2>
+              <div className="mt-4 space-y-4 text-muted-foreground leading-relaxed">
+                <p>
+                  Cooking {tag.toLowerCase()} for two people isn&rsquo;t just about dividing a larger recipe in half.
+                  Pan sizes change, cooking times shift, and ingredient proportions need recalibrating.
+                  A skillet that&rsquo;s too wide burns off your sauce; one that&rsquo;s too crowded steams instead of sears.
+                  Every recipe in this collection is developed and tested at two-serving scale, so the techniques
+                  and timings are exactly right.
+                </p>
+                <p>
+                  {recipes.length === 1
+                    ? `This single ${tag.toLowerCase()} recipe packs everything you need — no filler, no fluff, just one reliable dish that works every time.`
+                    : `With ${recipes.length} tested ${tag.toLowerCase()} recipes to choose from, you can plan anything from a 15-minute weeknight staple to a slow weekend project. Each one is written with clear steps, exact pan sizes, and real-world timing so you can cook with confidence — even on a Tuesday night after work.`
+                  }
+                </p>
+                <p>
+                  Got leftovers? Most recipes here make exactly two servings. Some make enough for lunch the next day —
+                  intentional leftovers that actually reheat well, not the sad container that gets pushed to the back
+                  of the fridge. Because cooking for two should mean less waste, not less ambition.
+                </p>
+              </div>
+            </div>
+          </section>
+        ) : null}
+
+        {/* Cross-link to all categories */}
         <section className="mt-16 border-t border-border pt-14 text-center">
           <h2 className="font-serif text-2xl">Browse all categories</h2>
           <p className="mt-2 mb-6 text-muted-foreground">

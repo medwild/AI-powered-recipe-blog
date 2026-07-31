@@ -104,6 +104,25 @@ export default function AboutPage() {
             </ul>
           </section>
 
+          <section className="mt-12">
+            <h2 className="font-serif text-2xl">What to Expect</h2>
+            <div className="mt-4 space-y-3 text-muted-foreground leading-relaxed">
+              <p>
+                New recipes are published regularly, with a focus on seasonal ingredients
+                and practical weeknight cooking. You&apos;ll find everything from 15-minute
+                pantry dinners to slow-cooked weekend projects — all scaled for two.
+                Each recipe includes clear step-by-step instructions, ingredient notes,
+                and tips for avoiding the most common mistakes.
+              </p>
+              <p>
+                Beyond recipes, the site covers cooking techniques, equipment guides,
+                and the occasional deep dive into food science. The goal is simple:
+                help you become a more confident cook, one dinner at a time, without
+                the waste and stress that comes with cooking for a crowd.
+              </p>
+            </div>
+          </section>
+
           <section className="mt-12 rounded-xl border border-muted bg-muted/30 p-6">
             <h2 className="font-serif text-lg">About Our Content</h2>
             <p className="mt-2 text-sm text-muted-foreground">

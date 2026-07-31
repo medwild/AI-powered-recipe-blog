@@ -1,8 +1,7 @@
 import type { MetadataRoute } from "next"
-import { eq, and, notLike } from "drizzle-orm"
+import { eq, and, desc } from "drizzle-orm"
 import { db } from "@/lib/db"
 import { recipes } from "@/lib/db/schema"
-import { getPublishedRecipes } from "@/lib/queries"
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.chefaugustin.com"
 
@@ -13,8 +12,21 @@ const CATEGORY_PAGES = ["techniques", "guides", "histoire", "equipement", "idees
 const STATIC_PAGES = ["privacy", "terms"]
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [allRecipes, articles] = await Promise.all([
-    getPublishedRecipes(),
+  const [recipeRows, articles] = await Promise.all([
+    // Lightweight: only fetch columns the sitemap actually needs (avoid hauling content_json, instructions full text, etc.)
+    db
+      .select({
+        slug: recipes.slug,
+        updatedAt: recipes.updatedAt,
+        ingredients: recipes.ingredients,
+        instructions: recipes.instructions,
+      })
+      .from(recipes)
+      .where(and(
+        eq(recipes.content_type, "recipe"),
+        eq(recipes.status, "published"),
+      ))
+      .orderBy(desc(recipes.publishedAt)),
     db
       .select({ slug: recipes.slug, category: recipes.category, updatedAt: recipes.updatedAt })
       .from(recipes)
@@ -25,7 +37,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ])
 
   // Exclude test pages and ghost recipes (no ingredients AND no instructions) from the sitemap
-  const cleanRecipes = allRecipes.filter((r) => {
+  const cleanRecipes = recipeRows.filter((r) => {
     if (r.slug.startsWith("test-")) return false
     const hasContent = (r.ingredients?.length ?? 0) > 0 || (r.instructions?.length ?? 0) > 0
     return hasContent

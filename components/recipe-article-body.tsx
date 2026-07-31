@@ -15,14 +15,30 @@ const DUPLICATE_HEADINGS = [
   /^##\s+Steps?\b/i,
 ]
 
+/** Strip excessive bold formatting: spans > 120 chars or duplicate bold text. */
+function sanitizeBold(md: string): string {
+  const seen = new Set<string>()
+  return md.replace(/\*\*(.+?)\*\*/g, (match, content: string) => {
+    // Too long: strip bold from very long spans (likely an LLM formatting error)
+    if (content.length > 120) return content
+    // Duplicate: same bold text appearing more than once
+    const key = content.toLowerCase().trim()
+    if (seen.has(key)) return content
+    seen.add(key)
+    return match
+  })
+}
+
 function stripDuplicateSections(
   md: string,
   hasIngredients: boolean,
   hasInstructions: boolean,
+  recipeTitle?: string,
 ): string {
   const lines = md.split("\n")
   const result: string[] = []
   let skipping = false
+  const seenH2 = new Set<string>()
 
   for (const line of lines) {
     // Always strip H1 headings — the title is rendered by RecipeHero.
@@ -30,6 +46,15 @@ function stripDuplicateSections(
     if (/^#\s+/.test(line) && !/^##\s+/.test(line)) continue
 
     if (/^##\s+/.test(line)) {
+      const h2Text = line.replace(/^##\s+/, "").trim().toLowerCase()
+
+      // Skip if this H2 matches the recipe title (avoids H1/H2 duplicate)
+      if (recipeTitle && h2Text === recipeTitle.toLowerCase()) continue
+
+      // Skip duplicate H2 headings (same text appearing twice)
+      if (seenH2.has(h2Text)) continue
+      seenH2.add(h2Text)
+
       const isIngredientHeading = DUPLICATE_HEADINGS[0]!.test(line) || DUPLICATE_HEADINGS[1]!.test(line)
       const isInstructionHeading = DUPLICATE_HEADINGS.slice(2).some(r => r.test(line))
       skipping = (isIngredientHeading && hasIngredients) || (isInstructionHeading && hasInstructions)
@@ -37,7 +62,7 @@ function stripDuplicateSections(
     if (!skipping) result.push(line)
   }
 
-  const out = result.join("\n").trim()
+  const out = sanitizeBold(result.join("\n").trim())
   return out.length > 100 ? out : md
 }
 
@@ -45,16 +70,18 @@ export function RecipeArticleBody({
   contentMarkdown,
   ingredients,
   instructions,
+  title,
 }: {
   contentMarkdown: string | null
   ingredients?: Ingredient[] | null
   instructions?: Instruction[] | null
+  title?: string
 }) {
   if (!contentMarkdown) return null
 
   const hasIngredients = (ingredients?.length ?? 0) > 0
   const hasInstructions = (instructions?.length ?? 0) > 0
-  const bodyContent = stripDuplicateSections(contentMarkdown, hasIngredients, hasInstructions)
+  const bodyContent = stripDuplicateSections(contentMarkdown, hasIngredients, hasInstructions, title)
 
   if (bodyContent.length < 50) return null
 

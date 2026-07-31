@@ -125,7 +125,7 @@ export function RecipeHero({ recipe }: { recipe: Recipe }) {
             ? [
                 { label: "Home", href: "/" },
                 { label: "Recipes", href: "/recipes" },
-                { label: cluster.name, href: `/recipes?cluster=${cluster.id}` },
+                { label: cluster.name, href: `/recipes/cluster/${cluster.id}` },
                 { label: recipe.title, href: `/recipes/${recipe.slug}` },
               ]
             : [

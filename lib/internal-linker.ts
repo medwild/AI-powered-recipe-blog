@@ -353,7 +353,7 @@ export function insertContextualLinksBatch(
     if (regex.test(p)) {
       paragraphs[placement.paragraphIdx] = p.replace(
         regex,
-        `[${placement.anchor}](/recettes/${placement.slug})`,
+        `[${placement.anchor}](/recipes/${placement.slug})`,
       )
       links.push({ targetSlug: placement.slug, anchor: placement.anchor })
     }

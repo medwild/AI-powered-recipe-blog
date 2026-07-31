@@ -11,7 +11,16 @@ import { HomepageJsonLd } from "@/components/homepage/homepage-jsonld"
 import { getPublishedRecipes, getPublishedArticles, getRecipeCategories, getLatestRecipeHero } from "@/lib/queries"
 
 export const metadata: Metadata = {
+  title: "Easy Weeknight Dinners for Two",
+  description:
+    "Practical small-batch dinner recipes scaled for two people. One-pan dinners, quick pastas, and mini slow cooker recipes — no waste, no stress.",
   alternates: { canonical: "/" },
+  openGraph: {
+    title: "Chef Augustin — Easy Weeknight Dinners for Two",
+    description:
+      "Practical small-batch dinner recipes scaled for two people. One-pan dinners, quick pastas, and mini slow cooker recipes.",
+    type: "website",
+  },
 }
 
 export const revalidate = 60

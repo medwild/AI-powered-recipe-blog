@@ -52,7 +52,9 @@ export function ArticleCard({ article }: { article: Recipe }) {
         </h3>
         {article.excerpt ? (
           <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
-            {article.excerpt}
+            {article.excerpt.length > 120
+              ? article.excerpt.slice(0, 120).replace(/\s+\S*$/, "") + "…"
+              : article.excerpt}
           </p>
         ) : null}
         {article.publishedAt ? (

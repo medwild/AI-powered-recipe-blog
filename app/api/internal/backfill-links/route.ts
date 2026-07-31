@@ -47,14 +47,14 @@ export async function POST() {
       // Remove "📖 Related Recipes" fallback section (v1)
       .replace(/\n\n---\n\n## 📖 Related Recipes\n\n[\s\S]*$/, "")
       // Remove any remaining "- Try our [...]" list items at the end
-      .replace(/\n- Try our \[.+?\]\(\/recettes\/.+?\)\n?/g, "")
-      // Remove ALL existing markdown links to /recettes/ (any format)
+      .replace(/\n- Try our \[.+?\]\(\/(?:recettes|recipes)\/.+?\)\n?/g, "")
+      // Remove ALL existing markdown links to /recettes/ or /recipes/ (any format)
       // But preserve the anchor text (remove just the link syntax)
-      .replace(/\[(.+?)\]\(\/recettes\/[^)]+\)/g, "$1")
+      .replace(/\[(.+?)\]\(\/(?:recettes|recipes)\/[^)]+\)/g, "$1")
 
-    const beforeCount = (content.match(/\[.+?\]\(\/recettes\/.+?\)/g) ?? []).length
+    const beforeCount = (content.match(/\[.+?\]\(\/(?:recettes|recipes)\/.+?\)/g) ?? []).length
 
-    // Step 2: Run v2 contextual linker
+    // Step 2: Run v2 contextual linker (now generates /recipes/ links)
     const result = insertContextualLinksBatch(
       cleaned,
       recipe.id,
@@ -62,7 +62,7 @@ export async function POST() {
       linkTargets,
     )
 
-    const afterCount = (result.markdown.match(/\[.+?\]\(\/recettes\/.+?\)/g) ?? []).length
+    const afterCount = (result.markdown.match(/\[.+?\]\(\/recipes\/.+?\)/g) ?? []).length
     const added = afterCount // links after cleanup is count of new links
 
     // Always save — even if 0 links (clean slate is better than stale v1 links)

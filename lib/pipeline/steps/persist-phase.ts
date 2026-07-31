@@ -37,7 +37,7 @@ export async function persistFinalDraft(
     if (enriched !== markdown) {
       markdown = enriched
       // Count links in the enriched content for the log
-      const linkCount = (markdown.match(/\[.+?\]\(\/recettes\/.+?\)/g) ?? []).length
+      const linkCount = (markdown.match(/\[.+?\]\(\/recipes\/.+?\)/g) ?? []).length
       await appendLog(recipeId, logEntry("Internal Linker", "done", `${linkCount} contextual links inserted`))
     }
   } catch (err) {
