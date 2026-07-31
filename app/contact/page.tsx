@@ -24,10 +24,11 @@ export default function ContactPage() {
         <article className="mx-auto max-w-3xl px-4 py-10">
           <h1 className="font-serif text-3xl text-foreground">Get in Touch with Chef Augustin</h1>
           <p className="mt-3 max-w-lg text-muted-foreground leading-relaxed">
-            Questions about a recipe? Found an error? Have a suggestion? We&apos;d love to
-            hear from you. Whether you tried a dish and want to share how it turned out,
-            spotted a typo in an ingredient list, or have an idea for a recipe you&apos;d like
-            to see, your feedback shapes what we cook next.
+            <strong>Get in Touch with Chef Augustin</strong> — questions about a recipe?
+            Found an error? Have a suggestion? We&apos;d love to hear from you. Whether you
+            tried a dish and want to share how it turned out, spotted a typo in an ingredient
+            list, or have an idea for a recipe you&apos;d like to see, your feedback shapes
+            what we cook next.
           </p>
 
           {/* Email */}

@@ -53,8 +53,8 @@ export function RecipeCard({ recipe, aspectRatio }: { recipe: RecipeCardData; as
         </h3>
         {recipe.excerpt ? (
           <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
-            {recipe.excerpt.length > 120
-              ? recipe.excerpt.slice(0, 120).replace(/\s+\S*$/, "") + "…"
+            {recipe.excerpt.length > 80
+              ? recipe.excerpt.slice(0, 80).replace(/\s+\S*$/, "") + "…"
               : recipe.excerpt}
           </p>
         ) : null}

@@ -40,11 +40,12 @@ export default function AboutPage() {
 
           <section className="mt-12 space-y-6 text-base leading-relaxed text-muted-foreground">
             <p>
-              I trained in the professional kitchens of Lyon — not the tourist
-              spots, the real ones. The kind where you learn to sear, deglaze,
-              and reduce before you&apos;re allowed to touch a pan on the line.
-              I brought that precision home with me, and I&apos;ve spent the
-              years since figuring out how to make it work for Tuesday night,
+              <strong>Chef Augustin Lefèvre</strong> — French-trained chef, cookbook author,
+              and your guide to practical weeknight cooking for two. I trained in the
+              professional kitchens of Lyon — not the tourist spots, the real ones. The kind
+              where you learn to sear, deglaze, and reduce before you&apos;re allowed to touch
+              a pan on the line. I brought that precision home with me, and I&apos;ve spent
+              the years since figuring out how to make it work for Tuesday night,
               not Saturday night. Two plates. One pan when possible.
               No leftovers that die in the back of the fridge.
             </p>

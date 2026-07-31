@@ -36,7 +36,8 @@ export default async function HomePage() {
   ])
 
   const featured = recipes.slice(0, 4)
-  const recent = recipes.slice(0, 6)
+  // Non-overlapping: HomepageStartCooking + HomepageFeatured use distinct recipe sets
+  const recent = recipes.slice(4, 10)
   const latestArticles = articles.slice(0, 3)
 
   return (
@@ -58,13 +59,14 @@ export default async function HomePage() {
                 Small-batch cooking, big French technique
               </h2>
               <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground">
-                Most recipes are written for four to six people. Scaling down isn&apos;t
-                just division — it&apos;s a different way of cooking. A pan that&apos;s too
-                wide burns the sauce. A roast for two dries out faster than one for six.
-                Every recipe here is developed and tested specifically for two people:
-                the right pan size, the right timing, the right ingredient quantities.
-                No guessing, no waste, no sad leftovers wilting in the fridge.
-                Just practical weeknight dinners that work the first time.
+                Welcome to <strong>Easy Weeknight Dinners for Two</strong> — your go-to
+                resource for practical meals scaled for two people. Most recipes are written
+                for four to six. Scaling down isn&apos;t just division — it&apos;s a different way
+                of cooking. A pan that&apos;s too wide burns the sauce. A roast for two dries
+                out faster than one for six. Every recipe here is developed and tested
+                specifically for two people: the right pan size, the right timing, the right
+                ingredient quantities. No guessing, no waste, no sad leftovers wilting in
+                the fridge. Just practical weeknight dinners that work the first time.
               </p>
               <p className="mt-5 text-sm text-muted-foreground">
                 <span className="font-semibold text-foreground">{recipes.length}+ recipes</span>{" "}
