@@ -57,6 +57,11 @@ const nextConfig = {
     return [
       { source: "/recettes", destination: "/recipes", permanent: true },
       { source: "/recettes/:path*", destination: "/recipes/:path*", permanent: true },
+      // Orzo slug fix 2026-08-03 — old Wave-2 slugs now point to real keywords
+      { source: "/recipes/simple-dinner-recipes-for-2", destination: "/recipes/creamy-parmesan-garlic-chicken-orzo-for-two", permanent: true },
+      { source: "/recipes/easy-healthy-dinner-recipes-for-two", destination: "/recipes/summer-herb-chicken-orzo-with-zucchini-for-two", permanent: true },
+      { source: "/recipes/easy-dinner-for-two-recipes", destination: "/recipes/white-wine-lemon-chicken-orzo-for-two", permanent: true },
+      { source: "/recipes/dinner-for-two-recipes-healthy", destination: "/recipes/mediterranean-chicken-orzo-with-feta-olives-for-two", permanent: true },
       // Deleted slugs — 301 to replacement recipes (2026-07-29 chicken-orzo dedup)
       { source: "/recipes/healthy-dinner-ideas-for-two", destination: "/recipes/garlic-shrimp-orzo-with-cherry-tomatoes-for-two", permanent: true },
       { source: "/recipes/healthy-dinner-recipes-for-2", destination: "/recipes/salmon-orzo-with-dill-and-capers-for-two", permanent: true },
