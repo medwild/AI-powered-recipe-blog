@@ -1,13 +1,10 @@
 name: Keep Vercel Warm
 
-# Pings the site every 5 minutes to prevent Vercel Hobby cold starts.
-# Cold start = 20-60s delay = browser ERR_CONNECTION_TIMED_OUT.
-# This keeps the serverless function alive.
+# DISABLED 2026-08-03 — migration vers Hostinger Node.js (cold starts Vercel sans objet).
+# Conservé en manuel (workflow_dispatch) pour les tests de disponibilité.
 
 on:
-  schedule:
-    # Every 5 minutes (avoid :00/:30 to reduce contention)
-    - cron: '3,8,13,18,23,28,33,38,43,48,53,58 * * * *'
+  schedule: []
   workflow_dispatch:  # manual trigger for testing
 
 jobs:

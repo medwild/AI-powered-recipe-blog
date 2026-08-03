@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Standalone server — self-contained deploy for Hostinger Node.js hosting
+  // (Vercel ignores this option; safe to keep).
+  output: "standalone",
   images: {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [384, 640, 768, 1024, 1280, 1536],
