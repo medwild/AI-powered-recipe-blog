@@ -11,9 +11,14 @@ const CANONICAL_HOST = "www.chefaugustin.com"
 export function middleware(req: NextRequest) {
   const host = req.headers.get("host") ?? ""
   if (host !== CANONICAL_HOST && host.endsWith("chefaugustin.com")) {
-    const url = new URL(req.url)
-    url.host = CANONICAL_HOST
-    return NextResponse.redirect(url, 301)
+    // Rebuild the target explicitly — Hostinger Node hosting runs the app on
+    // $PORT behind a proxy, so req.url can carry a stray port that would leak
+    // into the Location header (https://www.chefaugustin.com:3000/).
+    const target = new URL(
+      `${req.nextUrl.pathname}${req.nextUrl.search}`,
+      `https://${CANONICAL_HOST}`,
+    )
+    return NextResponse.redirect(target, 301)
   }
   return NextResponse.next()
 }
