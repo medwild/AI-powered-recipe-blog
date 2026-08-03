@@ -12,10 +12,11 @@ export type ContentType = "recipe" | "article"
 
 // ── Component prop types ──────────────────────────────────────────────────
 
-/** Fields consumed by RecipeCard */
+/** Fields consumed by RecipeCard.
+ *  Excerpt intentionally excluded — not rendered in listing cards (avoids duplicate content). */
 export type RecipeCardData = Pick<
   Recipe,
-  "id" | "slug" | "title" | "excerpt" | "heroImageUrl" | "difficulty" | "totalTime" | "servings"
+  "id" | "slug" | "title" | "heroImageUrl" | "difficulty" | "totalTime" | "servings"
 >
 
 /** Fields consumed by RecipeHero */
@@ -28,6 +29,12 @@ export type RecipeHeroData = Pick<
 export type RecipeMetaData = Pick<
   Recipe,
   "prepTime" | "cookTime" | "servings" | "difficulty"
+>
+
+/** Fields consumed by ArticleCard */
+export type ArticleCardData = Pick<
+  Recipe,
+  "id" | "slug" | "title" | "heroImageUrl" | "publishedAt" | "category"
 >
 
 // Re-export schema types for convenience

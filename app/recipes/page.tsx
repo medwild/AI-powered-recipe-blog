@@ -11,11 +11,9 @@ import { ArticleCard } from "@/components/article-card"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 
 const RecipeSearch = dynamic(() => import("@/components/recipe-search").then((m) => m.RecipeSearch))
-import { searchPublishedRecipes, getRecipeCategories, getPublishedArticles } from "@/lib/queries"
+import { searchPublishedRecipes, getRecipeCategories, getPublishedArticlesLight } from "@/lib/queries"
 import { getClusterById, getAllClusters } from "@/lib/cluster-resolver"
 import { tagToSlug } from "@/lib/tag-utils"
-
-export const revalidate = 60
 
 export async function generateMetadata({
   searchParams,
@@ -65,7 +63,7 @@ export default async function RecipesPage({
   const [recipes, categories, articles] = await Promise.all([
     searchPublishedRecipes(q, cat),
     getRecipeCategories(),
-    getPublishedArticles(),
+    getPublishedArticlesLight(),
   ])
 
   const displayArticles = articles.slice(0, 3)

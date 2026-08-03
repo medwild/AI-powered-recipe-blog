@@ -15,7 +15,6 @@ import { searchPublishedRecipes, getRecipeCategories } from "@/lib/queries"
 import { resolveCluster, getClusterById, getAllClusters } from "@/lib/cluster-resolver"
 import { tagToSlug } from "@/lib/tag-utils"
 
-export const revalidate = 60
 
 export async function generateStaticParams() {
   const clusters = getAllClusters()

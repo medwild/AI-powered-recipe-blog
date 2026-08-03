@@ -1,9 +1,9 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { ArticleCard } from "@/components/article-card"
-import type { Recipe } from "@/lib/db/schema"
+import type { ArticleCardData } from "@/lib/types"
 
-export function HomepageArticles({ articles }: { articles: Recipe[] }) {
+export function HomepageArticles({ articles }: { articles: ArticleCardData[] }) {
   if (!articles.length) return null
 
   return (

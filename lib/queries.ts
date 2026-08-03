@@ -20,6 +20,38 @@ export async function getPublishedRecipes() {
     .orderBy(desc(recipes.publishedAt))
 }
 
+/** SSG-optimized: only the columns RecipeCard needs (9 of 25 columns).
+ *  Drops content_markdown, ingredients, instructions, json_ld, serp_data,
+ *  image_variants, workflow_log — reduces data transfer by ~90%. */
+export async function getPublishedRecipesLight() {
+  return db
+    .select(recipeCardSelect)
+    .from(recipes)
+    .where(
+      and(
+        eq(recipes.status, "published"),
+        eq(recipes.content_type, "recipe"),
+      ),
+    )
+    .orderBy(desc(recipes.publishedAt))
+}
+
+/** Lightweight tag-filtered recipe listing — pushes filtering into SQL instead of JS.
+ *  Only the columns RecipeCard needs. */
+export async function getPublishedRecipesByTag(tag: string) {
+  return db
+    .select(recipeCardSelect)
+    .from(recipes)
+    .where(
+      and(
+        eq(recipes.status, "published"),
+        eq(recipes.content_type, "recipe"),
+        sql`${recipes.tags}::text ILIKE ${`%${tag}%`}`,
+      ),
+    )
+    .orderBy(desc(recipes.publishedAt))
+}
+
 /** Lightweight: only the latest recipe's hero fields — for streaming the hero before below-fold content resolves. */
 export async function getLatestRecipeHero() {
   return db
@@ -153,6 +185,28 @@ export async function getPublishedArticles() {
     .orderBy(desc(recipes.publishedAt))
 }
 
+/** SSG-optimized: only the columns ArticleCard needs (6 of 25 columns).
+ *  Drops the heavy blobs — reduces data transfer by ~95%. */
+export async function getPublishedArticlesLight() {
+  return db
+    .select({
+      id: recipes.id,
+      slug: recipes.slug,
+      title: recipes.title,
+      heroImageUrl: recipes.heroImageUrl,
+      category: recipes.category,
+      publishedAt: recipes.publishedAt,
+    })
+    .from(recipes)
+    .where(
+      and(
+        eq(recipes.status, "published"),
+        eq(recipes.content_type, "article"),
+      ),
+    )
+    .orderBy(desc(recipes.publishedAt))
+}
+
 export async function getArticleBySlug(slug: string) {
   const rows = await db
     .select()
@@ -189,13 +243,26 @@ export async function getLinkedArticle(recipeId: number) {
   return row ?? null
 }
 
+/** Lightweight: only RecipeCard fields + tags for cluster resolution. */
+const recipeCardSelect = {
+  id: recipes.id,
+  slug: recipes.slug,
+  title: recipes.title,
+  heroImageUrl: recipes.heroImageUrl,
+  difficulty: recipes.difficulty,
+  totalTime: recipes.totalTime,
+  servings: recipes.servings,
+  tags: recipes.tags,
+  publishedAt: recipes.publishedAt,
+}
+
 export async function getRelatedForArticle(linkedRecipeId: number | null) {
   if (!linkedRecipeId) return []
   // Return the linked recipe + up to 2 other published recipes.
   // Must filter by content_type = "recipe" — if linked_content_id points to an
   // article, RecipeCard would render /recipes/{article-slug} → 404.
   const linked = await db
-    .select()
+    .select(recipeCardSelect)
     .from(recipes)
     .where(
       and(
@@ -205,7 +272,7 @@ export async function getRelatedForArticle(linkedRecipeId: number | null) {
     )
     .limit(1)
   const others = await db
-    .select()
+    .select(recipeCardSelect)
     .from(recipes)
     .where(
       and(

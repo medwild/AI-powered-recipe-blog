@@ -12,10 +12,8 @@ import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { RecipeCard } from "@/components/recipe-card"
 import { Breadcrumbs } from "@/components/breadcrumbs"
-import { getPublishedRecipes, getRecipeCategories } from "@/lib/queries"
+import { getPublishedRecipesByTag, getRecipeCategories } from "@/lib/queries"
 import { tagToSlug, slugToTag } from "@/lib/tag-utils"
-
-export const revalidate = 60
 
 export async function generateStaticParams() {
   const categories = await getRecipeCategories()
@@ -47,8 +45,7 @@ export default async function CategoryPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const [allRecipes, categories] = await Promise.all([
-    getPublishedRecipes(),
+  const [categories] = await Promise.all([
     getRecipeCategories(),
   ])
 
@@ -59,10 +56,8 @@ export default async function CategoryPage({
     notFound()
   }
 
-  // Filter recipes by tag (case-insensitive)
-  const recipes = allRecipes.filter((r) =>
-    (r.tags ?? []).some((t: string) => t.toLowerCase() === tag.toLowerCase()),
-  )
+  // SQL-level tag filtering — fetches only matching recipes, not all 30+
+  const recipes = await getPublishedRecipesByTag(tag)
 
   return (
     <div className="flex min-h-screen flex-col">

@@ -7,13 +7,13 @@ import { SiteFooter } from "@/components/site-footer"
 import { RecipeArticle } from "@/components/recipe-article"
 import { RecipeRelated } from "@/components/recipe-related"
 import { JumpToRecipeDesktop, JumpToRecipeMobile } from "@/components/jump-to-recipe"
-import { getRecipeBySlug, getPublishedRecipes, getRelatedRecipes, getLinkedArticle, getRecipeRating } from "@/lib/queries"
+import { getRecipeBySlug, getPublishedRecipesLight, getRelatedRecipes, getLinkedArticle, getRecipeRating } from "@/lib/queries"
 
-export const revalidate = 300
+// SSG pure — pages generated at build time, regenerated on-demand via revalidatePath()
 export const dynamicParams = true
 
 export async function generateStaticParams() {
-  const recipes = await getPublishedRecipes()
+  const recipes = await getPublishedRecipesLight()
   return recipes.map((r) => ({ slug: r.slug }))
 }
 

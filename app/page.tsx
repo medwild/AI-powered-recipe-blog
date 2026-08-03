@@ -8,7 +8,7 @@ import { HomepageFeatured } from "@/components/homepage/homepage-featured"
 import { HomepageArticles } from "@/components/homepage/homepage-articles"
 import { HomepageCTA } from "@/components/homepage/homepage-cta"
 import { HomepageJsonLd } from "@/components/homepage/homepage-jsonld"
-import { getPublishedRecipes, getPublishedArticles, getRecipeCategories, getLatestRecipeHero } from "@/lib/queries"
+import { getPublishedRecipesLight, getPublishedArticlesLight, getRecipeCategories, getLatestRecipeHero } from "@/lib/queries"
 
 export const metadata: Metadata = {
   title: "Easy Weeknight Dinners for Two",
@@ -23,15 +23,13 @@ export const metadata: Metadata = {
   },
 }
 
-export const revalidate = 60
-
+// SSG — page generated at build time, regenerated on-demand via revalidatePath() in actions
 export default async function HomePage() {
-  // Fetch all data at the page level — no Suspense streaming needed
-  // (avoids duplicate <main> in raw HTML from React streaming fallback)
+  // Lightweight queries: only the 9 columns RecipeCard/ArticleCard actually use
   const [latestRecipe, recipes, articles, categories] = await Promise.all([
     getLatestRecipeHero(),
-    getPublishedRecipes(),
-    getPublishedArticles(),
+    getPublishedRecipesLight(),
+    getPublishedArticlesLight(),
     getRecipeCategories(),
   ])
 

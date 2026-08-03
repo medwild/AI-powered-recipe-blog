@@ -5,7 +5,7 @@ import { recipes } from "@/lib/db/schema"
 import { getArticleBySlug } from "@/lib/queries"
 import { articleMetadata, ArticleDetail } from "@/components/article-detail"
 
-export const revalidate = 300
+
 export const dynamicParams = true
 
 export async function generateStaticParams() {

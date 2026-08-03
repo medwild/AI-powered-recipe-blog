@@ -1,11 +1,11 @@
 import Image from "next/image"
 import Link from "next/link"
 import { BookOpen } from "lucide-react"
-import type { Recipe } from "@/lib/db/schema"
+import type { ArticleCardData } from "@/lib/types"
 import { PinButton } from "@/components/pin-button"
 import { CATEGORY_LABELS } from "@/components/category-listing"
 
-export function ArticleCard({ article }: { article: Recipe }) {
+export function ArticleCard({ article }: { article: ArticleCardData }) {
   const categoryLabel = CATEGORY_LABELS[article.category ?? ""] ?? article.category ?? "Article"
 
   return (

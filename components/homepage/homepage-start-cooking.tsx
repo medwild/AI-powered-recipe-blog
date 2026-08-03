@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { RecipeCard } from "@/components/recipe-card"
-import type { Recipe } from "@/lib/db/schema"
+import type { RecipeCardData } from "@/lib/types"
 
 /**
  * HomepageStartCooking — clean recipe grid, no horizontal scroll.
@@ -11,7 +11,7 @@ import type { Recipe } from "@/lib/db/schema"
  * without forcing the user to scroll horizontally. The food
  * photography does the selling — no abstract claims needed.
  */
-export function HomepageStartCooking({ recipes }: { recipes: Recipe[] }) {
+export function HomepageStartCooking({ recipes }: { recipes: RecipeCardData[] }) {
   if (recipes.length === 0) return null
 
   const display = recipes.slice(0, 4)

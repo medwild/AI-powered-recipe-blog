@@ -1,22 +1,21 @@
 import Link from "next/link"
 import Image from "next/image"
 import { resolveCluster } from "@/lib/cluster-resolver"
-import { getRelatedRecipes, getPublishedRecipes } from "@/lib/queries"
-import type { Recipe } from "@/lib/db/schema"
+import { getRelatedRecipes, getPublishedRecipesLight } from "@/lib/queries"
 import { FOOD_BLUR_PLACEHOLDER } from "@/lib/utils/cn"
 import { fromIsoDuration } from "@/lib/utils/duration"
 
-export async function RelatedRecipes({ recipe }: { recipe: Recipe }) {
+export async function RelatedRecipes({ recipe }: { recipe: { id: number; tags: string[] | null } }) {
   const tags = (recipe.tags ?? []) as string[]
   const cluster = resolveCluster(tags)
 
   // Get same-cluster recipes via tag overlap
   const related = await getRelatedRecipes(recipe.id, tags)
 
-  // Get cross-cluster recipes (2 from different clusters)
-  let crossCluster: Recipe[] = []
+  // Get cross-cluster recipes (2 from different clusters) — lightweight query (9 columns, no blobs)
+  let crossCluster: { id: number; slug: string; title: string; heroImageUrl: string | null; totalTime: string | null; tags: string[] | null }[] = []
   if (cluster) {
-    const allPublished = await getPublishedRecipes()
+    const allPublished = await getPublishedRecipesLight()
     crossCluster = allPublished
       .filter((r) => {
         if (r.id === recipe.id) return false

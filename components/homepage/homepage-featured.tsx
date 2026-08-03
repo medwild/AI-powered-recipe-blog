@@ -1,14 +1,14 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { RecipeCard } from "@/components/recipe-card"
-import type { Recipe } from "@/lib/db/schema"
+import type { RecipeCardData } from "@/lib/types"
 
 export function HomepageFeatured({
   featured,
   recent,
 }: {
-  featured: Recipe[]
-  recent: Recipe[]
+  featured: RecipeCardData[]
+  recent: RecipeCardData[]
 }) {
   if (featured.length === 0) return null
 
