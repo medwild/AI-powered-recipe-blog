@@ -14,7 +14,7 @@
 - **Serveur** : Hostinger Node.js hosting — Next.js **standalone** (`node server.js`), Node 22.
 - **DB** : Neon PostgreSQL conservée (distante).
 - **Images** : Cloudinary conservées.
-- **Domaine** : chefaugustin.com (registraire = Hostinger, créé 2026-07-02). DNS géré par Vercel (records changés via API) tant que la migration n'est pas validée.
+- **Domaine** : chefaugustin.com (registraire = Hostinger, créé 2026-07-02). **DNS géré par Hostinger** (name servers d'origine restaurés le 3/08 : aurora.dns-parking.com / nebula.dns-parking.com) — les records se posent dans hPanel, plus via l'API Vercel.
 - **Redirection apex → www** : middleware Next (nouveau, `middleware.ts`) — remplace le redirect de plateforme Vercel.
 - **Keep-warm GitHub Action** : désactivé (sans objet sur Node hosting).
 
@@ -36,15 +36,36 @@
 6. Node.js → **Domain** : s'assurer que `chefaugustin.com` est attaché.
 7. **SSL** : hPanel → Sécurité → SSL → générer le certificat pour `chefaugustin.com` (+ www).
 
-## Étape C — Après réception de l'IP (Claude)
+## Étape C — Après réception de l'IP (utilisateur hPanel + Claude vérifie)
 
-- API Vercel : remplacer ALIAS `@` et `*` (→ cname.vercel-dns.com) par des **A records** → IP Hostinger.
-- Vérifier résolution + HTTP (apex 301 → www 200) + check-host.net global.
+**NS restaurés Hostinger le 3/08** (aurora/nebula.dns-parking.com) — délégation en propagation (Cloudflare OK immédiat, Google jusqu'à quelques heures, TTL résiduel ~3h constaté).
 
-## Étape D — Validation finale
+⚠️ La zone Hostinger contient ENCORE les anciens records Vercel (`A @ → 216.198.79.1`, `CNAME www → vercel-dns-017.com`) → le site reste servi par Vercel (donc toujours bloqué au Maroc) jusqu'au remplacement.
 
-- **Utilisateur reteste au Maroc** (le test décisif).
-- Si échec persisté → blocage **par nom** → parade : nouveau domaine (SEO à gérer) ; Hostinger ne changera rien au nom.
+Actions utilisateur dans **hPanel → Domains → chefaugustin.com → DNS Management** :
+1. Éditer `A @` → remplacer `216.198.79.1` par l'**IP du serveur Node.js**.
+2. Remplacer `CNAME www` par un `A www` → même IP (ou garder un CNAME www → @).
+
+Puis Claude : vérifier résolution + HTTP (apex 301 → www 200) + check-host.net global.
+
+## Étape C′ — RÉALISÉ le 3/08 (16h30)
+
+- Node.js activé par l'utilisateur ; zone Hostinger mise à jour automatiquement (ou manuellement) :
+  `A @ → 93.127.179.203 / 77.37.53.246`, `CNAME www → www.chefaugustin.com.cdn.hstgr.net`, MX/SPF/DKIM Hostinger intacts.
+- Déploiement GitHub → **site 200 partout** : accueil, `/recipes` (DB), `/sitemap.xml` (frais), redirects `/recettes`→308, recette SSG. **25/25 nœuds check-host.net → 200.**
+- Bug corrigé : redirect apex→www portait `:3000` (app sur `$PORT` derrière le proxy Hostinger) → middleware reconstruit l'URL cible explicitement. Commit `bac6b75` (push le 3/08 16h35).
+- RESTE : redeploy (auto GitHub ou manuel) → retest Maroc (test décisif) → vérif redirect apex propre.
+
+## Étape D — Validation finale (RÉALISÉE)
+
+- **Test Maroc mobile : ✅ PASSÉ** (3/08 soir) — le site charge au Maroc sur mobile. Objectif de la migration atteint.
+- PC au bureau : bloqué par l'**antivirus d'entreprise** (PC admin-restreint, pas de whitelist possible) — problème local, sans rapport avec la migration.
+- Migration **CLÔTURÉE** : chefaugustin.com servi depuis Hostinger Node.js, accessible depuis le Maroc.
+
+## Leçons pour la suite
+
+- Le blocage « Vercel » au Maroc n'était pas (que) réseau : l'antivirus d'entreprise bloquait par domaine/catégorie sur les plages Vercel. Hostinger est maintenant whitelisté ou non-catégorisé par l'AV → OK.
+- Le site reste sur Hostinger ; pas de retour Vercel prévu.
 
 ## Risques
 
