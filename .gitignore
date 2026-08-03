@@ -25,3 +25,7 @@ loop-run-log.md
 # Standalone Go proxy — not part of the blog pipeline.
 # Keep out of this repo to prevent keys from leaking on `git add .`.
 claude-nvidia-proxy/
+
+# IDX dev environment — contains API keys in dev.nix (hardcoded locally).
+# Keep out of this repo to prevent keys from leaking on `git add .`.
+.idx/
