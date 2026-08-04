@@ -58,13 +58,13 @@ export function SiteFooter() {
               Guides
             </Link>
             <Link href="/histoire" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-              Histoire
+              History
             </Link>
             <Link href="/equipement" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-              Équipement
+              Equipment
             </Link>
             <Link href="/idees" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-              Idées
+              Ideas
             </Link>
             <Link href="/about" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
               About
