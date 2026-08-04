@@ -117,30 +117,6 @@ export default async function CategoryPage({
           </div>
         )}
 
-        {/* Why this category works for two */}
-        {recipes.length > 0 ? (
-          <section className="mt-14 border-t border-border pt-12">
-            <div className="mx-auto max-w-2xl">
-              <h2 className="font-serif text-2xl">Why {tag} recipes work for two</h2>
-              <div className="mt-4 space-y-4 text-muted-foreground leading-relaxed">
-                <p>
-                  Cooking {tag.toLowerCase()} for two people isn&rsquo;t just about dividing a larger recipe in half.
-                  Pan sizes change, cooking times shift, and ingredient proportions need recalibrating.
-                  A skillet that&rsquo;s too wide burns off your sauce; one that&rsquo;s too crowded steams instead of sears.
-                  Every recipe in this collection is developed and tested at two-serving scale, so the techniques
-                  and timings are exactly right.
-                </p>
-                <p>
-                  {recipes.length === 1
-                    ? `This single ${tag.toLowerCase()} recipe packs everything you need — no filler, no fluff, just one reliable dish that works every time.`
-                    : `With ${recipes.length} tested ${tag.toLowerCase()} recipes to choose from, you can plan anything from a 15-minute weeknight staple to a slow weekend project. Each one is written with clear steps, exact pan sizes, and real-world timing so you can cook with confidence — even on a Tuesday night after work.`
-                  }
-                </p>
-              </div>
-            </div>
-          </section>
-        ) : null}
-
         {/* BreadcrumbList JSON-LD */}
         <script
           type="application/ld+json"
