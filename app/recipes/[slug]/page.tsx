@@ -5,9 +5,8 @@ import { ArrowRight } from "lucide-react"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { RecipeArticle } from "@/components/recipe-article"
-import { RecipeRelated } from "@/components/recipe-related"
 import { JumpToRecipeDesktop, JumpToRecipeMobile } from "@/components/jump-to-recipe"
-import { getRecipeBySlug, getPublishedRecipesLight, getRelatedRecipes, getLinkedArticle, getRecipeRating } from "@/lib/queries"
+import { getRecipeBySlug, getPublishedRecipesLight, getLinkedArticle, getRecipeRating } from "@/lib/queries"
 
 // SSG pure — pages generated at build time, regenerated on-demand via revalidatePath()
 export const dynamicParams = true
@@ -201,8 +200,7 @@ export default async function RecipePage({
     notFound()
   }
 
-  const [relatedRecipes, linkedArticle, ratings] = await Promise.all([
-    getRelatedRecipes(recipe.id, recipe.tags ?? []),
+  const [linkedArticle, ratings] = await Promise.all([
     getLinkedArticle(recipe.id),
     getRecipeRating(recipe.id),
   ])
@@ -255,7 +253,6 @@ export default async function RecipePage({
           </section>
         ) : null}
 
-        <RecipeRelated recipes={relatedRecipes} />
       </main>
       <RecipeJsonLd
         recipe={recipe}
