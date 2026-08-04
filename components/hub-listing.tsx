@@ -33,7 +33,10 @@ export async function HubListing({ slug }: { slug: string }) {
       {hub.intro.map((p, i) => (
         <p key={i} className="mt-4 text-gray-600">{p}</p>
       ))}
-      <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {/* H2 before the card grid — keeps heading hierarchy H1→H2→H3
+          (cards render their titles in H3, no structural jump). */}
+      <h2 className="mt-10 text-2xl font-semibold">Recipes in this collection</h2>
+      <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {curated.map((r) => <RecipeCard key={r.id} recipe={r} />)}
       </div>
       <script
