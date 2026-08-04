@@ -1,7 +1,6 @@
 import { Suspense } from "react"
-import dynamic from "next/dynamic"
+import nextDynamic from "next/dynamic"
 import type { Metadata } from "next"
-import { permanentRedirect } from "next/navigation"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { SiteHeader } from "@/components/site-header"
@@ -10,63 +9,40 @@ import { RecipeCard } from "@/components/recipe-card"
 import { ArticleCard } from "@/components/article-card"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 
-const RecipeSearch = dynamic(() => import("@/components/recipe-search").then((m) => m.RecipeSearch))
+const RecipeSearch = nextDynamic(() => import("@/components/recipe-search").then((m) => m.RecipeSearch))
 import { searchPublishedRecipes, getRecipeCategories, getPublishedArticlesLight } from "@/lib/queries"
-import { getClusterById, getAllClusters } from "@/lib/cluster-resolver"
+import { getAllClusters } from "@/lib/cluster-resolver"
 import { tagToSlug } from "@/lib/tag-utils"
 
-export async function generateMetadata({
-  searchParams,
-}: {
-  searchParams: Promise<{ q?: string; cat?: string; cluster?: string }>
-}): Promise<Metadata> {
-  const { q, cat, cluster } = await searchParams
-  const isFiltered = !!(q || cat)
+// SSG + ISR : page statique générée au build, re-générée 1x/heure après publication.
+// Économise le quota DB Neon (0 requête par visite) + charge instantanée (CDN).
+// La recherche est client-side (RecipeSearch "use client") — pas besoin de searchParams serveur.
+export const dynamic = "force-static"
+export const revalidate = 3600 // ISR — re-génère 1x/heure après publication
 
-  // Redirect ?cluster= to clean /recipes/cluster/[slug] URLs (301 permanent)
-  if (cluster && getClusterById(cluster)) {
-    permanentRedirect(`/recipes/cluster/${cluster}`)
-  }
-
+export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "All recipes",
+    title: "All Recipes for Two — Easy Weeknight Dinners",
     description:
-      "Browse our collection of French cooking recipes, optimized and explained step by step.",
+      "Simple, small-batch recipes for two — tested, scaled for two, ready tonight.",
     alternates: { canonical: "/recipes" },
-    robots: isFiltered ? { index: false, follow: true } : undefined,
     openGraph: {
-      title: "All recipes | Chef Augustin",
+      title: "All Recipes for Two | Chef Augustin",
       description:
-        "Browse our collection of French cooking recipes, optimized and explained step by step.",
+        "Simple, small-batch recipes for two — tested, scaled for two, ready tonight.",
       type: "website",
     },
   }
 }
 
-export default async function RecipesPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ q?: string; cat?: string; cluster?: string }>
-}) {
-  const { q, cat, cluster } = await searchParams
-
-  // Redirect ?cat=X to /recipes/category/{slug} (301 permanent)
-  if (cat) {
-    permanentRedirect(`/recipes/category/${tagToSlug(cat)}`)
-  }
-
-  // Redirect ?cluster=X to /recipes/cluster/{slug} (301 permanent)
-  if (cluster && getClusterById(cluster)) {
-    permanentRedirect(`/recipes/cluster/${cluster}`)
-  }
-
+export default async function RecipesPage() {
   const [recipes, categories, articles] = await Promise.all([
-    searchPublishedRecipes(q, cat),
+    searchPublishedRecipes(), // toutes les recettes (pas de filtre serveur — la recherche est client)
     getRecipeCategories(),
     getPublishedArticlesLight(),
   ])
 
-  const displayArticles = articles.slice(0, 3)
+  const displayArticles = articles
   const clusters = getAllClusters()
 
   return (
@@ -93,8 +69,8 @@ export default async function RecipesPage({
           <Suspense>
             <RecipeSearch
               categories={categories}
-              currentSearch={q || ""}
-              currentCategory={cat || ""}
+              currentSearch=""
+              currentCategory=""
             />
           </Suspense>
         </div>
@@ -104,9 +80,7 @@ export default async function RecipesPage({
         {recipes.length === 0 ? (
           <div className="rounded-xl border border-dashed border-border bg-card p-12 text-center">
             <p className="text-muted-foreground">
-              {q || cat
-                ? "No recipes match your search."
-                : "No recipes published yet."}
+              No recipes published yet.
             </p>
           </div>
         ) : (
@@ -118,8 +92,7 @@ export default async function RecipesPage({
         )}
 
         {/* Browse by category */}
-        {!q && !cat ? (
-          <section className="mt-16 border-t border-border pt-14 text-center">
+        <section className="mt-16 border-t border-border pt-14 text-center">
             <h2 className="font-serif text-2xl">Browse by category</h2>
             <p className="mt-2 mb-6 text-muted-foreground">
               Explore recipes by ingredient, cuisine, or technique.
@@ -136,10 +109,9 @@ export default async function RecipesPage({
               ))}
             </div>
           </section>
-        ) : null}
 
         {/* Browse by collection */}
-        {!q && !cat && clusters.length > 0 ? (
+        {clusters.length > 0 ? (
           <section className="mt-16 border-t border-border pt-14">
             <h2 className="font-serif text-2xl text-center mb-6">Browse by collection</h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -161,8 +133,8 @@ export default async function RecipesPage({
           </section>
         ) : null}
 
-        {/* Cross-link: Related Articles (default mode only) */}
-        {displayArticles.length > 0 && !q && !cat ? (
+        {/* Cross-link: Related Articles */}
+        {displayArticles.length > 0 ? (
           <section className="mt-16 border-t border-border pt-14">
             <div className="mb-8 flex items-end justify-between">
               <div>
