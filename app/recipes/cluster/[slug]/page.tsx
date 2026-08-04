@@ -31,8 +31,12 @@ export async function generateMetadata({
 
   if (!cluster) notFound()
 
+  // Cluster names already end with "for Two" — append the suffix only when
+  // needed to avoid "One-Pan Dinners for Two — Dinners for Two" (word repetition).
+  const suffix = cluster.name.toLowerCase().endsWith("for two") ? "" : " — Dinners for Two"
+
   return {
-    title: `${cluster.name} — Dinners for Two`,
+    title: `${cluster.name}${suffix}`,
     description: cluster.description,
     alternates: { canonical: `/recipes/cluster/${slug}` },
     robots: "index, follow",
@@ -136,34 +140,6 @@ export default async function ClusterPage({
           </>
         )}
 
-        {/* Why this cluster matters */}
-        {displayRecipes.length > 0 ? (
-          <section className="mt-14 border-t border-border pt-12">
-            <div className="mx-auto max-w-2xl">
-              <h2 className="font-serif text-2xl">Why {cluster.name.toLowerCase()} matter</h2>
-              <div className="mt-4 space-y-4 text-muted-foreground leading-relaxed">
-                <p>
-                  {cluster.description}
-                </p>
-                <p>
-                  With {displayRecipes.length} recipe{displayRecipes.length !== 1 ? "s" : ""} in this
-                  collection, you have a full toolkit for building dinners around this approach.
-                  Each recipe is written for two people, tested at that scale, and designed to work
-                  in a real home kitchen — not a restaurant line. The techniques you learn here
-                  transfer across cuisines: master one pan sauce, and you can adapt it to whatever
-                  protein and vegetables are in your fridge this week.
-                </p>
-                <p>
-                  Browse the recipes below, pick one that matches your energy level tonight, and cook
-                  with confidence. If you enjoy these, check out the related collections — each one
-                  offers a different angle on the same core idea: practical, delicious dinners built
-                  for two.
-                </p>
-              </div>
-            </div>
-          </section>
-        ) : null}
-
         {/* BreadcrumbList JSON-LD */}
         <script
           type="application/ld+json"
@@ -213,9 +189,6 @@ export default async function ClusterPage({
                   <h3 className="font-serif text-lg group-hover:text-primary transition-colors">
                     {sibling.name}
                   </h3>
-                  <p className="mt-1.5 text-sm text-muted-foreground line-clamp-2">
-                    {sibling.description}
-                  </p>
                 </Link>
               ))}
             </div>
