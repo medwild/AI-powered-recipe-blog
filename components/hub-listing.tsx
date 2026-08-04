@@ -22,7 +22,7 @@ export async function HubListing({ slug }: { slug: string }) {
     itemListElement: curated.map((r, i) => ({
       "@type": "ListItem",
       position: i + 1,
-      url: `https://www.chefaugustin.com/recettes/${r.slug}`,
+      url: `https://www.chefaugustin.com/recipes/${r.slug}`,
       name: r.title,
     })),
   }
