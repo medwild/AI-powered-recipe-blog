@@ -15,6 +15,10 @@ import { Breadcrumbs } from "@/components/breadcrumbs"
 import { getPublishedRecipesByTag, getRecipeCategories } from "@/lib/queries"
 import { tagToSlug, slugToTag } from "@/lib/tag-utils"
 
+// Seuil Google anti-thin-content : une catégorie avec < 3 recettes n'apporte
+// pas de valeur → noindex (évite le scaled content abuse sur les 100+ pages fines).
+const MIN_RECIPES_FOR_INDEX = 3
+
 export async function generateStaticParams() {
   const categories = await getRecipeCategories()
   return categories.map((tag) => ({ slug: tagToSlug(tag) }))
@@ -31,11 +35,14 @@ export async function generateMetadata({
 
   if (!tag) notFound()
 
+  const recipes = await getPublishedRecipesByTag(tag)
+  const isThin = recipes.length < MIN_RECIPES_FOR_INDEX
+
   return {
     title: `${tag} Recipes for Two — Easy Weeknight Dinners`,
     description: `Browse our collection of ${tag.toLowerCase()} recipes — tested, scaled for two, ready tonight.`,
     alternates: { canonical: `/recipes/category/${slug}` },
-    robots: "index, follow",
+    robots: isThin ? "noindex, follow" : "index, follow",
   }
 }
 
