@@ -124,9 +124,6 @@ export default async function RecipesPage() {
                   <h3 className="font-serif text-lg group-hover:text-primary transition-colors">
                     {c.name}
                   </h3>
-                  <p className="mt-1.5 text-sm text-muted-foreground line-clamp-2">
-                    {c.description}
-                  </p>
                 </Link>
               ))}
             </div>
