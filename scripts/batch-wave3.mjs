@@ -17,7 +17,8 @@ const WAVE3 = [
   { keyword: "easy dinner ideas for two", category: "guides" },
   { keyword: "quick and easy dinner recipes for two", category: "guides" },
   { keyword: "healthy dinner ideas for two", category: "idees" },
-  { keyword: "romantic dinner ideas for two", category: "idees" },
+  // romantic dinner ideas for two — RETIRÉ : hub déjà servi par le code
+  // (lib/hub-content.ts) + slug déjà publié (#47, recette réalignée).
   { keyword: "easy meal ideas for two", category: "idees" },
   { keyword: "dinner recipe ideas for two", category: "idees" },
   { keyword: "slow cooker recipes for two", category: "guides" },
@@ -98,7 +99,7 @@ async function main() {
     : arg === "C3" ? [chunks[2]]
     : chunks
 
-  console.log("🚀 Batch VAGUE 3 — Démarrage (4 recettes + 21 hubs)")
+  console.log("🚀 Batch VAGUE 3 — Démarrage (4 recettes + 20 hubs)")
   console.log("═".repeat(50))
   for (const [keywords, label] of selected) {
     await runBatch(keywords, label)
