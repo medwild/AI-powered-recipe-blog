@@ -26,6 +26,16 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
+  // Topical hubs are served from the code catalog (not the DB) — check it
+  // before the DB lookup so hub pages get their real title/meta, not
+  // "Article not found" (the page render already prioritizes hubs).
+  const hub = getHubBySlug(slug)
+  if (hub) {
+    return {
+      title: hub.metaTitle,
+      description: hub.metaDescription,
+    }
+  }
   const article = await getArticleBySlug(slug)
   if (!article || article.status !== "published") return { title: "Article not found" }
   return articleMetadata(article, "guides")
