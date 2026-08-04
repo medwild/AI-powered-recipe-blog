@@ -4,6 +4,8 @@ import { db } from "@/lib/db"
 import { recipes } from "@/lib/db/schema"
 import { getArticleBySlug } from "@/lib/queries"
 import { articleMetadata, ArticleDetail } from "@/components/article-detail"
+import { getHubBySlug } from "@/lib/hub-content"
+import { HubListing } from "@/components/hub-listing"
 
 
 export const dynamicParams = true
@@ -31,5 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function IdeesArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
+  const hub = getHubBySlug(slug)
+  if (hub) return <HubListing slug={slug} />
   return <ArticleDetail slug={slug} />
 }
