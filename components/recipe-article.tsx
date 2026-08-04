@@ -1,4 +1,5 @@
 import type { Recipe } from "@/lib/db/schema"
+import Link from "next/link"
 import { RecipeHero } from "@/components/recipe-hero"
 import { RecipeActionBar } from "@/components/recipe-action-bar"
 import { RecipeIngredients } from "@/components/recipe-ingredients"
@@ -7,6 +8,7 @@ import { RecipeArticleBody } from "@/components/recipe-article-body"
 import { RelatedRecipes } from "@/components/related-recipes"
 import { RecipeRating } from "@/components/recipe-rating"
 import { getRecipeRating } from "@/lib/queries"
+import { getHubForRecipe } from "@/lib/hub-content"
 
 export async function RecipeArticle({ recipe }: { recipe: Recipe }) {
   const ratings = await getRecipeRating(recipe.id)
@@ -36,6 +38,27 @@ export async function RecipeArticle({ recipe }: { recipe: Recipe }) {
           initialCount={ratings.count}
         />
       </section>
+
+      {/* Section 6.5: Related hub — link silo leaf→hub (topical authority) */}
+      {(() => {
+        const hub = getHubForRecipe(recipe.tags ?? [])
+        if (!hub) return null
+        return (
+          <section className="mx-auto max-w-3xl px-4 pb-10">
+            <div className="rounded-lg bg-gray-50 p-4">
+              <p className="text-sm text-gray-600">
+                Looking for more ideas? Browse our{" "}
+                <Link
+                  href={`/${hub.category}/${hub.slug}`}
+                  className="font-medium text-primary underline"
+                >
+                  {hub.title}
+                </Link>
+              </p>
+            </div>
+          </section>
+        )
+      })()}
 
       {/* Section 7: Related Recipes — cluster-aware sidebar */}
       <RelatedRecipes recipe={recipe} />
