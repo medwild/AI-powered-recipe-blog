@@ -20,9 +20,11 @@ import { tagToSlug, slugToTag } from "@/lib/tag-utils"
 const MIN_RECIPES_FOR_INDEX = 3
 
 /**
- * Handwritten intro paragraphs for the 10 indexable categories (≥ 3 recipes).
- * Replaces the template skeleton that produced duplicate paragraphs across pages.
- * Noindex categories (< 3 recipes) keep the template fallback (Google ignores them).
+ * Handwritten intro paragraphs for the 22 indexable categories (≥ 3 recipes).
+ * Keys are the exact tags as stored in the DB (slugToTag returns original
+ * casing/spacing). Replaces the template skeleton that produced duplicate
+ * paragraphs across pages. Noindex categories (< 3 recipes) keep the template
+ * fallback (Google ignores them).
  */
 const CATEGORY_INTROS: Record<string, string[]> = {
   "30-minute": [
@@ -37,23 +39,59 @@ const CATEGORY_INTROS: Record<string, string[]> = {
   "chicken breast": [
     "Boneless chicken breast recipes built for two people. The challenge is keeping a small breast tender instead of dry — these recipes control heat, pan size, and resting time so it works first try.",
   ],
+  chocolate: [
+    "Small-batch chocolate recipes for two — molten cakes, chocolate lava cakes, and easy desserts that feel indulgent without a half tray of leftovers.",
+  ],
   "comfort food": [
     "Small-batch comfort food for two — creamy pastas, hearty stews, and slow-simmered dishes that taste like a long cook even on a short night. Portions sized so you don't drown in leftovers.",
+  ],
+  "date night": [
+    "Date-night dinners for two that feel restaurant-worthy without the reservation — romantic mains and sides designed to impress at home.",
+  ],
+  dessert: [
+    "Desserts scaled for two — individual cakes, cookies, and puddings that are ready while you still want them. No half-eaten tray in the fridge.",
   ],
   "dinner for two": [
     "The core collection: complete dinners designed and tested for exactly two servings. Every recipe lists precise pan sizes and timings, because dividing a family recipe in half rarely works as-is.",
   ],
+  easy: [
+    "The easiest recipes for two — short ingredient lists, forgiving techniques, and dinners that come together in one pan. Built for real weeknights.",
+  ],
   "for two": [
     "Every recipe in this collection is built around two servings — no scaling guesswork, no half-empty fridge containers. Skillet, sheet pan, or slow cooker, the portions and timings are tuned for a small household.",
   ],
-  "one-pan": [
+  italian: [
+    "Italian-inspired dinners for two — creamy pastas, chicken parmesan-style bakes, and one-pan Italian classics tested at small-batch scale.",
+  ],
+  lemon: [
+    "Bright, lemony dinners for two — lemon butter chicken, lemon garlic sauces, and pasta dishes where citrus does the heavy lifting.",
+  ],
+  "one pan": [
     "One pan, two plates, minimal cleanup. These skillet and sheet-pan dinners for two are tested so the sauce reduces correctly in a smaller surface — no overcooked protein, no burned fond.",
+  ],
+  orzo: [
+    "Orzo dinners for two — one-pan orzo with chicken, shrimp, and salmon, where the pasta cooks right in the sauce for a creamy, fuss-free meal.",
+  ],
+  pasta: [
+    "Pasta recipes for two — creamy one-pan pastas, garlic butter noodles, and small-batch classics that taste like a long simmer in half the time.",
   ],
   quick: [
     "Quick dinners for two — ready in about 30 minutes with real technique, not shortcuts that cost flavor. Short ingredient lists, hot pans, and methods that fit a weeknight schedule.",
   ],
+  "quick dinner": [
+    "Complete weeknight dinners for two that are genuinely quick — on the table in about 30 minutes from a short ingredient list, with hot-pan techniques that keep the flavor.",
+  ],
+  rice: [
+    "Rice-bowl and rice-based dinners for two — one-pan chicken and rice, flavorful grains, and fast weeknight bowls built around a single pot.",
+  ],
+  "small batch": [
+    "Small-batch cooking for two — recipes developed and tested at two-serving scale so portions, pan sizes, and timings are right the first time.",
+  ],
   weeknight: [
     "Weeknight-friendly recipes for two: fast prep, common ingredients, and forgiving techniques. Designed to be cooked after a workday without a trip to a specialty store.",
+  ],
+  "weeknight dinner": [
+    "The weeknight dinner collection for two — reliable meals that come together quickly and scale naturally to two servings, with clear steps and exact timings.",
   ],
 }
 
