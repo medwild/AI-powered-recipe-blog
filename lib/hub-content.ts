@@ -25,7 +25,7 @@ export const HUBS: Hub[] = [
       "Quick, easy dinner ideas for two people — one-pan meals, 30-minute dinners, and small-batch favorites from Chef Augustin.",
     intro: [
       "Cooking for two doesn't mean cooking twice the work. The best dinners for two are the ones that come together in a single pan, use ingredients you already have, and don't leave you with a week of leftovers.",
-      "These are our favorite easy dinners for two — every one of them is a complete meal that scales naturally to two servings, most in 30 minutes or less.",
+      "These are our favorite easy dinner ideas for two — every one of them is a complete meal that scales naturally to two servings, most in 30 minutes or less.",
     ],
     curateTags: ["dinner for two", "easy", "one-pan", "30-minute", "weeknight"],
   },
@@ -61,7 +61,7 @@ export const HUBS: Hub[] = [
     metaDescription:
       "Romantic dinners for two to make at home — date-night recipes that feel restaurant-worthy without the stress or the bill.",
     intro: [
-      "A romantic dinner at home is about the gesture — a meal made just for the two of you, with a little extra care. These date-night recipes are impressive enough for an occasion and simple enough for a weeknight.",
+      "A romantic dinner at home is about the gesture — a meal made just for the two of you, with a little extra care. These romantic dinner ideas are date-night recipes that feel impressive enough for an occasion and simple enough for a weeknight.",
     ],
     curateTags: ["romantic", "date night", "dinner for two"],
   },
@@ -97,7 +97,7 @@ export const HUBS: Hub[] = [
     metaDescription:
       "Slow cooker recipes sized for two — small-batch crockpot dinners that don't drown you in leftovers. Set it and forget it.",
     intro: [
-      "A slow cooker is the ultimate hands-off dinner — but most recipes are sized for a family of six. These slow cooker recipes for two use small batches and 2-quart cookers so you get perfectly portioned dinners, not a week of leftovers.",
+      "A slow cooker is the ultimate hands-off dinner — but most recipes are sized for a family of six. These small-batch slow cooker recipes for two use a 2-quart crockpot so you get perfectly portioned dinners, not a week of leftovers.",
     ],
     curateTags: ["slow cooker", "crockpot", "dinner for two"],
   },
@@ -241,7 +241,7 @@ export const HUBS: Hub[] = [
     metaDescription:
       "Baking for 2 — small-batch desserts and bakes scaled for two, from cookies to lava cakes. No leftover cake going stale.",
     intro: [
-      "Baking for two is the art of the small batch — a single cookie sheet, a ramekin or two, and recipes that don't assume you're feeding a crowd. These are our favorite small-batch bakes.",
+      "Baking for two is the art of the small batch — a single cookie sheet, a ramekin or two, and recipes that don't assume you're feeding a crowd. These are our favorite small-batch bakes and desserts.",
     ],
     curateTags: ["baking", "small batch", "dessert"],
   },

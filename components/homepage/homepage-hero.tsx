@@ -59,7 +59,7 @@ export function HomepageHero({
 
             {/* Headline */}
             <h1 className="font-serif text-[clamp(2rem,5vw,3rem)] leading-tight text-balance text-foreground">
-              Easy Weeknight Dinners
+              Easy Weeknight Dinners{" "}
               <span className="block text-primary/80">for Two</span>
             </h1>
 

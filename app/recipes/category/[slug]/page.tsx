@@ -100,6 +100,17 @@ export async function generateStaticParams() {
   return categories.map((tag) => ({ slug: tagToSlug(tag) }))
 }
 
+/**
+ * Page title for a category: title-cases the tag and drops a redundant
+ * trailing "For Two" so "Dinner For Two" doesn't become "Dinner For Two
+ * Recipes for Two" (word repetition). No "— Easy Weeknight Dinners" suffix —
+ * it pushed titles past the ~580px SERP limit on 22 category pages.
+ */
+function categoryTitle(tag: string): string {
+  const base = tag.replace(/\b\w/g, (c) => c.toUpperCase()).replace(/ For Two$/i, "").trim()
+  return base ? `${base} Recipes for Two` : "Recipes for Two"
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -113,12 +124,9 @@ export async function generateMetadata({
 
   const recipes = await getPublishedRecipesByTag(tag)
   const isThin = recipes.length < MIN_RECIPES_FOR_INDEX
-  // Title-case the tag for the title/H1 ("30-minute meal" → "30-Minute Meal")
-  // instead of serving the raw lowercase tag from the DB.
-  const titleTag = tag.replace(/\b\w/g, (c) => c.toUpperCase())
 
   return {
-    title: `${titleTag} Recipes for Two — Easy Weeknight Dinners`,
+    title: categoryTitle(tag),
     description: `Browse our collection of ${tag.toLowerCase()} recipes — tested, scaled for two, ready tonight.`,
     alternates: { canonical: `/recipes/category/${slug}` },
     robots: isThin ? "noindex, follow" : "index, follow",
@@ -161,7 +169,7 @@ export default async function CategoryPage({
         />
 
         <header className="mt-4 mb-8">
-          <h1 className="font-serif text-4xl text-balance">{titleTag} Recipes for Two</h1>
+          <h1 className="font-serif text-4xl text-balance">{categoryTitle(tag)}</h1>
           <div className="mt-3 max-w-2xl text-muted-foreground leading-relaxed space-y-3">
             {CATEGORY_INTROS[tag] ? (
               CATEGORY_INTROS[tag].map((p, i) => <p key={i}>{p}</p>)

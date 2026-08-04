@@ -36,7 +36,7 @@ const CATEGORY_TITLES: Record<string, string> = {
 /** Unique intro descriptions — one sentence per category. */
 const CATEGORY_DESCRIPTIONS: Record<string, string> = {
   techniques: "Master the fundamental skills that make French cooking effortless — from knife work to sauce-making, these techniques are the building blocks of every great dinner.",
-  guides: "Practical, no-nonsense guides to help you navigate the kitchen with confidence. Ingredient deep-dives, equipment recommendations, and step-by-step walkthroughs.",
+  guides: "Practical, no-nonsense kitchen guides and tips to help you navigate cooking for two with confidence. Ingredient deep-dives, equipment recommendations, and step-by-step walkthroughs.",
   histoire: "The stories behind the dishes — where they come from, why they work, and how French culinary tradition shaped the way we cook today.",
   equipement: "The right tool makes every recipe easier. Honest reviews of pots, pans, knives, and gadgets — what's worth buying and what's just marketing.",
   idees: "Menu ideas, seasonal inspiration, and creative ways to turn a handful of ingredients into a memorable dinner for two — no recipes required.",

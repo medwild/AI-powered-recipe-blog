@@ -193,7 +193,7 @@ export const CHICKEN_CLUSTER: Cluster = {
   kdAvg: 5,
   totalVolume: 15_600,
   coverageContribution: 20,
-  description: "Practical chicken recipes perfectly portioned for two people. Quick weeknight dinners, sheet-pan meals, and stir-fries that make cooking for a small household effortless.",
+  description: "Practical chicken recipes for two — quick weeknight dinners, sheet-pan meals, and stir-fries.",
   siblings: ["one-pan-dinners-for-two", "quick-healthy-dinners", "budget-meals-for-two"],
   pillarPage: {
     title: "Chicken Dinners for Two — Practical Recipes for Small Households",
