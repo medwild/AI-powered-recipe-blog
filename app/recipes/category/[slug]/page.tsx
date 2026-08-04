@@ -19,6 +19,44 @@ import { tagToSlug, slugToTag } from "@/lib/tag-utils"
 // pas de valeur → noindex (évite le scaled content abuse sur les 100+ pages fines).
 const MIN_RECIPES_FOR_INDEX = 3
 
+/**
+ * Handwritten intro paragraphs for the 11 indexable categories (≥ 3 recipes).
+ * Replaces the template skeleton that produced duplicate paragraphs across pages.
+ * Noindex categories (< 3 recipes) keep the template fallback (Google ignores them).
+ */
+const CATEGORY_INTROS: Record<string, string[]> = {
+  "30-minute": [
+    "Dinner in 30 minutes or less, sized for two. These weeknight recipes lean on quick sears, one-pan cooking, and sauces that come together while the pasta boils — tested so the timing actually fits a Tuesday.",
+  ],
+  "30-minute meal": [
+    "Complete meals for two that fit in a half-hour window. Each recipe pairs a protein with a side or sauce in a single pan, so the whole dinner lands on the table at the same time — no separate prep tracks.",
+  ],
+  chicken: [
+    "The most versatile weeknight protein, portioned for two. From skillet sears to one-pan bakes, these chicken recipes are tested at two-serving scale so the breast stays juicy and the sauce actually clings.",
+  ],
+  "chicken breast": [
+    "Boneless chicken breast recipes built for two people. The challenge is keeping a small breast tender instead of dry — these recipes control heat, pan size, and resting time so it works first try.",
+  ],
+  "comfort food": [
+    "Small-batch comfort food for two — creamy pastas, hearty stews, and slow-simmered dishes that taste like a long cook even on a short night. Portions sized so you don't drown in leftovers.",
+  ],
+  "dinner for two": [
+    "The core collection: complete dinners designed and tested for exactly two servings. Every recipe lists precise pan sizes and timings, because dividing a family recipe in half rarely works as-is.",
+  ],
+  "for two": [
+    "Every recipe in this collection is built around two servings — no scaling guesswork, no half-empty fridge containers. Skillet, sheet pan, or slow cooker, the portions and timings are tuned for a small household.",
+  ],
+  "one-pan": [
+    "One pan, two plates, minimal cleanup. These skillet and sheet-pan dinners for two are tested so the sauce reduces correctly in a smaller surface — no overcooked protein, no burned fond.",
+  ],
+  quick: [
+    "Quick dinners for two — ready in about 30 minutes with real technique, not shortcuts that cost flavor. Short ingredient lists, hot pans, and methods that fit a weeknight schedule.",
+  ],
+  weeknight: [
+    "Weeknight-friendly recipes for two: fast prep, common ingredients, and forgiving techniques. Designed to be cooked after a workday without a trip to a specialty store.",
+  ],
+}
+
 export async function generateStaticParams() {
   const categories = await getRecipeCategories()
   return categories.map((tag) => ({ slug: tagToSlug(tag) }))
@@ -37,9 +75,12 @@ export async function generateMetadata({
 
   const recipes = await getPublishedRecipesByTag(tag)
   const isThin = recipes.length < MIN_RECIPES_FOR_INDEX
+  // Title-case the tag for the title/H1 ("30-minute meal" → "30-Minute Meal")
+  // instead of serving the raw lowercase tag from the DB.
+  const titleTag = tag.replace(/\b\w/g, (c) => c.toUpperCase())
 
   return {
-    title: `${tag} Recipes for Two — Easy Weeknight Dinners`,
+    title: `${titleTag} Recipes for Two — Easy Weeknight Dinners`,
     description: `Browse our collection of ${tag.toLowerCase()} recipes — tested, scaled for two, ready tonight.`,
     alternates: { canonical: `/recipes/category/${slug}` },
     robots: isThin ? "noindex, follow" : "index, follow",
@@ -63,6 +104,9 @@ export default async function CategoryPage({
     notFound()
   }
 
+  // Same title-case as generateMetadata — keeps title, H1 and breadcrumb consistent.
+  const titleTag = tag.replace(/\b\w/g, (c) => c.toUpperCase())
+
   // SQL-level tag filtering — fetches only matching recipes, not all 30+
   const recipes = await getPublishedRecipesByTag(tag)
 
@@ -74,26 +118,32 @@ export default async function CategoryPage({
           crumbs={[
             { label: "Home", href: "/" },
             { label: "Recipes", href: "/recipes" },
-            { label: tag, href: `/recipes/category/${slug}` },
+            { label: titleTag, href: `/recipes/category/${slug}` },
           ]}
         />
 
         <header className="mt-4 mb-8">
-          <h1 className="font-serif text-4xl text-balance">{tag} Recipes for Two</h1>
+          <h1 className="font-serif text-4xl text-balance">{titleTag} Recipes for Two</h1>
           <div className="mt-3 max-w-2xl text-muted-foreground leading-relaxed space-y-3">
-            <p>
-              Looking for the best <strong>{tag}</strong> recipes for two people?
-              You&rsquo;re in the right place. Our collection of {recipes.length}{" "}
-              {tag.toLowerCase()} recipe{recipes.length !== 1 ? "s" : ""} brings
-              professional French technique to your weeknight table — scaled down,
-              tested, and ready when you are.
-            </p>
-            <p>
-              {recipes.length === 1
-                ? `This ${tag.toLowerCase()} recipe is the only one you need — developed, tested, and scaled for two people with no leftovers and no wasted ingredients.`
-                : `All ${recipes.length} ${tag.toLowerCase()} recipes are developed for two people: no leftovers that die in the back of the fridge, no ingredient waste, and no compromise on flavor. Whether you're after a quick weeknight fix or a slow-cooked weekend project, each recipe is tested at two-serving scale so it works the first time.`
-              }
-            </p>
+            {CATEGORY_INTROS[tag] ? (
+              CATEGORY_INTROS[tag].map((p, i) => <p key={i}>{p}</p>)
+            ) : (
+              <>
+                <p>
+                  Looking for the best <strong>{tag}</strong> recipes for two people?
+                  You&rsquo;re in the right place. Our collection of {recipes.length}{" "}
+                  {tag.toLowerCase()} recipe{recipes.length !== 1 ? "s" : ""} brings
+                  professional French technique to your weeknight table — scaled down,
+                  tested, and ready when you are.
+                </p>
+                <p>
+                  {recipes.length === 1
+                    ? `This ${tag.toLowerCase()} recipe is the only one you need — developed, tested, and scaled for two people with no leftovers and no wasted ingredients.`
+                    : `All ${recipes.length} ${tag.toLowerCase()} recipes are developed for two people: no leftovers that die in the back of the fridge, no ingredient waste, and no compromise on flavor. Whether you're after a quick weeknight fix or a slow-cooked weekend project, each recipe is tested at two-serving scale so it works the first time.`
+                  }
+                </p>
+              </>
+            )}
           </div>
           <div className="mt-5 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary">
