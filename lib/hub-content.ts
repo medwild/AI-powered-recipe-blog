@@ -301,5 +301,10 @@ export function getHubForRecipe(tags: string[]): Hub | undefined {
   for (const [tag, slug] of priority) {
     if (lower.some((t) => t.includes(tag))) return getHubBySlug(slug)
   }
+  // Fallback : toute recette « for two » / dinner remonte au hub maître
+  // (silo leaf→hub garanti — aucune recette sans lien vers un hub).
+  if (lower.some((t) => t.includes("dinner") || t.includes("for two") || t.includes("two"))) {
+    return getHubBySlug("recipes-for-two")
+  }
   return undefined
 }
