@@ -6,13 +6,15 @@ const ReactMarkdownContent = dynamic(
 )
 
 /** Sections already handled by dedicated components — strip from article body
- *  ONLY when the corresponding structured data is present (non-empty). */
+ *  ONLY when the corresponding structured data is present (non-empty).
+ *  Matches any heading level (#..######) — generated bodies sometimes use
+ *  H3 for these (e.g. dessert-for-2), which the hero still renders as H2. */
 const DUPLICATE_HEADINGS = [
-  /^##\s+Ingredients?\b/i,
-  /^##\s+Instructions?\b/i,
-  /^##\s+Directions?\b/i,
-  /^##\s+Method\b/i,
-  /^##\s+Steps?\b/i,
+  /^#{1,6}\s+Ingredients?\b/i,
+  /^#{1,6}\s+Instructions?\b/i,
+  /^#{1,6}\s+Directions?\b/i,
+  /^#{1,6}\s+Method\b/i,
+  /^#{1,6}\s+Steps?\b/i,
 ]
 
 /** Strip excessive bold formatting: spans > 120 chars or duplicate bold text. */
@@ -38,22 +40,23 @@ function stripDuplicateSections(
   const lines = md.split("\n")
   const result: string[] = []
   let skipping = false
-  const seenH2 = new Set<string>()
+  const seenH = new Set<string>()
 
   for (const line of lines) {
     // Always strip H1 headings — the title is rendered by RecipeHero.
     // A duplicate H1 in the markdown body causes "Too many H1 headings" SEO warnings.
-    if (/^#\s+/.test(line) && !/^##\s+/.test(line)) continue
+    if (/^#\s+/.test(line) && !/^#{2,6}\s+/.test(line)) continue
 
-    if (/^##\s+/.test(line)) {
-      const h2Text = line.replace(/^##\s+/, "").trim().toLowerCase()
+    // Any heading level (H2-H6) — dedupe + skip hero-covered sections.
+    if (/^#{2,6}\s+/.test(line)) {
+      const hText = line.replace(/^#{2,6}\s+/, "").trim().toLowerCase()
 
-      // Skip if this H2 matches the recipe title (avoids H1/H2 duplicate)
-      if (recipeTitle && h2Text === recipeTitle.toLowerCase()) continue
+      // Skip if this heading matches the recipe title (avoids H1/H2 duplicate)
+      if (recipeTitle && hText === recipeTitle.toLowerCase()) continue
 
-      // Skip duplicate H2 headings (same text appearing twice)
-      if (seenH2.has(h2Text)) continue
-      seenH2.add(h2Text)
+      // Skip duplicate headings (same text appearing twice)
+      if (seenH.has(hText)) continue
+      seenH.add(hText)
 
       const isIngredientHeading = DUPLICATE_HEADINGS[0]!.test(line) || DUPLICATE_HEADINGS[1]!.test(line)
       const isInstructionHeading = DUPLICATE_HEADINGS.slice(2).some(r => r.test(line))

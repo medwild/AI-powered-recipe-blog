@@ -14,11 +14,22 @@ const DRY = process.argv.includes("--dry")
 
 // Une section markdown = une ligne de titre + son contenu jusqu'au prochain titre.
 // On cible uniquement les titres "Ingredients"/"Instructions" (n'importe quel niveau #).
-const SECTION = /^#{1,6}\s+(?:Ingredients|Instructions)\s*\n[\s\S]*?(?=^#{1,6}\s|\Z)/gim
+// IMPORTANT : on ne retire que la 2e occurrence+ (le doublon du hero), jamais la
+// première — qui peut être une section éditoriale unique ("Ingredients Notes", etc.).
+const SECTION = /^#{1,6}\s+(?:Ingredients|Instructions)[^\n]*\n[\s\S]*?(?=^#{1,6}\s|\Z)/gim
 
 function fixContent(md: string): { fixed: string; removed: number } {
+  const matches = md.match(SECTION) ?? []
+  if (matches.length <= 1) return { fixed: md, removed: 0 } // pas de doublon
+
+  // Garder la première occurrence, retirer les suivantes
   let removed = 0
-  const fixed = md.replace(SECTION, (_m) => {
+  let first = true
+  const fixed = md.replace(SECTION, (m) => {
+    if (first) {
+      first = false
+      return m
+    }
     removed++
     return ""
   })
