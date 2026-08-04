@@ -16,9 +16,21 @@ import { SiteFooter } from "@/components/site-footer"
 export const CATEGORY_LABELS: Record<string, string> = {
   techniques: "Techniques",
   guides: "Guides",
-  histoire: "Histoire",
-  equipement: "Équipement",
-  idees: "Idées",
+  histoire: "History",
+  equipement: "Equipment",
+  idees: "Ideas",
+}
+
+/**
+ * Descriptive page titles — keyword-rich, longer than the nav label.
+ * Used for <title> and H1 (nav labels stay short: "Techniques", "Guides", …).
+ */
+const CATEGORY_TITLES: Record<string, string> = {
+  techniques: "Cooking Techniques & Skills",
+  guides: "Kitchen Guides & Tips",
+  histoire: "History of French Cooking",
+  equipement: "Kitchen Equipment & Tools",
+  idees: "Dinner Ideas for Two",
 }
 
 /** Unique intro descriptions — one sentence per category. */
@@ -56,13 +68,14 @@ const CATEGORY_BODY: Record<string, string[]> = {
 
 export function categoryMetadata(category: string): Metadata {
   const label = CATEGORY_LABELS[category] ?? category
+  const title = CATEGORY_TITLES[category] ?? label
   return {
-    title: label,
+    title,
     description: `Browse our ${label.toLowerCase()} articles — French cooking tips, techniques, and guides.`,
     alternates: { canonical: `/${category}` },
     robots: "index, follow",
     openGraph: {
-      title: `${label} | Chef Augustin`,
+      title: `${title} | Chef Augustin`,
       description: `Browse our ${label.toLowerCase()} articles — French cooking tips, techniques, and guides.`,
       type: "website",
     },
@@ -104,7 +117,7 @@ export async function CategoryListing({ category }: { category: string }) {
         </Link>
 
         <header className="mb-10">
-          <h1 className="font-serif text-4xl text-balance">{label}</h1>
+          <h1 className="font-serif text-4xl text-balance">{CATEGORY_TITLES[category] ?? label}</h1>
           {CATEGORY_DESCRIPTIONS[category] ? (
             <p className="mt-3 max-w-2xl text-muted-foreground leading-relaxed">
               {CATEGORY_DESCRIPTIONS[category]}
