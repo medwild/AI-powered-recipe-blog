@@ -20,7 +20,7 @@ import { tagToSlug, slugToTag } from "@/lib/tag-utils"
 const MIN_RECIPES_FOR_INDEX = 3
 
 /**
- * Handwritten intro paragraphs for the 11 indexable categories (≥ 3 recipes).
+ * Handwritten intro paragraphs for the 10 indexable categories (≥ 3 recipes).
  * Replaces the template skeleton that produced duplicate paragraphs across pages.
  * Noindex categories (< 3 recipes) keep the template fallback (Google ignores them).
  */
