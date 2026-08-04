@@ -136,11 +136,6 @@ export default async function CategoryPage({
                     : `With ${recipes.length} tested ${tag.toLowerCase()} recipes to choose from, you can plan anything from a 15-minute weeknight staple to a slow weekend project. Each one is written with clear steps, exact pan sizes, and real-world timing so you can cook with confidence — even on a Tuesday night after work.`
                   }
                 </p>
-                <p>
-                  Got leftovers? Most recipes here make exactly two servings. Some make enough for lunch the next day —
-                  intentional leftovers that actually reheat well, not the sad container that gets pushed to the back
-                  of the fridge. Because cooking for two should mean less waste, not less ambition.
-                </p>
               </div>
             </div>
           </section>
