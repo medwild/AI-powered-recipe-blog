@@ -1,7 +1,7 @@
 # Design — Pin Variants (5 pins par recette, image de référence)
 
 > **Date :** 2026-08-05
-> **Status :** Validé (revue Karpathy appliquée)
+> **Status :** Draft — en attente de validation utilisateur
 > **Contexte :** Pipeline v14, Blog Chef Augustin, Stratégie Pinterest PTRA
 
 ---
@@ -98,24 +98,20 @@ Le mapping est une **constante TS** avec le commentaire `// reflète food-photog
 ### 5.1 Structure du prompt (template déterministe, zéro LLM)
 
 ```
-Recrée exactement ce même plat — mêmes ingrédients, mêmes couleurs, même style,
-même lumière. Change uniquement l'angle de prise de vue : <ANGLE>.
+Recrée exactement ce même plat — <TITLE> — mêmes ingrédients, mêmes couleurs,
+même style, même lumière. Change uniquement l'angle de prise de vue : <ANGLE>.
 
 <Description pro du nouvel angle : cadrage, lens, aperture, DOF — selon le tableau
 food-photography.md §7, ex: "45° medium, 24-70mm à 50mm, f/4, profondeur de champ
 modérée">
 
-<Extrait déterministe de l'imagePrompt original : première phrase, tronquée à
-~160 chars — contient déjà plat + lighting + style, ex: "pâtes al dente, sauce
-tomate riche, cheese pull, lumière naturelle fenêtre 3500K">
-
 2:3 vertical, Pinterest. Fond simple. Pas de texte sur l'image.
 ```
 
-**Extraction déterministe (pas d'LLM)** : le script prend la **première phrase** de l'`imagePrompt` original (découpe sur le premier `. `), tronquée à ~160 chars. Elle contient déjà le plat, le lighting et le style — pas besoin de parsing sémantique. Fallback si `imagePrompt` vide : `title + top 2 tags`.
+**Cohérence via le titre, pas via parsing** : l'image de référence porte déjà le plat, la lumière et le style — Ideogram la voit. Le prompt n'ajoute que l'**identité du plat** (`title`, jamais vide) et l'angle. Pas d'extraction de l'`imagePrompt` (fragile : listes, tirets, première phrase = spec camera).
 
 **Clause de cohérence courte** (l'image de référence est déjà sous les yeux d'Ideogram — pas de récitation longue) :
-`Recrée exactement ce même plat — mêmes ingrédients, mêmes couleurs, même style, même lumière. Change uniquement l'angle de prise de vue : X.`
+`Recrée exactement ce même plat — <TITLE> — mêmes ingrédients, mêmes couleurs, même style, même lumière. Change uniquement l'angle de prise de vue : X.`
 
 ### 5.2 Spécs pro (tirées du skill, une seule combo par prompt)
 
@@ -164,12 +160,3 @@ Réponse à la question « 5 pins du même plat = risque spam ? » :
 - ❌ Pas d'appel LLM pour rédiger les prompts (template déterministe suffit)
 - ❌ Pas de refacto de `pin-brief.ts` (toujours utilisé pour les overlays texte)
 
----
-
-## 8. Non-goals (YAGNI)
-
-- ❌ Pas d'écriture dans `pin_drafts` (option console-only retenue — le stockage viendra plus tard si le workflow manuel est rodé)
-- ❌ Pas de génération d'images via l'API Ideogram (tout passe par le chat, manuel)
-- ❌ Pas d'automatisation dans le pipeline v14
-- ❌ Pas d'appel LLM pour rédiger les prompts (template déterministe suffit)
-- ❌ Pas de refacto de `pin-brief.ts` (toujours utilisé pour les overlays texte)
