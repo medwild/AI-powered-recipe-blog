@@ -57,7 +57,7 @@ export const HUBS: Hub[] = [
     slug: "romantic-dinner-ideas-for-two",
     category: "idees",
     title: "Romantic Dinner Ideas for Two",
-    metaTitle: "Romantic Dinner Ideas for Two (Date Night at Home)",
+    metaTitle: "Romantic Dinner Ideas for Two",
     metaDescription:
       "Romantic dinners for two to make at home — date-night recipes that feel restaurant-worthy without the stress or the bill.",
     intro: [

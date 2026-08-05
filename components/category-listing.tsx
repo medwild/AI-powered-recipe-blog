@@ -7,6 +7,7 @@ import { recipes } from "@/lib/db/schema"
 import { and, eq, desc } from "drizzle-orm"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
+import { HUBS } from "@/lib/hub-content"
 
 /**
  * Canonical category label map — single source of truth for the 5 article categories.
@@ -104,6 +105,11 @@ export async function CategoryListing({ category }: { category: string }) {
 
   const label = CATEGORY_LABELS[category] ?? category
 
+  // Hubs catalogue (lib/hub-content.ts) pour cette catégorie — les 22 pages
+  // de collection guides/idees. S'ils existent, on les liste sous les articles
+  // (évite le "0 articles" alors que le contenu existe).
+  const catalogHubs = HUBS.filter((h) => h.category === category)
+
   return (
     <div className="flex min-h-screen flex-col">
       <SiteHeader />
@@ -130,7 +136,7 @@ export async function CategoryListing({ category }: { category: string }) {
           </p>
         </header>
 
-        {articles.length === 0 ? (
+        {articles.length === 0 && catalogHubs.length === 0 ? (
           <div className="rounded-xl border border-dashed border-border bg-card p-12 text-center">
             <p className="text-muted-foreground">
               No articles in this category yet.
@@ -144,6 +150,28 @@ export async function CategoryListing({ category }: { category: string }) {
           </div>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {catalogHubs.map((hub) => (
+              <article key={hub.slug}>
+                <Link
+                  href={`/${hub.category}/${hub.slug}`}
+                  className="group rounded-xl border border-border bg-card overflow-hidden transition-colors hover:border-primary/50 block h-full"
+                >
+                  <div className="aspect-[16/9] bg-secondary flex items-center justify-center">
+                    <span className="text-muted-foreground text-sm">
+                      Collection
+                    </span>
+                  </div>
+                  <div className="p-4">
+                    <h2 className="font-serif text-lg font-semibold leading-snug group-hover:text-primary transition-colors">
+                      {hub.title}
+                    </h2>
+                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                      {hub.metaDescription}
+                    </p>
+                  </div>
+                </Link>
+              </article>
+            ))}
             {articles.map((article) => (
               <article key={article.slug}>
                 <Link

@@ -5,6 +5,7 @@ import { recipes } from "@/lib/db/schema"
 import { getRecipeCategories } from "@/lib/queries"
 import { getAllClusters } from "@/lib/cluster-resolver"
 import { tagToSlug } from "@/lib/tag-utils"
+import { HUBS } from "@/lib/hub-content"
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.chefaugustin.com"
 
@@ -79,6 +80,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
+  // Topical hub pages from the code catalog (guides/idees) — 22 collection hubs
+  const hubEntries: MetadataRoute.Sitemap = HUBS.map((hub) => ({
+    url: `${BASE_URL}/${hub.category}/${hub.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.7,
+  }))
+
   // Article category pages (techniques, guides, etc.)
   const articleCategoryEntries: MetadataRoute.Sitemap = ARTICLE_CATEGORIES.map((cat) => ({
     url: `${BASE_URL}/${cat}`,
@@ -118,6 +127,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...recipeEntries,
     ...recipeCategoryEntries,
     ...clusterEntries,
+    ...hubEntries,
     ...articleEntries,
   ]
 }

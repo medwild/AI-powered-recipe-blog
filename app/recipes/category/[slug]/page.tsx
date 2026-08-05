@@ -107,8 +107,12 @@ export async function generateStaticParams() {
  * it pushed titles past the ~580px SERP limit on 22 category pages.
  */
 function categoryTitle(tag: string): string {
-  const base = tag.replace(/\b\w/g, (c) => c.toUpperCase()).replace(/ For Two$/i, "").trim()
-  return base ? `${base} Recipes for Two` : "Recipes for Two"
+  const titleCased = tag.replace(/\b\w/g, (c) => c.toUpperCase())
+  // Strip a trailing "For Two" (e.g. "Dinner For Two" → "Dinner"), but keep
+  // the whole string when the tag IS "For Two" (→ fallback below, no repetition)
+  const base = titleCased === "For Two" ? "" : titleCased.replace(/ For Two$/i, "").trim()
+  // Generic "for two" tag → fallback that doesn't repeat the brand keyword
+  return base ? `${base} Recipes for Two` : "All Recipes for Two"
 }
 
 export async function generateMetadata({

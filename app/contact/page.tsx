@@ -5,7 +5,7 @@ import { SiteFooter } from "@/components/site-footer"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 
 export const metadata: Metadata = {
-  title: "Contact Chef Augustin",
+  title: "Contact Us — Recipe Questions & Feedback",
   description: "Get in touch with Chef Augustin — recipe questions, feedback, corrections, partnership inquiries, or just to say hello.",
   alternates: { canonical: "/contact" },
 }
