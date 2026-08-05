@@ -14,6 +14,7 @@ import { RecipeCard } from "@/components/recipe-card"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { getPublishedRecipesByTag, getRecipeCategories } from "@/lib/queries"
 import { tagToSlug, slugToTag } from "@/lib/tag-utils"
+import { CANONICAL_CATEGORIES } from "@/lib/category-consolidation"
 
 // Seuil Google anti-thin-content : une catégorie avec < 3 recettes n'apporte
 // pas de valeur → noindex (évite le scaled content abuse sur les 100+ pages fines).
@@ -233,14 +234,16 @@ export default async function CategoryPage({
           }}
         />
 
-        {/* Cross-link to all categories */}
+        {/* Cross-link to canonical categories only (merged thin categories 301
+            to their parent — lib/category-consolidation.ts; linking to them
+            would point at redirects and dilute equity on 119 near-duplicates) */}
         <section className="mt-16 border-t border-border pt-14 text-center">
           <h2 className="font-serif text-2xl">Browse all categories</h2>
           <p className="mt-2 mb-6 text-muted-foreground">
             Explore more dinner-for-two recipes by ingredient, technique, or occasion.
           </p>
           <div className="flex flex-wrap justify-center gap-2">
-            {categories.map((cat) => (
+            {categories.filter((cat) => CANONICAL_CATEGORIES.has(cat.toLowerCase())).map((cat) => (
               <Link
                 key={cat}
                 href={`/recipes/category/${tagToSlug(cat)}`}

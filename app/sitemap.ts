@@ -6,6 +6,7 @@ import { getRecipeCategories } from "@/lib/queries"
 import { getAllClusters } from "@/lib/cluster-resolver"
 import { tagToSlug } from "@/lib/tag-utils"
 import { HUBS } from "@/lib/hub-content"
+import { CANONICAL_CATEGORIES } from "@/lib/category-consolidation"
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.chefaugustin.com"
 
@@ -64,13 +65,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  // Recipe tag categories — dynamically generated from published recipe tags
-  const recipeCategoryEntries: MetadataRoute.Sitemap = categories.map((tag) => ({
-    url: `${BASE_URL}/recipes/category/${tagToSlug(tag)}`,
-    lastModified: new Date(),
-    changeFrequency: "weekly" as const,
-    priority: 0.6,
-  }))
+  // Recipe tag categories — only the canonical deep categories (>=3 recipes)
+  // are included; merged thin categories (1-2 recipes) 301 to their canonical
+  // parent (lib/category-consolidation.ts) and must not appear in the sitemap.
+  const recipeCategoryEntries: MetadataRoute.Sitemap = categories
+    .filter((tag) => CANONICAL_CATEGORIES.has(tag.toLowerCase()))
+    .map((tag) => ({
+      url: `${BASE_URL}/recipes/category/${tagToSlug(tag)}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.6,
+    }))
 
   // Topical cluster hub pages — 6 pillar pages for content architecture
   const clusterEntries: MetadataRoute.Sitemap = clusters.map((c) => ({
