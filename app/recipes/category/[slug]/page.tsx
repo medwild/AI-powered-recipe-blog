@@ -183,21 +183,15 @@ export default async function CategoryPage({
             {CATEGORY_INTROS[tag] ? (
               CATEGORY_INTROS[tag].map((p, i) => <p key={i}>{p}</p>)
             ) : (
-              <>
-                <p>
-                  Looking for the best <strong>{tag}</strong> recipes for two people?
-                  You&rsquo;re in the right place. Our collection of {recipes.length}{" "}
-                  {tag.toLowerCase()} recipe{recipes.length !== 1 ? "s" : ""} brings
-                  professional French technique to your weeknight table — scaled down,
-                  tested, and ready when you are.
-                </p>
-                <p>
-                  {recipes.length === 1
-                    ? `This ${tag.toLowerCase()} recipe is the only one you need — developed, tested, and scaled for two people with no leftovers and no wasted ingredients.`
-                    : `All ${recipes.length} ${tag.toLowerCase()} recipes are developed for two people: no leftovers that die in the back of the fridge, no ingredient waste, and no compromise on flavor. Whether you're after a quick weeknight fix or a slow-cooked weekend project, each recipe is tested at two-serving scale so it works the first time.`
+              // No templated "collection of N" boilerplate — thin categories are
+              // noindex anyway; a plain count line reads naturally (Seobility
+              // flagged the old template as scaled-content pattern 2026-08-05).
+              <p>
+                {recipes.length === 1
+                  ? `This ${tag.toLowerCase()} recipe is scaled for two people — tested at two-serving size with no leftovers and no wasted ingredients.`
+                  : `${recipes.length} ${tag.toLowerCase()} recipes scaled for two people — tested at two-serving size, no leftovers, no waste.`
                   }
-                </p>
-              </>
+              </p>
             )}
           </div>
           <div className="mt-5 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
@@ -207,7 +201,7 @@ export default async function CategoryPage({
           </div>
         </header>
 
-        <h2 className="sr-only">{tag} recipes</h2>
+        <h2 className="sr-only">{categoryTitle(tag)}</h2>
         {recipes.length === 0 ? (
           <div className="rounded-xl border border-dashed border-border bg-card p-12 text-center">
             <p className="text-muted-foreground">
@@ -221,6 +215,29 @@ export default async function CategoryPage({
             ))}
           </div>
         )}
+
+        {/* ItemList JSON-LD — category as a collection of Recipe items (AI
+            citation + rich-result eligibility; the recipes themselves carry
+            full Recipe schema) */}
+        {recipes.length > 0 ? (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "ItemList",
+                name: categoryTitle(tag),
+                numberOfItems: recipes.length,
+                itemListElement: recipes.map((recipe, i) => ({
+                  "@type": "ListItem",
+                  position: i + 1,
+                  url: `https://www.chefaugustin.com/recipes/${recipe.slug}`,
+                  name: recipe.title,
+                })),
+              }),
+            }}
+          />
+        ) : null}
 
 
         {/* Cross-link to canonical categories only (merged thin categories 301
