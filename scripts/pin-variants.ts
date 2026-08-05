@@ -51,6 +51,16 @@ function resolveAngles(tags: string[]): Angle[] {
   return ANGLES.default
 }
 
+function buildPrompt(title: string, angle: Angle): string {
+  return [
+    `Recrée exactement ce même plat — ${title} — mêmes ingrédients, mêmes couleurs, même style, même lumière. Change uniquement l'angle de prise de vue : ${angle.label}.`,
+    "",
+    angle.specs,
+    "",
+    "2:3 vertical, Pinterest. Fond simple. Pas de texte sur l'image.",
+  ].join("\n")
+}
+
 async function main() {
   // Dynamic import AFTER dotenv.config(): static imports are hoisted above
   // this call, and lib/db creates the Pool at import time — DATABASE_URL must
@@ -76,7 +86,21 @@ async function main() {
   const title = recipe.title || recipe.keyword || "Untitled"
   const tags = (recipe.tags ?? []) as string[]
 
-  // TODO: print pin 1 (hero URL) + pins 2-5 (4 prompts)
+  console.log("")
+  console.log("═══ PIN 1 — HERO EXISTANTE ═══")
+  console.log("Image de référence (à charger dans le chat Ideogram) :")
+  console.log(recipe.heroImageUrl)
+  console.log("")
+
+  const angles = resolveAngles(tags)
+  for (let i = 0; i < angles.length; i++) {
+    const pinNum = i + 2
+    console.log(`═══ PIN ${pinNum} — ${angles[i].label} ═══`)
+    console.log("[PROM] " + buildPrompt(title, angles[i]))
+    console.log("")
+  }
+
+  console.log("💡 Overlays texte : npx tsx scripts/pin-brief.ts " + recipe.id + " (pas de duplication ici)")
 }
 
 main().catch((err) => { console.error("❌", err); process.exit(1) })
