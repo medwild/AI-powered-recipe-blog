@@ -7,7 +7,9 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
+        // /api/recipes/raw is referenced by llms.txt for AI crawlers — allow it
+        // explicitly despite the /api/ disallow (the raw JSON export is public).
+        allow: ["/", "/api/recipes/raw"],
         disallow: ["/dashboard", "/api/"],
       },
       { userAgent: "OAI-SearchBot", allow: "/" },

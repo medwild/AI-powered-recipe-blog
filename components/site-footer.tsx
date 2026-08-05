@@ -85,6 +85,9 @@ export function SiteFooter() {
             <Link href="/contact" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
               Contact
             </Link>
+            <Link href="/llms.txt" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+              For AI / llms.txt
+            </Link>
           </div>
 
           {/* Connect */}

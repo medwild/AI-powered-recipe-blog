@@ -34,7 +34,8 @@ export async function GET() {
   const recipeList = publishedRecipes
     .map(
       (r) =>
-        `- [${r.title}](${BASE_URL}/recipes/${r.slug}): ${r.excerpt ?? "Small-batch dinner recipe for two."} (${r.totalTime ?? "N/A"}, ${r.difficulty ?? "N/A"}, ${r.servings ?? 2} servings)`,
+        // servings already reads "2 servings" — avoid "2 servings servings"
+        `- [${r.title}](${BASE_URL}/recipes/${r.slug}): ${r.excerpt ?? "Small-batch dinner recipe for two."} (${r.totalTime ?? "N/A"}, ${r.difficulty ?? "N/A"}, ${r.servings ?? "2 servings"})`,
     )
     .join("\n")
 
