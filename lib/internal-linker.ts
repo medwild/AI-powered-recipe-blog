@@ -17,6 +17,7 @@
 
 import { getPublishedRecipes } from "@/lib/queries"
 import { resolveCluster } from "@/lib/cluster-resolver"
+import { getHubForCluster, type Hub } from "@/lib/hub-content"
 import { db } from "@/lib/db"
 import { internalLinkLogs } from "@/lib/db/schema"
 
@@ -30,6 +31,8 @@ interface LinkTarget {
   title: string
   keyword: string
   tags: string[]
+  /** Cluster ID (topical authority silo) — resolved by the linker. */
+  clusterId?: string | null
   /** Search phrases — populated by buildPhrases(). Optional in input, filled by the linker. */
   phrases?: string[]
 }
@@ -38,6 +41,7 @@ interface PlacedLink {
   paragraphIdx: number
   phrase: string        // the exact text to replace (from the content)
   slug: string          // target recipe slug
+  url: string           // target URL — "/recipes/x" or "/guides/x" for hubs
   anchor: string        // anchor text to display (target recipe's keyword)
   score: number         // higher = better match
 }
@@ -165,6 +169,33 @@ function buildPhrases(title: string, keyword: string, tags: string[]): string[] 
     .slice(0, 10)
 }
 
+/**
+ * Search phrases for a hub (pillar page) — derived from its name and
+ * curated tags. Kept short so the anchor reads naturally in body text.
+ */
+function buildHubPhrases(hub: Hub): string[] {
+  const phrases: string[] = []
+  // "Easy Dinner Ideas for Two" → "dinner ideas", "easy dinner ideas", "dinner"
+  const name = hub.title.toLowerCase().replace(/\s+(for two|for 2|ideas for two)$/i, "")
+  const words = name.split(/\s+/)
+  for (let i = 0; i <= words.length - 2; i++) {
+    const chunk = words.slice(i, i + 2).join(" ")
+    if (chunk.length > 6 && !GENERIC_PHRASES.has(chunk)) phrases.push(chunk)
+  }
+  if (name.length > 6 && !GENERIC_PHRASES.has(name)) phrases.push(name)
+  // Distinctive curated tags (multi-word + single-word content words)
+  for (const t of hub.curateTags) {
+    const tag = t.toLowerCase()
+    if (tag.includes(" ") && tag.length > 6 && !GENERIC_PHRASES.has(tag)) phrases.push(tag)
+  }
+  for (const w of words) {
+    // Unigram anchors: ≥6 chars ("dinner", "healthy") carry meaning;
+    // shorter or generic words ("easy", "for", "two") read as broken anchors.
+    if (w.length >= 6 && !STOP_WORDS.test(w) && !GENERIC_PHRASES.has(w)) phrases.push(w)
+  }
+  return [...new Set(phrases)]
+}
+
 // ---------------------------------------------------------------------------
 // Paragraph classification
 // ---------------------------------------------------------------------------
@@ -283,14 +314,25 @@ export function insertContextualLinksBatch(
   if (!markdown || markdown.trim().length === 0) return { markdown, links }
 
   // 1. Build phrase index for all target recipes
+  const sourceCluster = resolveCluster(tags)
   const targets: LinkTarget[] = allRecipes
     .filter((r) => r.id !== recipeId)
     .map((r) => ({
       ...r,
+      clusterId: resolveCluster(r.tags)?.id ?? null,
       phrases: buildPhrases(r.title, r.keyword, r.tags),
     }))
 
   if (targets.length === 0) return { markdown, links }
+
+  // Topical authority silo: strict same-cluster linking (Koray Gübür method).
+  // A leaf recipe may only link to leaves of its own cluster + its pillar
+  // hub — cross-cluster links dilute cluster authority (PageRank leaks).
+  // Recipes without a cluster are only linkable from other clusterless
+  // recipes (avoids spraying authority across the whole site).
+  const sameClusterTargets = sourceCluster
+    ? targets.filter((t) => t.clusterId === sourceCluster.id)
+    : targets.filter((t) => t.clusterId === null)
 
   // 2. Resolve same-cluster IDs for priority
   const cluster = resolveCluster(tags)
@@ -325,8 +367,8 @@ export function insertContextualLinksBatch(
       if (wordsBefore - lastWordsBefore < 150) continue
     }
 
-    // Find the best match for this paragraph
-    const matches = scanParagraph(paragraphs[i], targets, recipeId, sameClusterIds)
+    // Find the best match for this paragraph (same-cluster targets only)
+    const matches = scanParagraph(paragraphs[i], sameClusterTargets, recipeId, sameClusterIds)
 
     for (const match of matches) {
       if (usedSlugs.has(match.slug)) continue
@@ -335,11 +377,41 @@ export function insertContextualLinksBatch(
         paragraphIdx: i,
         phrase: match.phrase,
         slug: match.slug,
+        url: `/recipes/${match.slug}`,
         anchor: match.anchor,
         score: match.score,
       })
       usedSlugs.add(match.slug)
       break // max 1 link per paragraph
+    }
+  }
+
+  // Pillar fallback — if no same-cluster leaf match was found, link up to
+  // the cluster's hub (leaf→pillar) contextually. This keeps the silo
+  // intact: every leaf still gets an internal link, but never cross-cluster.
+  if (placements.length === 0 && sourceCluster) {
+    const hub = getHubForCluster(sourceCluster.id, tags)
+    if (hub) {
+      const hubPhrases = buildHubPhrases(hub)
+      const hubTarget: LinkTarget = {
+        id: -1, slug: hub.slug, title: hub.title, keyword: hub.title,
+        tags: hub.curateTags, clusterId: sourceCluster.id, phrases: hubPhrases,
+      }
+      for (let i = 0; i < paragraphs.length; i++) {
+        if (!isContentParagraph(paragraphs[i])) continue
+        const matches = scanParagraph(paragraphs[i], [hubTarget], recipeId, sameClusterIds)
+        if (matches.length > 0) {
+          placements.push({
+            paragraphIdx: i,
+            phrase: matches[0].phrase,
+            slug: hub.slug,
+            url: `/${hub.category}/${hub.slug}`,
+            anchor: matches[0].anchor,
+            score: matches[0].score,
+          })
+          break
+        }
+      }
     }
   }
 
@@ -351,6 +423,15 @@ export function insertContextualLinksBatch(
     // Match the phrase as a whole word/phrase, case-insensitive
     const regex = new RegExp(`(${escaped})`, "i")
     if (regex.test(p)) {
+      // Skip matches already inside an existing link "[...](...)" —
+      // re-linking them creates nested broken links like
+      // "[[ground beef](/recipes/...)](...)".
+      const m = regex.exec(p)!
+      const before = p.substring(0, m.index)
+      const openBrackets = (before.match(/\[/g) ?? []).length
+      const closeBrackets = (before.match(/\]/g) ?? []).length
+      const insideText = openBrackets > closeBrackets
+      if (insideText) continue
       // Anchor = the matched text itself ($1), NOT the target's keyword.
       // Using the keyword as anchor replaces e.g. "beef" with
       // "one pan ground beef and tomato rice skillet for two" —
@@ -359,7 +440,7 @@ export function insertContextualLinksBatch(
       // context, so it reads naturally.
       paragraphs[placement.paragraphIdx] = p.replace(
         regex,
-        `[$1](/recipes/${placement.slug})`,
+        `[$1](${placement.url})`,
       )
       links.push({ targetSlug: placement.slug, anchor: placement.phrase })
     }

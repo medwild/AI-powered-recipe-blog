@@ -308,3 +308,23 @@ export function getHubForRecipe(tags: string[]): Hub | undefined {
   }
   return undefined
 }
+
+/** Cluster ID → hub slug (one pillar per cluster — topical authority silo). */
+const CLUSTER_TO_HUB: Record<string, string> = {
+  "chicken-dinners-for-two": "easy-dinner-ideas-for-two",
+  "small-batch-slow-cooker": "slow-cooker-recipes-for-two",
+  "one-pan-dinners-for-two": "easy-dinner-ideas-for-two",
+  "asian-inspired-dinners": "easy-dinner-ideas-for-two",
+  "budget-meals-for-two": "easy-meal-ideas-for-two",
+  "quick-healthy-dinners": "healthy-dinner-ideas-for-two",
+}
+
+/**
+ * Hub for a cluster (leaf→pillar link). Falls back to getHubForRecipe
+ * so every recipe still has a pillar even if its cluster has no hub.
+ */
+export function getHubForCluster(clusterId: string, tags: string[]): Hub | undefined {
+  const slug = CLUSTER_TO_HUB[clusterId]
+  if (slug) return getHubBySlug(slug)
+  return getHubForRecipe(tags)
+}
