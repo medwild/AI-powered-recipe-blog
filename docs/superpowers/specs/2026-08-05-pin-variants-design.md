@@ -34,7 +34,7 @@ L'idée : **exploiter l'hero image comme référence** pour générer 4 images v
 scripts/pin-variants.ts <recipeId|slug>
         │
         ▼
-   DB (read-only) — recipes : title, tags, imagePrompt, heroImageUrl, totalTime, difficulty
+   DB (read-only) — recipes : title, tags, heroImageUrl
         │
         ▼
    Console — lien Cloudinary hero (pin 1) + 4 prompts image-to-image (pins 2-5)
@@ -56,7 +56,6 @@ scripts/pin-variants.ts <recipeId|slug>
 | Usage sans argument | `Usage: npx tsx scripts/pin-variants.ts <recipeId\|slug>` + `exit 1` |
 | Recette introuvable | `Recipe not found: <target>` + `exit 1` |
 | `heroImageUrl` null | `⚠️ Génère la hero image d'abord — elle sert de référence` + `exit 1` |
-| Tags vides | Mapping fallback (45° close-up → overhead → macro → lifestyle) |
 
 ### 4.2 Sortie console
 
@@ -82,18 +81,18 @@ Image de référence (à charger dans le chat Ideogram) :
 
 ---
 
-## 5. Les 4 angles + mapping par type de plat
+## 5. Les 4 angles — séquence fixe + 2 conditions (pas de table)
 
-Le mapping est une **constante TS** avec le commentaire `// reflète food-photography.md §6` — c'est la source de vérité (pas de duplication silencieuse).
+La séquence de base est **fixe** pour tous les plats ; seuls 2 cas particuliers dévient (reflète `food-photography.md` §6) :
 
-| Type de plat (tags) | Pin 2 | Pin 3 | Pin 4 | Pin 5 |
-|---|---|---|---|---|
-| Pâtes / plat dressé | 45° close-up (cheese pull, sauce) | Overhead (composition) | Détail macro (vapeur, texture) | Lifestyle en situation |
-| Pizza / salade / board | Overhead flat lay | 45° close-up | Détail macro (garnitures) | Lifestyle en situation |
-| Burger / sandwich | 45° hero (hauteur/layers) | Side cut-away (couche) | Détail macro (sauce qui coule) | Lifestyle en situation |
-| Dessert / cake | 45° close-up | Overhead | Détail macro (coulage, texture) | Lifestyle en situation |
-| Soupe / mijoté | 45° close (vapeur) | Overhead | Détail macro (texture) | Lifestyle en situation |
-| Fallback | 45° close-up | Overhead | Détail macro | Lifestyle |
+| Pin | Angle par défaut | Cas flat-lay (pizza, salade, board, cake/tart) | Cas burger/sandwich |
+|---|---|---|---|
+| Pin 2 | 45° close-up | Overhead flat lay | 45° hero (hauteur/layers) |
+| Pin 3 | Overhead | 45° close-up | Side cut-away (couches) |
+| Pin 4 | Détail macro | Détail macro | Détail macro (sauce qui coule) |
+| Pin 5 | Lifestyle en situation | Lifestyle | Lifestyle |
+
+Implémentation : `FLAT_LAY_TAGS = ["pizza", "salad", "board", "cake", "tart"]`, `BURGER_TAGS = ["burger", "sandwich", "wrap"]` — 2 tableaux courts, 1 resolver de 4 lignes. Pas de table de 6 lignes (4 étaient identiques).
 
 ### 5.1 Structure du prompt (template déterministe, zéro LLM)
 
@@ -123,7 +122,7 @@ modérée">
 | Détail macro | 90mm macro | f/2.2 | Très shallow |
 | Hero shot | 35mm | f/2.0 | Shallow |
 
-Toujours : `crisp focus on the main dish, subtle film grain texture, professional food photography` + camera body `Sony A7R IV` ou `Canon EOS R5` (extrait de l'imagePrompt original si présent).
+Toujours : `crisp focus on the main dish, subtle film grain texture, professional food photography` + camera body fixe `Sony A7R IV` (recommandé par le skill §7 — pas d'extraction de l'imagePrompt, l'image de référence porte déjà le style).
 
 ### 5.3 Pas de texte sur l'image
 
@@ -149,7 +148,7 @@ Réponse à la question « 5 pins du même plat = risque spam ? » :
 ## 8. Critères de succès (revue Karpathy)
 
 1. `npx tsc --noEmit` passe
-2. Sur 2 recettes de types différents (ex: lasagne + dessert), les angles changent selon les tags
+2. Sur 2 recettes : une flat-lay (ex: pizza ou salade) + une autre (ex: lasagne) → la pizza sort en overhead (pin 2), la lasagne en 45° (pin 2)
 3. **1 prompt généré par le script testé dans le chat Ideogram avec la hero en référence** → variante reconnaissable + angle réellement différent (test manuel par l'utilisateur, AVANT mass pinning)
 
 ## 9. Non-goals (YAGNI)
