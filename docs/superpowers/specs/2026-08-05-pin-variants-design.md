@@ -1,7 +1,7 @@
 # Design — Pin Variants (5 pins par recette, image de référence)
 
 > **Date :** 2026-08-05
-> **Status :** Draft — en attente de validation utilisateur
+> **Status :** ✅ Validé par l'utilisateur (2026-08-05)
 > **Contexte :** Pipeline v14, Blog Chef Augustin, Stratégie Pinterest PTRA
 
 ---
