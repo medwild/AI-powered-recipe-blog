@@ -141,9 +141,9 @@ Réponse à la question « 5 pins du même plat = risque spam ? » :
 
 ---
 
-## 7. Étape 0 — Assomption à vérifier AVANT de coder
+## 7. Étape 0 — Assomption vérifiée ✅
 
-**Le chat Ideogram accepte une image de référence uploadée + un prompt texte pour produire une variante du même plat.** L'utilisateur confirme que oui — mais c'est la seule assomption factuelle du design. Test manuel sur 1 recette d'abord, puis code.
+**Le chat Ideogram accepte une image de référence uploadée + un prompt texte pour produire une variante du même plat.** — **Confirmé par l'utilisateur le 2026-08-05.** L'assomption factuelle unique du design est levée : le workflow est réalisable tel que spécifié.
 
 ## 8. Critères de succès (revue Karpathy)
 
