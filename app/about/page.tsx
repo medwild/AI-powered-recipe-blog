@@ -32,21 +32,19 @@ export default function AboutPage() {
             <div>
               <h1 className="font-serif text-4xl">Chef Augustin Lefèvre</h1>
               <p className="mt-2 text-lg text-muted-foreground">
-                French-trained chef, cookbook author, and advocate for practical
-                weeknight cooking for two.
+                The house persona behind Easy Weeknight Dinners for Two — practical,
+                tested small-batch cooking grounded in classic French technique.
               </p>
             </div>
           </header>
 
           <section className="mt-12 space-y-6 text-base leading-relaxed text-muted-foreground">
             <p>
-              <strong>Chef Augustin Lefèvre</strong> — French-trained chef, cookbook author,
-              and your guide to practical weeknight cooking for two. I trained in the
-              professional kitchens of Lyon — not the tourist spots, the real ones. The kind
-              where you learn to sear, deglaze, and reduce before you&apos;re allowed to touch
-              a pan on the line. I brought that precision home with me, and I&apos;ve spent
-              the years since figuring out how to make it work for Tuesday night,
-              not Saturday night. Two plates. One pan when possible.
+              <strong>Chef Augustin Lefèvre</strong> is the house persona of Easy Weeknight
+              Dinners for Two — a voice built on classic French technique and practical
+              small-batch cooking. The recipes here are developed and tested at
+              two-serving scale: the right pan size, the right timing, the right
+              ingredient quantities. Two plates. One pan when possible.
               No leftovers that die in the back of the fridge.
             </p>
 
@@ -91,8 +89,10 @@ export default function AboutPage() {
                 — every temperature, ratio, and technique explained
               </li>
               <li>
-                ✅ Every article passes a <strong>7-criteria quality audit</strong>
-                covering food safety, technique accuracy, and clarity
+                ✅ Every article passes a <strong>7-point quality gate</strong>:
+                food-safety temperatures, minimum word count, no banned health
+                claims, title length, heading structure, Recipe schema validity,
+                and no keyword-stuffing repetition
               </li>
               <li>
                 ✅ <strong>Science-backed</strong> — techniques grounded in
