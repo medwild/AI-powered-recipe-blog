@@ -7,7 +7,7 @@ import type { RecipeArticle } from "@/lib/schemas/recipe-article";
 
 export interface GateResult {
   status: "PASS" | "BLOCK";
-  reason?: "duplicate" | "food_safety" | "too_short" | "banned_words" | "meta_title_length" | "schema_author_missing";
+  reason?: "duplicate" | "food_safety" | "too_short" | "banned_words" | "meta_title_length" | "schema_author_missing" | "token_repetition";
   errors?: string[];
 }
 
@@ -226,6 +226,21 @@ export async function qualityGate(output: RecipeArticle): Promise<GateResult> {
       status: "BLOCK",
       reason: "schema_author_missing",
       errors: ["Recipe JSON-LD node is missing 'author' (required for Google Recipe rich results)"],
+    };
+  }
+
+  // Check 7: Token repetition — block keyword-stuffing artifacts like
+  // "easy easy mexican dinner recipes recipes two" (seen live on the
+  // garlic-shrimp recipe + llms.txt, Seobility/GEO audit 2026-08-05).
+  // Catches "word word" and "for two for two" style repetition.
+  const repeatMatches = (output.contentMarkdown ?? "").match(/\b(\w+)\s+\1\b/g) ?? []
+  const forTwoRepeat = (output.contentMarkdown ?? "").match(/(for two\s+){2,}/g) ?? []
+  if (repeatMatches.length || forTwoRepeat.length) {
+    const samples = [...new Set([...repeatMatches, ...forTwoRepeat])].slice(0, 5)
+    return {
+      status: "BLOCK",
+      reason: "token_repetition",
+      errors: [`Token repetition detected: ${samples.join(", ")}`],
     };
   }
 
