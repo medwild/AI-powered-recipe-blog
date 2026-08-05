@@ -14,12 +14,17 @@ import { Breadcrumbs } from "@/components/breadcrumbs"
 import { searchPublishedRecipes, getRecipeCategories } from "@/lib/queries"
 import { resolveCluster, getClusterById, getAllClusters } from "@/lib/cluster-resolver"
 import { tagToSlug } from "@/lib/tag-utils"
+import { CANONICAL_CATEGORIES } from "@/lib/category-consolidation"
 
 
 export async function generateStaticParams() {
   const clusters = getAllClusters()
   return clusters.map((c) => ({ slug: c.id }))
 }
+
+// Unknown cluster slugs must return a true 404, not a soft-404 200
+// (Seobility/audit 2026-08-05).
+export const dynamicParams = false
 
 export async function generateMetadata({
   params,
@@ -140,30 +145,15 @@ export default async function ClusterPage({
           </>
         )}
 
-        {/* BreadcrumbList JSON-LD */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "BreadcrumbList",
-              itemListElement: [
-                { "@type": "ListItem", position: 1, name: "Home", item: "https://www.chefaugustin.com/" },
-                { "@type": "ListItem", position: 2, name: "Recipes", item: "https://www.chefaugustin.com/recipes" },
-                { "@type": "ListItem", position: 3, name: cluster.name, item: `https://www.chefaugustin.com/recipes/cluster/${slug}` },
-              ],
-            }),
-          }}
-        />
-
-        {/* Browse all categories */}
+        {/* Browse all categories — canonical only (merged thin categories 301
+            to their parent — lib/category-consolidation.ts) */}
         <section className="mt-16 border-t border-border pt-14 text-center">
           <h2 className="font-serif text-2xl">Browse by ingredient</h2>
           <p className="mt-2 mb-6 text-muted-foreground">
             Explore recipes by ingredient, technique, or cuisine.
           </p>
           <div className="flex flex-wrap justify-center gap-2">
-            {categories.map((cat) => (
+            {categories.filter((cat) => CANONICAL_CATEGORIES.has(cat.toLowerCase())).map((cat) => (
               <Link
                 key={cat}
                 href={`/recipes/category/${tagToSlug(cat)}`}

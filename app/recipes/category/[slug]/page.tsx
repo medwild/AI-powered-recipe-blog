@@ -101,6 +101,10 @@ export async function generateStaticParams() {
   return categories.map((tag) => ({ slug: tagToSlug(tag) }))
 }
 
+// Unknown slugs (not in generateStaticParams) must return a true 404, not a
+// soft-404 200 with the not-found page (Seobility/audit 2026-08-05).
+export const dynamicParams = false
+
 /**
  * Page title for a category: title-cases the tag and drops a redundant
  * trailing "For Two" so "Dinner For Two" doesn't become "Dinner For Two
@@ -218,21 +222,6 @@ export default async function CategoryPage({
           </div>
         )}
 
-        {/* BreadcrumbList JSON-LD */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "BreadcrumbList",
-              itemListElement: [
-                { "@type": "ListItem", position: 1, name: "Home", item: "https://www.chefaugustin.com/" },
-                { "@type": "ListItem", position: 2, name: "Recipes", item: "https://www.chefaugustin.com/recipes" },
-                { "@type": "ListItem", position: 3, name: tag, item: `https://www.chefaugustin.com/recipes/category/${slug}` },
-              ],
-            }),
-          }}
-        />
 
         {/* Cross-link to canonical categories only (merged thin categories 301
             to their parent — lib/category-consolidation.ts; linking to them

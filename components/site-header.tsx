@@ -61,12 +61,6 @@ export function SiteHeader({ actions }: { actions?: React.ReactNode }) {
               {link.label}
             </Link>
           ))}
-          <Link
-            href="/dashboard"
-            className="rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
-          >
-            Studio
-          </Link>
           {actions}
           <ThemeToggle />
         </nav>
@@ -108,14 +102,6 @@ export function SiteHeader({ actions }: { actions?: React.ReactNode }) {
                 {link.label}
               </Link>
             ))}
-            <div className="mx-4 my-2 border-t border-border" />
-            <Link
-              href="/dashboard"
-              onClick={close}
-              className="block px-4 py-3 text-base font-medium text-foreground transition-colors hover:bg-secondary"
-            >
-              Studio
-            </Link>
             <div className="flex items-center justify-between px-4 py-3">
               <span className="text-base font-medium text-foreground">Dark mode</span>
               <ThemeToggle />

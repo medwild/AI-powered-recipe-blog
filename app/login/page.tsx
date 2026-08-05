@@ -1,4 +1,11 @@
 import { LogIn } from "lucide-react"
+import type { Metadata } from "next"
+
+// Admin login — must not be indexed (internal tool, not content).
+export const metadata: Metadata = {
+  title: "Editorial Studio — Login",
+  robots: "noindex, nofollow",
+}
 
 export default async function LoginPage({
   searchParams,

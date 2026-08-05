@@ -93,13 +93,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  // Article category pages (techniques, guides, etc.)
-  const articleCategoryEntries: MetadataRoute.Sitemap = ARTICLE_CATEGORIES.map((cat) => ({
-    url: `${BASE_URL}/${cat}`,
-    lastModified: new Date(),
-    changeFrequency: "weekly" as const,
-    priority: 0.7,
-  }))
+  // Article category pages (techniques, guides, etc.) — only those with
+  // content (catalog hubs) are included; empty hubs are noindex + excluded
+  // (thin content, Seobility/audit 2026-08-05).
+  const articleCategoryEntries: MetadataRoute.Sitemap = ARTICLE_CATEGORIES
+    .filter((cat) => HUBS.some((h) => h.category === cat))
+    .map((cat) => ({
+      url: `${BASE_URL}/${cat}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    }))
 
   const staticEntries: MetadataRoute.Sitemap = STATIC_PAGES.map((page) => ({
     url: `${BASE_URL}/${page}`,

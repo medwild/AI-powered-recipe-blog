@@ -70,11 +70,16 @@ const CATEGORY_BODY: Record<string, string[]> = {
 export function categoryMetadata(category: string): Metadata {
   const label = CATEGORY_LABELS[category] ?? category
   const title = CATEGORY_TITLES[category] ?? label
+  // Empty hubs (no DB articles AND no catalog hubs) must not be indexed —
+  // they render "No articles in this category yet" (thin content, soft-404
+  // risk). Seobility/audit 2026-08-05 flagged /techniques /histoire /equipement.
+  const catalogHubs = HUBS.filter((h) => h.category === category)
+  const isEmpty = catalogHubs.length === 0
   return {
     title,
     description: `Browse our ${label.toLowerCase()} articles — French cooking tips, techniques, and guides.`,
     alternates: { canonical: `/${category}` },
-    robots: "index, follow",
+    robots: isEmpty ? "noindex, follow" : "index, follow",
     openGraph: {
       title: `${title} | Chef Augustin`,
       description: `Browse our ${label.toLowerCase()} articles — French cooking tips, techniques, and guides.`,
