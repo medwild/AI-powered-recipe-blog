@@ -105,6 +105,11 @@ export function validateFoodSafety(
 
     if (matchedKeywords.length === 0) continue;
 
+    // Skip broader rules if a more specific rule already matched this protein.
+    // e.g. "ground beef" (160°F) also matches "beef" (145°F) — the specific
+    // rule must win, otherwise the gate demands the wrong temperature.
+    if (rule.keywords[0] === "beef" && lowerIngredients.includes("ground beef")) continue;
+
     // Check excludes
     if (rule.exclude) {
       const excluded = rule.exclude.filter((ex) => lowerIngredients.includes(ex));
@@ -233,7 +238,11 @@ export async function qualityGate(output: RecipeArticle): Promise<GateResult> {
   // "easy easy mexican dinner recipes recipes two" (seen live on the
   // garlic-shrimp recipe + llms.txt, Seobility/GEO audit 2026-08-05).
   // Catches "word word" and "for two for two" style repetition.
-  const repeatMatches = (output.contentMarkdown ?? "").match(/\b(\w+)\s+\1\b/g) ?? []
+  // Ignore number+number+slash patterns like "1 1/4" (fractions), and
+  // pure-digit repeats like "1 1" that are measurement artifacts, not stuffing.
+  const repeatMatches = (output.contentMarkdown ?? "")
+    .replace(/\b\d+\s+\d+\/\d+\b/g, " ")   // "1 1/4 cups" → fraction, not repetition
+    .match(/\b([a-z]+)\s+\1\b/gi) ?? []
   const forTwoRepeat = (output.contentMarkdown ?? "").match(/(for two\s+){2,}/g) ?? []
   if (repeatMatches.length || forTwoRepeat.length) {
     const samples = [...new Set([...repeatMatches, ...forTwoRepeat])].slice(0, 5)

@@ -985,25 +985,12 @@ export async function runWithStructuredOutput<T>(
     throw lastErr ?? new Error("Gemini structured output: all attempts failed")
   }
 
-  // Tokenmix native structured output (OpenAI response_format.json_schema)
+  // Tokenmix: structured output is unreliable for heavy prompts —
+  // returns `output_config.format: Extra inputs are not permitted`
+  // (HTTP 200, invalid_request_error) with skill + schema. Text mode
+  // works. Fall through to the text+parse path below.
   if (provider instanceof TokenmixProvider) {
-    console.log("[provider] Tokenmix structured output (response_format)")
-    let lastErr: Error | null = null
-    for (let attempt = 1; attempt <= 3; attempt++) {
-      try {
-        return await provider.runStructured<T>(systemPrompt, userPrompt, jsonSchema, options)
-      } catch (err) {
-        lastErr = err as Error
-        const msg = (err as Error).message
-        if (!isRecoverable(msg)) throw lastErr
-        if (attempt < 3) {
-          const delay = attempt * 5_000
-          console.warn(`[provider] Tokenmix attempt ${attempt} failed: ${msg.substring(0, 100)} — retrying in ${delay / 1000}s`)
-          await new Promise(r => setTimeout(r, delay))
-        }
-      }
-    }
-    throw lastErr ?? new Error("Tokenmix structured output: all attempts failed")
+    console.log("[provider] Tokenmix — falling back to text+parse (structured output unreliable for heavy prompts)")
   }
 
   // Non-Anthropic providers AND FlatKey: fall back to text + JSON parse.
