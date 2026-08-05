@@ -7,7 +7,7 @@ import type { RecipeArticle } from "@/lib/schemas/recipe-article";
 
 export interface GateResult {
   status: "PASS" | "BLOCK";
-  reason?: "duplicate" | "food_safety" | "too_short" | "banned_words" | "meta_title_length";
+  reason?: "duplicate" | "food_safety" | "too_short" | "banned_words" | "meta_title_length" | "schema_author_missing";
   errors?: string[];
 }
 
@@ -213,6 +213,19 @@ export async function qualityGate(output: RecipeArticle): Promise<GateResult> {
       status: "BLOCK",
       reason: "too_short",
       errors: [`Only ${h2Count} H2 heading(s) found — need ≥3 for scannable structure. Add ## sections (Why This Works, Ingredients, Instructions, FAQ, Chef Tips, etc.).`],
+    };
+  }
+
+  // Check 6: Recipe JSON-LD must include author — required for Google Recipe
+  // rich results. The LLM sometimes emits author on BlogPosting only.
+  const jsonLd = (output.jsonLd ?? {}) as Record<string, unknown>
+  const graph = Array.isArray(jsonLd["@graph"]) ? jsonLd["@graph"] : []
+  const recipeNode = graph.find((n) => (n as Record<string, unknown>)["@type"] === "Recipe") as Record<string, unknown> | undefined
+  if (recipeNode && !recipeNode.author) {
+    return {
+      status: "BLOCK",
+      reason: "schema_author_missing",
+      errors: ["Recipe JSON-LD node is missing 'author' (required for Google Recipe rich results)"],
     };
   }
 

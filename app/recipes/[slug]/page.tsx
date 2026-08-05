@@ -101,9 +101,17 @@ function RecipeJsonLd({
         // tag-like values ("Easy Weeknight Dinners for Two") instead of a valid cuisine
         // ("American", "French"). Invalid cuisine → Google Rich Results warning.
         const { recipeCuisine: _cuisine, ...cleanNode } = node as Record<string, unknown> & { recipeCuisine?: unknown }
+        // author is a required property for Google Recipe rich results; the LLM
+        // sometimes omits it from the Recipe node (it lives on BlogPosting only).
+        // Enrich/fallback here so every recipe is eligible.
+        const author = (node.author as Record<string, unknown>) ?? {}
+        const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://www.chefaugustin.com"
         return {
           ...cleanNode,
           "@id": "#recipe",
+          author: Object.keys(author).length
+            ? { ...author, url: author.url || `${SITE}/about` }
+            : { "@type": "Person", name: "Chef Augustin Lefèvre", url: `${SITE}/about` },
           name: recipe.title,
           description: recipe.metaDescription || recipe.excerpt || undefined,
           image: recipe.heroImageUrl ? [recipe.heroImageUrl] : undefined,
