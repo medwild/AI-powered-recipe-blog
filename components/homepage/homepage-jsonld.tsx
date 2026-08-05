@@ -13,7 +13,7 @@ export function HomepageJsonLd() {
             url: SITE,
             logo: `${SITE}/hero-kitchen.png`,
             description:
-              "Chef Augustin Lefevre shares practical small-batch dinner recipes for two.",
+              "Chef Augustin Lefèvre shares practical small-batch dinner recipes for two.",
             sameAs: [
               "https://www.instagram.com/chefaugustin",
               "https://www.pinterest.com/chefaugustin",

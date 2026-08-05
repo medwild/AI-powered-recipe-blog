@@ -116,6 +116,7 @@ function RecipeJsonLd({
           description: recipe.metaDescription || recipe.excerpt || undefined,
           image: recipe.heroImageUrl ? [recipe.heroImageUrl] : undefined,
           datePublished: recipe.publishedAt?.toISOString(),
+          dateModified: recipe.updatedAt?.toISOString() || node.dateModified,
           recipeYield: recipe.servings || node.recipeYield || undefined,
           keywords: (recipe.tags ?? []).join(", ") || recipe.keyword,
           ...(ratingAvg !== null && ratingCount > 0 ? {

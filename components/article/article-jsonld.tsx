@@ -21,7 +21,7 @@ export function ArticleJsonLd({ article }: { article: ArticleData }) {
           image: article.heroImageUrl || node.image,
           datePublished: article.publishedAt?.toISOString() || node.datePublished,
           dateModified: article.updatedAt?.toISOString() || node.dateModified,
-          author: node.author ?? { "@type": "Person", name: "Chef Augustin Lefevre" },
+          author: node.author ?? { "@type": "Person", name: "Chef Augustin Lefèvre" },
           publisher: node.publisher ?? { "@type": "Organization", name: "Chef Augustin", url: SITE },
         }
       }
@@ -65,7 +65,7 @@ export function ArticleJsonLd({ article }: { article: ArticleData }) {
               "@type": "Article",
               headline: article.title,
               description: article.metaDescription || article.excerpt,
-              author: { "@type": "Person", name: "Chef Augustin Lefevre" },
+              author: { "@type": "Person", name: "Chef Augustin Lefèvre" },
               datePublished: article.publishedAt?.toISOString(),
               image: article.heroImageUrl,
             },

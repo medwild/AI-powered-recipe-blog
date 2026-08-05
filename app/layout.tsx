@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     template: '%s | Chef Augustin',
   },
   description:
-    'Simple small-batch dinner recipes for two people. Chef Augustin Lefevre shares practical weeknight meals with clear portions and tested techniques.',
+    'Simple small-batch dinner recipes for two people. Chef Augustin Lefèvre shares practical weeknight meals with clear portions and tested techniques.',
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || 'https://www.chefaugustin.com',
   ),
