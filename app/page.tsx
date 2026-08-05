@@ -4,10 +4,12 @@ import { SiteFooter } from "@/components/site-footer"
 import { HomepageHero } from "@/components/homepage/homepage-hero"
 import { HomepageStartCooking } from "@/components/homepage/homepage-start-cooking"
 import { HomepageCategories } from "@/components/homepage/homepage-categories"
+import { HomepageClusters } from "@/components/homepage/homepage-clusters"
 import { HomepageFeatured } from "@/components/homepage/homepage-featured"
 import { HomepageArticles } from "@/components/homepage/homepage-articles"
 import { HomepageCTA } from "@/components/homepage/homepage-cta"
 import { HomepageJsonLd } from "@/components/homepage/homepage-jsonld"
+import { getAllClusters } from "@/lib/cluster-resolver"
 import { getPublishedRecipesLight, getPublishedArticlesLight, getRecipeCategories, getLatestRecipeHero } from "@/lib/queries"
 
 export const metadata: Metadata = {
@@ -33,6 +35,7 @@ export default async function HomePage() {
     getRecipeCategories(),
   ])
 
+  const clusters = getAllClusters()
   const featured = recipes.slice(0, 4)
   // Non-overlapping: HomepageStartCooking + HomepageFeatured use distinct recipe sets
   const recent = recipes.slice(4, 10)
@@ -75,6 +78,7 @@ export default async function HomePage() {
         </section>
         <HomepageStartCooking recipes={recent} />
         <HomepageCategories categories={categories} />
+        <HomepageClusters clusters={clusters} />
         <HomepageFeatured featured={featured} recent={recent} />
         <HomepageArticles articles={latestArticles} />
         <HomepageCTA />
