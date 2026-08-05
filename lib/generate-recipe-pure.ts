@@ -105,7 +105,15 @@ export async function generateRecipe(input: GenerateRecipeInput): Promise<void> 
       const imageResult = await runImagePhase(recipeId, article!, keyword)
       if (imageResult.heroImageUrl) {
         heroImageUrl = imageResult.heroImageUrl
-        const contentWithImages = article!.contentMarkdown.replace(
+        // Read the markdown from DB — persistFinalDraft enriched it with
+        // contextual links. Using article.contentMarkdown here would wipe
+        // the links (internal linking bug: "N links inserted" then 0).
+        const persisted = await db.query.recipes.findFirst({
+          where: (r, { eq }) => eq(r.id, recipeId),
+          columns: { contentMarkdown: true },
+        })
+        const baseMd = persisted?.contentMarkdown ?? article!.contentMarkdown
+        const contentWithImages = baseMd.replace(
           /\[IMAGE:\s*(.+?)\]/g,
           (_: string, alt: string) => `<img src="${imageResult.heroImageUrl}" alt="${alt.trim()}" loading="lazy" />`,
         )

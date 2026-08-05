@@ -351,11 +351,17 @@ export function insertContextualLinksBatch(
     // Match the phrase as a whole word/phrase, case-insensitive
     const regex = new RegExp(`(${escaped})`, "i")
     if (regex.test(p)) {
+      // Anchor = the matched text itself ($1), NOT the target's keyword.
+      // Using the keyword as anchor replaces e.g. "beef" with
+      // "one pan ground beef and tomato rice skillet for two" —
+      // breaking the sentence grammar (fixed by fix-internal-links.ts
+      // on 30 recipes, 2026-08-04). The matched text is already in
+      // context, so it reads naturally.
       paragraphs[placement.paragraphIdx] = p.replace(
         regex,
-        `[${placement.anchor}](/recipes/${placement.slug})`,
+        `[$1](/recipes/${placement.slug})`,
       )
-      links.push({ targetSlug: placement.slug, anchor: placement.anchor })
+      links.push({ targetSlug: placement.slug, anchor: placement.phrase })
     }
   }
 
