@@ -95,7 +95,7 @@ Le mapping est une **constante TS** avec le commentaire `// reflète food-photog
 | Soupe / mijoté | 45° close (vapeur) | Overhead | Détail macro (texture) | Lifestyle en situation |
 | Fallback | 45° close-up | Overhead | Détail macro | Lifestyle |
 
-### 5.1 Structure du prompt (template déterministe)
+### 5.1 Structure du prompt (template déterministe, zéro LLM)
 
 ```
 Recrée exactement ce même plat — mêmes ingrédients, mêmes couleurs, même style,
@@ -105,13 +105,14 @@ même lumière. Change uniquement l'angle de prise de vue : <ANGLE>.
 food-photography.md §7, ex: "45° medium, 24-70mm à 50mm, f/4, profondeur de champ
 modérée">
 
-<Élément du plat extrait de l'imagePrompt original — 1 seule phrase max, ex: "pâtes
-al dente, sauce tomate riche, cheese pull">
-
-<Lighting — celui de l'imagePrompt original, une seule combo>
+<Extrait déterministe de l'imagePrompt original : première phrase, tronquée à
+~160 chars — contient déjà plat + lighting + style, ex: "pâtes al dente, sauce
+tomate riche, cheese pull, lumière naturelle fenêtre 3500K">
 
 2:3 vertical, Pinterest. Fond simple. Pas de texte sur l'image.
 ```
+
+**Extraction déterministe (pas d'LLM)** : le script prend la **première phrase** de l'`imagePrompt` original (découpe sur le premier `. `), tronquée à ~160 chars. Elle contient déjà le plat, le lighting et le style — pas besoin de parsing sémantique. Fallback si `imagePrompt` vide : `title + top 2 tags`.
 
 **Clause de cohérence courte** (l'image de référence est déjà sous les yeux d'Ideogram — pas de récitation longue) :
 `Recrée exactement ce même plat — mêmes ingrédients, mêmes couleurs, même style, même lumière. Change uniquement l'angle de prise de vue : X.`
@@ -145,15 +146,23 @@ Réponse à la question « 5 pins du même plat = risque spam ? » :
 
 ---
 
-## 7. Critères de succès (revue Karpathy)
+## 7. Étape 0 — Assomption à vérifier AVANT de coder
+
+**Le chat Ideogram accepte une image de référence uploadée + un prompt texte pour produire une variante du même plat.** L'utilisateur confirme que oui — mais c'est la seule assomption factuelle du design. Test manuel sur 1 recette d'abord, puis code.
+
+## 8. Critères de succès (revue Karpathy)
 
 1. `npx tsc --noEmit` passe
 2. Sur 2 recettes de types différents (ex: lasagne + dessert), les angles changent selon les tags
-3. **1 prompt testé dans le chat Ideogram avec la hero en référence** → variante reconnaissable + angle réellement différent (test manuel par l'utilisateur, AVANT mass pinning)
+3. **1 prompt généré par le script testé dans le chat Ideogram avec la hero en référence** → variante reconnaissable + angle réellement différent (test manuel par l'utilisateur, AVANT mass pinning)
 
-### 7.1 Assomption à vérifier AVANT de coder
+## 9. Non-goals (YAGNI)
 
-**Le chat Ideogram accepte une image de référence uploadée + un prompt texte pour produire une variante du même plat.** L'utilisateur confirme que oui — mais c'est la seule assomption factuelle du design. Test manuel sur 1 recette d'abord, puis code.
+- ❌ Pas d'écriture dans `pin_drafts` (option console-only retenue — le stockage viendra plus tard si le workflow manuel est rodé)
+- ❌ Pas de génération d'images via l'API Ideogram (tout passe par le chat, manuel)
+- ❌ Pas d'automatisation dans le pipeline v14
+- ❌ Pas d'appel LLM pour rédiger les prompts (template déterministe suffit)
+- ❌ Pas de refacto de `pin-brief.ts` (toujours utilisé pour les overlays texte)
 
 ---
 
