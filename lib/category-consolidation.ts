@@ -72,7 +72,7 @@ export const CATEGORY_REDIRECTS: Record<string, string> = {
   "small-thanksgiving": "dinner-for-two",
   "easy-to-cook-dinner-for-two": "dinner-for-two",
   beef: "dinner-for-two",
-  "ground-beef": "dinner-for-two",
+  // "ground-beef" promoted to canonical 2026-08-06 (4 recipes) — removed from redirects.
   // Date-night family
   "romantic-dinner": "date-night",
   "romantic-dinner-for-two-at-home": "date-night",
@@ -93,8 +93,8 @@ export const CATEGORY_REDIRECTS: Record<string, string> = {
   "shrimp-orzo": "orzo",
   "garlic-shrimp": "orzo",
   seafood: "orzo",
-  // Rice / asian family -> one-pan (closest deep tag)
-  rice: "one-pan",
+  // Rice / asian family -> one-pan (closest deep tag).
+  // "rice" promoted to canonical 2026-08-06 (5 recipes) — removed from redirects.
   "rice-bowl": "one-pan",
   "rice-recipe": "one-pan",
   "stir-fry": "one-pan",
@@ -110,7 +110,7 @@ export const CATEGORY_REDIRECTS: Record<string, string> = {
   "summer-dinner": "weeknight",
   "small-batch-cooking": "small-batch",
   "small-batch-recipe": "small-batch",
-  "slow-cooker": "small-batch",
+  // "slow-cooker" promoted to canonical 2026-08-06 (4 recipes) — removed from redirects.
   "quick-and-easy-dinner-recipes-for-two": "quick",
   "simple-healthy-dinner-ideas-for-two": "easy",
 }
@@ -128,4 +128,21 @@ export const CANONICAL_CATEGORIES = new Set([
   "orzo",
   "quick",
   "comfort food",
+  // Promoted 2026-08-06 (Semrush audit — all have ≥3 published recipes,
+  // distinct real intents): ground beef, pasta, chicken breast, slow cooker, rice
+  "ground beef",
+  "pasta",
+  "chicken breast",
+  "slow cooker",
+  "rice",
 ])
+
+/**
+ * Keep only the canonical category tags — used by navigation surfaces
+ * (Browse by category) so they only link indexable category pages. The raw
+ * tag list (138 tags from the DB) is still used by generateStaticParams,
+ * slug resolution, the sitemap filter, and client-side search filters.
+ */
+export function canonicalCategories(tags: string[]): string[] {
+  return tags.filter((t) => CANONICAL_CATEGORIES.has(t.toLowerCase()))
+}

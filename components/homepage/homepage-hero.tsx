@@ -57,10 +57,11 @@ export function HomepageHero({
               Small-batch recipes for two
             </span>
 
-            {/* Headline */}
+            {/* Headline — distinct from the <title> (Semrush flagged identical
+                h1/title as duplicate content 2026-08-06) */}
             <h1 className="font-serif text-[clamp(2rem,5vw,3rem)] leading-tight text-balance text-foreground">
-              Easy Weeknight Dinners{" "}
-              <span className="block text-primary/80">for Two</span>
+              Easy Dinners,{" "}
+              <span className="block text-primary/80">Made for Two</span>
             </h1>
 
             {/* Description */}

@@ -1,8 +1,12 @@
 import Link from "next/link"
+import { canonicalCategories } from "@/lib/category-consolidation"
 import { tagToSlug } from "@/lib/tag-utils"
 
 export function HomepageCategories({ categories }: { categories: string[] }) {
-  if (!categories.length) return null
+  // Only canonical category chips (the 11 deep, indexable categories) — the raw
+  // tag cloud links to 308/404/noindex pages (Semrush audit 2026-08-06).
+  const canonical = canonicalCategories(categories)
+  if (!canonical.length) return null
 
   return (
     <section className="mx-auto max-w-5xl px-4 py-14">
@@ -11,7 +15,7 @@ export function HomepageCategories({ categories }: { categories: string[] }) {
         Find exactly what you&apos;re in the mood for.
       </p>
       <div className="flex flex-wrap gap-2">
-        {categories.slice(0, 15).map((cat) => (
+        {canonical.map((cat) => (
           <Link
             key={cat}
             href={`/recipes/category/${tagToSlug(cat)}`}
@@ -20,14 +24,12 @@ export function HomepageCategories({ categories }: { categories: string[] }) {
             {cat}
           </Link>
         ))}
-        {categories.length > 15 ? (
-          <Link
-            href="/recipes"
-            className="rounded-full border border-primary/30 bg-primary/5 px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/10"
-          >
-            View all {categories.length} categories →
-          </Link>
-        ) : null}
+        <Link
+          href="/recipes"
+          className="rounded-full border border-primary/30 bg-primary/5 px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/10"
+        >
+          View all {canonical.length} categories →
+        </Link>
       </div>
     </section>
   )

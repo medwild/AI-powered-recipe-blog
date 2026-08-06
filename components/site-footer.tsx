@@ -51,17 +51,8 @@ export function SiteFooter() {
             <Link href="/recipes" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
               All Recipes
             </Link>
-            <Link href="/techniques" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-              Techniques
-            </Link>
             <Link href="/guides" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
               Guides
-            </Link>
-            <Link href="/histoire" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-              History
-            </Link>
-            <Link href="/equipement" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-              Equipment
             </Link>
             <Link href="/idees" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
               Ideas

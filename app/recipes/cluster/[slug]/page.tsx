@@ -112,9 +112,9 @@ export default async function ClusterPage({
 
         <header className="mt-4 mb-8">
           <h1 className="font-serif text-4xl text-balance">{cluster.name}</h1>
-          <p className="mt-3 max-w-2xl text-muted-foreground leading-relaxed">
-            {cluster.description}
-          </p>
+          <div className="mt-3 max-w-2xl space-y-3 text-muted-foreground leading-relaxed">
+            {cluster.description.split("\n\n").map((p, i) => <p key={i}>{p}</p>)}
+          </div>
           {/* Stats row */}
           <div className="mt-5 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary">

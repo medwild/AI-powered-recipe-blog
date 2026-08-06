@@ -57,6 +57,11 @@ const nextConfig = {
     return [
       { source: "/recettes", destination: "/recipes", permanent: true },
       { source: "/recettes/:path*", destination: "/recipes/:path*", permanent: true },
+      // Empty legacy hubs (2026-08-06 Semrush audit — no published articles, no
+      // catalog hubs → noindex shells). 301 to the real content sections.
+      { source: "/techniques", destination: "/guides", permanent: true },
+      { source: "/histoire", destination: "/about", permanent: true },
+      { source: "/equipement", destination: "/guides", permanent: true },
       // Orzo slug fix 2026-08-03 — old Wave-2 slugs now point to real keywords
       { source: "/recipes/simple-dinner-recipes-for-2", destination: "/recipes/creamy-parmesan-garlic-chicken-orzo-for-two", permanent: true },
       { source: "/recipes/easy-healthy-dinner-recipes-for-two", destination: "/recipes/summer-herb-chicken-orzo-with-zucchini-for-two", permanent: true },
@@ -138,7 +143,7 @@ const nextConfig = {
       { source: "/recipes/category/rice-bowl", destination: "/recipes/category/one-pan", permanent: true },
       { source: "/recipes/category/rice-recipe", destination: "/recipes/category/one-pan", permanent: true },
       { source: "/recipes/category/stir-fry", destination: "/recipes/category/one-pan", permanent: true },
-      { source: "/recipes/category/rice", destination: "/recipes/category/one-pan", permanent: true },
+      // rice promoted to canonical 2026-08-06 (5 recipes) — redirect removed
       { source: "/recipes/category/asian", destination: "/recipes/category/one-pan", permanent: true },
       { source: "/recipes/category/italian-american", destination: "/recipes/category/easy", permanent: true },
       { source: "/recipes/category/italian-inspired", destination: "/recipes/category/easy", permanent: true },
@@ -148,8 +153,7 @@ const nextConfig = {
       { source: "/recipes/category/gluten-free", destination: "/recipes/category/easy", permanent: true },
       { source: "/recipes/category/vegetarian", destination: "/recipes/category/easy", permanent: true },
       { source: "/recipes/category/beef", destination: "/recipes/category/dinner-for-two", permanent: true },
-      { source: "/recipes/category/ground-beef", destination: "/recipes/category/dinner-for-two", permanent: true },
-      { source: "/recipes/category/slow-cooker", destination: "/recipes/category/small-batch", permanent: true },
+      // ground-beef + slow-cooker promoted to canonical 2026-08-06 (4 recipes each) — redirects removed
       { source: "/recipes/category/small-batch-cooking", destination: "/recipes/category/small-batch", permanent: true },
       { source: "/recipes/category/small-batch-recipe", destination: "/recipes/category/small-batch", permanent: true },
       { source: "/recipes/category/summer-dinner", destination: "/recipes/category/weeknight", permanent: true },

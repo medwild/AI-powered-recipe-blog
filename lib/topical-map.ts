@@ -65,7 +65,10 @@ export const SLOW_COOKER_CLUSTER: Cluster = {
   kdAvg: 5,
   totalVolume: 12_500,
   coverageContribution: 25,
-  description: "Set-and-forget dinners perfectly portioned for two. Hearty stews, tender meats, and comforting soups made simple in a small slow cooker.",
+  description:
+    "Set-and-forget dinners perfectly portioned for two. Hearty stews, tender meats, and comforting soups made simple in a small slow cooker.\n\n" +
+    "These recipes are built around a 2-quart cooker, the size that fits two servings without burying you in leftovers. Slow cooker chicken and gravy, a chicken and ground beef ragu, chicken and rice, and a crockpot chicken and tomato rice all follow the same small-batch logic: liquid ratios that don't drown two portions, cook times tuned to a smaller vessel, and proteins that come out tender instead of dried out.\n\n" +
+    "If you've only ever cooked in a full-size crock pot, the two-quart difference is real — food cooks faster and reduces harder, so the recipes here spell out the adjustments. Load the pot, set the time, and dinner is done when you are.",
   siblings: ["budget-meals-for-two", "one-pan-dinners-for-two", "chicken-dinners-for-two"],
   pillarPage: {
     title: "Small-Batch Slow Cooker Dinners for Two — The Complete Guide",
@@ -110,7 +113,10 @@ export const ONE_PAN_CLUSTER: Cluster = {
   kdAvg: 5,
   totalVolume: 18_200,
   coverageContribution: 25,
-  description: "Minimal cleanup, maximum flavor — all-in-one sheet pan and skillet dinners for two. Perfect for busy weeknights without the mountain of dishes.",
+  description:
+    "Minimal cleanup, maximum flavor — all-in-one sheet pan and skillet dinners for two. Perfect for busy weeknights without the mountain of dishes.\n\n" +
+    "The collection runs the full range of single-vessel cooking: a chicken enchilada skillet, lasagna built in one skillet from stove to oven, a pan-seared steak dinner with blistered green beans, salmon orzo with dill and capers, beef ramen noodles in 25 minutes, garlic shrimp orzo, ground beef and tomato rice, and a sheet-pan Easter dinner with lamb chops and spring vegetables.\n\n" +
+    "What ties them together is technique written for a smaller pan: sauces reduce correctly on a 10-inch surface instead of scorching, proteins are cut for two and pulled at the right moment, and each recipe follows one order of operations so nothing sits waiting. The payoff is a layered dinner with a single pan to wash.",
   siblings: ["chicken-dinners-for-two", "quick-healthy-dinners", "small-batch-slow-cooker"],
   pillarPage: {
     title: "One-Pan Dinners for Two — Minimal Cleanup, Maximum Flavor",
@@ -155,7 +161,10 @@ export const BUDGET_CLUSTER: Cluster = {
   kdAvg: 4,
   totalVolume: 9_800,
   coverageContribution: 20,
-  description: "Delicious dinners for two that won't break the bank. Smart swaps, pantry staples, and affordable ingredients for every night of the week.",
+  description:
+    "Delicious dinners for two that won't break the bank. Smart swaps, pantry staples, and affordable ingredients for every night of the week.\n\n" +
+    "The recipes here keep the grocery bill small by building around pantry staples and one main ingredient: a chicken and tomato rice skillet, ground beef and tomato rice, easy beef ramen noodles, and slow cooker chicken and rice are all built from ingredients that cover a whole week of dinners.\n\n" +
+    "Budget cooking for two comes with its own constraints — no family-pack portions to use up, no half a tray of leftovers — and these recipes are written for exactly two servings, so the ingredients you buy are the ingredients you use. Most are one-pan dinners that turn a small list into a full meal in 25 to 40 minutes.",
   siblings: ["chicken-dinners-for-two", "small-batch-slow-cooker", "one-pan-dinners-for-two"],
   pillarPage: {
     title: "Budget-Friendly Dinners for Two — Eat Well for Less",
@@ -193,7 +202,10 @@ export const CHICKEN_CLUSTER: Cluster = {
   kdAvg: 5,
   totalVolume: 15_600,
   coverageContribution: 20,
-  description: "Practical chicken recipes for two — quick weeknight dinners, sheet-pan meals, and stir-fries.",
+  description:
+    "Practical chicken recipes for two — quick weeknight dinners, sheet-pan meals, and stir-fries.\n\n" +
+    "This is the deepest collection on the site, with 20+ chicken dinners covering the full weeknight range: white wine lemon chicken orzo, one-pan chicken and rice, garlic butter chicken pasta, a sheet-pan Thanksgiving dinner for two, chicken pot pie with a puff pastry lid, slow cooker chicken and gravy, and 25-minute pan-seared chicken with herb-butter sauce.\n\n" +
+    "Every recipe is tested at two-serving scale, where the real challenge is keeping a small chicken breast juicy: pan size, heat, and resting time are spelled out for each method. Whatever style you're in the mood for — one-pan, slow cooker, pasta, or pot pie — there's a chicken dinner here that fits a Tuesday night.",
   siblings: ["one-pan-dinners-for-two", "quick-healthy-dinners", "budget-meals-for-two"],
   pillarPage: {
     title: "Chicken Dinners for Two — Practical Recipes for Small Households",
@@ -238,7 +250,10 @@ export const ASIAN_CLUSTER: Cluster = {
   kdAvg: 5,
   totalVolume: 8_400,
   coverageContribution: 10,
-  description: "Better-than-takeout Asian-inspired dinners for two. Quick stir-fries, rice bowls, and noodles packed with authentic flavor for easy weeknights.",
+  description:
+    "Better-than-takeout Asian-inspired dinners for two. Quick stir-fries, rice bowls, and noodles packed with authentic flavor for easy weeknights.\n\n" +
+    "The collection opens with an easy Asian beef noodle stir-fry that's on the table in 25 minutes — seared beef, noodles, and a soy-sesame sauce built in one skillet, sized for two servings with the takeout urge covered without the delivery fee.\n\n" +
+    "The guiding idea is that good stir-fry is a technique, not a cuisine you need a wok for: a hot pan, ingredients prepped before the heat goes on, and a sauce that coats rather than drowns. Recipes follow that order of operations so the meal comes together in the time it would take to scroll a delivery app.",
   siblings: ["quick-healthy-dinners", "chicken-dinners-for-two", "one-pan-dinners-for-two"],
   pillarPage: {
     title: "Asian-Inspired Dinners for Two — Easy Weeknight Favorites",
@@ -276,7 +291,10 @@ export const QUICK_HEALTHY_CLUSTER: Cluster = {
   kdAvg: 5,
   totalVolume: 12_000,
   coverageContribution: 15,
-  description: "Fast, nutritious dinners scaled for two. All recipes ready in 30 minutes or less, using fresh ingredients and smart shortcuts.",
+  description:
+    "Fast dinners scaled for two, all built around short timelines and fresh ingredients — quick desserts included.\n\n" +
+    "Speed here means honest cooking in 30 minutes or less, not convenience shortcuts: sauces that come together while the pasta boils, one-pan mains with a clear order of operations, and desserts like chocolate lava cakes and small-batch edible cookie dough that fit the same quick-turnaround brief.\n\n" +
+    "Every recipe is sized for two servings with the timing written as a single timeline, so the meal lands on the table at once — no component waiting on another. It's the collection to reach for when the clock matters more than the occasion.",
   siblings: ["chicken-dinners-for-two", "asian-inspired-dinners", "one-pan-dinners-for-two"],
   pillarPage: {
     title: "Quick & Healthy Dinners for Two — 30 Minutes or Less",

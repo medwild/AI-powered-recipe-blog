@@ -2,7 +2,6 @@ import { Suspense } from "react"
 import nextDynamic from "next/dynamic"
 import type { Metadata } from "next"
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { RecipeCard } from "@/components/recipe-card"
@@ -12,6 +11,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs"
 const RecipeSearch = nextDynamic(() => import("@/components/recipe-search").then((m) => m.RecipeSearch))
 import { searchPublishedRecipes, getRecipeCategories, getPublishedArticlesLight } from "@/lib/queries"
 import { getAllClusters } from "@/lib/cluster-resolver"
+import { canonicalCategories } from "@/lib/category-consolidation"
 import { tagToSlug } from "@/lib/tag-utils"
 
 // SSG + ISR : page statique générée au build, re-générée 1x/heure après publication.
@@ -98,7 +98,7 @@ export default async function RecipesPage() {
               Explore recipes by ingredient, cuisine, or technique.
             </p>
             <div className="flex flex-wrap justify-center gap-2">
-              {categories.map((cat) => (
+              {canonicalCategories(categories).map((cat) => (
                 <Link
                   key={cat}
                   href={`/recipes/category/${tagToSlug(cat)}`}
@@ -133,20 +133,13 @@ export default async function RecipesPage() {
         {/* Cross-link: Related Articles */}
         {displayArticles.length > 0 ? (
           <section className="mt-16 border-t border-border pt-14">
-            <div className="mb-8 flex items-end justify-between">
+            <div className="mb-8">
               <div>
                 <h2 className="font-serif text-2xl">Cooking Tips &amp; Guides</h2>
                 <p className="mt-1 text-sm text-muted-foreground">
                   Learn the techniques behind the recipes.
                 </p>
               </div>
-              <Link
-                href="/techniques"
-                className="flex items-center gap-1 text-sm font-medium text-primary hover:underline"
-              >
-                View all
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
             </div>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {displayArticles.map((article) => (
