@@ -33,6 +33,29 @@
   - h1 homepage "Easy Dinners, Made for Two" ✅ · intros 3 paragraphes ✅ · clusters multi-paragraphes ✅ · merge one-pan 25 recettes ✅ · excerpts corrigés ✅ · sitemap 96 URLs ✅ · JS 780 KB ✅
 - **Base résiduelle ~700 KB** = runtime React/Next 19 (norme App Router) — rendements décroissants
 
+## ✅ CRAWL DE VALIDATION Semrush #2 (106 pages, même jour) — analysé + fixé
+
+**Ce que le crawl #2 CONFIRME fixé** (comparé au #1) :
+- 4xx errors : 4 → **0** ✅
+- Broken internal links : 4 → **0** ✅ (nav 16 canoniques)
+- Blocked from crawling : 9 → **0** ✅
+- Duplicate h1/title : 1 → **0** ✅ (h1 "Easy Dinners, Made for Two")
+- **Hubs enfin crawlés** : 0 guides/0 idees → **15 guides + 8 idees + 6 clusters** ✅ (le budget n'est plus mangé par le tag cloud)
+- 8 pages ont quitté "low word count" (30-minute, easy, one-pan, quick, small-batch, weeknight-dinner, 2 clusters) grâce aux intros du P1
+
+**Fixes appliqués au #2** (commit `8caac8a`, deployé + vérifié live) :
+- Title trop long (78→43 chars) : easy-lactose-free → "Easy Lactose-Free Dinners for Two"
+- Intros +1 paragraphe (factuel, technique small-scale) : ground-beef 296→355 mots, pasta 324→379
+- baking-for-2 : 1→3 paragraphes, 175→273 mots
+
+**Non-actionné (documenté, faux positifs/structurel)** :
+- Low text/HTML 96 pages : structurel App Router (183 KB → 30.6 KB gzip) — pas un problème réel
+- 39 "permanent redirects" : trailing-slash 308 → comportement standard Next.js (sitemap propre)
+- 12 low word count restants : 8 sont des catégories à 3-4 recettes (306-324 mots, juste sous le seuil) + 4 clusters fins (1-2 recettes) — passeront avec la VAGUE 3
+- 4 "content not optimized" : check TF-IDF vs SERP, keywords présents — faible priorité
+- 1 schema warning (easter-dinner, nutrition optionnel) : faux positif
+- 1 "sitemap not found" : artefact (Semrush a crawl /sitemap.xml/ avec slash)
+
 ## ✅ P0 implémenté le 2026-08-06 (6 fichiers)
 - `lib/category-consolidation.ts` — helper `canonicalCategories()` (filtre aux 11 tags canoniques)
 - `app/recipes/page.tsx` — chips "Browse by category" → 11 canoniques (fini les 138 tags) + lien "View all" → /techniques retiré
