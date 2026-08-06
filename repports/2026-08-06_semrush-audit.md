@@ -25,6 +25,14 @@
   - `summer-herb-chicken-orzo-with-zucchini-for-two` — excerpt réécrit aligné (zucchini, basilic/persil/ciboulette) ; vérifié que le contenu était déjà correct (seul l'excerpt citait le mauvais plat)
 - **P2 restant (déféré)** : ratio texte/HTML (185 KB/recette — template lourd, CWV), re-crawl Semrush de validation
 
+## ✅ P2 implémenté + DÉPLOYÉ le 2026-08-06
+- **Cause racine du "Low text to HTML ratio"** : pas le HTML brut (183 KB → 30.6 KB gzip, normal) mais **920 KB de JS** sur une page recette — `react-markdown-content.tsx` était `"use client"` → le parseur react-markdown (~200-300 KB) partait au client pour un rendu purement statique
+- **Fix** : passage en server component (commit `87c1bb3`) → JS 920→780 KB (vérifié en local + **live**), markdown toujours SSR
+- **Déploiement** : le push GitHub déclenche bien le redeploy Hostinger auto (réactivé post-migration). Vérifié live le 06/08 :
+  - nav 16 chips canoniques ✅ · /techniques /histoire → 308 ✅ · slow-cooker/rice/ground-beef/pasta → 200 ✅
+  - h1 homepage "Easy Dinners, Made for Two" ✅ · intros 3 paragraphes ✅ · clusters multi-paragraphes ✅ · merge one-pan 25 recettes ✅ · excerpts corrigés ✅ · sitemap 96 URLs ✅ · JS 780 KB ✅
+- **Base résiduelle ~700 KB** = runtime React/Next 19 (norme App Router) — rendements décroissants
+
 ## ✅ P0 implémenté le 2026-08-06 (6 fichiers)
 - `lib/category-consolidation.ts` — helper `canonicalCategories()` (filtre aux 11 tags canoniques)
 - `app/recipes/page.tsx` — chips "Browse by category" → 11 canoniques (fini les 138 tags) + lien "View all" → /techniques retiré

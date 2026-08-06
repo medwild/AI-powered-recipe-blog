@@ -213,7 +213,7 @@ export const HUBS: Hub[] = [
     slug: "easy-lactose-free-dinner-recipes",
     category: "guides",
     title: "Easy Lactose-Free Dinner Recipes",
-    metaTitle: "Easy Lactose-Free Dinner Recipes (Dairy-Free Dinners for Two)",
+    metaTitle: "Easy Lactose-Free Dinners for Two",
     metaDescription:
       "Easy lactose-free dinner recipes — dairy-free dinners for two that are creamy, comforting, and completely lactose-free.",
     intro: [
@@ -242,6 +242,8 @@ export const HUBS: Hub[] = [
       "Baking for 2 — small-batch desserts and bakes scaled for two, from cookies to lava cakes. No leftover cake going stale.",
     intro: [
       "Baking for two is the art of the small batch — a single cookie sheet, a ramekin or two, and recipes that don't assume you're feeding a crowd. These are our favorite small-batch bakes and desserts.",
+      "The recipes here are scaled so the bake fits the occasion: chocolate chip cookies in a small batch ready in under 30 minutes, and molten chocolate lava cakes portioned into two ramekins with a 25-minute timeline. No half trays of cake going stale in the fridge.",
+      "Small-batch baking changes the math in ways that matter — less butter to cream, ramekins that bake through faster than a full cake pan, and cookie dough measured for two instead of three dozen. Each recipe spells out the pan size and timing so the result comes out right the first time.",
     ],
     curateTags: ["baking", "small batch", "dessert"],
   },

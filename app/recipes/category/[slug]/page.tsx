@@ -93,6 +93,7 @@ const CATEGORY_INTROS: Record<string, string[]> = {
     "Pasta recipes for two — creamy one-pan pastas, garlic butter noodles, and small-batch classics that taste like a long simmer in half the time.",
     "The collection leans on one-pan technique: a garlic butter chicken with orzo, a slow cooker chicken and ground beef ragu over pasta, and a pan-seared chicken breast with creamy tomato garlic pasta. Each one builds a sauce that coats the pasta rather than a plain jarred topping.",
     "Portions are measured for two servings, which changes the pasta math — less water, a smaller pan, and a sauce that clings instead of flooding a family-size bowl. Timings stay under 45 minutes, and most recipes are single-pot once the pasta is in.",
+    "The one-pan approach matters more at this scale: with less pasta in the pan, the starch it releases thickens the sauce faster, so you don't need a second pot or a roux. That's why these recipes cook the pasta directly in the liquid, then finish with a handful of cheese or butter off the heat.",
   ],
   quick: [
     "Quick dinners for two — ready in about 30 minutes with real technique, not shortcuts that cost flavor. Short ingredient lists, hot pans, and methods that fit a weeknight schedule.",
@@ -126,6 +127,7 @@ const CATEGORY_INTROS: Record<string, string[]> = {
     "Ground beef recipes for two — skillet dinners and small-batch classics that are quick, filling, and easy to scale down.",
     "The collection shows how far ground beef stretches in a two-person kitchen: a one-skillet lasagna that skips the baking dish, a slow cooker chicken and ground beef ragu over pasta, easy beef ramen noodles in 25 minutes, and a ground beef and tomato rice skillet built for the week.",
     "Because ground beef browns fast, these recipes lean on one-pan assembly — the meat seasons the sauce in the same skillet the rest of the dish cooks in. Portions are measured for two servings and most recipes take 25 to 45 minutes from first sizzle to plate.",
+    "If you're used to cooking ground beef for a family, the two-serving version is a different exercise: a smaller pan means the beef browns in less time, and the liquid ratio for a sauce needs to match the smaller surface. These recipes spell out both, so the beef stays browned rather than steamed and the sauce coats without flooding.",
   ],
   "slow cooker": [
     "Slow cooker recipes for two — set-and-forget dinners sized for a 2-quart cooker, from chicken and gravy to hearty ragu.",
