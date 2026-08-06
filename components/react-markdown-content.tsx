@@ -1,5 +1,7 @@
-"use client"
-
+// Server component (2026-08-06, P2 Semrush audit) — le rendu markdown est
+// purement statique : react-markdown + remark-gfm sont exécutés au build, le
+// parseur (~200-300 KB) ne part plus au client. Les wrappers (recipe-article-body,
+// markdown-renderer) sont des server components — aucun client ne l'importe.
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { sanitizeMarkdown } from "@/lib/utils/sanitize"
