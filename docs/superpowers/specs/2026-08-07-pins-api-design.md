@@ -17,7 +17,8 @@ Exposer un endpoint public JSON qui donne à l'app Gemini tout ce dont elle a be
 | Consommation | **Côté serveur** | Pas de CORS, pas de OPTIONS |
 | Sync | **Lecture seule** (GET pur) | Pas d'écriture dans la DB du blog |
 | Image | **Hero seule** — l'URL Cloudinary brute 2:3 | L'app génère ses variantes d'angles elle-même ; `imageVariants` ne contient qu'un seul variant aujourd'hui |
-| Temps (`prepTime` etc.) | **Strings bruts** ("45 min", "1 hour 30 minutes") | 4 formats possibles en DB ; c'est le LLM qui interprète, pas notre code |
+| Temps (`prepTime` etc.) | **Strings bruts en ISO 8601** (`PT10M`, `PT6H`) | Vérifié en prod : les 46 recettes sont en ISO 8601 standard — pas de parsing, c'est le LLM qui interprète le standard |
+| `category` | **Exclu du contrat** | NULL sur 46/46 recettes en prod — la catégorisation réelle est portée par `tags` ("dinner for two", "one-pan", "weeknight") |
 | `calories`, `rating`, `chefTip` | **Exclus** | N'existent pas dans le schema — on n'invente pas |
 | `instructions` | **Exclus** | Inutiles pour un pin |
 
@@ -42,7 +43,7 @@ Un seul fichier : `app/api/recipes/pins/route.ts`, calqué sur `app/api/recipes/
 {
   "status": "ok",
   "blogName": "Chef Augustin",
-  "totalFound": 75,
+  "totalFound": 46,
   "syncedAt": "2026-08-07T13:40:00.000Z",
   "recipes": [
     {
@@ -51,14 +52,13 @@ Un seul fichier : `app/api/recipes/pins/route.ts`, calqué sur `app/api/recipes/
       "title": "Easy Lasagna",
       "excerpt": "…",
       "heroImageUrl": "https://res.cloudinary.com/…/recipes/easy-lasagna.jpg",
-      "prepTime": "45 min",
-      "cookTime": "30 min",
-      "totalTime": "1 hour 15 minutes",
-      "servings": "4",
-      "category": "Dinner",
-      "tags": ["Under 30 Mins", "Gluten-Free"],
+      "prepTime": "PT10M",
+      "cookTime": "PT20M",
+      "totalTime": "PT30M",
+      "servings": "2 servings",
+      "tags": ["dinner for two", "one-pan", "easy"],
       "ingredients": [{ "name": "…", "quantity": "…" }],
-      "publishedAt": "2026-08-01T10:00:00.000Z",
+      "publishedAt": "2026-08-05T19:08:02.280Z",
       "url": "https://www.chefaugustin.com/recipes/easy-lasagna"
     }
   ]
@@ -67,7 +67,9 @@ Un seul fichier : `app/api/recipes/pins/route.ts`, calqué sur `app/api/recipes/
 
 Points de contrat :
 - `ingredients` : `{name, quantity?}` — forme native du schema (le prompt Google proposait `{amount, name}`, inversé — on garde le natif, le LLM s'adapte)
-- `category`, `servings`, `prepTime` : strings **nullables** en DB → le mapping renvoie la valeur telle quelle, sans promettre "toujours présent"
+- **Temps** : ISO 8601 standard (`PT10M` = 10 min, `PT6H` = 6 h) — vérifié sur les 46 recettes en prod ; c'est le LLM qui interprète le standard, pas notre code
+- **Pas de `category`** : NULL sur 46/46 recettes en prod — la catégorisation est portée par `tags` ("dinner for two", "one-pan", "weeknight dinner"…)
+- `servings` : string libre ("2 servings" ou "2") — valeur telle quelle
 - `heroImageUrl` : URL Cloudinary brute, **2:3 natif** (Ideogram `2x3` → upload sans crop ni resize, `f_auto,q_auto` seulement) — aucune transformation
 - Pas d'`instructions`, pas de `contentMarkdown`, pas de `jsonLd`, pas de `workflowLog` — payload minimal
 
@@ -90,9 +92,11 @@ Points de contrat :
    - `url` absolue correcte (`https://www.chefaugustin.com/recipes/{slug}`)
 3. (Facultatif) `/api/recipes/pins` ne casse pas `/api/recipes/raw` ni les routes `[id]` existantes — segment statique, pas de shadowing (vérifié : aucun `pins` existant)
 
+**Fait observé au moment de la rédaction** (via `GET https://www.chefaugustin.com/api/recipes/raw` le 2026-08-07) : 46 recettes publiées, toutes avec `heroImageUrl`, temps tous en ISO 8601, `category` NULL sur 100 % — cohérent avec les choix ci-dessus.
+
 ## 8. Non-goals (assumés explicitement)
 
-- Pas de sync incrémentale (`?updated_after=`) — 75 recettes, un full fetch passe ; YAGNI
+- Pas de sync incrémentale (`?updated_after=`) — 46 recettes aujourd'hui, un full fetch passe ; YAGNI
 - Pas de parsing `prepTimeMinutes` en number — fragile (4 formats), inutile pour un LLM
 - Pas d'écriture en DB (pas de POST, pas de token d'auth)
 - Pas de refactor de la machinerie pins existante (décision app vs machinerie reste ouverte, indépendante de ce contrat)
