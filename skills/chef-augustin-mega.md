@@ -110,4 +110,10 @@ Next action with temperature and visual cue.
 ### JSON-LD (REQUIRED — populate jsonLd field as an object)
 `jsonLd` is a JSON object (not a string). Must include an `@graph` array with at minimum: `{"@type": "Recipe", "image": "<placeholder>", "recipeIngredient": [...], "recipeInstructions": [...]}`, plus `BlogPosting`, `FAQPage`, and `BreadcrumbList` nodes. Use `"<placeholder>"` for the image URL.
 
+### Nutrition (REQUIRED — in the Recipe node)
+Include a `nutrition` object inside the Recipe node: `{"@type": "NutritionInformation", "servingSize": "1 serving", "calories": "450 calories", "proteinContent": "32 g", "fatContent": "18 g", "carbohydrateContent": "41 g"}`.
+- Estimate from the actual ingredient quantities and the stated servings. Be conservative and realistic — no zero-calorie dishes, no absurdly high values.
+- Use rounded whole numbers, standard "g" for macros, and the `"450 calories"` string format (never bare numbers).
+- If unsure about an ingredient, round toward the middle of its plausible range. These are estimates, not lab values — do not invent unusual precision.
+
 Output: start with `{`, end with `}`. No markdown fences, no preamble.
