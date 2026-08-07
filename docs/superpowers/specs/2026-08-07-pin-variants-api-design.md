@@ -80,10 +80,12 @@ Recreate this exact same dish — <TITLE> — same ingredients, same colors, sam
 1. `npx tsc --noEmit` passe
 2. `npx tsx scripts/pin-variants.ts <slug>` → sortie console identique, prompts en anglais
 3. `curl localhost:3000/api/recipes/pins` → chaque recette a `pinVariants` de longueur 4
-4. Cas limites : "pizza" → overhead flat lay en pin 2 ; "burger" → 45° hero en pin 2 ; recette lambda → 45° close-up en pin 2 (test manuel de la spec du 05/08)
+4. Cas limites (sur des données réelles) : `dessert-for-2` → overhead flat lay en pin 2 ; une recette "burger" hypothétique → 45° hero en pin 2 ; recette lambda → 45° close-up en pin 2. Le cas "pizza" du spec du 05/08 n'est pas reproductible (aucune recette "pizza" — vérifié)
 5. `npm run build` avant push
 
-**Fait observé au moment de la rédaction** : payload actuel du contrat v1 = **71.9 KB** pour 46 recettes (vérifié en prod via `curl`). L'ajout de `pinVariants` (~27 KB) porte le full fetch à ~100 KB — reste un seul appel par run, OK.
+**Faits observés au moment de la rédaction** (via `curl` sur le contrat v1 déployé, 46 recettes) :
+- Payload actuel = **71.9 KB** (moyenne **1.56 KB/recette** — pas 156 KB). L'ajout de `pinVariants` (~27 KB) porte le full fetch à ~100 KB — un seul appel par run, OK.
+- **Matching flat-lay/burger sur les données réelles** : 2 recettes matchent flat-lay (tags "cake"), 0 matchent burger, 44 en "default". La logique des 3 jeux est vivante (2 recettes prennent réellement le jeu flat-lay) ; le cas burger n'est pas couvert par les données actuelles mais reste correct par construction. Le test manuel "pizza" du spec du 05/08 n'est pas reproductible sur les données réelles (aucune recette "pizza").
 
 ## 7. Non-goals
 
