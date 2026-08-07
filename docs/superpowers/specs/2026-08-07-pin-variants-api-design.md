@@ -15,7 +15,7 @@
 | Où vit la logique d'angles | **Côté blog, exposée par l'endpoint** | Une seule source de vérité ; l'app ne peut pas exécuter le script CLI (pas de DB, pas de shell) |
 | Langue des prompts | **Anglais** (langue du blog, audience US/UK/CA/AU) | Cohérence ; les prompts d'image fonctionnent en toute langue pour Gemini |
 | Langue des labels | **Anglais aussi** ("Macro detail", "Lifestyle shot") | Labels = contenu consommé par l'app (noms de fichiers/variantes) ; éviter le franglais dans un contrat anglais |
-| Consommation | **Full fetch** (46 recettes, toutes avec leurs 4 prompts) | Un appel par run ; ~80 KB payload avec prompts ; YAGNI par-recette |
+| Consommation | **Full fetch** (46 recettes, toutes avec leurs 4 prompts) | Un appel par run ; ~100 KB payload avec prompts (71.9 KB actuel + ~27 KB) ; YAGNI par-recette |
 | Format par variant | **`{ label, prompt }`** — prompt texte seulement | Le hero (référence) est déjà dans `heroImageUrl` ; pas de rappel redondant |
 | Pin 1 | **La même image de la recette** (`heroImageUrl`) | Déjà servi par le contrat v1 ; inchangé |
 
@@ -27,7 +27,7 @@
   - `resolveAngles(tags: string[]): Angle[]` — les 3 jeux (default / flat-lay / burger), inchangés
   - `buildPinVariantPrompt(title: string, angle: Angle): string` — le template traduit en anglais
   - **Zéro import DB, zéro dotenv, zéro side-effect** — ⚠️ critique : `lib/db` crée le pool PostgreSQL à l'import (`pin-variants.ts:64-67` documente ce pitfall). Si ce module importait quoi que ce soit de DB, la route Next.js initialiserait le pool au premier import. Le module doit être pur.
-- **Modifier `scripts/pin-variants.ts`** — importe `resolveAngles`/`buildPinVariantPrompt` depuis `lib/` au lieu de les dupliquer ; comportement console identique ; garde son chargement DB local
+- **Modifier `scripts/pin-variants.ts`** — importe `resolveAngles`/`buildPinVariantPrompt` depuis `lib/` au lieu de les dupliquer ; garde TOUT le reste du script intact (chargement DB local, fallback title `recipe.title || recipe.keyword || "Untitled"` à `pin-variants.ts:86`, et le wording console existant aux `:71,90,103`). Seule la logique sort — pas le comportement console.
 - **Modifier `app/api/recipes/pins/route.ts`** — ajoute `pinVariants` au mapping
 
 **Traduction :** on traduit le prompt **du code actuel** (`pin-variants.ts:54-62`), source de vérité — PAS celui de la spec du 05/08 §5.2 (qui mentionnait des clauses "crisp focus…, Sony A7R IV" que l'implémentation a simplifiées).
@@ -82,6 +82,8 @@ Recreate this exact same dish — <TITLE> — same ingredients, same colors, sam
 3. `curl localhost:3000/api/recipes/pins` → chaque recette a `pinVariants` de longueur 4
 4. Cas limites : "pizza" → overhead flat lay en pin 2 ; "burger" → 45° hero en pin 2 ; recette lambda → 45° close-up en pin 2 (test manuel de la spec du 05/08)
 5. `npm run build` avant push
+
+**Fait observé au moment de la rédaction** : payload actuel du contrat v1 = **71.9 KB** pour 46 recettes (vérifié en prod via `curl`). L'ajout de `pinVariants` (~27 KB) porte le full fetch à ~100 KB — reste un seul appel par run, OK.
 
 ## 7. Non-goals
 
