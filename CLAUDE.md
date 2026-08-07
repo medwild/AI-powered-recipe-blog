@@ -12,11 +12,6 @@ SERP → Mega-Skill (1 LLM call, Opus 4.8) → Quality Gate (4 checks) → Persi
 | Paramètre | Valeur |
 |---|---|
 | Modèle primaire | **Claude Opus 4.8** (via FlatKey — `router.flatkey.ai/v1/messages`) |
-| Modèle fallback | Gemini Flash 3 (conservé, rollback si FlatKey épuisé) |
-| Tier gratuit | FlatKey $1 crédit/compte — rotation multi-clés `ANTHROPIC_API_KEY*` |
-| Rotation | 5+ comptes FlatKey — rotation automatique sur 401 `insufficient_balance` |
-| Structured output | Anthropic natif `json_schema` — fallback text+parse si 400 |
-| Thinking | Désactivé pour FlatKey (non supporté) | Prompt cache | Désactivé pour FlatKey (non supporté) |
 | Max tokens | 32000 |
 | Skill | `skills/chef-augustin-mega.md` |
 L'agent unique gère en un seul appel LLM : analyse SERP, structuration, rédaction, auto-édition, food safety, image prompt, et JSON-LD.
