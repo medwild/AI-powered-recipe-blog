@@ -47,6 +47,33 @@ export async function generateMetadata({
   }
 }
 
+// Cuisine mapping — the mega-skill fills recipeCuisine with tag-like values
+// ("Easy Weeknight Dinners for Two") instead of a valid cuisine ("American").
+// Derive it deterministically from tags instead; "American" is the default
+// position (easy weeknight dinners), overridden when a tag names a cuisine.
+const CUISINE_TAGS: Record<string, string> = {
+  italian: "Italian",
+  french: "French",
+  mexican: "Mexican",
+  asian: "Asian",
+  chinese: "Chinese",
+  japanese: "Japanese",
+  indian: "Indian",
+  mediterranean: "Mediterranean",
+  thai: "Thai",
+  spanish: "Spanish",
+  greek: "Greek",
+}
+
+function deriveCuisine(tags: string[] | null | undefined): string {
+  for (const tag of tags ?? []) {
+    for (const [key, cuisine] of Object.entries(CUISINE_TAGS)) {
+      if (tag.includes(key)) return cuisine
+    }
+  }
+  return "American"
+}
+
 function RecipeJsonLd({
   recipe,
   ratingAvg,
@@ -97,10 +124,10 @@ function RecipeJsonLd({
         }
       }
       if (node["@type"] === "Recipe") {
-        // Strip recipeCuisine from LLM output — the mega-skill often fills this with
-        // tag-like values ("Easy Weeknight Dinners for Two") instead of a valid cuisine
-        // ("American", "French"). Invalid cuisine → Google Rich Results warning.
-        const { recipeCuisine: _cuisine, ...cleanNode } = node as Record<string, unknown> & { recipeCuisine?: unknown }
+        // recipeCuisine is overridden deterministically below (deriveCuisine) —
+        // the LLM value is dropped because the mega-skill fills it with tag-like
+        // values ("Easy Weeknight Dinners for Two") instead of a valid cuisine.
+        const cleanNode = node as Record<string, unknown>
         // author is a required property for Google Recipe rich results; the LLM
         // sometimes omits it from the Recipe node (it lives on BlogPosting only).
         // Enrich/fallback here so every recipe is eligible.
@@ -119,6 +146,8 @@ function RecipeJsonLd({
           dateModified: recipe.updatedAt?.toISOString() || node.dateModified,
           recipeYield: recipe.servings || node.recipeYield || undefined,
           keywords: (recipe.tags ?? []).join(", ") || recipe.keyword,
+          recipeCategory: (recipe.tags ?? []).slice(0, 3).join(", ") || undefined,
+          recipeCuisine: deriveCuisine(recipe.tags),
           ...(ratingAvg !== null && ratingCount > 0 ? {
             aggregateRating: {
               "@type": "AggregateRating",
@@ -134,6 +163,7 @@ function RecipeJsonLd({
           recipeInstructions: (recipe.instructions ?? []).map((s) => ({
             "@type": "HowToStep",
             position: s.step,
+            image: s.step === 1 && recipe.heroImageUrl ? [recipe.heroImageUrl] : undefined,
             name: (() => {
               // Extract a short name from the instruction text (first sentence, max 80 chars)
               const firstSentence = s.text.split(/[.!?][\s\n]/)[0] ?? s.text
@@ -176,6 +206,7 @@ function RecipeJsonLd({
     },
     recipeYield: recipe.servings || base.recipeYield || undefined,
     recipeCategory: (recipe.tags ?? []).slice(0, 3).join(", ") || undefined,
+    recipeCuisine: deriveCuisine(recipe.tags),
     keywords: (recipe.tags ?? []).join(", ") || recipe.keyword,
     recipeIngredient: (recipe.ingredients ?? []).map((i) =>
       [i.quantity, i.name].filter(Boolean).join(" "),
