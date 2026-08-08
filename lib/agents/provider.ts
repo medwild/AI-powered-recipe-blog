@@ -650,7 +650,12 @@ class TokenmixProvider implements LlmProvider {
         // Quota exhaustion → rotate key
         if (res.status === 402 || res.status === 429) {
           const text = await res.text()
-          const exhausted = res.status === 402
+          // Only mark the key exhausted on a REAL quota signal. Tokenmix
+          // returns 402 for other transient reasons (model busy, request
+          // too large) — blindly marking the key exhausted with a single
+          // key turns one transient 402 into "All keys exhausted" for
+          // every later call.
+          const exhausted = (res.status === 402 && /insufficient.?balance|quota|credit/i.test(text))
             || (res.status === 429 && /quota/i.test(text))
           if (exhausted) {
             this.markExhausted(apiKey, `HTTP ${res.status}`)
