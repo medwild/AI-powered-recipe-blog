@@ -119,15 +119,15 @@ export const CATEGORY_REDIRECTS: Record<string, string> = {
 export const CANONICAL_CATEGORIES = new Set([
   "dinner for two",
   "weeknight dinner",
-  "one-pan",
   "easy",
-  "chicken",
   "small batch",
   "date night",
   "weeknight",
   "orzo",
   "quick",
   "comfort food",
+  // chicken + one-pan REMOVED 2026-08-08 (audit P2-6): their categories merged
+  // into the clusters (301 → /recipes/cluster/*) which are the pillars now.
   // Promoted 2026-08-06 (Semrush audit — all have ≥3 published recipes,
   // distinct real intents): ground beef, pasta, chicken breast, slow cooker, rice
   "ground beef",

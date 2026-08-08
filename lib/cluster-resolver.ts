@@ -75,3 +75,15 @@ export function getClusterById(id: string): ResolvedCluster | null {
     siblings: cluster.siblings,
   }
 }
+
+/**
+ * Tag patterns for a cluster's member filter — audit 2026-08-08 P2-6.
+ * Cluster pages list recipes whose tags match ANY pattern (substring, like
+ * getPublishedRecipesByTag's ILIKE) instead of first-tag-wins, so the
+ * chicken cluster covers every chicken-tagged recipe (superset of the old
+ * category) before the category 301s to it.
+ */
+export function getClusterTagPatterns(clusterId: string): string[] {
+  const entry = TAG_TO_CLUSTER.find(([, id]) => id === clusterId)
+  return entry ? entry[0] : []
+}

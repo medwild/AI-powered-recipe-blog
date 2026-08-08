@@ -12,9 +12,21 @@ import { SiteFooter } from "@/components/site-footer"
 import { RecipeCard } from "@/components/recipe-card"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { searchPublishedRecipes, getRecipeCategories } from "@/lib/queries"
-import { resolveCluster, getClusterById, getAllClusters } from "@/lib/cluster-resolver"
+import { resolveCluster, getClusterById, getAllClusters, getClusterTagPatterns } from "@/lib/cluster-resolver"
 import { tagToSlug } from "@/lib/tag-utils"
 import { CANONICAL_CATEGORIES } from "@/lib/category-consolidation"
+
+/**
+ * Member filter — audit 2026-08-08 P2-6. Any tag containing one of the
+ * cluster's patterns matches (same substring semantics as the category
+ * ILIKE), so the cluster covers every recipe its old category did before
+ * the category 301s to it. (resolveCluster stays first-tag-wins for the
+ * silo / sibling logic below.)
+ */
+function matchesClusterTags(tags: string[] | null | undefined, patterns: string[]): boolean {
+  if (!tags || tags.length === 0) return false
+  return tags.some((tag) => patterns.some((p) => tag.toLowerCase().includes(p)))
+}
 
 
 export async function generateStaticParams() {
@@ -72,11 +84,11 @@ export default async function ClusterPage({
     getRecipeCategories(),
   ])
 
-  // Filter recipes by cluster tag match
-  const displayRecipes = allRecipes.filter((r) => {
-    const rc = resolveCluster((r.tags ?? []) as string[])
-    return rc?.id === cluster.id
-  })
+  // Filter recipes by cluster tag match — any-tag substring (P2-6)
+  const clusterPatterns = getClusterTagPatterns(cluster.id)
+  const displayRecipes = allRecipes.filter((r) =>
+    matchesClusterTags((r.tags ?? []) as string[], clusterPatterns),
+  )
 
   // Stats
   const totalTimeMinutes = displayRecipes.reduce((sum, r) => {
@@ -186,6 +198,24 @@ export default async function ClusterPage({
           </section>
         ) : null}
       </main>
+      {/* ItemList JSON-LD — clusters were missing it (audit 2026-08-08 P2-12) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            name: cluster.name,
+            numberOfItems: displayRecipes.length,
+            itemListElement: displayRecipes.map((r, i) => ({
+              "@type": "ListItem",
+              position: i + 1,
+              url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://www.chefaugustin.com"}/recipes/${r.slug}`,
+              name: r.title,
+            })),
+          }),
+        }}
+      />
       <SiteFooter />
     </div>
   )
