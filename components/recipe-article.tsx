@@ -30,6 +30,14 @@ export async function RecipeArticle({ recipe }: { recipe: Recipe }) {
       {/* Section 5: Article Body — markdown FAQ, tips, nutrition */}
       <RecipeArticleBody contentMarkdown={recipe.contentMarkdown} ingredients={recipe.ingredients} instructions={recipe.instructions} title={recipe.title} />
 
+      {/* Nutrition disclaimer — YMYL trust (audit 2026-08-08 P2-14). Visible,
+          minimal, no full nutrition section (AdSense policy). */}
+      <section className="mx-auto max-w-3xl px-4">
+        <p className="text-xs text-muted-foreground">
+          Nutrition information is an estimate and provided for convenience only.
+        </p>
+      </section>
+
       {/* Section 6: Rate this recipe — before related recipes */}
       <section className="mx-auto max-w-3xl px-4 pb-10">
         <RecipeRating

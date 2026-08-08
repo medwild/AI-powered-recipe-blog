@@ -36,6 +36,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       description: hub.metaDescription,
       // Canonical self — hub pages were missing it (audit 2026-08-08 P1-4)
       alternates: { canonical: `/idees/${slug}` },
+      openGraph: {
+        title: hub.metaTitle,
+        description: hub.metaDescription,
+        type: "website",
+        url: `/idees/${slug}`, // audit 2026-08-08 P2-10
+      },
     }
   }
   const article = await getArticleBySlug(slug)

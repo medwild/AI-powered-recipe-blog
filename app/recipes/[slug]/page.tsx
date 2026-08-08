@@ -36,6 +36,7 @@ export async function generateMetadata({
       title: recipe.metaTitle || recipe.title,
       description: recipe.metaDescription || recipe.excerpt || undefined,
       type: "article",
+      url: `/recipes/${recipe.slug}`, // audit 2026-08-08 P2-10 (og:url → homepage sinon)
       images: recipe.heroImageUrl ? [recipe.heroImageUrl] : undefined,
     },
     twitter: {
@@ -146,7 +147,9 @@ function RecipeJsonLd({
           dateModified: recipe.updatedAt?.toISOString() || node.dateModified,
           recipeYield: recipe.servings || node.recipeYield || undefined,
           keywords: (recipe.tags ?? []).join(", ") || recipe.keyword,
-          recipeCategory: (recipe.tags ?? []).slice(0, 3).join(", ") || undefined,
+          // Single category value (schema.org expects one category, not a
+          // comma-joined tag list redundant with keywords) — audit 2026-08-08 P2-11
+          recipeCategory: recipe.tags?.[0] || undefined,
           recipeCuisine: deriveCuisine(recipe.tags),
           ...(ratingAvg !== null && ratingCount > 0 ? {
             aggregateRating: {

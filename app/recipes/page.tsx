@@ -31,6 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         "Simple, small-batch recipes for two — tested, scaled for two, ready tonight.",
       type: "website",
+      url: "/recipes", // audit 2026-08-08 P2-10
     },
   }
 }

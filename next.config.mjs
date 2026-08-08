@@ -165,6 +165,8 @@ const nextConfig = {
       { source: "/recipes/category/small-batch-cooking", destination: "/recipes/category/small-batch", permanent: true },
       { source: "/recipes/category/small-batch-recipe", destination: "/recipes/category/small-batch", permanent: true },
       { source: "/recipes/category/summer-dinner", destination: "/recipes/category/weeknight", permanent: true },
+      // 2026-08-08 audit P2-9 — strict subset (11/11) duplicate category
+      { source: "/recipes/category/weeknight-dinner", destination: "/recipes/category/weeknight", permanent: true },
       { source: "/recipes/category/side-dish", destination: "/recipes/category/easy", permanent: true },
       { source: "/recipes/category/mac-and-cheese", destination: "/recipes/category/easy", permanent: true },
       { source: "/recipes/category/mashed-potatoes-for-two", destination: "/recipes/category/easy", permanent: true },

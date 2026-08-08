@@ -185,6 +185,14 @@ export async function generateMetadata({
       : `Browse our collection of ${tag.toLowerCase()} recipes — tested, scaled for two, ready tonight.`,
     alternates: { canonical: `/recipes/category/${slug}` },
     robots: isThin ? "noindex, follow" : "index, follow",
+    openGraph: {
+      title: categoryTitle(tag),
+      description: tag.toLowerCase() === "one-pan"
+        ? "One-pan and skillet dinner recipes for two."
+        : `Browse ${tag.toLowerCase()} recipes for two — tested, ready tonight.`,
+      type: "website",
+      url: `/recipes/category/${slug}`, // audit 2026-08-08 P2-10
+    },
   }
 }
 

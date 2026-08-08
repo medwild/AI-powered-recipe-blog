@@ -49,6 +49,7 @@ export async function generateMetadata({
       title: cluster.name,
       description: cluster.description,
       type: "website",
+      url: `/recipes/cluster/${slug}`, // audit 2026-08-08 P2-10
     },
   }
 }
