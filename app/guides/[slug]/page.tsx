@@ -34,6 +34,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     return {
       title: hub.metaTitle,
       description: hub.metaDescription,
+      // Canonical self — hub pages were missing it (audit 2026-08-08 P1-4)
+      alternates: { canonical: `/guides/${slug}` },
     }
   }
   const article = await getArticleBySlug(slug)

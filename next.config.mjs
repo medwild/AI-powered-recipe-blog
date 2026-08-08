@@ -72,6 +72,9 @@ const nextConfig = {
       // 2026-08-05 (One-Pan Chicken and Vegetable Skillet for Two) — its stale
       // redirect was removed so the live recipe is reachable again.
       { source: "/recipes/healthy-dinner-recipes-for-2", destination: "/recipes/salmon-orzo-with-dill-and-capers-for-two", permanent: true },
+      // 2026-08-08 audit P1-3 — soft-404 (200 "Recipe not found" + noindex) ;
+      // l'ancien slug servait un cul-de-sac via /recettes/:path*
+      { source: "/recipes/creamy-garlic-chicken", destination: "/recipes/creamy-parmesan-garlic-chicken-orzo-for-two", permanent: true },
       // Category consolidation 2026-08-05 — 1-2 recipe categories 301 to their
       // canonical parent (kill thin pages + keyword cannibalization, ~119 → ~35)
       { source: "/recipes/category/30-minute-meals", destination: "/recipes/category/quick", permanent: true },
@@ -98,6 +101,9 @@ const nextConfig = {
       { source: "/recipes/category/one-pan-chicken-dinner", destination: "/recipes/category/one-pan", permanent: true },
       { source: "/recipes/category/quick-dinner", destination: "/recipes/category/quick", permanent: true },
       { source: "/recipes/category/quick-dinner-for-two", destination: "/recipes/category/quick", permanent: true },
+      // 2026-08-08 audit P1-2 — thin legacy categories (63-138 words) served 200
+      { source: "/recipes/category/chicken-for-two", destination: "/recipes/category/chicken", permanent: true },
+      { source: "/recipes/category/dessert", destination: "/recipes/category/small-batch", permanent: true },
       { source: "/recipes/category/quick-dessert", destination: "/recipes/category/small-batch", permanent: true },
       { source: "/recipes/category/quick-sauces", destination: "/recipes/category/easy", permanent: true },
       { source: "/recipes/category/quick-shrimp-recipe", destination: "/recipes/category/quick", permanent: true },
