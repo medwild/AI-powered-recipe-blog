@@ -14,13 +14,15 @@ export interface ResolvedCluster {
   siblings: string[]
 }
 
-/** Tag patterns → cluster ID mapping. Checked in order — first match wins. */
+/** Tag patterns → cluster ID mapping. Checked in order — first match wins.
+ * Patterns are matched against kebab-normalized tags ("slow cooker" → "slow-cooker"),
+ * so a space/tire variant never orphans a recipe from its cluster. */
 const TAG_TO_CLUSTER: [string[], string][] = [
   [["chicken", "poultry", "rotisserie"], "chicken-dinners-for-two"],
-  [["slow-cooker", "crockpot", "mijoteuse"], "small-batch-slow-cooker"],
+  [["slow-cooker", "crockpot", "mijoteuse", "gravy"], "small-batch-slow-cooker"],
   [["one-pan", "sheet-pan", "one-pot", "single-pan", "skillet"], "one-pan-dinners-for-two"],
-  [["asian", "stir-fry", "soy", "ginger", "sesame", "teriyaki"], "asian-inspired-dinners"],
-  [["budget", "cheap", "affordable", "economical", "frugal"], "budget-meals-for-two"],
+  [["asian", "stir-fry", "soy", "ginger", "sesame", "teriyaki", "noodle", "ramen"], "asian-inspired-dinners"],
+  [["budget", "cheap", "affordable", "economical", "frugal", "meal-prep"], "budget-meals-for-two"],
   [["healthy", "quick", "30-minute", "15-minute", "light", "low-carb"], "quick-healthy-dinners"],
 ]
 
@@ -35,7 +37,9 @@ export function resolveCluster(tags: string[]): ResolvedCluster | null {
   if (!tags || tags.length === 0) return null
 
   for (const tag of tags) {
-    const normalized = tag.toLowerCase()
+    // Kebab-normalize so "slow cooker" matches the "slow-cooker" pattern
+    // (space/tire variants were orphaning recipes from their cluster).
+    const normalized = tag.toLowerCase().replace(/\s+/g, "-")
     for (const [patterns, clusterId] of TAG_TO_CLUSTER) {
       if (patterns.some((p) => normalized.includes(p))) {
         const cluster = TOPICAL_MAP.find((c) => c.id === clusterId)

@@ -25,7 +25,13 @@ import { CANONICAL_CATEGORIES } from "@/lib/category-consolidation"
  */
 function matchesClusterTags(tags: string[] | null | undefined, patterns: string[]): boolean {
   if (!tags || tags.length === 0) return false
-  return tags.some((tag) => patterns.some((p) => tag.toLowerCase().includes(p)))
+  // Kebab-normalize ("slow cooker" → "slow-cooker") — same as cluster-resolver
+  const hit = tags.some((tag) => patterns.some((p) => tag.toLowerCase().replace(/\s+/g, "-").includes(p)))
+  if (!hit) return false
+  // quick-healthy is a dinner pillar — desserts matching "quick" (cookie dough,
+  // lava cakes) don't belong (audit 2026-08-08 P3-17).
+  const isDessert = (tags ?? []).some((t) => /dessert|cookie|lava|cake|dough/i.test(t))
+  return !isDessert
 }
 
 
