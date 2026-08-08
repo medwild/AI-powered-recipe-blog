@@ -68,7 +68,9 @@ const nextConfig = {
       { source: "/recipes/easy-dinner-for-two-recipes", destination: "/recipes/white-wine-lemon-chicken-orzo-for-two", permanent: true },
       { source: "/recipes/dinner-for-two-recipes-healthy", destination: "/recipes/mediterranean-chicken-orzo-with-feta-olives-for-two", permanent: true },
       // Deleted slugs — 301 to replacement recipes (2026-07-29 chicken-orzo dedup)
-      { source: "/recipes/healthy-dinner-ideas-for-two", destination: "/recipes/garlic-shrimp-orzo-with-cherry-tomatoes-for-two", permanent: true },
+      // NOTE: healthy-dinner-ideas-for-two was re-used by a NEW recipe published
+      // 2026-08-05 (One-Pan Chicken and Vegetable Skillet for Two) — its stale
+      // redirect was removed so the live recipe is reachable again.
       { source: "/recipes/healthy-dinner-recipes-for-2", destination: "/recipes/salmon-orzo-with-dill-and-capers-for-two", permanent: true },
       // Category consolidation 2026-08-05 — 1-2 recipe categories 301 to their
       // canonical parent (kill thin pages + keyword cannibalization, ~119 → ~35)
