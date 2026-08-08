@@ -3,7 +3,6 @@ import { Geist, Playfair_Display } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
 import { CookieBanner } from '@/components/cookie-banner'
 import { DynamicToaster } from '@/components/dynamic-toaster'
-import { DynamicAnalytics } from '@/components/dynamic-analytics'
 import './globals.css'
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'], display: 'swap' })
@@ -96,7 +95,6 @@ export default function RootLayout({
           </div>
           <DynamicToaster />
           <CookieBanner />
-          {process.env.NODE_ENV === 'production' && <DynamicAnalytics />}
         </ThemeProvider>
       </body>
     </html>
