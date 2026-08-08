@@ -27,6 +27,16 @@ export async function HubListing({ slug }: { slug: string }) {
     })),
   }
 
+  // BreadcrumbList — hubs were the only page type without one (audit 2026-08-08 P2-12)
+  const breadcrumb = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.chefaugustin.com/" },
+      { "@type": "ListItem", position: 2, name: hub.title, item: `https://www.chefaugustin.com/${hub.category}/${hub.slug}` },
+    ],
+  }
+
   return (
     <article className="mx-auto max-w-4xl px-4 py-12">
       <h1 className="text-3xl font-bold">{hub.title}</h1>
@@ -42,6 +52,10 @@ export async function HubListing({ slug }: { slug: string }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemList) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
       />
     </article>
   )
