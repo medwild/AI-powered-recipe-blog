@@ -152,6 +152,10 @@ export const dynamicParams = false
  * it pushed titles past the ~580px SERP limit on 22 category pages.
  */
 function categoryTitle(tag: string): string {
+  // 2026-08-08 audit P1-7 — cover the "skillet recipes" intent (GSC emerging,
+  // 0 URL for the word) on the one-pan category without a 3rd competing page
+  // (category + cluster one-pan already cannibalize each other).
+  if (tag.toLowerCase() === "one-pan") return "One-Pan & Skillet Recipes for Two"
   const titleCased = tag.replace(/\b\w/g, (c) => c.toUpperCase())
   // Strip a trailing "For Two" (e.g. "Dinner For Two" → "Dinner"), but keep
   // the whole string when the tag IS "For Two" (→ fallback below, no repetition)
@@ -176,7 +180,9 @@ export async function generateMetadata({
 
   return {
     title: categoryTitle(tag),
-    description: `Browse our collection of ${tag.toLowerCase()} recipes — tested, scaled for two, ready tonight.`,
+    description: tag.toLowerCase() === "one-pan"
+      ? "One-pan and skillet dinner recipes for two — quick sears, sheet-pan bakes, and skillet meals tested at two-serving size."
+      : `Browse our collection of ${tag.toLowerCase()} recipes — tested, scaled for two, ready tonight.`,
     alternates: { canonical: `/recipes/category/${slug}` },
     robots: isThin ? "noindex, follow" : "index, follow",
   }
