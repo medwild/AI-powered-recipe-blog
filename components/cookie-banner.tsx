@@ -7,15 +7,24 @@ export function CookieBanner() {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
+    // Reserve space so the fixed banner never covers the page content
+    // (mobile CTA was hidden under it — audit 2026-08-08 Critical).
+    document.body.classList.add("cookie-banner-open")
     const stored = localStorage.getItem("cookie-consent")
     if (!stored) {
       setVisible(true)
+    } else {
+      document.body.classList.remove("cookie-banner-open")
+    }
+    return () => {
+      document.body.classList.remove("cookie-banner-open")
     }
   }, [])
 
   const accept = () => {
     localStorage.setItem("cookie-consent", "accepted")
     setVisible(false)
+    document.body.classList.toggle("cookie-banner-open", false)
   }
 
   if (!visible) return null

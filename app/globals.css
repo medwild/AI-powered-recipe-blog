@@ -229,3 +229,14 @@ html.theme-transition *::after {
     background: #fff;
   }
 }
+
+/* Cookie banner reserves space so the fixed bar never covers page content
+   (mobile CTA was hidden under it — audit 2026-08-08 Critical). */
+body.cookie-banner-open {
+  padding-bottom: 96px;
+}
+@media (min-width: 640px) {
+  body.cookie-banner-open {
+    padding-bottom: 72px;
+  }
+}
