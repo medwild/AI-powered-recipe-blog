@@ -75,6 +75,22 @@ const nextConfig = {
       // 2026-08-08 audit P1-3 — soft-404 (200 "Recipe not found" + noindex) ;
       // l'ancien slug servait un cul-de-sac via /recettes/:path*
       { source: "/recipes/creamy-garlic-chicken", destination: "/recipes/creamy-parmesan-garlic-chicken-orzo-for-two", permanent: true },
+      // 2026-08-08 audit P2-7 — 13 recettes renommées en slugs descriptifs du
+      // plat (elles dupliquaient les slugs d'intent des hubs /guides /idees).
+      // Les hubs gardent leurs slugs — les recettes prennent un slug de plat.
+      { source: "/recipes/easy-dinner-ideas-for-two", destination: "/recipes/one-pan-garlic-butter-chicken-tomato-orzo", permanent: true },
+      { source: "/recipes/quick-and-easy-dinner-recipes-for-two", destination: "/recipes/one-pan-garlic-tomato-chicken-rice", permanent: true },
+      { source: "/recipes/healthy-dinner-ideas-for-two", destination: "/recipes/one-pan-chicken-vegetable-skillet", permanent: true },
+      { source: "/recipes/romantic-dinner-ideas-for-two", destination: "/recipes/lemon-butter-chicken-pasta-for-two", permanent: true },
+      { source: "/recipes/easy-meal-ideas-for-two", destination: "/recipes/one-pan-chicken-tomato-rice", permanent: true },
+      { source: "/recipes/dinner-recipe-ideas-for-two", destination: "/recipes/one-pan-chicken-rice-garlic-butter-tomato-sauce", permanent: true },
+      { source: "/recipes/slow-cooker-recipes-for-two", destination: "/recipes/slow-cooker-chicken-rice-for-two", permanent: true },
+      { source: "/recipes/crockpot-recipes-for-two", destination: "/recipes/crockpot-chicken-tomato-rice-for-two", permanent: true },
+      { source: "/recipes/easy-recipes-for-two", destination: "/recipes/one-pan-chicken-rice-for-two", permanent: true },
+      { source: "/recipes/recipes-for-two", destination: "/recipes/one-pan-chicken-rice-dinner-for-two", permanent: true },
+      { source: "/recipes/fast-and-easy-dinner-for-2", destination: "/recipes/garlic-butter-chicken-pasta-for-two", permanent: true },
+      { source: "/recipes/simple-healthy-dinner-ideas-for-two", destination: "/recipes/one-pan-chicken-tomato-garlic-rice", permanent: true },
+      { source: "/recipes/easy-whole30-recipes", destination: "/recipes/whole30-chicken-skillet-tomatoes-garlic", permanent: true },
       // Category consolidation 2026-08-05 — 1-2 recipe categories 301 to their
       // canonical parent (kill thin pages + keyword cannibalization, ~119 → ~35)
       { source: "/recipes/category/30-minute-meals", destination: "/recipes/category/quick", permanent: true },
