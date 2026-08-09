@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { recipes } from "@/lib/db/schema"
 import { and, eq, desc, isNotNull } from "drizzle-orm"
+import { resolveAngles, buildPinVariantPrompt } from "@/lib/pin-variants"
 
 export const dynamic = "force-dynamic"
 
@@ -48,6 +49,10 @@ export async function GET() {
       ingredients: recipe.ingredients,
       publishedAt: recipe.publishedAt?.toISOString(),
       url: `${SITE_URL}/recipes/${recipe.slug}`,
+      pinVariants: resolveAngles(recipe.tags ?? []).map((angle) => ({
+        label: angle.label,
+        prompt: buildPinVariantPrompt(recipe.title, angle),
+      })),
     }))
 
     return NextResponse.json(
