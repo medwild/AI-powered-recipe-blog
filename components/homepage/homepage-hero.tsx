@@ -3,6 +3,7 @@ import Link from "next/link"
 import { ArrowRight, Clock, ChefHat, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { FOOD_BLUR_PLACEHOLDER } from "@/lib/utils/cn"
+import { cloudinaryUrl } from "@/lib/cloudinary-url"
 
 /**
  * HomepageHero — redesigned following 2025-2026 food blog best practices.
@@ -21,7 +22,12 @@ export function HomepageHero({
   heroImage?: string
   heroAlt?: string
 }) {
-  const imageSrc = heroImage || "/hero-kitchen.png"
+  // LCP homepage — image servie au plus léger possible :
+  //  - recette héro : source Cloudinary + w_ (edge), crop 16:9 côté Cloudinary
+  //  - fallback : hero-kitchen Cloudinary (crop 16:9, 39KB @w_640 vs 233KB PNG)
+  const imageSrc = heroImage
+    ? cloudinaryUrl(heroImage, 1200)
+    : "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/ar_16:9,c_fill/v1786283654/recipes/hero-kitchen.png"
   const imageAlt = heroAlt || "Kitchen counter with fresh ingredients"
 
   return (
