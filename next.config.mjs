@@ -75,6 +75,9 @@ const nextConfig = {
       // 2026-08-08 audit P1-3 — soft-404 (200 "Recipe not found" + noindex) ;
       // l'ancien slug servait un cul-de-sac via /recettes/:path*
       { source: "/recipes/creamy-garlic-chicken", destination: "/recipes/creamy-parmesan-garlic-chicken-orzo-for-two", permanent: true },
+      // 2026-08-09 audit images — soft-404 : ancien slug P2-7 sans 301
+      // (renommé en creamy-parmesan-garlic-chicken-orzo-for-two, 200 noindex)
+      { source: "/recipes/easy-chicken-parmesan-for-two-the-double-butter-pan-sauce-method", destination: "/recipes/creamy-parmesan-garlic-chicken-orzo-for-two", permanent: true },
       // 2026-08-08 audit P2-7 — 13 recettes renommées en slugs descriptifs du
       // plat (elles dupliquaient les slugs d'intent des hubs /guides /idees).
       // Les hubs gardent leurs slugs — les recettes prennent un slug de plat.
