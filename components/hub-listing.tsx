@@ -4,6 +4,8 @@
 import { getHubBySlug } from "@/lib/hub-content"
 import { getPublishedRecipes } from "@/lib/queries"
 import { RecipeCard } from "@/components/recipe-card"
+import { SiteHeader } from "@/components/site-header"
+import { SiteFooter } from "@/components/site-footer"
 
 export async function HubListing({ slug }: { slug: string }) {
   const hub = getHubBySlug(slug)
@@ -38,25 +40,31 @@ export async function HubListing({ slug }: { slug: string }) {
   }
 
   return (
-    <article className="mx-auto max-w-4xl px-4 py-12">
-      <h1 className="text-3xl font-bold">{hub.title}</h1>
-      {hub.intro.map((p, i) => (
-        <p key={i} className="mt-4 text-gray-600">{p}</p>
-      ))}
-      {/* H2 before the card grid — keeps heading hierarchy H1→H2→H3
-          (cards render their titles in H3, no structural jump). */}
-      <h2 className="mt-10 text-2xl font-semibold">Recipes in this collection</h2>
-      <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {curated.map((r) => <RecipeCard key={r.id} recipe={r} />)}
-      </div>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemList) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
-      />
-    </article>
+    <div className="flex min-h-screen flex-col">
+      <SiteHeader />
+      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-14">
+        <article>
+          <h1 className="text-3xl font-bold">{hub.title}</h1>
+          {hub.intro.map((p, i) => (
+            <p key={i} className="mt-4 text-gray-600">{p}</p>
+          ))}
+          {/* H2 before the card grid — keeps heading hierarchy H1→H2→H3
+              (cards render their titles in H3, no structural jump). */}
+          <h2 className="mt-10 text-2xl font-semibold">Recipes in this collection</h2>
+          <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {curated.map((r) => <RecipeCard key={r.id} recipe={r} />)}
+          </div>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(itemList) }}
+          />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
+          />
+        </article>
+      </main>
+      <SiteFooter />
+    </div>
   )
 }
