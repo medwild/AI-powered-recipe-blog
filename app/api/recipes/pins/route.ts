@@ -66,6 +66,10 @@ export async function GET() {
       {
         headers: {
           "Cache-Control": "public, max-age=3600, s-maxage=3600",
+          // CORS — l'app PinScheduler (pinsvariants.vercel.app) fetch cette API
+          // depuis un autre domaine ; sans ce header, le navigateur bloque la
+          // réponse cross-origin ("NetworkError when attempting to fetch").
+          "Access-Control-Allow-Origin": "*",
         },
       },
     )
