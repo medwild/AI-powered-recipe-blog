@@ -1,6 +1,7 @@
 // components/hub-listing.tsx
 // Renders a topical hub: editorial intro + cards of curated existing recipes
 // (deterministic, from DB tags — no hallucinated links) + ItemList JSON-LD.
+import Image from "next/image"
 import { getHubBySlug } from "@/lib/hub-content"
 import { getPublishedRecipes } from "@/lib/queries"
 import { RecipeCard } from "@/components/recipe-card"
@@ -44,6 +45,18 @@ export async function HubListing({ slug }: { slug: string }) {
       <SiteHeader />
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-14">
         <article>
+          {hub.heroImageUrl ? (
+            <div className="relative mb-8 aspect-[16/9] overflow-hidden rounded-3xl border border-border shadow-2xl shadow-primary/10">
+              <Image
+                src={hub.heroImageUrl}
+                alt={hub.title}
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, 768px"
+                className="object-cover"
+              />
+            </div>
+          ) : null}
           <h1 className="text-3xl font-bold">{hub.title}</h1>
           {hub.intro.map((p, i) => (
             <p key={i} className="mt-4 text-gray-600">{p}</p>

@@ -8,7 +8,6 @@ import { and, eq, desc } from "drizzle-orm"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { HUBS } from "@/lib/hub-content"
-import { getPublishedRecipesLight } from "@/lib/queries"
 
 /**
  * Canonical category label map — single source of truth for the 5 article categories.
@@ -116,31 +115,8 @@ export async function CategoryListing({ category }: { category: string }) {
   // (évite le "0 articles" alors que le contenu existe).
   const catalogHubs = HUBS.filter((h) => h.category === category)
 
-  // Images des cartes hubs : recette curée la plus représentative du hub
-  // (score = nb de tags matchés, départage par la plus récente). Greedy
-  // distinct : chaque hub prend la meilleure candidate dont l'image n'est pas
-  // déjà utilisée par un hub précédent (ordre catalogue stable → déterministe,
-  // variété maximale). Pas de champ à maintenir.
-  const publishedRecipes = await getPublishedRecipesLight()
-  const hubHeroImages = new Map<string, string | null>()
-  const usedImages = new Set<string>()
-  for (const hub of catalogHubs) {
-    const candidates = publishedRecipes
-      .filter((r) => r.heroImageUrl)
-      .map((r) => ({
-        r,
-        score: hub.curateTags.filter((t) => (r.tags ?? []).includes(t)).length,
-      }))
-      .filter((c) => c.score > 0)
-      .sort((a, b) =>
-        b.score - a.score ||
-        (new Date(b.r.publishedAt ?? 0).getTime() - new Date(a.r.publishedAt ?? 0).getTime()),
-      )
-    const pick =
-      candidates.find((c) => !usedImages.has(c.r.heroImageUrl!)) ?? candidates[0] ?? null
-    hubHeroImages.set(hub.slug, pick?.r.heroImageUrl ?? null)
-    if (pick?.r.heroImageUrl) usedImages.add(pick.r.heroImageUrl)
-  }
+  // Images des cartes hubs : image dédiée par hub (champ heroImageUrl,
+  // Cloudinary). Plus de greedy — chaque hub a sa propre image.
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -188,10 +164,10 @@ export async function CategoryListing({ category }: { category: string }) {
                   href={`/${hub.category}/${hub.slug}`}
                   className="group rounded-xl border border-border bg-card overflow-hidden transition-colors hover:border-primary/50 block h-full"
                 >
-                  {hubHeroImages.get(hub.slug) ? (
+                  {hub.heroImageUrl ? (
                     <div className="relative aspect-[16/9] overflow-hidden">
                       <Image
-                        src={hubHeroImages.get(hub.slug)!}
+                        src={hub.heroImageUrl}
                         alt={hub.title}
                         fill
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

@@ -13,6 +13,8 @@ export interface Hub {
   intro: string[]
   /** Tags used to curate existing recipes into this hub (intersection match). */
   curateTags: string[]
+  /** Hero image (Cloudinary) — used on collection cards + hub pages. */
+  heroImageUrl: string
 }
 
 export const HUBS: Hub[] = [
@@ -28,6 +30,7 @@ export const HUBS: Hub[] = [
       "These are our favorite easy dinner ideas for two — every one of them is a complete meal that scales naturally to two servings, most in 30 minutes or less.",
     ],
     curateTags: ["dinner for two", "easy", "one-pan", "30-minute", "weeknight"],
+    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279107/recipes/collections-easy-dinner-ideas-for-two.jpg",
   },
   {
     slug: "quick-and-easy-dinner-recipes-for-two",
@@ -40,6 +43,7 @@ export const HUBS: Hub[] = [
       "Some nights you just need dinner on the table — fast. These quick recipes for two are built around short cook times and minimal cleanup, without cutting corners on flavor.",
     ],
     curateTags: ["quick", "easy", "dinner for two"],
+    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279119/recipes/collections-quick-and-easy-dinner-recipes-for-two.jpg",
   },
   {
     slug: "healthy-dinner-ideas-for-two",
@@ -52,6 +56,7 @@ export const HUBS: Hub[] = [
       "Healthy doesn't have to mean boring, and it definitely doesn't mean cooking two separate meals. These dinners for two balance lean protein, vegetables, and flavor — in portions that make sense for two people.",
     ],
     curateTags: ["healthy", "dinner for two", "30-minute"],
+    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279117/recipes/collections-healthy-dinner-ideas-for-two.jpg",
   },
   {
     slug: "romantic-dinner-ideas-for-two",
@@ -64,6 +69,7 @@ export const HUBS: Hub[] = [
       "A romantic dinner at home is about the gesture — a meal made just for the two of you, with a little extra care. These romantic dinner ideas are date-night recipes that feel impressive enough for an occasion and simple enough for a weeknight.",
     ],
     curateTags: ["romantic", "date night", "dinner for two"],
+    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279120/recipes/collections-romantic-dinner-ideas-for-two.jpg",
   },
   {
     slug: "easy-meal-ideas-for-two",
@@ -76,6 +82,7 @@ export const HUBS: Hub[] = [
       "The hardest part of cooking for two is often deciding what to make. These easy meal ideas cover a week of dinners — from skillet meals to one-pan bakes — so you can plan ahead and shop once.",
     ],
     curateTags: ["easy", "dinner for two", "meal"],
+    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279111/recipes/collections-easy-meal-ideas-for-two.jpg",
   },
   {
     slug: "dinner-recipe-ideas-for-two",
@@ -88,6 +95,7 @@ export const HUBS: Hub[] = [
       "Looking for dinner tonight? Browse our recipe ideas for two — every dish is scaled for two people, tested in a home kitchen, and most come together in one pan.",
     ],
     curateTags: ["dinner for two", "ideas", "easy"],
+    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279105/recipes/collections-dinner-recipe-ideas-for-two.jpg",
   },
   {
     slug: "slow-cooker-recipes-for-two",
@@ -100,6 +108,7 @@ export const HUBS: Hub[] = [
       "A slow cooker is the ultimate hands-off dinner — but most recipes are sized for a family of six. These small-batch slow cooker recipes for two use a 2-quart crockpot so you get perfectly portioned dinners, not a week of leftovers.",
     ],
     curateTags: ["slow cooker", "crockpot", "dinner for two"],
+    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279122/recipes/collections-slow-cooker-recipes-for-two.jpg",
   },
   {
     slug: "crockpot-recipes-for-two",
@@ -112,6 +121,7 @@ export const HUBS: Hub[] = [
       "The crockpot is the original set-it-and-forget-it tool. These recipes are built for two — small batches, 2-quart-friendly, and ready when you are.",
     ],
     curateTags: ["crockpot", "slow cooker", "dinner for two"],
+    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279104/recipes/collections-crockpot-recipes-for-two.jpg",
   },
   {
     slug: "easy-recipes-for-two",
@@ -124,6 +134,7 @@ export const HUBS: Hub[] = [
       "Simple cooking for two is about scale and technique — a smaller pan, the right portion, and recipes that don't complicate things. These are our easiest recipes for two, made for real weeknights.",
     ],
     curateTags: ["easy", "dinner for two", "one-pan"],
+    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279112/recipes/collections-easy-recipes-for-two.jpg",
   },
   {
     slug: "recipes-for-two",
@@ -136,6 +147,7 @@ export const HUBS: Hub[] = [
       "Welcome to our recipes for two — the full collection of small-batch cooking. Every recipe here is scaled for two servings, tested in a home kitchen, and designed to minimize waste.",
     ],
     curateTags: ["dinner for two", "small batch"],
+    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279120/recipes/collections-recipes-for-two.jpg",
   },
   {
     slug: "fast-and-easy-dinner-for-2",
@@ -148,6 +160,7 @@ export const HUBS: Hub[] = [
       "When it's 6 PM and you're hungry, 'fast and easy' is the whole brief. These dinners for two are ready in 30 minutes or less, with minimal dishes to wash.",
     ],
     curateTags: ["fast", "easy", "dinner for two", "30-minute"],
+    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279115/recipes/collections-fast-and-easy-dinner-for-2.jpg",
   },
   {
     slug: "simple-healthy-dinner-ideas-for-two",
@@ -160,6 +173,7 @@ export const HUBS: Hub[] = [
       "Healthy dinners for two don't need to be complicated. These simple ideas balance protein, vegetables, and flavor — the kind of meals you can make on autopilot after a long day.",
     ],
     curateTags: ["healthy", "simple", "dinner for two"],
+    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279121/recipes/collections-simple-healthy-dinner-ideas-for-two.jpg",
   },
   {
     slug: "easy-whole30-recipes",
@@ -172,6 +186,7 @@ export const HUBS: Hub[] = [
       "Eating Whole30 doesn't mean eating boring. These compliant recipes skip sugar, grains, dairy, and legumes — while still delivering dinners you'll actually look forward to.",
     ],
     curateTags: ["whole30", "dinner for two", "easy"],
+    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279114/recipes/collections-easy-whole30-recipes.jpg",
   },
   {
     slug: "easy-carnivore-recipes",
@@ -184,6 +199,7 @@ export const HUBS: Hub[] = [
       "The carnivore diet is simple by design — meat, salt, water. These recipes keep it interesting with different cuts, cooking methods, and seasonings, all sized for two.",
     ],
     curateTags: ["carnivore", "dinner for two", "easy"],
+    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279107/recipes/collections-easy-carnivore-recipes.jpg",
   },
   {
     slug: "easy-low-fodmap-recipes",
@@ -196,6 +212,7 @@ export const HUBS: Hub[] = [
       "Low FODMAP cooking is about choosing the right ingredients, not eating less flavor. These recipes stick to low-FODMAP ingredients and portion sizes that work for two.",
     ],
     curateTags: ["low fodmap", "dinner for two", "easy"],
+    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279109/recipes/collections-easy-low-fodmap-recipes.jpg",
   },
   {
     slug: "easy-ibs-dinner-recipes",
@@ -208,6 +225,7 @@ export const HUBS: Hub[] = [
       "Living with IBS doesn't mean giving up good dinners. These recipes focus on low-FODMAP ingredients and simple preparation — the kind of meals that are easy on your gut and your schedule.",
     ],
     curateTags: ["low fodmap", "ibs", "dinner for two"],
+    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279108/recipes/collections-easy-ibs-dinner-recipes.jpg",
   },
   {
     slug: "easy-lactose-free-dinner-recipes",
@@ -220,6 +238,7 @@ export const HUBS: Hub[] = [
       "Cooking lactose-free doesn't mean cooking without creaminess. These dinners for two swap dairy for smart alternatives — while keeping the texture and flavor you want.",
     ],
     curateTags: ["lactose free", "dairy free", "dinner for two"],
+    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279109/recipes/collections-easy-lactose-free-dinner-recipes.jpg",
   },
   {
     slug: "easy-meals-for-beginners",
@@ -232,6 +251,7 @@ export const HUBS: Hub[] = [
       "New to cooking for two? Start here. These are the easiest meals to master — short ingredient lists, forgiving techniques, and results that feel like a win even on a first try.",
     ],
     curateTags: ["easy", "beginner", "dinner for two", "one-pan"],
+    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279111/recipes/collections-easy-meals-for-beginners.jpg",
   },
   {
     slug: "baking-for-2",
@@ -246,6 +266,7 @@ export const HUBS: Hub[] = [
       "Small-batch baking changes the math in ways that matter — less butter to cream, ramekins that bake through faster than a full cake pan, and cookie dough measured for two instead of three dozen. Each recipe spells out the pan size and timing so the result comes out right the first time.",
     ],
     curateTags: ["baking", "small batch", "dessert"],
+    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279103/recipes/collections-baking-for-2.jpg",
   },
   {
     slug: "dinner-recipes-for-two",
@@ -258,6 +279,7 @@ export const HUBS: Hub[] = [
       "This is the collection hub for all our dinner recipes for two. Browse by what you're craving — chicken, pasta, seafood, slow-cooker — every recipe is scaled for two servings.",
     ],
     curateTags: ["dinner for two", "easy", "one-pan"],
+    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279106/recipes/collections-dinner-recipes-for-two.jpg",
   },
   {
     slug: "easy-to-cook-dinner-for-two",
@@ -270,6 +292,7 @@ export const HUBS: Hub[] = [
       "Some recipes just want to be cooked. These easy-to-cook dinners for two are forgiving, fast, and perfect when you want a good meal without a project.",
     ],
     curateTags: ["easy", "dinner for two", "beginner"],
+    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279113/recipes/collections-easy-to-cook-dinner-for-two.jpg",
   },
 ]
 
