@@ -8,6 +8,7 @@ import { SiteFooter } from "@/components/site-footer"
 import { RecipeCard } from "@/components/recipe-card"
 import { getArticleBySlug, getRelatedForArticle } from "@/lib/queries"
 import { FOOD_BLUR_PLACEHOLDER } from "@/lib/utils/cn"
+import { cloudinaryUrl } from "@/lib/cloudinary-url"
 import { MarkdownRenderer } from "@/components/markdown-renderer"
 import { CATEGORY_LABELS } from "@/components/category-listing"
 import { PinButton } from "@/components/pin-button"
@@ -60,7 +61,7 @@ export async function ArticleDetail({ slug }: { slug: string }) {
           {article.heroImageUrl ? (
             <div className="relative mb-8 aspect-[16/9] overflow-hidden rounded-3xl border border-border shadow-2xl shadow-primary/10">
               <Image
-                src={article.heroImageUrl}
+                src={cloudinaryUrl(article.heroImageUrl, 1200)}
                 alt={article.title}
                 fill
                 priority

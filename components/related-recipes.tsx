@@ -3,6 +3,7 @@ import Image from "next/image"
 import { resolveCluster } from "@/lib/cluster-resolver"
 import { getRelatedRecipes, getPublishedRecipesLight } from "@/lib/queries"
 import { FOOD_BLUR_PLACEHOLDER } from "@/lib/utils/cn"
+import { cloudinaryUrl } from "@/lib/cloudinary-url"
 import { fromIsoDuration } from "@/lib/utils/duration"
 
 export async function RelatedRecipes({ recipe }: { recipe: { id: number; tags: string[] | null } }) {
@@ -47,7 +48,7 @@ export async function RelatedRecipes({ recipe }: { recipe: { id: number; tags: s
             {r.heroImageUrl ? (
               <div className="relative aspect-[4/3] overflow-hidden">
                 <Image
-                  src={r.heroImageUrl}
+                  src={cloudinaryUrl(r.heroImageUrl, 800)}
                   alt={r.title}
                   fill
                   className="object-cover transition-transform group-hover:scale-105"

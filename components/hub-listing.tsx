@@ -2,6 +2,7 @@
 // Renders a topical hub: editorial intro + cards of curated existing recipes
 // (deterministic, from DB tags — no hallucinated links) + ItemList JSON-LD.
 import Image from "next/image"
+import { cloudinaryUrl } from "@/lib/cloudinary-url"
 import { getHubBySlug } from "@/lib/hub-content"
 import { getPublishedRecipes } from "@/lib/queries"
 import { RecipeCard } from "@/components/recipe-card"
@@ -48,7 +49,7 @@ export async function HubListing({ slug }: { slug: string }) {
           {hub.heroImageUrl ? (
             <div className="relative mb-8 aspect-[16/9] overflow-hidden rounded-3xl border border-border shadow-2xl shadow-primary/10">
               <Image
-                src={hub.heroImageUrl}
+                src={cloudinaryUrl(hub.heroImageUrl, 1200)}
                 alt={hub.title}
                 fill
                 priority

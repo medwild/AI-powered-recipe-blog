@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Clock, Flame, Users, ChefHat, ArrowDown, Sparkles } from "lucide-react"
 import type { Recipe } from "@/lib/db/schema"
 import { FOOD_BLUR_PLACEHOLDER } from "@/lib/utils/cn"
+import { cloudinaryUrl } from "@/lib/cloudinary-url"
 import { fromIsoDuration, parseDurationMinutes } from "@/lib/utils/duration"
 import { PinButton } from "@/components/pin-button"
 import { CookModeToggle } from "@/components/cook-mode-toggle"
@@ -140,7 +141,7 @@ export function RecipeHero({ recipe }: { recipe: Recipe }) {
       {recipe.heroImageUrl ? (
         <figure className="relative overflow-hidden rounded-3xl border border-border shadow-2xl shadow-primary/10 aspect-[3/2] md:aspect-[2/3]">
           <Image
-            src={recipe.heroImageUrl}
+            src={cloudinaryUrl(recipe.heroImageUrl, 1200)}
             alt={recipe.title}
             fill
             className="object-cover"

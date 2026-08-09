@@ -4,6 +4,7 @@ import { BookOpen } from "lucide-react"
 import type { ArticleCardData } from "@/lib/types"
 import { PinButton } from "@/components/pin-button"
 import { CATEGORY_LABELS } from "@/components/category-listing"
+import { cloudinaryUrl } from "@/lib/cloudinary-url"
 
 export function ArticleCard({ article }: { article: ArticleCardData }) {
   const categoryLabel = CATEGORY_LABELS[article.category ?? ""] ?? article.category ?? "Article"
@@ -18,7 +19,7 @@ export function ArticleCard({ article }: { article: ArticleCardData }) {
         {article.heroImageUrl ? (
           <>
             <Image
-              src={article.heroImageUrl}
+              src={cloudinaryUrl(article.heroImageUrl, 800)}
               alt={article.title}
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"

@@ -8,6 +8,7 @@ import { and, eq, desc } from "drizzle-orm"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { HUBS } from "@/lib/hub-content"
+import { cloudinaryUrl } from "@/lib/cloudinary-url"
 
 /**
  * Canonical category label map — single source of truth for the 5 article categories.
@@ -167,7 +168,7 @@ export async function CategoryListing({ category }: { category: string }) {
                   {hub.heroImageUrl ? (
                     <div className="relative aspect-[16/9] overflow-hidden">
                       <Image
-                        src={hub.heroImageUrl}
+                        src={cloudinaryUrl(hub.heroImageUrl, 800)}
                         alt={hub.title}
                         fill
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -201,7 +202,7 @@ export async function CategoryListing({ category }: { category: string }) {
                 {article.heroImageUrl ? (
                   <div className="relative aspect-[16/9] overflow-hidden">
                     <Image
-                      src={article.heroImageUrl}
+                      src={cloudinaryUrl(article.heroImageUrl, 800)}
                       alt={article.title}
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

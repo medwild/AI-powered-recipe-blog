@@ -4,6 +4,7 @@ import { Clock, Users } from "lucide-react"
 import type { RecipeCardData } from "@/lib/types"
 import { PinButton } from "@/components/pin-button"
 import { fromIsoDuration } from "@/lib/utils/duration"
+import { cloudinaryUrl } from "@/lib/cloudinary-url"
 
 export function RecipeCard({ recipe, aspectRatio }: { recipe: RecipeCardData; aspectRatio?: string }) {
   const ratio = aspectRatio ?? "2/3"
@@ -17,7 +18,7 @@ export function RecipeCard({ recipe, aspectRatio }: { recipe: RecipeCardData; as
         {recipe.heroImageUrl ? (
           <>
             <Image
-              src={recipe.heroImageUrl || "/placeholder.svg"}
+              src={cloudinaryUrl(recipe.heroImageUrl, 800)}
               alt={recipe.title}
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
