@@ -9,57 +9,7 @@ import { recipes } from "../lib/db/schema"
 import { eq } from "drizzle-orm"
 import type { NodePgDatabase } from "drizzle-orm/node-postgres"
 import type * as schema from "../lib/db/schema"
-
-type Angle = { label: string; specs: string }
-
-const FLAT_LAY_TAGS = ["pizza", "salad", "board", "cake", "tart"] // food-photography.md §6
-const BURGER_TAGS = ["burger", "sandwich", "wrap"] // food-photography.md §6
-
-const LIFESTYLE: Angle = {
-  label: "Lifestyle en situation",
-  specs: "35mm, f/2.0, shallow depth of field",
-}
-
-const ANGLES: Record<"default" | "flat-lay" | "burger", Angle[]> = {
-  // 45° close-up → overhead → macro → lifestyle (spec §5)
-  default: [
-    { label: "45° close-up", specs: "90mm macro, f/2.8, shallow depth of field (bokeh)" },
-    { label: "Overhead", specs: "50mm, f/5.6, deep depth of field (tout net)" },
-    { label: "Détail macro", specs: "90mm macro, f/2.2, very shallow depth of field" },
-    LIFESTYLE,
-  ],
-  // Flat-lay: overhead first (pizza, salad, board, cake/tart)
-  "flat-lay": [
-    { label: "Overhead flat lay", specs: "50mm, f/5.6, deep depth of field (tout net)" },
-    { label: "45° close-up", specs: "90mm macro, f/2.8, shallow depth of field (bokeh)" },
-    { label: "Détail macro", specs: "90mm macro, f/2.2, very shallow depth of field" },
-    LIFESTYLE,
-  ],
-  // Burger/sandwich: 45° hero + side cut-away
-  burger: [
-    { label: "45° hero (hauteur/layers)", specs: "35mm, f/2.0, shallow depth of field" },
-    { label: "Side cut-away (couches)", specs: "50mm, f/4, moderate depth of field" },
-    { label: "Détail macro (sauce qui coule)", specs: "90mm macro, f/2.2, very shallow depth of field" },
-    LIFESTYLE,
-  ],
-}
-
-function resolveAngles(tags: string[]): Angle[] {
-  const joined = tags.join(" ").toLowerCase()
-  if (FLAT_LAY_TAGS.some((t) => joined.includes(t))) return ANGLES["flat-lay"]
-  if (BURGER_TAGS.some((t) => joined.includes(t))) return ANGLES.burger
-  return ANGLES.default
-}
-
-function buildPrompt(title: string, angle: Angle): string {
-  return [
-    `Recrée exactement ce même plat — ${title} — mêmes ingrédients, mêmes couleurs, même style, même lumière. Change uniquement l'angle de prise de vue : ${angle.label}.`,
-    "",
-    angle.specs,
-    "",
-    "2:3 vertical, Pinterest. Fond simple. Pas de texte sur l'image.",
-  ].join("\n")
-}
+import { resolveAngles, buildPinVariantPrompt } from "../lib/pin-variants"
 
 async function main() {
   // Dynamic import AFTER dotenv.config(): static imports are hoisted above
@@ -96,7 +46,7 @@ async function main() {
   for (let i = 0; i < angles.length; i++) {
     const pinNum = i + 2
     console.log(`═══ PIN ${pinNum} — ${angles[i].label} ═══`)
-    console.log("[PROM] " + buildPrompt(title, angles[i]))
+    console.log("[PROM] " + buildPinVariantPrompt(title, angles[i]))
     console.log("")
   }
 
