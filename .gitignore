@@ -29,3 +29,7 @@ claude-nvidia-proxy/
 # IDX dev environment — contains API keys in dev.nix (hardcoded locally).
 # Keep out of this repo to prevent keys from leaking on `git add .`.
 .idx/
+.worktrees
+
+# Visual companion brainstorming (mockups éphémères)
+.superpowers/
