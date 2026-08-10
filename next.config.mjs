@@ -94,6 +94,23 @@ const nextConfig = {
       { source: "/recipes/fast-and-easy-dinner-for-2", destination: "/recipes/garlic-butter-chicken-pasta-for-two", permanent: true },
       { source: "/recipes/simple-healthy-dinner-ideas-for-two", destination: "/recipes/one-pan-chicken-tomato-garlic-rice", permanent: true },
       { source: "/recipes/easy-whole30-recipes", destination: "/recipes/whole30-chicken-skillet-tomatoes-garlic", permanent: true },
+      // 2026-08-10 GSC "Exclues par noindex" — vieux slugs renommés/supprimés
+      // qui servaient 200 + noindex (soft-404). 301 vers les slugs actuels ;
+      // les slugs sans successeur (sourdough, banana-bread, honey-garlic-salmon,
+      // one-pot-lemon-chicken, dinners-for-two) restent en 404 natif
+      // (dynamicParams=false sur /recipes/[slug]).
+      { source: "/recipes/one-pot-chicken-pasta-for-two", destination: "/recipes/garlic-butter-chicken-pasta-for-two", permanent: true },
+      { source: "/recipes/one-pan-garlic-herb-chicken-thighs-for-two-the-cold-pan-secret", destination: "/recipes/chicken-dinner-for-two", permanent: true },
+      { source: "/recipes/one-pan-chicken-and-rice-for-two", destination: "/recipes/one-pan-chicken-rice-for-two", permanent: true },
+      { source: "/recipes/one-pan-garlic-tomato-chicken-rice-for-two", destination: "/recipes/one-pan-garlic-tomato-chicken-rice", permanent: true },
+      { source: "/recipes/easy-beef-ramen-noodles-for-two", destination: "/recipes/easy-beef-ramen-noodle-recipes", permanent: true },
+      { source: "/recipes/easy-chili-colorado-for-two", destination: "/recipes/easy-chili-colorado-recipe", permanent: true },
+      { source: "/recipes/easy-lasagna-recipe-for-two", destination: "/recipes/easy-lasagna-recipe", permanent: true },
+      { source: "/recipes/chicken-enchilada-skillet", destination: "/recipes/easy-mexican-dinner-recipes", permanent: true },
+      { source: "/recipes/mexican", destination: "/recipes/easy-mexican-dinner-recipes", permanent: true },
+      { source: "/recipes/2-quart-slow-cooker-chicken-gravy-for-two", destination: "/recipes/2-qt-slow-cooker-recipes", permanent: true },
+      { source: "/recipes/slow-cooker-chicken-beef-pasta-for-two", destination: "/recipes/easy-slow-cooker-pasta-recipes", permanent: true },
+      { source: "/recipes/chicken-pot-pie-for-two", destination: "/recipes/chicken-pot-pie-for-2", permanent: true },
       // Category consolidation 2026-08-05 — 1-2 recipe categories 301 to their
       // canonical parent (kill thin pages + keyword cannibalization, ~119 → ~35)
       { source: "/recipes/category/30-minute-meals", destination: "/recipes/category/quick", permanent: true },

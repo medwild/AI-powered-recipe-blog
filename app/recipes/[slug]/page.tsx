@@ -8,8 +8,12 @@ import { RecipeArticle } from "@/components/recipe-article"
 import { JumpToRecipeDesktop, JumpToRecipeMobile } from "@/components/jump-to-recipe"
 import { getRecipeBySlug, getPublishedRecipesLight, getLinkedArticle, getRecipeRating } from "@/lib/queries"
 
-// SSG pure — pages generated at build time, regenerated on-demand via revalidatePath()
-export const dynamicParams = true
+// SSG pure — pages generated at build time. dynamicParams = false : un slug
+// inconnu sert un 404 natif (comme category/cluster). Avec true, notFound()
+// servait 200 + noindex dans Next 16.2.9 → Google listait les vieux slugs en
+// "Exclues par noindex". Les nouvelles recettes arrivent au prochain build
+// (le push → redeploy Hostinger est auto).
+export const dynamicParams = false
 
 export async function generateStaticParams() {
   const recipes = await getPublishedRecipesLight()
@@ -24,7 +28,10 @@ export async function generateMetadata({
   const { slug } = await params
   const recipe = await getRecipeBySlug(slug)
   if (!recipe || recipe.status !== "published") {
-    return { title: "Recipe not found" }
+    // notFound() ici (pas seulement return title) : Next 16.2.9 ne pose le
+    // statut 404 que pour la route interne /404 — sans ça, une recette
+    // absente servait 200 + noindex (Google: "Exclue par noindex").
+    notFound()
   }
   return {
     title: recipe.metaTitle || recipe.title,
