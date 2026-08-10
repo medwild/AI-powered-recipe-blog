@@ -118,7 +118,9 @@ export const CATEGORY_REDIRECTS: Record<string, string> = {
 /** Tags that are canonical (deep, kept) — everything else redirects. */
 export const CANONICAL_CATEGORIES = new Set([
   "dinner for two",
-  "weeknight dinner",
+  // "weeknight dinner" removed 2026-08-10 — thin variant (2 recipes) that
+  // 301s to "weeknight" (next.config.mjs); listing it here put a redirecting
+  // URL in the sitemap (GSC "Page with redirection" notice 2026-08-09).
   "easy",
   "small batch",
   "date night",
