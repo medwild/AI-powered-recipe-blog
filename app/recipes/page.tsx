@@ -20,12 +20,22 @@ import { tagToSlug } from "@/lib/tag-utils"
 export const dynamic = "force-static"
 export const revalidate = 3600 // ISR — re-génère 1x/heure après publication
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ cat?: string; cluster?: string }>
+}): Promise<Metadata> {
+  // Les filtres ?cat= et ?cluster= sont des URLs UI (client-side, non indexables) :
+  // GSC les listait en "Autre page avec balise canonique correcte". On noindex
+  // toute URL avec query — la page canonique /recipes garde index.
+  const qp = await searchParams
+  const hasQuery = qp?.cat !== undefined || qp?.cluster !== undefined
   return {
     title: "All Recipes for Two — Easy Weeknight Dinners",
     description:
       "Simple, small-batch recipes for two — tested, scaled for two, ready tonight.",
     alternates: { canonical: "/recipes" },
+    robots: hasQuery ? "noindex, follow" : undefined,
     openGraph: {
       title: "All Recipes for Two | Chef Augustin",
       description:
