@@ -1,7 +1,7 @@
 # 📌 Pins à publier — copier-coller direct (format manuel Pinterest)
 
 > Ouvre ce fichier dans l'éditeur (pas le terminal) pour un copier-coller classique.
-> Cadence : 1-2 pins/jour, espacés de 4-6h. Coche au fur et à mesure.
+> Cadence : 3 pins/jour (13:30, 18:30, 22:30 Paris), espacés de 4-5h. Coche au fur et à mesure.
 > **Ordre : boards variés** (pas de répétition du même board) — Pinterest préfère un compte diversifié.
 
 > 📐 **RAPPEL VISUEL** : ratio **2:3 (1000×1500 px)** — le standard Pinterest (le 4:5 est trop court, le 9:16 rogne). Texte overlay dans le tiers bas, dégradé brun foncé, marges 10-15%.
@@ -21,17 +21,17 @@
 | 5 ✅ | Lemon Butter Chicken Pasta | Romantic Dinner | 15/08 22:30 |
 | 6 ✅ | Baked Ziti | Romantic Dinner | 16/08 22:30 |
 | 7 ✅ | Slow Cooker Chicken & Rice | Slow Cooker | 17/08 22:30 |
-| 8 📅 | 2-Quart Slow Cooker Chicken & Gravy | Slow Cooker | 18/08 13:30 |
-| 10 📅 | Garlic Butter Chicken Pasta | Pasta | 18/08 18:30 |
-| 9 📅 | Crockpot Chicken & Tomato Rice | Slow Cooker | 18/08 22:30 |
-| 11 📅 | Stovetop Mac and Cheese | Pasta | 19/08 13:30 |
-| 12 📅 | Asian Beef Noodle Stir-Fry | Asian | 19/08 18:30 |
-| 13 📅 | Easy Mexican Dinner | Quick Weeknight | 19/08 22:30 |
-| 14 📅 | Pan-Seared Chicken Herb-Butter | Easy Chicken | 20/08 13:30 |
-| 15 📅 | One-Pan Chicken and Rice | One-Pan Meals | 20/08 18:30 |
-| 16 📅 | Garlic Butter Chicken Rice Bowls | Quick Weeknight | 20/08 22:30 |
-| 17 📅 | Edible Cookie Dough | Small-Batch Desserts | 21/08 13:30 |
-| 18 📅 | Creamy Mashed Potatoes | Small-Batch Sides | 21/08 18:30 |
+| 8 📅 | 2-Quart Slow Cooker Chicken & Gravy | Slow Cooker | 11/08 13:30 |
+| 10 📅 | Garlic Butter Chicken Pasta | Pasta | 11/08 18:30 |
+| 9 📅 | Crockpot Chicken & Tomato Rice | Slow Cooker | 11/08 22:30 |
+| 11 📅 | Stovetop Mac and Cheese | Pasta | 12/08 13:30 |
+| 12 📅 | Asian Beef Noodle Stir-Fry | Asian | 12/08 18:30 |
+| 13 📅 | Easy Mexican Dinner | Quick Weeknight | 12/08 22:30 |
+| 14 📅 | Pan-Seared Chicken Herb-Butter | Easy Chicken | 13/08 13:30 |
+| 15 📅 | One-Pan Chicken and Rice | One-Pan Meals | 13/08 18:30 |
+| 16 📅 | Garlic Butter Chicken Rice Bowls | Quick Weeknight | 14/08 13:30 |
+| 17 📅 | Edible Cookie Dough | Small-Batch Desserts | 14/08 18:30 |
+| 18 📅 | Creamy Mashed Potatoes | Small-Batch Sides | 15/08 13:30 |
 
 ---
 
