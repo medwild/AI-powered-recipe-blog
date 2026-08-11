@@ -16,7 +16,7 @@ export function HomepageJsonLd() {
               "Chef Augustin Lefèvre shares practical small-batch dinner recipes for two.",
             sameAs: [
               "https://www.instagram.com/chefaugustin",
-              "https://www.pinterest.com/chefaugustin",
+              "https://www.pinterest.com/cookwithaugustin",
               "https://www.youtube.com/@chefaugustin",
             ],
           },

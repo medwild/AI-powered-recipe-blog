@@ -90,7 +90,7 @@ export function SiteFooter() {
               <SocialIcon href="https://www.instagram.com/chefaugustin" label="Instagram">
                 <InstagramIcon className="h-4 w-4" />
               </SocialIcon>
-              <SocialIcon href="https://www.pinterest.com/chefaugustin" label="Pinterest">
+              <SocialIcon href="https://www.pinterest.com/cookwithaugustin" label="Pinterest">
                 <PinterestIcon className="h-4 w-4" />
               </SocialIcon>
               <SocialIcon href="https://www.youtube.com/@chefaugustin" label="YouTube">
