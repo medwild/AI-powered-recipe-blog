@@ -20,6 +20,15 @@ export function middleware(req: NextRequest) {
     )
     return NextResponse.redirect(target, 301)
   }
+  // Filtres UI ?cat=/?q= sur /recipes — noindex via header (GSC 09/08, bcd9709).
+  // Le HTML est statique (ISR) donc le meta robots ne peut pas dépendre des
+  // params ; X-Robots-Tag est honoré par Google. Canonical /recipes reste dans
+  // le HTML (metadata statique).
+  if (req.nextUrl.pathname === "/recipes" && req.nextUrl.search !== "") {
+    const res = NextResponse.next()
+    res.headers.set("X-Robots-Tag", "noindex, follow")
+    return res
+  }
   return NextResponse.next()
 }
 
