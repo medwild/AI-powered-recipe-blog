@@ -1,0 +1,415 @@
+{
+  "summary": {
+    "health_score": 79.0,
+    "business_type": "Recipe blog (dinner for two)",
+    "top_findings": [],
+    "quick_wins": []
+  },
+  "categories": [
+    {
+      "name": "Technical SEO",
+      "score": 82,
+      "what_works": [
+        "HTTPS/HSTS excellent (max-age=63072000+preload, XFO DENY, nosniff)",
+        "robots.txt sain (sitemap déclaré, /dashboard + /api bloqués)",
+        "Canonicals self OK sauf /idees/*",
+        "Redirects /recettes→/recipes propres (308, 1 hop)",
+        "/api/recipes/raw : exposition volontaire, aucun draft fuité",
+        "96/96 URLs sitemap → 200",
+        "non-www→www 301"
+      ],
+      "findings": [
+        {
+          "severity": "High",
+          "title": "7 pages /idees/* sans tag canonical",
+          "evidence": "grep canonical = 0 sur /idees/romantic-dinner-ideas-for-two (+6 autres) ; toutes dans le sitemap, indexables",
+          "recommendation": "Ajouter canonical via generateMetadata"
+        },
+        {
+          "severity": "High",
+          "title": "Soft-404 : /recipes/creamy-garlic-chicken → 200 noindex",
+          "evidence": "title 'Recipe not found' + noindex ; redirect legacy /recettes/creamy-garlic-chicken → 308 y mène (cul-de-sac)",
+          "recommendation": "410 ou 301 vers creamy-parmesan-garlic-chicken-orzo-for-two"
+        },
+        {
+          "severity": "Medium",
+          "title": "LCP lab mobile > 2.5s (home 2.6s, recette 2.9s, hub 3.9s)",
+          "evidence": "perf 87-96, CLS 0, TBT 0-20ms",
+          "recommendation": "fetchpriority=high hero + inliner CSS critique"
+        },
+        {
+          "severity": "Medium",
+          "title": "og:url absent/erroné sur pages internes",
+          "evidence": "absent sur /recipes + clusters + recettes ; → homepage sur /idees/*",
+          "recommendation": "og:url par page dans generateMetadata"
+        },
+        {
+          "severity": "Medium",
+          "title": "CSP minimale",
+          "evidence": "header = upgrade-insecure-requests uniquement",
+          "recommendation": "CSP complète (default-src 'self')"
+        },
+        {
+          "severity": "Low",
+          "title": "Permissions-Policy absente",
+          "evidence": "header absent",
+          "recommendation": "Ajouter Permissions-Policy"
+        }
+      ]
+    },
+    {
+      "name": "Content Quality",
+      "score": 72,
+      "what_works": [
+        "Recettes fortes (1505-2869 mots, temps 165°F/145°F, 10-inch skillet, anecdotes 1re personne)",
+        "AI citation 78/100 — FAQ auto-suffisantes 60-90 mots",
+        "Lisibilité recettes saine (17.8-19.6 mots/phrase)",
+        "Persona transparent (about : house persona)",
+        "Meta descriptions uniques hors pattern catégories"
+      ],
+      "findings": [
+        {
+          "severity": "High",
+          "title": "13 paires même slug /recipes/ + /guides|/idees/ (dupliquées)",
+          "evidence": "/recipes/easy-dinner-ideas-for-two (recette) vs /guides/… (hub, SANS canonical) ; 13 paires au sitemap",
+          "recommendation": "Renommer slugs hubs OU canonical croisé"
+        },
+        {
+          "severity": "High",
+          "title": "Catégories legacy quasi vides servies en 200",
+          "evidence": "chicken-for-two 63 mots (noindex), quick-dinner-for-two 249 mots (index,follow!), dessert 138 mots",
+          "recommendation": "301 vers canoniques + supprimer liens internes"
+        },
+        {
+          "severity": "Medium",
+          "title": "Hubs sous plancher 500-800 mots",
+          "evidence": "easy-dinner-ideas 705 mots (prose ≈150-200), healthy-dinner-ideas 585, index /guides 447",
+          "recommendation": "+150-250 mots éditoriaux par hub"
+        },
+        {
+          "severity": "Medium",
+          "title": "Clusters à dominante grille (272 mots)",
+          "evidence": "one-pan-dinners : 272 mots + 16 cards",
+          "recommendation": "+1 section technique thème"
+        },
+        {
+          "severity": "Medium",
+          "title": "Nutrition en JSON-LD seul, pas de disclaimer visible",
+          "evidence": "0 occurrence 'nutrition'/'calorie' visible sur 4 recettes ; YMYL food",
+          "recommendation": "Ligne 'Nutrition information is an estimate' (sans section complète)"
+        },
+        {
+          "severity": "Medium",
+          "title": "FAQ potentiellement synthétiques",
+          "evidence": "log embarqué : 'No PAA questions — using 8 synthetic fallbacks'",
+          "recommendation": "Auditer Q/R ; alimenter depuis vraies SERP quand dispo"
+        },
+        {
+          "severity": "Medium",
+          "title": "Hiérarchie H2/H3 des pages de collection",
+          "evidence": "hubs : 1 H2 + 35-41 H3 non groupés ; intros monolithiques ~176-195 mots",
+          "recommendation": "Grouper cards sous H2 thématiques, découper intros"
+        },
+        {
+          "severity": "Low",
+          "title": "Homepage phrases longues",
+          "evidence": "26.4 mots/phrase, 39% > 25 mots",
+          "recommendation": "Raccourcir 4-5 phrases"
+        },
+        {
+          "severity": "Low",
+          "title": "Meta descriptions catégories à squelette identique",
+          "evidence": "'Browse our collection of X recipes — tested, scaled for two…'",
+          "recommendation": "Réécrire avec angle + bénéfice"
+        },
+        {
+          "severity": "Info",
+          "title": "workflowLog IA sérialisé dans le HTML client",
+          "evidence": "agents SERP/MegaSkill/SeoGate/Opus 4.8 + horodatages lisibles dans la source",
+          "recommendation": "Évaluer : empreinte 'généré par IA' traçable"
+        }
+      ]
+    },
+    {
+      "name": "On-Page SEO",
+      "score": 72,
+      "what_works": [
+        "Titles recettes 61-67 chars, uniques",
+        "Meta descriptions uniques hors pattern catégories (140-160 chars)",
+        "H1 unique + hiérarchie H2/H3 saine sur recettes",
+        "Canonicals self OK sur recettes/catégories/clusters (sauf /idees/*)",
+        "og:title/description présents (og:url manquant)"
+      ],
+      "findings": [
+        {
+          "severity": "High",
+          "title": "og:url absent/erroné sur pages internes",
+          "evidence": "absent /recipes + clusters + recettes ; → homepage sur /idees/*",
+          "recommendation": "og:url par page dans generateMetadata"
+        },
+        {
+          "severity": "Medium",
+          "title": "Titles/meta hubs hors focus cible",
+          "evidence": "'French cooking tips' (hub /guides) vs cible US/UK/CA/AU ; title 41 chars",
+          "recommendation": "Recentrer titles/meta sur cible anglophone + mots-clés intents"
+        },
+        {
+          "severity": "Medium",
+          "title": "Meta descriptions catégories à squelette identique",
+          "evidence": "'Browse our collection of X recipes — tested, scaled for two…'",
+          "recommendation": "Réécrire avec angle + bénéfice"
+        },
+        {
+          "severity": "Low",
+          "title": "Homepage phrases longues",
+          "evidence": "26.4 mots/phrase, 39% > 25 mots",
+          "recommendation": "Raccourcir 4-5 phrases intro"
+        },
+        {
+          "severity": "Low",
+          "title": "Hiérarchie H2/H3 des collections",
+          "evidence": "hubs : 1 H2 + 35-41 H3 non groupés",
+          "recommendation": "Grouper cards sous H2 thématiques"
+        }
+      ]
+    },
+    {
+      "name": "Schema / Structured Data",
+      "score": 85,
+      "what_works": [
+        "100% blocs JSON-LD parsent, @context https, URLs absolues, dates ISO 8601",
+        "Recettes : Recipe complet (HowToStep avec image+text, author Person, prep+cook=total, cuisine déterministe, yield) + BlogPosting + BreadcrumbList",
+        "ItemList hub (41) et catégorie (30) exacts (counts, positions, 0 doublon)",
+        "FAQPage 5-6 Q&A/recette bien formées",
+        "Home : Organization (logo, sameAs×3) + WebSite SearchAction",
+        "aggregateRating absent = correct (pas de vraies reviews)"
+      ],
+      "findings": [
+        {
+          "severity": "High",
+          "title": "NutritionInformation vide sur 2-qt-slow-cooker-recipes",
+          "evidence": "\"nutrition\": {\"servingSize\": \"1 serving\"} — 0 calories/macros ; 45/46 ont des valeurs",
+          "recommendation": "Backfiller calories+macros + vérifier les 46 par script"
+        },
+        {
+          "severity": "Medium",
+          "title": "recipeCategory multi-tags en un Text unique",
+          "evidence": "\"mediterranean chicken, one-pan dinner, orzo\" — Google attend une catégorie unique",
+          "recommendation": "Une valeur unique ; garder tags dans keywords"
+        },
+        {
+          "severity": "Medium",
+          "title": "Format calories incohérent (580 sans unité, 650 per serving, 520 kcal)",
+          "evidence": "4 recettes sur 46 : '580', '650 per serving', '520 kcal', '540' vs '620 calories' attendu",
+          "recommendation": "Uniformiser 'N calories'"
+        },
+        {
+          "severity": "Medium",
+          "title": "Cluster sans ItemList",
+          "evidence": "/recipes/cluster/one-pan-dinners-for-two : seul BreadcrumbList",
+          "recommendation": "Ajouter ItemList (comme catégorie)"
+        },
+        {
+          "severity": "Medium",
+          "title": "Hub /guides sans BreadcrumbList",
+          "evidence": "/guides/easy-dinner-ideas-for-two : seul ItemList",
+          "recommendation": "Ajouter BreadcrumbList Home > Guides > …"
+        },
+        {
+          "severity": "Low",
+          "title": "Organization.logo = URL nue (pas ImageObject)",
+          "evidence": "\"logo\": \"https://www.chefaugustin.com/hero-kitchen.png\"",
+          "recommendation": "ImageObject + vérifier 112×112+ carré"
+        },
+        {
+          "severity": "Low",
+          "title": "SearchAction format legacy",
+          "evidence": "\"query-input\": \"required name=search_term_string\"",
+          "recommendation": "Moderniser en \"required\""
+        },
+        {
+          "severity": "Low",
+          "title": "recipeYield incohérent ('2' vs '2 servings')",
+          "evidence": "R1 '2' vs R2/R3 '2 servings'",
+          "recommendation": "Uniformiser '2 servings'"
+        }
+      ]
+    },
+    {
+      "name": "Performance (CWV)",
+      "score": 96,
+      "what_works": [
+        "Score PSI mobile 96/100 (Access 100, BP 96, SEO 100) ; desktop 99",
+        "CLS 0.00 partout",
+        "TBT 9ms (proxy INP excellent), 0 long task significatif",
+        "0 script tiers (pas AdSense/GTM/analytics)",
+        "Fonts self-hosted (Playfair+Geist woff2, 67 KiB), payload 681 KiB/38 req",
+        "Images Cloudinary f_auto/q_auto"
+      ],
+      "findings": [
+        {
+          "severity": "Critical",
+          "title": "Script Vercel Analytics mort (404 sur chaque page)",
+          "evidence": "/_vercel/insights/script.js → 404 MIME text/html refusé ; audit errors-in-console échoué (score 0)",
+          "recommendation": "Retirer <Analytics/> de @vercel/analytics du layout"
+        },
+        {
+          "severity": "Medium",
+          "title": "LCP lab 2.56s (juste au-dessus du seuil 2.5s)",
+          "evidence": "chaîne critique : CSS render-blocking 617ms → image hero 69.4 KiB",
+          "recommendation": "preload/priority image LCP + inliner CSS critique"
+        },
+        {
+          "severity": "Medium",
+          "title": "CSS render-blocking (2 chunks, 610ms économisables)",
+          "evidence": "Lighthouse opportunities",
+          "recommendation": "Inliner CSS critique"
+        },
+        {
+          "severity": "Low",
+          "title": "Images sur-dimensionnées (next/image w=768 pour rendu ~378px)",
+          "evidence": "32 KiB gaspillés",
+          "recommendation": "Ajuster sizes"
+        },
+        {
+          "severity": "Low",
+          "title": "13 KiB polyfills legacy (cible ES2022 partielle)",
+          "evidence": "Legacy JS",
+          "recommendation": "Compléter la cible ES2022"
+        }
+      ]
+    },
+    {
+      "name": "AI Search Readiness",
+      "score": 75,
+      "what_works": [
+        "llms.txt exemplaire (46 recettes + API raw JSON ouverte aux LLM)",
+        "SSR complet — aucun shell SPA, contenu 100% visible sans JS",
+        "Tous crawlers IA autorisés (wildcard + OAI-SearchBot/PerplexityBot explicites)",
+        "Passages FAQ 74-109 mots, réponse directe + mot-clé dans les 60 premiers mots",
+        "JSON-LD Recipe complet + FAQPage dans @graph",
+        "Brand cohérent (Chef Augustin title/byline/JSON-LD)"
+      ],
+      "findings": [
+        {
+          "severity": "Medium",
+          "title": "Blocs FAQ sans conteneur sémantique HTML",
+          "evidence": "faq_containers=0 sur 3 recettes ; H2 nues sans details/accordion",
+          "recommendation": "Wrapper <details> ou section FAQ dédiée"
+        },
+        {
+          "severity": "Medium",
+          "title": "Hub /guides sans JSON-LD",
+          "evidence": "0 script ld+json sur la porte d'entrée des 21 clusters",
+          "recommendation": "Ajouter ItemList + BreadcrumbList"
+        },
+        {
+          "severity": "Low",
+          "title": "Meta descriptions 151-161 chars (troncature)",
+          "evidence": "whole30 à 161 chars",
+          "recommendation": "Réécrire sous 160"
+        },
+        {
+          "severity": "Low",
+          "title": "Méta hub /guides hors focus",
+          "evidence": "'French cooking tips' vs cible US/UK/CA/AU",
+          "recommendation": "Recentrer sur cible anglophone"
+        },
+        {
+          "severity": "Low",
+          "title": "Pas de llms-full.txt ni de hubs dans llms.txt",
+          "evidence": "70 lignes, section Published Articles (0)",
+          "recommendation": "Ajouter hubs + llms-full.txt"
+        },
+        {
+          "severity": "Low",
+          "title": "Aucune table de nutrition visible",
+          "evidence": "tables=0 ; nutrition uniquement en JSON-LD",
+          "recommendation": "Envisager ligne 'Nutrition is an estimate' visible (YMYL)"
+        }
+      ]
+    },
+    {
+      "name": "Images",
+      "score": 88,
+      "what_works": [
+        "Images Cloudinary f_auto/q_auto",
+        "0 image cassée (16 vérifiées)",
+        "alt présents, contraste excellent (AAA)",
+        "CLS 0"
+      ],
+      "findings": [
+        {
+          "severity": "Medium",
+          "title": "Images sur-dimensionnées (w=768 pour rendu ~378px)",
+          "evidence": "32 KiB gaspillés par image",
+          "recommendation": "Ajuster sizes"
+        },
+        {
+          "severity": "Low",
+          "title": "LCP image hero hub /recipes (3.9s)",
+          "evidence": "fetchpriority manquant sur hero",
+          "recommendation": "fetchpriority=high"
+        }
+      ]
+    },
+    {
+      "name": "Backlinks",
+      "score": null,
+      "what_works": [
+        "0 lien externe mais ATTENDU (domaine 5 semaines, aucune fenêtre crawl CC couverte)",
+        "Pinterest : profil vérifié 13/13 boards, Rich Pins actifs = seul référant réel",
+        "Consolidation interne confirmée (0 variante 30-minute)",
+        "Historique spam juillet clôturé, aucun nouveau signe"
+      ],
+      "findings": [
+        {
+          "severity": "Info",
+          "title": "Profil backlink = page blanche (attendu)",
+          "evidence": "in_crawl false, 0 capture CC-MAIN-2026-30 ; domaine créé 02/07",
+          "recommendation": "Réévaluer ~Q4 2026 (graph CC Q3) ou clé Moz gratuite → Tier 1"
+        },
+        {
+          "severity": "Low",
+          "title": "0 lien construit — Pinterest levier n°1",
+          "evidence": "pinterest.com/chefaugustin vérifié ; seul canal social avec equity",
+          "recommendation": "Pins réguliers des 46 recettes (Rich Pins déjà actifs)"
+        },
+        {
+          "severity": "Low",
+          "title": "Historique spam juillet non observable en Tier 0",
+          "evidence": "~80 liens nofollow clôturés 01/08 ; ratio toxique inmesurable",
+          "recommendation": "Monitoring mensuel GSC ; ne pas reconstruire de disavow"
+        }
+      ]
+    }
+  ],
+  "action_plan": {
+    "phases": [
+      {
+        "name": "Phase 1: Critical Fixes",
+        "timeframe": "Week 1",
+        "items": []
+      },
+      {
+        "name": "Phase 2: High-Impact Improvements",
+        "timeframe": "Weeks 2-3",
+        "items": []
+      },
+      {
+        "name": "Phase 3: Content & Authority",
+        "timeframe": "Month 2",
+        "items": []
+      },
+      {
+        "name": "Phase 4: Monitoring & Iteration",
+        "timeframe": "Ongoing",
+        "items": []
+      }
+    ]
+  },
+  "artifacts": {
+    "findings_dir": "findings/",
+    "screenshots_dir": "screenshots/"
+  }
+}

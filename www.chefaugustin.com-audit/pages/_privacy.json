@@ -1,0 +1,60 @@
+{
+  "url": "https://www.chefaugustin.com/privacy",
+  "status_code": 200,
+  "content": "<!DOCTYPE html><html lang=\"en\" class=\"geist_deef94d5-module__Sms4YG__variable playfair_display_d5eda251-module__JGL7aG__variable bg-background\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"/><link rel=\"preload\" href=\"/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2\" as=\"font\" crossorigin=\"\" type=\"font/wo...",
+  "raw_content": "<!DOCTYPE html><html lang=\"en\" class=\"geist_deef94d5-module__Sms4YG__variable playfair_display_d5eda251-module__JGL7aG__variable bg-background\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" conte...",
+  "is_spa": false,
+  "extracted_text": "Privacy Policy & Data Protection\nLast updated: July 8, 2026\n1. Information We Collect\nChef Augustin (\u201cwe\u201d, \u201cour\u201d, or \u201cus\u201d) operates the website chefaugustin.com (the \u201cSite\u201d). We collect minimal information to provide and improve our service.\n- Usage Data: Pages visited, time spent, referring URLs, browser type. Collected automatically via Google Analytics.\n- Cookies: Small data files stored on your device. See Section 3.\n- Contact Information: If you email us, we receive your email address and a...",
+  "publication_date": "2026-07-08",
+  "accessibility_tree": null,
+  "headers": {
+    "Date": "Wed, 05 Aug 2026 11:00:19 GMT",
+    "Content-Type": "text/html; charset=utf-8",
+    "Transfer-Encoding": "chunked",
+    "Connection": "keep-alive",
+    "X-Frame-Options": "DENY",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+    "Content-Security-Policy": "upgrade-insecure-requests",
+    "x-nextjs-cache": "HIT",
+    "x-nextjs-prerender": "1",
+    "x-nextjs-stale-time": "300",
+    "X-Powered-By": "Next.js",
+    "Cache-Control": "s-maxage=31536000",
+    "ETag": "\"giaidrp0vi1b64\"",
+    "Content-Encoding": "br",
+    "platform": "hostinger",
+    "panel": "hpanel",
+    "Server": "hcdn",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "x-hcdn-request-id": "08607b284dbbd0eabc44aee220152618-srv-edge6",
+    "x-hcdn-cache-status": "BYPASS",
+    "x-hcdn-upstream-rt": "0.422"
+  },
+  "redirect_chain": [],
+  "console_errors": [],
+  "render_diagnostics": [],
+  "render_engine": null,
+  "render_ms": null,
+  "mode_used": "raw",
+  "error": null,
+  "structured_data": {
+    "block_count": 1,
+    "processed_count": 1,
+    "total_bytes": 269,
+    "truncated": false,
+    "blocks": [
+      {
+        "index": 1,
+        "size_bytes": 269,
+        "valid": true,
+        "types": [
+          "BreadcrumbList",
+          "ListItem"
+        ],
+        "types_truncated": false
+      }
+    ]
+  }
+}

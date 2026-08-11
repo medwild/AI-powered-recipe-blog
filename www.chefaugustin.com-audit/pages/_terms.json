@@ -1,0 +1,60 @@
+{
+  "url": "https://www.chefaugustin.com/terms",
+  "status_code": 200,
+  "content": "<!DOCTYPE html><html lang=\"en\" class=\"geist_deef94d5-module__Sms4YG__variable playfair_display_d5eda251-module__JGL7aG__variable bg-background\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"/><link rel=\"preload\" href=\"/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2\" as=\"font\" crossorigin=\"\" type=\"font/wo...",
+  "raw_content": "<!DOCTYPE html><html lang=\"en\" class=\"geist_deef94d5-module__Sms4YG__variable playfair_display_d5eda251-module__JGL7aG__variable bg-background\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" conte...",
+  "is_spa": false,
+  "extracted_text": "Terms of Use & Disclaimer\nLast updated: July 8, 2026\nPlease read these terms carefully before using Chef Augustin. By accessing or using this website, you agree to be bound by these terms. If you do not agree with any part of these terms, please do not use this site.\n1. Informational Purposes Only\nThe recipes, techniques, and content on Chef Augustin are provided for informational and educational purposes only. They do not constitute professional nutritional, medical, or dietary advice. Always c...",
+  "publication_date": "2026-07-08",
+  "accessibility_tree": null,
+  "headers": {
+    "Date": "Wed, 05 Aug 2026 11:00:21 GMT",
+    "Content-Type": "text/html; charset=utf-8",
+    "Transfer-Encoding": "chunked",
+    "Connection": "keep-alive",
+    "X-Frame-Options": "DENY",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+    "Content-Security-Policy": "upgrade-insecure-requests",
+    "x-nextjs-cache": "HIT",
+    "x-nextjs-prerender": "1",
+    "x-nextjs-stale-time": "300",
+    "X-Powered-By": "Next.js",
+    "Cache-Control": "s-maxage=31536000",
+    "ETag": "\"zlmeixhujg1bsr\"",
+    "Content-Encoding": "br",
+    "platform": "hostinger",
+    "panel": "hpanel",
+    "Server": "hcdn",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "x-hcdn-request-id": "f5de7dcd40b6e7a9db69f766b83dd91f-srv-edge6",
+    "x-hcdn-cache-status": "BYPASS",
+    "x-hcdn-upstream-rt": "0.411"
+  },
+  "redirect_chain": [],
+  "console_errors": [],
+  "render_diagnostics": [],
+  "render_engine": null,
+  "render_ms": null,
+  "mode_used": "raw",
+  "error": null,
+  "structured_data": {
+    "block_count": 1,
+    "processed_count": 1,
+    "total_bytes": 271,
+    "truncated": false,
+    "blocks": [
+      {
+        "index": 1,
+        "size_bytes": 271,
+        "valid": true,
+        "types": [
+          "BreadcrumbList",
+          "ListItem"
+        ],
+        "types_truncated": false
+      }
+    ]
+  }
+}

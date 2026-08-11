@@ -1,0 +1,686 @@
+{
+ "paint": [
+  {
+   "name": "first-paint",
+   "start": 1412
+  },
+  {
+   "name": "first-contentful-paint",
+   "start": 1412
+  }
+ ],
+ "url": "https://www.chefaugustin.com/recipes/easy-chicken-rice-bowls-for-two",
+ "lcp": null,
+ "links": [
+  {
+   "rel": "preload",
+   "href": "https://www.chefaugustin.com/_next/static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2",
+   "as": "font",
+   "type": "font/woff2",
+   "media": "",
+   "crossorigin": "anonymous",
+   "fetchpriority": null
+  },
+  {
+   "rel": "preload",
+   "href": "https://www.chefaugustin.com/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+   "as": "font",
+   "type": "font/woff2",
+   "media": "",
+   "crossorigin": "anonymous",
+   "fetchpriority": null
+  },
+  {
+   "rel": "preload",
+   "href": "",
+   "as": "image",
+   "type": "",
+   "media": "",
+   "crossorigin": null,
+   "fetchpriority": null
+  },
+  {
+   "rel": "stylesheet",
+   "href": "https://www.chefaugustin.com/_next/static/chunks/2swnbtkp595hv.css",
+   "as": null,
+   "type": "",
+   "media": "",
+   "crossorigin": null,
+   "fetchpriority": null
+  },
+  {
+   "rel": "stylesheet",
+   "href": "https://www.chefaugustin.com/_next/static/chunks/03g70739w6gu8.css",
+   "as": null,
+   "type": "",
+   "media": "",
+   "crossorigin": null,
+   "fetchpriority": null
+  },
+  {
+   "rel": "preload",
+   "href": "https://www.chefaugustin.com/_next/static/chunks/0dp29ey5xybb3.js",
+   "as": "script",
+   "type": "",
+   "media": "",
+   "crossorigin": null,
+   "fetchpriority": "low"
+  },
+  {
+   "rel": "manifest",
+   "href": "https://www.chefaugustin.com/manifest.webmanifest",
+   "as": null,
+   "type": "",
+   "media": "",
+   "crossorigin": null,
+   "fetchpriority": null
+  },
+  {
+   "rel": "canonical",
+   "href": "https://www.chefaugustin.com/recipes/easy-chicken-rice-bowls-for-two",
+   "as": null,
+   "type": "",
+   "media": "",
+   "crossorigin": null,
+   "fetchpriority": null
+  },
+  {
+   "rel": "icon",
+   "href": "https://www.chefaugustin.com/icon.svg?icon.2984ic-0u-frg.svg",
+   "as": null,
+   "type": "image/svg+xml",
+   "media": "",
+   "crossorigin": null,
+   "fetchpriority": null
+  }
+ ],
+ "scripts": [
+  {
+   "src": "https://www.chefaugustin.com/_next/static/chunks/2j0ntnypuz51a.js",
+   "async": true,
+   "defer": false,
+   "inline": false,
+   "len": 0
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/static/chunks/3nw5lwt6vl5ga.js",
+   "async": true,
+   "defer": false,
+   "inline": false,
+   "len": 0
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/static/chunks/0mk1g55o6kl1e.js",
+   "async": true,
+   "defer": false,
+   "inline": false,
+   "len": 0
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/static/chunks/0gp5ktsgx8lyg.js",
+   "async": true,
+   "defer": false,
+   "inline": false,
+   "len": 0
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/static/chunks/turbopack-13ka30-f30mg3.js",
+   "async": true,
+   "defer": false,
+   "inline": false,
+   "len": 0
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/static/chunks/3g05-ar7q__dz.js",
+   "async": true,
+   "defer": false,
+   "inline": false,
+   "len": 0
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/static/chunks/2im7c515bo69p.js",
+   "async": true,
+   "defer": false,
+   "inline": false,
+   "len": 0
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/static/chunks/1omor3m3y0zsq.js",
+   "async": true,
+   "defer": false,
+   "inline": false,
+   "len": 0
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/static/chunks/0_07l6gn0pv9m.js",
+   "async": true,
+   "defer": false,
+   "inline": false,
+   "len": 0
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/static/chunks/3alpi4p0fpygj.js",
+   "async": true,
+   "defer": false,
+   "inline": false,
+   "len": 0
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/static/chunks/09wusrrwhn0jp.js",
+   "async": true,
+   "defer": false,
+   "inline": false,
+   "len": 0
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/static/chunks/38_1_780l08sg.js",
+   "async": true,
+   "defer": false,
+   "inline": false,
+   "len": 0
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/static/chunks/2y1-wlbg6q4wq.js",
+   "async": true,
+   "defer": false,
+   "inline": false,
+   "len": 0
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/static/chunks/0cz1d0mv5g_q7.js",
+   "async": false,
+   "defer": false,
+   "inline": false,
+   "len": 0
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/static/chunks/1kk82h9c5vcvo.js",
+   "async": true,
+   "defer": false,
+   "inline": false,
+   "len": 0
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/static/chunks/2rzo76-zrob7j.js",
+   "async": true,
+   "defer": false,
+   "inline": false,
+   "len": 0
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/static/chunks/27v892mm1t8sz.js",
+   "async": true,
+   "defer": false,
+   "inline": false,
+   "len": 0
+  },
+  {
+   "src": "https://www.chefaugustin.com/_vercel/insights/script.js",
+   "async": true,
+   "defer": true,
+   "inline": false,
+   "len": 0
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/static/chunks/1xwjdagz39tq0.js",
+   "async": true,
+   "defer": false,
+   "inline": false,
+   "len": 0
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/static/chunks/2b0b2zs_4oevf.js",
+   "async": true,
+   "defer": false,
+   "inline": false,
+   "len": 0
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/static/chunks/0y_3jbthxiolz.js",
+   "async": true,
+   "defer": false,
+   "inline": false,
+   "len": 0
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/static/chunks/40hxdvqwxc3fb.js",
+   "async": true,
+   "defer": false,
+   "inline": false,
+   "len": 0
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/static/chunks/02_vi0um-b7tv.js",
+   "async": true,
+   "defer": false,
+   "inline": false,
+   "len": 0
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 526
+  },
+  {
+   "src": "",
+   "async": true,
+   "defer": false,
+   "inline": true,
+   "len": 569
+  },
+  {
+   "src": "",
+   "async": true,
+   "defer": false,
+   "inline": true,
+   "len": 5588
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 57
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/static/chunks/0dp29ey5xybb3.js",
+   "async": true,
+   "defer": false,
+   "inline": false,
+   "len": 0
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 845
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 43
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 660
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 5357
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 1922
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 4407
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 2172
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 3724
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 2979
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 113
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 185
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 330
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 147
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 2103
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 616
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 5950
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 394
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 1104
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 3778
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 2317
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 317
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 9529
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 13346
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 1640
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 4232
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 35
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 6530
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 1558
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 1864
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 302
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 4444
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 1830
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 1507
+  },
+  {
+   "src": "",
+   "async": false,
+   "defer": false,
+   "inline": true,
+   "len": 1495
+  }
+ ],
+ "imgs": [
+  {
+   "src": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785149091%2Frecipes%2FEasy%2520Lunch%2520Recipes%3A%252015-Minute%2520Garlic%2520Butter%2520Chicken%2520Rice%2520Bowls%2520for%2520Two-v0.png&w=768&q=75",
+   "srcset": "/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785149091%2Frecipes%2FEasy%2520Lunch%2520Recipes%3A%252015-Minute%2520Garlic%2520Butter%2520Chicken%2520Rice%2520Bowls%2520for%2520Two-v0.png&w=384&q=75 384w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785149091%2Frecipes%2FEasy%2520Lunch%2520Recipes%3A%252015-Minute%2520Garlic%2520Butter%2520Chicken%2520Rice%2520Bowls%2520for%2520Two-v0.png&w=640&q=75 640w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785149091%2Frecipes%2FEasy%2520Lunch%2520Recipes%3A%252015-Minute%2520Garlic%2520Butter%2520Chicken%2520Rice%2520Bowls%2520for%2520Two-v0.png&w=768&q=75 768w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785149091%2Frecipes%2FEasy%2520Lunch%2520Recipes%3A%252015-Minute%2520Garlic%2520Butter%2520Chicken%2520Rice%2520Bowls%2520for%2520Two-v0.png&w=1024&q=75 1024w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785149091%2Frecipes%2FEasy%2520Lunch%2520Recipes%3A%252015-Minute%2520Garlic%2520Butter%2520Chicken%2520Rice%2520Bowls%2520for%2520Two-v0.png&w=1280&q=75 1280w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785149091%2Frecipes%2FEasy%2520Lunch%2520Recipes%3A%252015-Minute%2520Garlic%2520Butter%2520Chicken%2520Rice%2520Bowls%2520for%2520Two-v0.png&w=1536&q=75 1536w",
+   "sizes": "(max-width: 768px) 100vw, 768px",
+   "width": null,
+   "height": null,
+   "loading": null,
+   "fetchpriority": null,
+   "alt": "Garlic Butter Chicken Rice Bowls for Two",
+   "format": "png&w=768&q=75"
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410165%2Frecipes%2FGarlic%2520Butter%2520Chicken%2520Bites%2520with%2520Blistered%2520Tomatoes%2520and%2520Saut%25C3%25A9ed%2520Spinach.png&w=1536&q=75",
+   "srcset": "/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410165%2Frecipes%2FGarlic%2520Butter%2520Chicken%2520Bites%2520with%2520Blistered%2520Tomatoes%2520and%2520Saut%25C3%25A9ed%2520Spinach.png&w=96&q=75 96w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410165%2Frecipes%2FGarlic%2520Butter%2520Chicken%2520Bites%2520with%2520Blistered%2520Tomatoes%2520and%2520Saut%25C3%25A9ed%2520Spinach.png&w=128&q=75 128w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410165%2Frecipes%2FGarlic%2520Butter%2520Chicken%2520Bites%2520with%2520Blistered%2520Tomatoes%2520and%2520Saut%25C3%25A9ed%2520Spinach.png&w=256&q=75 256w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410165%2Frecipes%2FGarlic%2520Butter%2520Chicken%2520Bites%2520with%2520Blistered%2520Tomatoes%2520and%2520Saut%25C3%25A9ed%2520Spinach.png&w=384&q=75 384w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410165%2Frecipes%2FGarlic%2520Butter%2520Chicken%2520Bites%2520with%2520Blistered%2520Tomatoes%2520and%2520Saut%25C3%25A9ed%2520Spinach.png&w=640&q=75 640w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410165%2Frecipes%2FGarlic%2520Butter%2520Chicken%2520Bites%2520with%2520Blistered%2520Tomatoes%2520and%2520Saut%25C3%25A9ed%2520Spinach.png&w=768&q=75 768w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410165%2Frecipes%2FGarlic%2520Butter%2520Chicken%2520Bites%2520with%2520Blistered%2520Tomatoes%2520and%2520Saut%25C3%25A9ed%2520Spinach.png&w=1024&q=75 1024w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410165%2Frecipes%2FGarlic%2520Butter%2520Chicken%2520Bites%2520with%2520Blistered%2520Tomatoes%2520and%2520Saut%25C3%25A9ed%2520Spinach.png&w=1280&q=75 1280w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410165%2Frecipes%2FGarlic%2520Butter%2520Chicken%2520Bites%2520with%2520Blistered%2520Tomatoes%2520and%2520Saut%25C3%25A9ed%2520Spinach.png&w=1536&q=75 1536w",
+   "sizes": "(max-width: 768px) 50vw, 25vw",
+   "width": null,
+   "height": null,
+   "loading": "lazy",
+   "fetchpriority": null,
+   "alt": "Garlic Butter Chicken Bites with Blistered Tomatoes and Saut\u00e9ed Spinach",
+   "format": "png&w=1536&q=75"
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412254%2Frecipes%2F40-Minute%2520White%2520Wine%2520Lemon%2520Chicken%2520Orzo%2520for%2520Two.png&w=1536&q=75",
+   "srcset": "/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412254%2Frecipes%2F40-Minute%2520White%2520Wine%2520Lemon%2520Chicken%2520Orzo%2520for%2520Two.png&w=96&q=75 96w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412254%2Frecipes%2F40-Minute%2520White%2520Wine%2520Lemon%2520Chicken%2520Orzo%2520for%2520Two.png&w=128&q=75 128w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412254%2Frecipes%2F40-Minute%2520White%2520Wine%2520Lemon%2520Chicken%2520Orzo%2520for%2520Two.png&w=256&q=75 256w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412254%2Frecipes%2F40-Minute%2520White%2520Wine%2520Lemon%2520Chicken%2520Orzo%2520for%2520Two.png&w=384&q=75 384w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412254%2Frecipes%2F40-Minute%2520White%2520Wine%2520Lemon%2520Chicken%2520Orzo%2520for%2520Two.png&w=640&q=75 640w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412254%2Frecipes%2F40-Minute%2520White%2520Wine%2520Lemon%2520Chicken%2520Orzo%2520for%2520Two.png&w=768&q=75 768w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412254%2Frecipes%2F40-Minute%2520White%2520Wine%2520Lemon%2520Chicken%2520Orzo%2520for%2520Two.png&w=1024&q=75 1024w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412254%2Frecipes%2F40-Minute%2520White%2520Wine%2520Lemon%2520Chicken%2520Orzo%2520for%2520Two.png&w=1280&q=75 1280w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412254%2Frecipes%2F40-Minute%2520White%2520Wine%2520Lemon%2520Chicken%2520Orzo%2520for%2520Two.png&w=1536&q=75 1536w",
+   "sizes": "(max-width: 768px) 50vw, 25vw",
+   "width": null,
+   "height": null,
+   "loading": "lazy",
+   "fetchpriority": null,
+   "alt": "40-Minute White Wine Lemon Chicken Orzo for Two",
+   "format": "png&w=1536&q=75"
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785238516%2Frecipes%2FEasy%2520Mexican%2520Dinner%2520for%2520Two%3A%2520One-Pan%2520Chicken%2520Enchilada%2520Skillet-v0.png&w=1536&q=75",
+   "srcset": "/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785238516%2Frecipes%2FEasy%2520Mexican%2520Dinner%2520for%2520Two%3A%2520One-Pan%2520Chicken%2520Enchilada%2520Skillet-v0.png&w=96&q=75 96w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785238516%2Frecipes%2FEasy%2520Mexican%2520Dinner%2520for%2520Two%3A%2520One-Pan%2520Chicken%2520Enchilada%2520Skillet-v0.png&w=128&q=75 128w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785238516%2Frecipes%2FEasy%2520Mexican%2520Dinner%2520for%2520Two%3A%2520One-Pan%2520Chicken%2520Enchilada%2520Skillet-v0.png&w=256&q=75 256w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785238516%2Frecipes%2FEasy%2520Mexican%2520Dinner%2520for%2520Two%3A%2520One-Pan%2520Chicken%2520Enchilada%2520Skillet-v0.png&w=384&q=75 384w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785238516%2Frecipes%2FEasy%2520Mexican%2520Dinner%2520for%2520Two%3A%2520One-Pan%2520Chicken%2520Enchilada%2520Skillet-v0.png&w=640&q=75 640w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785238516%2Frecipes%2FEasy%2520Mexican%2520Dinner%2520for%2520Two%3A%2520One-Pan%2520Chicken%2520Enchilada%2520Skillet-v0.png&w=768&q=75 768w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785238516%2Frecipes%2FEasy%2520Mexican%2520Dinner%2520for%2520Two%3A%2520One-Pan%2520Chicken%2520Enchilada%2520Skillet-v0.png&w=1024&q=75 1024w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785238516%2Frecipes%2FEasy%2520Mexican%2520Dinner%2520for%2520Two%3A%2520One-Pan%2520Chicken%2520Enchilada%2520Skillet-v0.png&w=1280&q=75 1280w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785238516%2Frecipes%2FEasy%2520Mexican%2520Dinner%2520for%2520Two%3A%2520One-Pan%2520Chicken%2520Enchilada%2520Skillet-v0.png&w=1536&q=75 1536w",
+   "sizes": "(max-width: 768px) 50vw, 25vw",
+   "width": null,
+   "height": null,
+   "loading": "lazy",
+   "fetchpriority": null,
+   "alt": "Easy Mexican Dinner for Two: One-Pan Chicken Enchilada Skillet",
+   "format": "png&w=1536&q=75"
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412317%2Frecipes%2F25-Minute%2520One-Pan%2520Garlic%2520Herb%2520Chicken%2520for%2520Two.png&w=1536&q=75",
+   "srcset": "/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412317%2Frecipes%2F25-Minute%2520One-Pan%2520Garlic%2520Herb%2520Chicken%2520for%2520Two.png&w=96&q=75 96w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412317%2Frecipes%2F25-Minute%2520One-Pan%2520Garlic%2520Herb%2520Chicken%2520for%2520Two.png&w=128&q=75 128w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412317%2Frecipes%2F25-Minute%2520One-Pan%2520Garlic%2520Herb%2520Chicken%2520for%2520Two.png&w=256&q=75 256w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412317%2Frecipes%2F25-Minute%2520One-Pan%2520Garlic%2520Herb%2520Chicken%2520for%2520Two.png&w=384&q=75 384w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412317%2Frecipes%2F25-Minute%2520One-Pan%2520Garlic%2520Herb%2520Chicken%2520for%2520Two.png&w=640&q=75 640w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412317%2Frecipes%2F25-Minute%2520One-Pan%2520Garlic%2520Herb%2520Chicken%2520for%2520Two.png&w=768&q=75 768w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412317%2Frecipes%2F25-Minute%2520One-Pan%2520Garlic%2520Herb%2520Chicken%2520for%2520Two.png&w=1024&q=75 1024w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412317%2Frecipes%2F25-Minute%2520One-Pan%2520Garlic%2520Herb%2520Chicken%2520for%2520Two.png&w=1280&q=75 1280w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412317%2Frecipes%2F25-Minute%2520One-Pan%2520Garlic%2520Herb%2520Chicken%2520for%2520Two.png&w=1536&q=75 1536w",
+   "sizes": "(max-width: 768px) 50vw, 25vw",
+   "width": null,
+   "height": null,
+   "loading": "lazy",
+   "fetchpriority": null,
+   "alt": "25-Minute One-Pan Garlic Herb Chicken for Two",
+   "format": "png&w=1536&q=75"
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412672%2Frecipes%2FMediterranean-Chicken-Orzo-with-Feta-Olives-for-Two.png&w=1536&q=75",
+   "srcset": "/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412672%2Frecipes%2FMediterranean-Chicken-Orzo-with-Feta-Olives-for-Two.png&w=96&q=75 96w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412672%2Frecipes%2FMediterranean-Chicken-Orzo-with-Feta-Olives-for-Two.png&w=128&q=75 128w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412672%2Frecipes%2FMediterranean-Chicken-Orzo-with-Feta-Olives-for-Two.png&w=256&q=75 256w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412672%2Frecipes%2FMediterranean-Chicken-Orzo-with-Feta-Olives-for-Two.png&w=384&q=75 384w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412672%2Frecipes%2FMediterranean-Chicken-Orzo-with-Feta-Olives-for-Two.png&w=640&q=75 640w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412672%2Frecipes%2FMediterranean-Chicken-Orzo-with-Feta-Olives-for-Two.png&w=768&q=75 768w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412672%2Frecipes%2FMediterranean-Chicken-Orzo-with-Feta-Olives-for-Two.png&w=1024&q=75 1024w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412672%2Frecipes%2FMediterranean-Chicken-Orzo-with-Feta-Olives-for-Two.png&w=1280&q=75 1280w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412672%2Frecipes%2FMediterranean-Chicken-Orzo-with-Feta-Olives-for-Two.png&w=1536&q=75 1536w",
+   "sizes": "(max-width: 768px) 50vw, 25vw",
+   "width": null,
+   "height": null,
+   "loading": "lazy",
+   "fetchpriority": null,
+   "alt": "30-Minute Mediterranean Chicken Orzo with Feta and Olives for Two",
+   "format": "png&w=1536&q=75"
+  },
+  {
+   "src": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410300%2Frecipes%2F30-Minute%2520Creamy%2520Parmesan%2520Garlic%2520Chicken%2520Orzo%2520for%2520Two.png&w=1536&q=75",
+   "srcset": "/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410300%2Frecipes%2F30-Minute%2520Creamy%2520Parmesan%2520Garlic%2520Chicken%2520Orzo%2520for%2520Two.png&w=96&q=75 96w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410300%2Frecipes%2F30-Minute%2520Creamy%2520Parmesan%2520Garlic%2520Chicken%2520Orzo%2520for%2520Two.png&w=128&q=75 128w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410300%2Frecipes%2F30-Minute%2520Creamy%2520Parmesan%2520Garlic%2520Chicken%2520Orzo%2520for%2520Two.png&w=256&q=75 256w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410300%2Frecipes%2F30-Minute%2520Creamy%2520Parmesan%2520Garlic%2520Chicken%2520Orzo%2520for%2520Two.png&w=384&q=75 384w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410300%2Frecipes%2F30-Minute%2520Creamy%2520Parmesan%2520Garlic%2520Chicken%2520Orzo%2520for%2520Two.png&w=640&q=75 640w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410300%2Frecipes%2F30-Minute%2520Creamy%2520Parmesan%2520Garlic%2520Chicken%2520Orzo%2520for%2520Two.png&w=768&q=75 768w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410300%2Frecipes%2F30-Minute%2520Creamy%2520Parmesan%2520Garlic%2520Chicken%2520Orzo%2520for%2520Two.png&w=1024&q=75 1024w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410300%2Frecipes%2F30-Minute%2520Creamy%2520Parmesan%2520Garlic%2520Chicken%2520Orzo%2520for%2520Two.png&w=1280&q=75 1280w, /_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410300%2Frecipes%2F30-Minute%2520Creamy%2520Parmesan%2520Garlic%2520Chicken%2520Orzo%2520for%2520Two.png&w=1536&q=75 1536w",
+   "sizes": "(max-width: 768px) 50vw, 25vw",
+   "width": null,
+   "height": null,
+   "loading": "lazy",
+   "fetchpriority": null,
+   "alt": "Creamy Parmesan Garlic Chicken Orzo for Two (30-Minute)",
+   "format": "png&w=1536&q=75"
+  }
+ ],
+ "styles": [
+  111,
+  14859
+ ],
+ "fontfaces": [
+  {
+   "family": "Geist",
+   "weight": "100 900",
+   "style": "normal",
+   "status": "error"
+  },
+  {
+   "family": "Geist",
+   "weight": "100 900",
+   "style": "normal",
+   "status": "error"
+  },
+  {
+   "family": "Geist",
+   "weight": "100 900",
+   "style": "normal",
+   "status": "error"
+  },
+  {
+   "family": "Geist",
+   "weight": "100 900",
+   "style": "normal",
+   "status": "error"
+  },
+  {
+   "family": "Geist",
+   "weight": "100 900",
+   "style": "normal",
+   "status": "loaded"
+  },
+  {
+   "family": "Geist Fallback",
+   "weight": "normal",
+   "style": "normal",
+   "status": "unloaded"
+  },
+  {
+   "family": "Playfair Display",
+   "weight": "400 900",
+   "style": "normal",
+   "status": "error"
+  },
+  {
+   "family": "Playfair Display",
+   "weight": "400 900",
+   "style": "normal",
+   "status": "error"
+  },
+  {
+   "family": "Playfair Display",
+   "weight": "400 900",
+   "style": "normal",
+   "status": "error"
+  },
+  {
+   "family": "Playfair Display",
+   "weight": "400 900",
+   "style": "normal",
+   "status": "loaded"
+  },
+  {
+   "family": "Playfair Display Fallback",
+   "weight": "normal",
+   "style": "normal",
+   "status": "unloaded"
+  }
+ ],
+ "font_display": [],
+ "html_len": 196972
+}

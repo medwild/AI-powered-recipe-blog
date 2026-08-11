@@ -1,0 +1,1538 @@
+{
+ "home_desktop": {
+  "url": "https://www.chefaugustin.com/",
+  "viewport": {
+   "width": 1440,
+   "height": 900
+  },
+  "shot": "/home/user/ai-blog-builder/www.chefaugustin.com-audit/screenshots/home_desktop.png",
+  "data": {
+   "overflow": false,
+   "scrollWidth": 1440,
+   "clientWidth": 1440,
+   "tapTargetsSmall": [],
+   "tinyText": [],
+   "fontInfo": {
+    "baseFontSize": "16px",
+    "baseFontFamily": "Geist",
+    "bodyColor": "lab(14.0649 4.58021 6.10547)",
+    "bgColor": "lab(98.2924 0.224292 3.04729)"
+   },
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "h1": {
+    "text": "Easy Weeknight Dinners for Two",
+    "inFold": true,
+    "fontSize": "48px",
+    "top": 177,
+    "color": "lab(14.0649 4.58021 6.10547)",
+    "fontWeight": "400"
+   },
+   "aboveFold": {
+    "h1": {
+     "text": "Easy Weeknight Dinners for Two",
+     "inFold": true,
+     "fontSize": "48px",
+     "top": 177,
+     "color": "lab(14.0649 4.58021 6.10547)",
+     "fontWeight": "400"
+    },
+    "ctas": [
+     {
+      "text": "Recipes",
+      "top": 14
+     },
+     {
+      "text": "Browse all recipes",
+      "top": 537
+     }
+    ],
+    "cards": 0,
+    "imgs": 1
+   },
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Easy Weeknight Dinners for Two",
+     "top": 177,
+     "inFold": true
+    },
+    {
+     "tag": "H2",
+     "text": "Small-batch cooking, big French technique",
+     "top": 706,
+     "inFold": true
+    },
+    {
+     "tag": "H2",
+     "text": "Easy Dinner Recipes for Two",
+     "top": 1065,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Garlic Shrimp Orzo with Cherry Tomatoes for Two",
+     "top": 1347,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "30-Minute Summer Herb Chicken Orzo with Zucchini for Two",
+     "top": 1347,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "30-Minute One-Pan Lemon Garlic Chicken for Two",
+     "top": 1347,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "25-Minute One-Pan Garlic Herb Chicken for Two",
+     "top": 1347,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Explore by category",
+     "top": 1619,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Featured",
+     "top": 1941,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "30-Minute Mediterranean Chicken Orzo with Feta and Olives fo",
+     "top": 2417,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Creamy Parmesan Garlic Chicken Orzo for Two (30-Minute)",
+     "top": 2417,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Salmon Orzo with Dill and Capers for Two",
+     "top": 2933,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "40-Minute White Wine Lemon Chicken Orzo for Two",
+     "top": 2933,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Most recent",
+     "top": 3109,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "35-Minute One-Skillet Chicken and Rice for Two",
+     "top": 3435,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "One-Pan Baked Ziti for Two (Romantic Date Night Dinner)",
+     "top": 3435,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Find your next dinner tonight",
+     "top": 3668,
+     "inFold": false
+    }
+   ],
+   "links": 63,
+   "nav": {
+    "tag": "HEADER",
+    "h": 65,
+    "top": 0
+   },
+   "heroImg": {
+    "src": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2F",
+    "w": 470,
+    "h": 313,
+    "inFold": true
+   },
+   "video": false,
+   "challengeCleared": true
+  },
+  "challengeCleared": true
+ },
+ "home_mobile": {
+  "url": "https://www.chefaugustin.com/",
+  "viewport": {
+   "width": 390,
+   "height": 844
+  },
+  "shot": "/home/user/ai-blog-builder/www.chefaugustin.com-audit/screenshots/home_mobile.png",
+  "data": {
+   "overflow": false,
+   "scrollWidth": 390,
+   "clientWidth": 390,
+   "tapTargetsSmall": [
+    {
+     "tag": "A",
+     "cls": "group/button inline-flex shrink-0 items-center justify-cente",
+     "text": "Browse all recipes",
+     "w": 170,
+     "h": 36
+    }
+   ],
+   "tinyText": [],
+   "fontInfo": {
+    "baseFontSize": "16px",
+    "baseFontFamily": "Geist",
+    "bodyColor": "lab(14.0649 4.58021 6.10547)",
+    "bgColor": "lab(98.2924 0.224292 3.04729)"
+   },
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "h1": {
+    "text": "Easy Weeknight Dinners for Two",
+    "inFold": true,
+    "fontSize": "32px",
+    "top": 386,
+    "color": "lab(14.0649 4.58021 6.10547)",
+    "fontWeight": "400"
+   },
+   "aboveFold": {
+    "h1": {
+     "text": "Easy Weeknight Dinners for Two",
+     "inFold": true,
+     "fontSize": "32px",
+     "top": 386,
+     "color": "lab(14.0649 4.58021 6.10547)",
+     "fontWeight": "400"
+    },
+    "ctas": [
+     {
+      "text": "Browse all recipes",
+      "top": 716
+     }
+    ],
+    "cards": 0,
+    "imgs": 1
+   },
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Easy Weeknight Dinners for Two",
+     "top": 386,
+     "inFold": true
+    },
+    {
+     "tag": "H2",
+     "text": "Small-batch cooking, big French technique",
+     "top": 861,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Easy Dinner Recipes for Two",
+     "top": 1428,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Garlic Shrimp Orzo with Cherry Tomatoes for Two",
+     "top": 1804,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "30-Minute Summer Herb Chicken Orzo with Zucchini for Two",
+     "top": 2224,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "30-Minute One-Pan Lemon Garlic Chicken for Two",
+     "top": 2644,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "25-Minute One-Pan Garlic Herb Chicken for Two",
+     "top": 3064,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Explore by category",
+     "top": 3329,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Featured",
+     "top": 3835,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "30-Minute Mediterranean Chicken Orzo with Feta and Olives fo",
+     "top": 4215,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Creamy Parmesan Garlic Chicken Orzo for Two (30-Minute)",
+     "top": 4635,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Salmon Orzo with Dill and Capers for Two",
+     "top": 5055,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "40-Minute White Wine Lemon Chicken Orzo for Two",
+     "top": 5475,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Most recent",
+     "top": 5651,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "35-Minute One-Skillet Chicken and Rice for Two",
+     "top": 6007,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "One-Pan Baked Ziti for Two (Romantic Date Night Dinner)",
+     "top": 6427,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Find your next dinner tonight",
+     "top": 6660,
+     "inFold": false
+    }
+   ],
+   "links": 63,
+   "nav": {
+    "tag": "HEADER",
+    "h": 65,
+    "top": 0
+   },
+   "heroImg": {
+    "src": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2F",
+    "w": 356,
+    "h": 199,
+    "inFold": true
+   },
+   "video": false,
+   "challengeCleared": true,
+   "contrast": []
+  },
+  "challengeCleared": true
+ },
+ "recipe_desktop": {
+  "url": "https://www.chefaugustin.com/recipes/easy-chicken-rice-bowls-for-two",
+  "viewport": {
+   "width": 1440,
+   "height": 900
+  },
+  "shot": "/home/user/ai-blog-builder/www.chefaugustin.com-audit/screenshots/recipe_desktop.png",
+  "data": {
+   "overflow": false,
+   "scrollWidth": 1440,
+   "clientWidth": 1440,
+   "tapTargetsSmall": [],
+   "tinyText": [],
+   "fontInfo": {
+    "baseFontSize": "16px",
+    "baseFontFamily": "Geist",
+    "bodyColor": "lab(14.0649 4.58021 6.10547)",
+    "bgColor": "lab(98.2924 0.224292 3.04729)"
+   },
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "h1": {
+    "text": "Garlic Butter Chicken Rice Bowls for Two",
+    "inFold": false,
+    "fontSize": "44.8px",
+    "top": 1301,
+    "color": "lab(14.0649 4.58021 6.10547)",
+    "fontWeight": "400"
+   },
+   "aboveFold": {
+    "h1": {
+     "text": "Garlic Butter Chicken Rice Bowls for Two",
+     "inFold": false,
+     "fontSize": "44.8px",
+     "top": 1301,
+     "color": "lab(14.0649 4.58021 6.10547)",
+     "fontWeight": "400"
+    },
+    "ctas": [
+     {
+      "text": "Recipes",
+      "top": 14
+     },
+     {
+      "text": "Jump to Recipe",
+      "top": 16
+     },
+     {
+      "text": "Recipes",
+      "top": 113
+     }
+    ],
+    "cards": 1,
+    "imgs": 1
+   },
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Garlic Butter Chicken Rice Bowls for Two",
+     "top": 1301,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Ingredients",
+     "top": 1854,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Instructions",
+     "top": 2564,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Article and tips",
+     "top": 3351,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "The Lunch I Actually Make on a Weekday",
+     "top": 3392,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Why This Works",
+     "top": 3802,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "What Most Recipes Get Wrong",
+     "top": 4212,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Chef's Tips & What I've Learned",
+     "top": 4528,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "What's the Easiest Thing to Cook for Lunch?",
+     "top": 5022,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "What Are Good Quick Lunch Options for Working From Home?",
+     "top": 5244,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Can I Make This Lunch Ahead for the Week?",
+     "top": 5466,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Can I Use Ground Beef Instead of Chicken?",
+     "top": 5688,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Do I Have to Use Frozen Vegetables?",
+     "top": 5910,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "More One-Pan Dinners for Two",
+     "top": 6479,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Garlic Butter Chicken Bites with Blistered Tomatoes and Saut",
+     "top": 6722,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "40-Minute White Wine Lemon Chicken Orzo for Two",
+     "top": 6722,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Easy Mexican Dinner for Two: One-Pan Chicken Enchilada Skill",
+     "top": 6722,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "25-Minute One-Pan Garlic Herb Chicken for Two",
+     "top": 7011,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "30-Minute Mediterranean Chicken Orzo with Feta and Olives fo",
+     "top": 7011,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Creamy Parmesan Garlic Chicken Orzo for Two (30-Minute)",
+     "top": 7011,
+     "inFold": false
+    }
+   ],
+   "links": 42,
+   "nav": {
+    "tag": "HEADER",
+    "h": 65,
+    "top": 0
+   },
+   "heroImg": {
+    "src": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2F",
+    "w": 734,
+    "h": 1102,
+    "inFold": true
+   },
+   "video": false,
+   "challengeCleared": true
+  },
+  "challengeCleared": true
+ },
+ "recipe_mobile": {
+  "url": "https://www.chefaugustin.com/recipes/easy-chicken-rice-bowls-for-two",
+  "viewport": {
+   "width": 390,
+   "height": 844
+  },
+  "shot": "/home/user/ai-blog-builder/www.chefaugustin.com-audit/screenshots/recipe_mobile.png",
+  "data": {
+   "overflow": false,
+   "scrollWidth": 390,
+   "clientWidth": 390,
+   "tapTargetsSmall": [],
+   "tinyText": [
+    {
+     "tag": "P",
+     "cls": "text-[10px] uppercase tracking-wider text-muted-fo",
+     "fs": 10,
+     "text": "Prep"
+    },
+    {
+     "tag": "P",
+     "cls": "text-[10px] uppercase tracking-wider text-muted-fo",
+     "fs": 10,
+     "text": "Cook"
+    },
+    {
+     "tag": "P",
+     "cls": "text-[10px] uppercase tracking-wider text-muted-fo",
+     "fs": 10,
+     "text": "Servings"
+    }
+   ],
+   "fontInfo": {
+    "baseFontSize": "16px",
+    "baseFontFamily": "Geist",
+    "bodyColor": "lab(14.0649 4.58021 6.10547)",
+    "bgColor": "lab(98.2924 0.224292 3.04729)"
+   },
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "h1": {
+    "text": "Garlic Butter Chicken Rice Bowls for Two",
+    "inFold": true,
+    "fontSize": "28.8px",
+    "top": 502,
+    "color": "lab(14.0649 4.58021 6.10547)",
+    "fontWeight": "400"
+   },
+   "aboveFold": {
+    "h1": {
+     "text": "Garlic Butter Chicken Rice Bowls for Two",
+     "inFold": true,
+     "fontSize": "28.8px",
+     "top": 502,
+     "color": "lab(14.0649 4.58021 6.10547)",
+     "fontWeight": "400"
+    },
+    "ctas": [
+     {
+      "text": "Jump to Recipe",
+      "top": 65
+     },
+     {
+      "text": "Recipes",
+      "top": 153
+     },
+     {
+      "text": "Jump to Recipe",
+      "top": 590
+     }
+    ],
+    "cards": 1,
+    "imgs": 1
+   },
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Garlic Butter Chicken Rice Bowls for Two",
+     "top": 502,
+     "inFold": true
+    },
+    {
+     "tag": "H2",
+     "text": "Ingredients",
+     "top": 1160,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Instructions",
+     "top": 2206,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Article and tips",
+     "top": 3487,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "The Lunch I Actually Make on a Weekday",
+     "top": 3528,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Why This Works",
+     "top": 4282,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "What Most Recipes Get Wrong",
+     "top": 5004,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Chef's Tips & What I've Learned",
+     "top": 5502,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "What's the Easiest Thing to Cook for Lunch?",
+     "top": 6314,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "What Are Good Quick Lunch Options for Working From Home?",
+     "top": 6698,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Can I Make This Lunch Ahead for the Week?",
+     "top": 7140,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Can I Use Ground Beef Instead of Chicken?",
+     "top": 7524,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Do I Have to Use Frozen Vegetables?",
+     "top": 7908,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "More One-Pan Dinners for Two",
+     "top": 8685,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Garlic Butter Chicken Bites with Blistered Tomatoes and Saut",
+     "top": 9025,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "40-Minute White Wine Lemon Chicken Orzo for Two",
+     "top": 9410,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Easy Mexican Dinner for Two: One-Pan Chicken Enchilada Skill",
+     "top": 9796,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "25-Minute One-Pan Garlic Herb Chicken for Two",
+     "top": 10181,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "30-Minute Mediterranean Chicken Orzo with Feta and Olives fo",
+     "top": 10548,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Creamy Parmesan Garlic Chicken Orzo for Two (30-Minute)",
+     "top": 10933,
+     "inFold": false
+    }
+   ],
+   "links": 42,
+   "nav": {
+    "tag": "HEADER",
+    "h": 65,
+    "top": 0
+   },
+   "heroImg": {
+    "src": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2F",
+    "w": 356,
+    "h": 237,
+    "inFold": true
+   },
+   "video": false,
+   "challengeCleared": true,
+   "contrast": []
+  },
+  "challengeCleared": true
+ },
+ "category_desktop": {
+  "url": "https://www.chefaugustin.com/recipes/category/chicken",
+  "viewport": {
+   "width": 1440,
+   "height": 900
+  },
+  "shot": "/home/user/ai-blog-builder/www.chefaugustin.com-audit/screenshots/category_desktop.png",
+  "data": {
+   "overflow": false,
+   "scrollWidth": 1440,
+   "clientWidth": 1440,
+   "tapTargetsSmall": [],
+   "tinyText": [],
+   "fontInfo": {
+    "baseFontSize": "16px",
+    "baseFontFamily": "Geist",
+    "bodyColor": "lab(14.0649 4.58021 6.10547)",
+    "bgColor": "lab(98.2924 0.224292 3.04729)"
+   },
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "h1": {
+    "text": "Chicken Recipes for Two",
+    "inFold": true,
+    "fontSize": "36px",
+    "top": 181,
+    "color": "lab(14.0649 4.58021 6.10547)",
+    "fontWeight": "400"
+   },
+   "aboveFold": {
+    "h1": {
+     "text": "Chicken Recipes for Two",
+     "inFold": true,
+     "fontSize": "36px",
+     "top": 181,
+     "color": "lab(14.0649 4.58021 6.10547)",
+     "fontWeight": "400"
+    },
+    "ctas": [
+     {
+      "text": "Recipes",
+      "top": 14
+     },
+     {
+      "text": "Recipes",
+      "top": 145
+     }
+    ],
+    "cards": 9,
+    "imgs": 6
+   },
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Chicken Recipes for Two",
+     "top": 181,
+     "inFold": true
+    },
+    {
+     "tag": "H2",
+     "text": "chicken recipes",
+     "top": 390,
+     "inFold": true
+    },
+    {
+     "tag": "H3",
+     "text": "30-Minute Mediterranean Chicken Orzo with Feta and Olives fo",
+     "top": 646,
+     "inFold": true
+    },
+    {
+     "tag": "H3",
+     "text": "Creamy Parmesan Garlic Chicken Orzo for Two (30-Minute)",
+     "top": 647,
+     "inFold": true
+    },
+    {
+     "tag": "H3",
+     "text": "40-Minute White Wine Lemon Chicken Orzo for Two",
+     "top": 646,
+     "inFold": true
+    },
+    {
+     "tag": "H3",
+     "text": "30-Minute Summer Herb Chicken Orzo with Zucchini for Two",
+     "top": 1065,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "30-Minute One-Pan Lemon Garlic Chicken for Two",
+     "top": 1066,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "25-Minute One-Pan Garlic Herb Chicken for Two",
+     "top": 1065,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "35-Minute One-Skillet Chicken and Rice for Two",
+     "top": 1484,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "30-Minute Lemon Butter Chicken Pasta for Two",
+     "top": 1484,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Garlic Butter Chicken Bites with Blistered Tomatoes and Saut",
+     "top": 1484,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Sheet Pan Thanksgiving Dinner for Two with Herb-Roasted Chic",
+     "top": 1903,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "25-Minute Pan-Seared Chicken with Herb-Butter Pan Sauce for ",
+     "top": 1903,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Pan-Seared Chicken Breast with Creamy Tomato Garlic Pasta fo",
+     "top": 1903,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "4-Ingredient Feta Brine Chicken Breast for Two",
+     "top": 2322,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Easy Mexican Dinner for Two: One-Pan Chicken Enchilada Skill",
+     "top": 2322,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "2-Quart Slow Cooker Chicken and Gravy for Two",
+     "top": 2322,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Chicken Pot Pie for Two with a Flaky Puff Pastry Lid",
+     "top": 2741,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Garlic Butter Chicken Rice Bowls for Two",
+     "top": 2741,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Browse all categories",
+     "top": 2974,
+     "inFold": false
+    }
+   ],
+   "links": 181,
+   "nav": {
+    "tag": "HEADER",
+    "h": 65,
+    "top": 0
+   },
+   "heroImg": {
+    "src": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2F",
+    "w": 313,
+    "h": 234,
+    "inFold": true
+   },
+   "video": false,
+   "challengeCleared": true
+  },
+  "challengeCleared": true
+ },
+ "category_mobile": {
+  "url": "https://www.chefaugustin.com/recipes/category/chicken",
+  "viewport": {
+   "width": 390,
+   "height": 844
+  },
+  "shot": "/home/user/ai-blog-builder/www.chefaugustin.com-audit/screenshots/category_mobile.png",
+  "data": {
+   "overflow": false,
+   "scrollWidth": 390,
+   "clientWidth": 390,
+   "tapTargetsSmall": [],
+   "tinyText": [],
+   "fontInfo": {
+    "baseFontSize": "16px",
+    "baseFontFamily": "Geist",
+    "bodyColor": "lab(14.0649 4.58021 6.10547)",
+    "bgColor": "lab(98.2924 0.224292 3.04729)"
+   },
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "h1": {
+    "text": "Chicken Recipes for Two",
+    "inFold": true,
+    "fontSize": "36px",
+    "top": 181,
+    "color": "lab(14.0649 4.58021 6.10547)",
+    "fontWeight": "400"
+   },
+   "aboveFold": {
+    "h1": {
+     "text": "Chicken Recipes for Two",
+     "inFold": true,
+     "fontSize": "36px",
+     "top": 181,
+     "color": "lab(14.0649 4.58021 6.10547)",
+     "fontWeight": "400"
+    },
+    "ctas": [
+     {
+      "text": "Recipes",
+      "top": 145
+     }
+    ],
+    "cards": 2,
+    "imgs": 1
+   },
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "Chicken Recipes for Two",
+     "top": 181,
+     "inFold": true
+    },
+    {
+     "tag": "H2",
+     "text": "chicken recipes",
+     "top": 482,
+     "inFold": true
+    },
+    {
+     "tag": "H3",
+     "text": "30-Minute Mediterranean Chicken Orzo with Feta and Olives fo",
+     "top": 771,
+     "inFold": true
+    },
+    {
+     "tag": "H3",
+     "text": "Creamy Parmesan Garlic Chicken Orzo for Two (30-Minute)",
+     "top": 1195,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "40-Minute White Wine Lemon Chicken Orzo for Two",
+     "top": 1619,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "30-Minute Summer Herb Chicken Orzo with Zucchini for Two",
+     "top": 2043,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "30-Minute One-Pan Lemon Garlic Chicken for Two",
+     "top": 2467,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "25-Minute One-Pan Garlic Herb Chicken for Two",
+     "top": 2891,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "35-Minute One-Skillet Chicken and Rice for Two",
+     "top": 3315,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "30-Minute Lemon Butter Chicken Pasta for Two",
+     "top": 3739,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Garlic Butter Chicken Bites with Blistered Tomatoes and Saut",
+     "top": 4163,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Sheet Pan Thanksgiving Dinner for Two with Herb-Roasted Chic",
+     "top": 4615,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "25-Minute Pan-Seared Chicken with Herb-Butter Pan Sauce for ",
+     "top": 5066,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Pan-Seared Chicken Breast with Creamy Tomato Garlic Pasta fo",
+     "top": 5518,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "4-Ingredient Feta Brine Chicken Breast for Two",
+     "top": 5969,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Easy Mexican Dinner for Two: One-Pan Chicken Enchilada Skill",
+     "top": 6393,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "2-Quart Slow Cooker Chicken and Gravy for Two",
+     "top": 6845,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Chicken Pot Pie for Two with a Flaky Puff Pastry Lid",
+     "top": 7269,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Garlic Butter Chicken Rice Bowls for Two",
+     "top": 7693,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Browse all categories",
+     "top": 7926,
+     "inFold": false
+    }
+   ],
+   "links": 181,
+   "nav": {
+    "tag": "HEADER",
+    "h": 65,
+    "top": 0
+   },
+   "heroImg": {
+    "src": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2F",
+    "w": 356,
+    "h": 267,
+    "inFold": true
+   },
+   "video": false,
+   "challengeCleared": true,
+   "contrast": []
+  },
+  "challengeCleared": true
+ },
+ "cluster_desktop": {
+  "url": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two",
+  "viewport": {
+   "width": 1440,
+   "height": 900
+  },
+  "shot": "/home/user/ai-blog-builder/www.chefaugustin.com-audit/screenshots/cluster_desktop.png",
+  "data": {
+   "overflow": false,
+   "scrollWidth": 1440,
+   "clientWidth": 1440,
+   "tapTargetsSmall": [],
+   "tinyText": [],
+   "fontInfo": {
+    "baseFontSize": "16px",
+    "baseFontFamily": "Geist",
+    "bodyColor": "lab(14.0649 4.58021 6.10547)",
+    "bgColor": "lab(98.2924 0.224292 3.04729)"
+   },
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "h1": {
+    "text": "One-Pan Dinners for Two",
+    "inFold": true,
+    "fontSize": "36px",
+    "top": 181,
+    "color": "lab(14.0649 4.58021 6.10547)",
+    "fontWeight": "400"
+   },
+   "aboveFold": {
+    "h1": {
+     "text": "One-Pan Dinners for Two",
+     "inFold": true,
+     "fontSize": "36px",
+     "top": 181,
+     "color": "lab(14.0649 4.58021 6.10547)",
+     "fontWeight": "400"
+    },
+    "ctas": [
+     {
+      "text": "Recipes",
+      "top": 14
+     },
+     {
+      "text": "Recipes",
+      "top": 145
+     }
+    ],
+    "cards": 9,
+    "imgs": 6
+   },
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "One-Pan Dinners for Two",
+     "top": 181,
+     "inFold": true
+    },
+    {
+     "tag": "H2",
+     "text": "One-Pan Dinners for Two recipes",
+     "top": 364,
+     "inFold": true
+    },
+    {
+     "tag": "H3",
+     "text": "Garlic Shrimp Orzo with Cherry Tomatoes for Two",
+     "top": 620,
+     "inFold": true
+    },
+    {
+     "tag": "H3",
+     "text": "One-Sheet-Pan Easter Dinner for Two: Herb-Crusted Lamb Chops",
+     "top": 621,
+     "inFold": true
+    },
+    {
+     "tag": "H3",
+     "text": "One-Pan Ground Beef and Tomato Rice Skillet: Your Easy Week ",
+     "top": 620,
+     "inFold": true
+    },
+    {
+     "tag": "H3",
+     "text": "Easy Mexican Dinner for Two: One-Pan Chicken Enchilada Skill",
+     "top": 1067,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Pan-Seared Steak Dinner for Two with Garlic Butter and Blist",
+     "top": 1067,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Garlic Butter Chicken Rice Bowls for Two",
+     "top": 1067,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Browse by ingredient",
+     "top": 1328,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Explore more dinners for two",
+     "top": 2357,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Chicken Dinners for Two",
+     "top": 2434,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Quick & Healthy Dinners for Two",
+     "top": 2434,
+     "inFold": false
+    }
+   ],
+   "links": 161,
+   "nav": {
+    "tag": "HEADER",
+    "h": 65,
+    "top": 0
+   },
+   "heroImg": {
+    "src": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2F",
+    "w": 313,
+    "h": 234,
+    "inFold": true
+   },
+   "video": false,
+   "challengeCleared": true
+  },
+  "challengeCleared": true
+ },
+ "cluster_mobile": {
+  "url": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two",
+  "viewport": {
+   "width": 390,
+   "height": 844
+  },
+  "shot": "/home/user/ai-blog-builder/www.chefaugustin.com-audit/screenshots/cluster_mobile.png",
+  "data": {
+   "overflow": false,
+   "scrollWidth": 390,
+   "clientWidth": 390,
+   "tapTargetsSmall": [],
+   "tinyText": [],
+   "fontInfo": {
+    "baseFontSize": "16px",
+    "baseFontFamily": "Geist",
+    "bodyColor": "lab(14.0649 4.58021 6.10547)",
+    "bgColor": "lab(98.2924 0.224292 3.04729)"
+   },
+   "viewportMeta": "width=device-width, initial-scale=1",
+   "h1": {
+    "text": "One-Pan Dinners for Two",
+    "inFold": true,
+    "fontSize": "36px",
+    "top": 181,
+    "color": "lab(14.0649 4.58021 6.10547)",
+    "fontWeight": "400"
+   },
+   "aboveFold": {
+    "h1": {
+     "text": "One-Pan Dinners for Two",
+     "inFold": true,
+     "fontSize": "36px",
+     "top": 181,
+     "color": "lab(14.0649 4.58021 6.10547)",
+     "fontWeight": "400"
+    },
+    "ctas": [
+     {
+      "text": "Recipes",
+      "top": 145
+     }
+    ],
+    "cards": 2,
+    "imgs": 1
+   },
+   "headings": [
+    {
+     "tag": "H1",
+     "text": "One-Pan Dinners for Two",
+     "top": 181,
+     "inFold": true
+    },
+    {
+     "tag": "H2",
+     "text": "One-Pan Dinners for Two recipes",
+     "top": 430,
+     "inFold": true
+    },
+    {
+     "tag": "H3",
+     "text": "Garlic Shrimp Orzo with Cherry Tomatoes for Two",
+     "top": 719,
+     "inFold": true
+    },
+    {
+     "tag": "H3",
+     "text": "One-Sheet-Pan Easter Dinner for Two: Herb-Crusted Lamb Chops",
+     "top": 1143,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "One-Pan Ground Beef and Tomato Rice Skillet: Your Easy Week ",
+     "top": 1595,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Easy Mexican Dinner for Two: One-Pan Chicken Enchilada Skill",
+     "top": 2046,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Pan-Seared Steak Dinner for Two with Garlic Butter and Blist",
+     "top": 2498,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Garlic Butter Chicken Rice Bowls for Two",
+     "top": 2949,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Browse by ingredient",
+     "top": 3182,
+     "inFold": false
+    },
+    {
+     "tag": "H2",
+     "text": "Explore more dinners for two",
+     "top": 5845,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Chicken Dinners for Two",
+     "top": 5922,
+     "inFold": false
+    },
+    {
+     "tag": "H3",
+     "text": "Quick & Healthy Dinners for Two",
+     "top": 6008,
+     "inFold": false
+    }
+   ],
+   "links": 161,
+   "nav": {
+    "tag": "HEADER",
+    "h": 65,
+    "top": 0
+   },
+   "heroImg": {
+    "src": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2F",
+    "w": 356,
+    "h": 267,
+    "inFold": true
+   },
+   "video": false,
+   "challengeCleared": true,
+   "contrast": []
+  },
+  "challengeCleared": true
+ },
+ "home_desktop_dark": {
+  "url": "https://www.chefaugustin.com/",
+  "shot": "/home/user/ai-blog-builder/www.chefaugustin.com-audit/screenshots/home_desktop_dark.png",
+  "data": {
+   "darkActive": true,
+   "bg": "lab(98.2924 0.224292 3.04729)",
+   "bodyColor": "lab(14.0649 4.58021 6.10547)",
+   "samples": [
+    {
+     "cls": "sticky top-0 z-40 border-b border-border",
+     "bg": "oklab(0.984998 0.000687361 0.00799215 / 0.85)",
+     "color": "lab(14.0649 4.58021 6.10547)"
+    },
+    {
+     "cls": "absolute -inset-4 -z-10 rounded-[2rem] b",
+     "bg": "oklab(0.520007 0.135831 0.118095 / 0.05)",
+     "color": "lab(14.0649 4.58021 6.10547)"
+    },
+    {
+     "cls": "border-b border-border bg-background",
+     "bg": "lab(98.2924 0.224292 3.04729)",
+     "color": "lab(14.0649 4.58021 6.10547)"
+    },
+    {
+     "cls": "border-b border-border bg-secondary/20",
+     "bg": "oklab(0.949999 0.00129789 0.0149644 / 0.2)",
+     "color": "lab(14.0649 4.58021 6.10547)"
+    },
+    {
+     "cls": "card-hover group flex flex-col overflow-",
+     "bg": "lab(100 0.107408 1.52051)",
+     "color": "lab(14.0649 4.58021 6.10547)"
+    },
+    {
+     "cls": "card-hover group flex flex-col overflow-",
+     "bg": "lab(100 0.107408 1.52051)",
+     "color": "lab(14.0649 4.58021 6.10547)"
+    },
+    {
+     "cls": "card-hover group flex flex-col overflow-",
+     "bg": "lab(100 0.107408 1.52051)",
+     "color": "lab(14.0649 4.58021 6.10547)"
+    },
+    {
+     "cls": "card-hover group flex flex-col overflow-",
+     "bg": "lab(100 0.107408 1.52051)",
+     "color": "lab(14.0649 4.58021 6.10547)"
+    },
+    {
+     "cls": "card-hover group flex flex-col overflow-",
+     "bg": "lab(100 0.107408 1.52051)",
+     "color": "lab(14.0649 4.58021 6.10547)"
+    },
+    {
+     "cls": "card-hover group flex flex-col overflow-",
+     "bg": "lab(100 0.107408 1.52051)",
+     "color": "lab(14.0649 4.58021 6.10547)"
+    },
+    {
+     "cls": "card-hover group flex flex-col overflow-",
+     "bg": "lab(100 0.107408 1.52051)",
+     "color": "lab(14.0649 4.58021 6.10547)"
+    },
+    {
+     "cls": "card-hover group flex flex-col overflow-",
+     "bg": "lab(100 0.107408 1.52051)",
+     "color": "lab(14.0649 4.58021 6.10547)"
+    },
+    {
+     "cls": "card-hover group flex flex-col overflow-",
+     "bg": "lab(100 0.107408 1.52051)",
+     "color": "lab(14.0649 4.58021 6.10547)"
+    },
+    {
+     "cls": "card-hover group flex flex-col overflow-",
+     "bg": "lab(100 0.107408 1.52051)",
+     "color": "lab(14.0649 4.58021 6.10547)"
+    },
+    {
+     "cls": "border-t border-border bg-secondary/30",
+     "bg": "oklab(0.949999 0.00129789 0.0149644 / 0.3)",
+     "color": "lab(14.0649 4.58021 6.10547)"
+    },
+    {
+     "cls": "fixed bottom-0 left-0 right-0 z-50 anima",
+     "bg": "oklab(0.999856 0.000339091 0.00400788 / 0.95)",
+     "color": "lab(14.0649 4.58021 6.10547)"
+    }
+   ],
+   "challengeCleared": true
+  }
+ },
+ "recipe_desktop_dark": {
+  "url": "https://www.chefaugustin.com/recipes/easy-chicken-rice-bowls-for-two",
+  "shot": "/home/user/ai-blog-builder/www.chefaugustin.com-audit/screenshots/recipe_desktop_dark.png",
+  "data": {
+   "darkActive": true,
+   "bg": "lab(98.2924 0.224292 3.04729)",
+   "bodyColor": "lab(14.0649 4.58021 6.10547)",
+   "samples": [
+    {
+     "cls": "sticky top-0 z-40 border-b border-border",
+     "bg": "oklab(0.984998 0.000687361 0.00799215 / 0.85)",
+     "color": "lab(14.0649 4.58021 6.10547)"
+    },
+    {
+     "cls": "rounded-3xl border border-border/80 p-6 ",
+     "bg": "lab(100 0.107408 1.52051)",
+     "color": "lab(14.0649 4.58021 6.10547)"
+    },
+    {
+     "cls": "flex flex-col items-center gap-2 rounded",
+     "bg": "lab(100 0.107408 1.52051)",
+     "color": "lab(14.0649 4.58021 6.10547)"
+    },
+    {
+     "cls": "rounded-lg bg-gray-50 p-4",
+     "bg": "lab(98.2596 -0.247031 -0.706708)",
+     "color": "lab(14.0649 4.58021 6.10547)"
+    },
+    {
+     "cls": "fixed bottom-0 left-0 right-0 z-50 anima",
+     "bg": "oklab(0.999856 0.000339091 0.00400788 / 0.95)",
+     "color": "lab(14.0649 4.58021 6.10547)"
+    }
+   ],
+   "challengeCleared": true
+  }
+ }
+}

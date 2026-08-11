@@ -1,0 +1,76 @@
+{
+  "url": "https://www.chefaugustin.com/recipes/chocolate-chip-cookies-for-2",
+  "status_code": 200,
+  "content": "<!DOCTYPE html><html lang=\"en\" class=\"geist_deef94d5-module__Sms4YG__variable playfair_display_d5eda251-module__JGL7aG__variable bg-background\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"/><link rel=\"preload\" href=\"/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2\" as=\"font\" crossorigin=\"\" type=\"font/wo...",
+  "raw_content": "<!DOCTYPE html><html lang=\"en\" class=\"geist_deef94d5-module__Sms4YG__variable playfair_display_d5eda251-module__JGL7aG__variable bg-background\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" conte...",
+  "is_spa": false,
+  "extracted_text": "Article and tips\nThe problem with a full batch of cookies is that it makes twenty-four cookies, and there are two of you. This recipe makes exactly two thick, chewy, bakery-style cookies \u2014 enough to split a plate after dinner without a container of dough lingering in your fridge for a week, whispering at you every time you open the door.\nHere's the angle the top recipes miss: every result on the first page melts the butter or creams it cold, then bakes immediately. Not one of them browns the but...",
+  "publication_date": "2026-07-30",
+  "accessibility_tree": null,
+  "headers": {
+    "Date": "Wed, 05 Aug 2026 11:01:58 GMT",
+    "Content-Type": "text/html; charset=utf-8",
+    "Transfer-Encoding": "chunked",
+    "Connection": "keep-alive",
+    "x-frame-options": "DENY",
+    "x-content-type-options": "nosniff",
+    "referrer-policy": "strict-origin-when-cross-origin",
+    "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
+    "content-security-policy": "upgrade-insecure-requests",
+    "x-nextjs-cache": "HIT",
+    "x-nextjs-prerender": "1",
+    "x-nextjs-stale-time": "300",
+    "x-powered-by": "Next.js",
+    "Cache-Control": "s-maxage=31536000",
+    "etag": "\"moycw2ovm03ld3\"",
+    "Content-Encoding": "br",
+    "platform": "hostinger",
+    "panel": "hpanel",
+    "Server": "hcdn",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "x-hcdn-request-id": "1d35a9e9edd4d44a6f8bc258422cb830-srv-edge6",
+    "x-hcdn-cache-status": "BYPASS",
+    "x-hcdn-upstream-rt": "0.146"
+  },
+  "redirect_chain": [],
+  "console_errors": [],
+  "render_diagnostics": [],
+  "render_engine": null,
+  "render_ms": null,
+  "mode_used": "raw",
+  "error": null,
+  "structured_data": {
+    "block_count": 2,
+    "processed_count": 2,
+    "total_bytes": 5597,
+    "truncated": false,
+    "blocks": [
+      {
+        "index": 1,
+        "size_bytes": 451,
+        "valid": true,
+        "types": [
+          "BreadcrumbList",
+          "ListItem"
+        ],
+        "types_truncated": false
+      },
+      {
+        "index": 2,
+        "size_bytes": 5146,
+        "valid": true,
+        "types": [
+          "Answer",
+          "BlogPosting",
+          "FAQPage",
+          "HowToStep",
+          "Organization",
+          "Person",
+          "Question",
+          "Recipe"
+        ],
+        "types_truncated": false
+      }
+    ]
+  }
+}

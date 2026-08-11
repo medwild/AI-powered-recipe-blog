@@ -1,0 +1,15 @@
+Problème,Validation,Éléments
+"Vous devez indiquer ""image"" ou ""video"" (dans ""recipeInstructions"")",Non commencé,14
+"Champ ""url"" manquant (dans ""recipeInstructions"")",Non commencé,14
+"Champ ""recipeCuisine"" manquant",Non commencé,14
+"Champ ""video"" manquant",Non commencé,14
+"Champ ""aggregateRating"" manquant",Non commencé,11
+"Champ ""nutrition"" manquant",Non commencé,9
+"Champ ""recipeCategory"" manquant",Non commencé,8
+"Longueur de chaîne non valide dans le champ ""recipeIngredient""",Non commencé,3
+"Champ ""author"" manquant",Non commencé,3
+"Champ ""prepTime"" manquant",Non commencé,1
+"Champ ""cookTime"" manquant",Non commencé,1
+"Champ ""recipeInstructions"" manquant",Sans objet,0
+"Champ ""recipeIngredient"" manquant",Sans objet,0
+"Champ ""description"" manquant",Sans objet,0

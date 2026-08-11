@@ -1,0 +1,70 @@
+{
+  "url": "https://www.chefaugustin.com/recipes/category/chicken-for-two",
+  "status_code": 200,
+  "content": "<!DOCTYPE html><html lang=\"en\" class=\"geist_deef94d5-module__Sms4YG__variable playfair_display_d5eda251-module__JGL7aG__variable bg-background\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"/><link rel=\"preload\" href=\"/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2\" as=\"font\" crossorigin=\"\" type=\"font/wo...",
+  "raw_content": "<!DOCTYPE html><html lang=\"en\" class=\"geist_deef94d5-module__Sms4YG__variable playfair_display_d5eda251-module__JGL7aG__variable bg-background\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" conte...",
+  "is_spa": false,
+  "extracted_text": "Looking for the best chicken for tworecipes for two people? You\u2019re in the right place. Our collection of 1 chicken for two recipe brings professional French technique to your weeknight table \u2014 scaled down, tested, and ready when you are.\nThis chicken for two recipe is the only one you need \u2014 developed, tested, and scaled for two people with no leftovers and no wasted ingredients.\nExplore more dinner-for-two recipes by ingredient, technique, or occasion.",
+  "publication_date": "2026-01-01",
+  "accessibility_tree": null,
+  "headers": {
+    "Date": "Wed, 05 Aug 2026 11:00:28 GMT",
+    "Content-Type": "text/html; charset=utf-8",
+    "Transfer-Encoding": "chunked",
+    "Connection": "keep-alive",
+    "X-Frame-Options": "DENY",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+    "Content-Security-Policy": "upgrade-insecure-requests",
+    "x-nextjs-cache": "HIT",
+    "x-nextjs-prerender": "1",
+    "x-nextjs-stale-time": "300",
+    "X-Powered-By": "Next.js",
+    "Cache-Control": "s-maxage=31536000",
+    "ETag": "\"q3ghsek3es2lls\"",
+    "Content-Encoding": "br",
+    "platform": "hostinger",
+    "panel": "hpanel",
+    "Server": "hcdn",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "x-hcdn-request-id": "b57cd4dbf564f1a7ce960f960d2e6793-srv-edge4",
+    "x-hcdn-cache-status": "BYPASS",
+    "x-hcdn-upstream-rt": "0.411"
+  },
+  "redirect_chain": [],
+  "console_errors": [],
+  "render_diagnostics": [],
+  "render_engine": null,
+  "render_ms": null,
+  "mode_used": "raw",
+  "error": null,
+  "structured_data": {
+    "block_count": 2,
+    "processed_count": 2,
+    "total_bytes": 784,
+    "truncated": false,
+    "blocks": [
+      {
+        "index": 1,
+        "size_bytes": 392,
+        "valid": true,
+        "types": [
+          "BreadcrumbList",
+          "ListItem"
+        ],
+        "types_truncated": false
+      },
+      {
+        "index": 2,
+        "size_bytes": 392,
+        "valid": true,
+        "types": [
+          "BreadcrumbList",
+          "ListItem"
+        ],
+        "types_truncated": false
+      }
+    ]
+  }
+}

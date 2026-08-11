@@ -1,0 +1,52 @@
+{
+  "url": "https://www.chefaugustin.com/recipes/salmon-orzo-with-dill-and-capers-for-two",
+  "status_code": null,
+  "content": null,
+  "raw_content": "<!DOCTYPE html><html lang=\"en\" class=\"geist_deef94d5-module__Sms4YG__variable playfair_display_d5eda251-module__JGL7aG__variable bg-background\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" conte...",
+  "is_spa": false,
+  "extracted_text": null,
+  "publication_date": null,
+  "accessibility_tree": null,
+  "headers": {},
+  "redirect_chain": [],
+  "console_errors": [],
+  "render_diagnostics": [],
+  "render_engine": null,
+  "render_ms": 669.4477379996897,
+  "mode_used": "rendered",
+  "error": "playwright error: BrowserType.launch: Target page, context or browser has been closed\nBrowser logs:\n\n<launching> /home/user/.local/share/claude-seo/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-GskQfG --remote-debugging-pipe --no-startup-window\n<launched> pid=43639\n[pid=43639][err] /home/user/.local/share/claude-seo/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell: error while loading shared libraries: libglib-2.0.so.0: cannot open shared object file: No such file or directory\nCall log:\n  - <launching> /home/user/.local/share/claude-seo/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-GskQfG --remote-debugging-pipe --no-startup-window\n  - <launched> pid=43639\n  - [pid=43639][err] /home/user/.local/share/claude-seo/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell: error while loading shared libraries: libglib-2.0.so.0: cannot open shared object file: No such file or directory\n  - [pid=43639] <gracefully close start>\n  - [pid=43639] <kill>\n  - [pid=43639] <will force kill>\n  - [pid=43639] exception while trying to kill process: Error: kill ESRCH\n  - [pid=43639] <process did exit: exitCode=127, signal=null>\n  - [pid=43639] starting temporary directories cleanup\n  - [pid=43639] finished temporary directories cleanup\n  - [pid=43639] <gracefully close end>\n",
+  "structured_data": {
+    "block_count": 2,
+    "processed_count": 2,
+    "total_bytes": 8231,
+    "truncated": false,
+    "blocks": [
+      {
+        "index": 1,
+        "size_bytes": 584,
+        "valid": true,
+        "types": [
+          "BreadcrumbList",
+          "ListItem"
+        ],
+        "types_truncated": false
+      },
+      {
+        "index": 2,
+        "size_bytes": 7647,
+        "valid": true,
+        "types": [
+          "Answer",
+          "BlogPosting",
+          "FAQPage",
+          "HowToStep",
+          "Organization",
+          "Person",
+          "Question",
+          "Recipe"
+        ],
+        "types_truncated": false
+      }
+    ]
+  }
+}

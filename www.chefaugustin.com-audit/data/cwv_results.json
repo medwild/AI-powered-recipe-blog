@@ -1,0 +1,4882 @@
+[
+ {
+  "name": "home-mobile-throttled",
+  "requested_url": "https://www.chefaugustin.com/",
+  "final_url": "https://www.chefaugustin.com/recipes",
+  "title": "All Recipes for Two \u2014 Easy Weeknight Dinners | Chef Augustin",
+  "challenge_persisted": false,
+  "wall_s": 2.3,
+  "lcp_ms": 2760,
+  "fcp_ms": 0,
+  "ttfb_ms": 620,
+  "cls": 0,
+  "dom_content_loaded_ms": 2338,
+  "load_ms": 4436,
+  "inp_approx_ms": 237,
+  "inp_event_type": "pointerdown",
+  "event_count": 9,
+  "longtask_count": 3,
+  "tbt_ms": 309,
+  "longtasks": [
+   {
+    "start": 2599,
+    "dur": 91
+   },
+   {
+    "start": 2788,
+    "dur": 236
+   },
+   {
+    "start": 12293,
+    "dur": 132
+   }
+  ],
+  "dom_scripts": 59,
+  "dom_links": 9,
+  "dom_imgs": 30,
+  "dom_inline_styles": 2,
+  "imgs_nodim": 30,
+  "imgs_lazy": 30,
+  "imgs_nolazy": 0,
+  "clicks": 3,
+  "resources": [
+   {
+    "name": "https://www.chefaugustin.com/_next/static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2",
+    "initiatorType": "link",
+    "transferSize": 38760,
+    "encodedBodySize": 38460,
+    "duration": 1714
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+    "initiatorType": "link",
+    "transferSize": 29588,
+    "encodedBodySize": 29288,
+    "duration": 1605
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412672%2Frecipes%2FMediterranean-Chicken-Orzo-with-Feta-Olives-for-Two.png&w=640&q=75",
+    "initiatorType": "link",
+    "transferSize": 44924,
+    "encodedBodySize": 44624,
+    "duration": 1561
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/2swnbtkp595hv.css",
+    "initiatorType": "link",
+    "transferSize": 1311,
+    "encodedBodySize": 1011,
+    "duration": 330
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/03g70739w6gu8.css",
+    "initiatorType": "link",
+    "transferSize": 24834,
+    "encodedBodySize": 24534,
+    "duration": 1531
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/0dp29ey5xybb3.js",
+    "initiatorType": "link",
+    "transferSize": 2505,
+    "encodedBodySize": 2205,
+    "duration": 428
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/2j0ntnypuz51a.js",
+    "initiatorType": "script",
+    "transferSize": 11617,
+    "encodedBodySize": 11317,
+    "duration": 1014
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/3nw5lwt6vl5ga.js",
+    "initiatorType": "script",
+    "transferSize": 94054,
+    "encodedBodySize": 93754,
+    "duration": 2087
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/0mk1g55o6kl1e.js",
+    "initiatorType": "script",
+    "transferSize": 53593,
+    "encodedBodySize": 53293,
+    "duration": 1893
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/0gp5ktsgx8lyg.js",
+    "initiatorType": "script",
+    "transferSize": 14033,
+    "encodedBodySize": 13733,
+    "duration": 1198
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/turbopack-13ka30-f30mg3.js",
+    "initiatorType": "script",
+    "transferSize": 5227,
+    "encodedBodySize": 4927,
+    "duration": 762
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/3g05-ar7q__dz.js",
+    "initiatorType": "script",
+    "transferSize": 7866,
+    "encodedBodySize": 7566,
+    "duration": 963
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/1omor3m3y0zsq.js",
+    "initiatorType": "script",
+    "transferSize": 10838,
+    "encodedBodySize": 10538,
+    "duration": 1127
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/2im7c515bo69p.js",
+    "initiatorType": "script",
+    "transferSize": 19181,
+    "encodedBodySize": 18881,
+    "duration": 1427
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/0_07l6gn0pv9m.js",
+    "initiatorType": "script",
+    "transferSize": 10775,
+    "encodedBodySize": 10475,
+    "duration": 1148
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/2b0b2zs_4oevf.js",
+    "initiatorType": "script",
+    "transferSize": 15269,
+    "encodedBodySize": 14969,
+    "duration": 1326
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412873%2Frecipes%2FGarlic-Shrimp-Orzo-with-Cherry-Tomatoes-for-Two.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 47235,
+    "encodedBodySize": 46935,
+    "duration": 1429
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410413%2Frecipes%2F30-Minute%2520Summer%2520Herb%2520Chicken%2520Orzo%2520with%2520Zucchini%2520for%2520Two.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 53906,
+    "encodedBodySize": 53606,
+    "duration": 1585
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412767%2Frecipes%2F30-Minute-One-Pan-Lemon-Garlic-Chicken-for-Two.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 40859,
+    "encodedBodySize": 40559,
+    "duration": 1484
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412317%2Frecipes%2F25-Minute%2520One-Pan%2520Garlic%2520Herb%2520Chicken%2520for%2520Two.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 36020,
+    "encodedBodySize": 35720,
+    "duration": 1454
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410300%2Frecipes%2F30-Minute%2520Creamy%2520Parmesan%2520Garlic%2520Chicken%2520Orzo%2520for%2520Two.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 52850,
+    "encodedBodySize": 52550,
+    "duration": 1712
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/1kk82h9c5vcvo.js",
+    "initiatorType": "script",
+    "transferSize": 1947,
+    "encodedBodySize": 1647,
+    "duration": 377
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/2rzo76-zrob7j.js",
+    "initiatorType": "script",
+    "transferSize": 12353,
+    "encodedBodySize": 12053,
+    "duration": 704
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/27v892mm1t8sz.js",
+    "initiatorType": "script",
+    "transferSize": 2077,
+    "encodedBodySize": 1777,
+    "duration": 388
+   },
+   {
+    "name": "https://www.chefaugustin.com/privacy?_rsc=5CB68i4pnAekjehf",
+    "initiatorType": "fetch",
+    "transferSize": 622,
+    "encodedBodySize": 322,
+    "duration": 510
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/garlic-shrimp-orzo-with-cherry-tomatoes-for-two?_rsc=5CB68i4pnAekjehf",
+    "initiatorType": "fetch",
+    "transferSize": 693,
+    "encodedBodySize": 393,
+    "duration": 401
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes?_rsc=5CB68i4pnAekjehf",
+    "initiatorType": "fetch",
+    "transferSize": 622,
+    "encodedBodySize": 322,
+    "duration": 550
+   },
+   {
+    "name": "https://www.chefaugustin.com/?_rsc=7h4NYy5eoyMcNlUN",
+    "initiatorType": "fetch",
+    "transferSize": 1230,
+    "encodedBodySize": 930,
+    "duration": 591
+   },
+   {
+    "name": "https://www.chefaugustin.com/?_rsc=yIp22O3xgPPxC28X",
+    "initiatorType": "fetch",
+    "transferSize": 5407,
+    "encodedBodySize": 5107,
+    "duration": 805
+   },
+   {
+    "name": "https://www.chefaugustin.com/_vercel/insights/script.js",
+    "initiatorType": "script",
+    "transferSize": 300,
+    "encodedBodySize": 0,
+    "duration": 772
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/garlic-shrimp-orzo-with-cherry-tomatoes-for-two?_rsc=7h4NYy5eoyMcNlUN",
+    "initiatorType": "fetch",
+    "transferSize": 1279,
+    "encodedBodySize": 979,
+    "duration": 371
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/garlic-shrimp-orzo-with-cherry-tomatoes-for-two?_rsc=2DPgbq-ctFzwwlU9",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 333
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/garlic-shrimp-orzo-with-cherry-tomatoes-for-two?_rsc=Hzhr1tM9nv0WZhti",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 310
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/garlic-shrimp-orzo-with-cherry-tomatoes-for-two?_rsc=SyW4HJoXIjaQV38U",
+    "initiatorType": "fetch",
+    "transferSize": 26268,
+    "encodedBodySize": 25968,
+    "duration": 421
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes?_rsc=7h4NYy5eoyMcNlUN",
+    "initiatorType": "fetch",
+    "transferSize": 1199,
+    "encodedBodySize": 899,
+    "duration": 180
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes?_rsc=4fc7r-vQPMNNTfNI",
+    "initiatorType": "fetch",
+    "transferSize": 20688,
+    "encodedBodySize": 20388,
+    "duration": 384
+   },
+   {
+    "name": "https://www.chefaugustin.com/?_rsc=8nTjltbQWvg6NcbE",
+    "initiatorType": "fetch",
+    "transferSize": 13010,
+    "encodedBodySize": 12710,
+    "duration": 335
+   },
+   {
+    "name": "https://www.chefaugustin.com/privacy?_rsc=7h4NYy5eoyMcNlUN",
+    "initiatorType": "fetch",
+    "transferSize": 1304,
+    "encodedBodySize": 1004,
+    "duration": 178
+   },
+   {
+    "name": "https://www.chefaugustin.com/privacy?_rsc=3XDUVntrE9f2g4uy",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 162
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/3alpi4p0fpygj.js",
+    "initiatorType": "script",
+    "transferSize": 12967,
+    "encodedBodySize": 12667,
+    "duration": 255
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/09wusrrwhn0jp.js",
+    "initiatorType": "script",
+    "transferSize": 23351,
+    "encodedBodySize": 23051,
+    "duration": 648
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/38_1_780l08sg.js",
+    "initiatorType": "script",
+    "transferSize": 57680,
+    "encodedBodySize": 57380,
+    "duration": 803
+   },
+   {
+    "name": "https://www.chefaugustin.com/privacy?_rsc=HrEtqPkwiCQvqKeY",
+    "initiatorType": "fetch",
+    "transferSize": 5744,
+    "encodedBodySize": 5444,
+    "duration": 204
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/0y_3jbthxiolz.js",
+    "initiatorType": "script",
+    "transferSize": 12997,
+    "encodedBodySize": 12697,
+    "duration": 484
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/02_vi0um-b7tv.js",
+    "initiatorType": "script",
+    "transferSize": 3154,
+    "encodedBodySize": 2854,
+    "duration": 238
+   },
+   {
+    "name": "https://www.chefaugustin.com/dashboard?_rsc=5CB68i4pnAekjehf",
+    "initiatorType": "fetch",
+    "transferSize": 462,
+    "encodedBodySize": 162,
+    "duration": 293
+   },
+   {
+    "name": "https://www.chefaugustin.com/about?_rsc=5CB68i4pnAekjehf",
+    "initiatorType": "fetch",
+    "transferSize": 621,
+    "encodedBodySize": 321,
+    "duration": 300
+   },
+   {
+    "name": "https://www.chefaugustin.com/guides?_rsc=5CB68i4pnAekjehf",
+    "initiatorType": "fetch",
+    "transferSize": 622,
+    "encodedBodySize": 322,
+    "duration": 313
+   },
+   {
+    "name": "https://www.chefaugustin.com/techniques?_rsc=5CB68i4pnAekjehf",
+    "initiatorType": "fetch",
+    "transferSize": 622,
+    "encodedBodySize": 322,
+    "duration": 304
+   },
+   {
+    "name": "https://www.chefaugustin.com/dashboard?_rsc=tXyZJ52UQVBCVsD3",
+    "initiatorType": "fetch",
+    "transferSize": 1580,
+    "encodedBodySize": 1280,
+    "duration": 170
+   },
+   {
+    "name": "https://www.chefaugustin.com/about?_rsc=7h4NYy5eoyMcNlUN",
+    "initiatorType": "fetch",
+    "transferSize": 1233,
+    "encodedBodySize": 933,
+    "duration": 167
+   },
+   {
+    "name": "https://www.chefaugustin.com/about?_rsc=n4tDNspjD4yS_Xnd",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 168
+   },
+   {
+    "name": "https://www.chefaugustin.com/about?_rsc=hzcUC6YqarYE9pKE",
+    "initiatorType": "fetch",
+    "transferSize": 6165,
+    "encodedBodySize": 5865,
+    "duration": 194
+   },
+   {
+    "name": "https://www.chefaugustin.com/guides?_rsc=7h4NYy5eoyMcNlUN",
+    "initiatorType": "fetch",
+    "transferSize": 1239,
+    "encodedBodySize": 939,
+    "duration": 167
+   },
+   {
+    "name": "https://www.chefaugustin.com/guides?_rsc=dAdXdQJ-omyvBoKl",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 164
+   },
+   {
+    "name": "https://www.chefaugustin.com/guides?_rsc=gYCxHVIPHgSY50lU",
+    "initiatorType": "fetch",
+    "transferSize": 4255,
+    "encodedBodySize": 3955,
+    "duration": 184
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/2y1-wlbg6q4wq.js",
+    "initiatorType": "script",
+    "transferSize": 6621,
+    "encodedBodySize": 6321,
+    "duration": 339
+   },
+   {
+    "name": "https://www.chefaugustin.com/techniques?_rsc=7h4NYy5eoyMcNlUN",
+    "initiatorType": "fetch",
+    "transferSize": 1241,
+    "encodedBodySize": 941,
+    "duration": 157
+   },
+   {
+    "name": "https://www.chefaugustin.com/techniques?_rsc=WtWM-1ME3abIUEJl",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 157
+   },
+   {
+    "name": "https://www.chefaugustin.com/techniques?_rsc=ty88TX0wnAIhsArs",
+    "initiatorType": "fetch",
+    "transferSize": 4326,
+    "encodedBodySize": 4026,
+    "duration": 192
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/40hxdvqwxc3fb.js",
+    "initiatorType": "script",
+    "transferSize": 10027,
+    "encodedBodySize": 9727,
+    "duration": 325
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412815%2Frecipes%2FSalmon-Orzo-with-Dill-and-Capers-for-Two.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 46191,
+    "encodedBodySize": 45891,
+    "duration": 1072
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412254%2Frecipes%2F40-Minute%2520White%2520Wine%2520Lemon%2520Chicken%2520Orzo%2520for%2520Two.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 41702,
+    "encodedBodySize": 41402,
+    "duration": 1015
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412720%2Frecipes%2F35-Minute-One-Skillet-Chicken-and-Rice-for-Two.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 49543,
+    "encodedBodySize": 49243,
+    "duration": 1130
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/creamy-parmesan-garlic-chicken-orzo-for-two?_rsc=9kI010RZ6VLPt0i7",
+    "initiatorType": "fetch",
+    "transferSize": 692,
+    "encodedBodySize": 392,
+    "duration": 189
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/mediterranean-chicken-orzo-with-feta-olives-for-two?_rsc=9kI010RZ6VLPt0i7",
+    "initiatorType": "fetch",
+    "transferSize": 697,
+    "encodedBodySize": 397,
+    "duration": 308
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/creamy-parmesan-garlic-chicken-orzo-for-two?_rsc=sFKMzk_48WBZbgMG",
+    "initiatorType": "fetch",
+    "transferSize": 1341,
+    "encodedBodySize": 1041,
+    "duration": 179
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/creamy-parmesan-garlic-chicken-orzo-for-two?_rsc=hQon4vHP8CY8WHe_",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 193
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/creamy-parmesan-garlic-chicken-orzo-for-two?_rsc=NeVFmG89ra-at98L",
+    "initiatorType": "fetch",
+    "transferSize": 27154,
+    "encodedBodySize": 26854,
+    "duration": 805
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/mediterranean-chicken-orzo-with-feta-olives-for-two?_rsc=sFKMzk_48WBZbgMG",
+    "initiatorType": "fetch",
+    "transferSize": 1275,
+    "encodedBodySize": 975,
+    "duration": 186
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/mediterranean-chicken-orzo-with-feta-olives-for-two?_rsc=hQon4vHP8CY8WHe_",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 188
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/mediterranean-chicken-orzo-with-feta-olives-for-two?_rsc=NeVFmG89ra-at98L",
+    "initiatorType": "fetch",
+    "transferSize": 31696,
+    "encodedBodySize": 31396,
+    "duration": 722
+   }
+  ],
+  "responses": [
+   {
+    "url": "https://www.chefaugustin.com/",
+    "status": 200,
+    "type": "document",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412672%2Frecipes%2FMediterranean-Chicken-Orzo-with-Feta-Olives-for-Two.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "44624",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/2swnbtkp595hv.css",
+    "status": 200,
+    "type": "stylesheet",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/03g70739w6gu8.css",
+    "status": 200,
+    "type": "stylesheet",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/0dp29ey5xybb3.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/turbopack-13ka30-f30mg3.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/3g05-ar7q__dz.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/2j0ntnypuz51a.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/1omor3m3y0zsq.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/0_07l6gn0pv9m.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/0gp5ktsgx8lyg.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/2b0b2zs_4oevf.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/2im7c515bo69p.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+    "status": 200,
+    "type": "font",
+    "clen": "29288",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2",
+    "status": 200,
+    "type": "font",
+    "clen": "38460",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/0mk1g55o6kl1e.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/3nw5lwt6vl5ga.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410413%2Frecipes%2F30-Minute%2520Summer%2520Herb%2520Chicken%2520Orzo%2520with%2520Zucchini%2520for%2520Two.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "53606",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412873%2Frecipes%2FGarlic-Shrimp-Orzo-with-Cherry-Tomatoes-for-Two.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "46935",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412767%2Frecipes%2F30-Minute-One-Pan-Lemon-Garlic-Chicken-for-Two.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "40559",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410300%2Frecipes%2F30-Minute%2520Creamy%2520Parmesan%2520Garlic%2520Chicken%2520Orzo%2520for%2520Two.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "52550",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412317%2Frecipes%2F25-Minute%2520One-Pan%2520Garlic%2520Herb%2520Chicken%2520for%2520Two.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "35720",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/1kk82h9c5vcvo.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/27v892mm1t8sz.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/privacy?_rsc=5CB68i4pnAekjehf",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/garlic-shrimp-orzo-with-cherry-tomatoes-for-two?_rsc=5CB68i4pnAekjehf",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/2rzo76-zrob7j.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes?_rsc=5CB68i4pnAekjehf",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/?_rsc=7h4NYy5eoyMcNlUN",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/?_rsc=yIp22O3xgPPxC28X",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/garlic-shrimp-orzo-with-cherry-tomatoes-for-two?_rsc=7h4NYy5eoyMcNlUN",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/garlic-shrimp-orzo-with-cherry-tomatoes-for-two?_rsc=2DPgbq-ctFzwwlU9",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/garlic-shrimp-orzo-with-cherry-tomatoes-for-two?_rsc=Hzhr1tM9nv0WZhti",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/garlic-shrimp-orzo-with-cherry-tomatoes-for-two?_rsc=SyW4HJoXIjaQV38U",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_vercel/insights/script.js",
+    "status": 404,
+    "type": "script",
+    "clen": null,
+    "cache": null,
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes?_rsc=7h4NYy5eoyMcNlUN",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes?_rsc=4fc7r-vQPMNNTfNI",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/?_rsc=8nTjltbQWvg6NcbE",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/privacy?_rsc=7h4NYy5eoyMcNlUN",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/privacy?_rsc=3XDUVntrE9f2g4uy",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/privacy?_rsc=HrEtqPkwiCQvqKeY",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/3alpi4p0fpygj.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/02_vi0um-b7tv.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/0y_3jbthxiolz.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/09wusrrwhn0jp.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/38_1_780l08sg.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/dashboard?_rsc=5CB68i4pnAekjehf",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/about?_rsc=5CB68i4pnAekjehf",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/techniques?_rsc=5CB68i4pnAekjehf",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/guides?_rsc=5CB68i4pnAekjehf",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/dashboard?_rsc=tXyZJ52UQVBCVsD3",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/about?_rsc=7h4NYy5eoyMcNlUN",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/about?_rsc=n4tDNspjD4yS_Xnd",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/about?_rsc=hzcUC6YqarYE9pKE",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/guides?_rsc=7h4NYy5eoyMcNlUN",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/guides?_rsc=dAdXdQJ-omyvBoKl",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/guides?_rsc=gYCxHVIPHgSY50lU",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/techniques?_rsc=7h4NYy5eoyMcNlUN",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/techniques?_rsc=WtWM-1ME3abIUEJl",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/techniques?_rsc=ty88TX0wnAIhsArs",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/2y1-wlbg6q4wq.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/40hxdvqwxc3fb.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412815%2Frecipes%2FSalmon-Orzo-with-Dill-and-Capers-for-Two.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "45891",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412254%2Frecipes%2F40-Minute%2520White%2520Wine%2520Lemon%2520Chicken%2520Orzo%2520for%2520Two.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "41402",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412720%2Frecipes%2F35-Minute-One-Skillet-Chicken-and-Rice-for-Two.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "49243",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/creamy-parmesan-garlic-chicken-orzo-for-two?_rsc=9kI010RZ6VLPt0i7",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/mediterranean-chicken-orzo-with-feta-olives-for-two?_rsc=9kI010RZ6VLPt0i7",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/creamy-parmesan-garlic-chicken-orzo-for-two?_rsc=sFKMzk_48WBZbgMG",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/creamy-parmesan-garlic-chicken-orzo-for-two?_rsc=hQon4vHP8CY8WHe_",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/creamy-parmesan-garlic-chicken-orzo-for-two?_rsc=NeVFmG89ra-at98L",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/mediterranean-chicken-orzo-with-feta-olives-for-two?_rsc=sFKMzk_48WBZbgMG",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/mediterranean-chicken-orzo-with-feta-olives-for-two?_rsc=hQon4vHP8CY8WHe_",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/mediterranean-chicken-orzo-with-feta-olives-for-two?_rsc=NeVFmG89ra-at98L",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   }
+  ],
+  "by_type": {
+   "link": {
+    "count": 6,
+    "bytes": 141922,
+    "time": 7169
+   },
+   "script": {
+    "count": 21,
+    "bytes": 385927,
+    "time": 18278
+   },
+   "img": {
+    "count": 8,
+    "bytes": 368306,
+    "time": 10881
+   },
+   "fetch": {
+    "count": 37,
+    "bytes": 167951,
+    "time": 11435
+   }
+  },
+  "by_host": {
+   "www.chefaugustin.com": {
+    "count": 72,
+    "bytes": 1064106
+   }
+  },
+  "third_party_hosts": {}
+ },
+ {
+  "name": "home-desktop",
+  "requested_url": "https://www.chefaugustin.com/",
+  "final_url": "https://www.chefaugustin.com/recipes",
+  "title": "All Recipes for Two \u2014 Easy Weeknight Dinners | Chef Augustin",
+  "challenge_persisted": false,
+  "wall_s": 0.9,
+  "lcp_ms": 1024,
+  "fcp_ms": 0,
+  "ttfb_ms": 468,
+  "cls": 0,
+  "dom_content_loaded_ms": 922,
+  "load_ms": 1107,
+  "inp_approx_ms": 225,
+  "inp_event_type": "pointerdown",
+  "event_count": 9,
+  "longtask_count": 1,
+  "tbt_ms": 14,
+  "longtasks": [
+   {
+    "start": 1023,
+    "dur": 64
+   }
+  ],
+  "dom_scripts": 59,
+  "dom_links": 9,
+  "dom_imgs": 30,
+  "dom_inline_styles": 2,
+  "imgs_nodim": 30,
+  "imgs_lazy": 30,
+  "imgs_nolazy": 0,
+  "clicks": 3,
+  "resources": [
+   {
+    "name": "https://www.chefaugustin.com/_next/static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2",
+    "initiatorType": "link",
+    "transferSize": 38760,
+    "encodedBodySize": 38460,
+    "duration": 400
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+    "initiatorType": "link",
+    "transferSize": 29588,
+    "encodedBodySize": 29288,
+    "duration": 409
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412672%2Frecipes%2FMediterranean-Chicken-Orzo-with-Feta-Olives-for-Two.png&w=640&q=75",
+    "initiatorType": "link",
+    "transferSize": 44924,
+    "encodedBodySize": 44624,
+    "duration": 218
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/2swnbtkp595hv.css",
+    "initiatorType": "link",
+    "transferSize": 1311,
+    "encodedBodySize": 1011,
+    "duration": 305
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/03g70739w6gu8.css",
+    "initiatorType": "link",
+    "transferSize": 24834,
+    "encodedBodySize": 24534,
+    "duration": 380
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/0dp29ey5xybb3.js",
+    "initiatorType": "link",
+    "transferSize": 2505,
+    "encodedBodySize": 2205,
+    "duration": 320
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/2j0ntnypuz51a.js",
+    "initiatorType": "script",
+    "transferSize": 11617,
+    "encodedBodySize": 11317,
+    "duration": 329
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/3nw5lwt6vl5ga.js",
+    "initiatorType": "script",
+    "transferSize": 94743,
+    "encodedBodySize": 94443,
+    "duration": 469
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/0mk1g55o6kl1e.js",
+    "initiatorType": "script",
+    "transferSize": 53620,
+    "encodedBodySize": 53320,
+    "duration": 475
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/0gp5ktsgx8lyg.js",
+    "initiatorType": "script",
+    "transferSize": 14033,
+    "encodedBodySize": 13733,
+    "duration": 355
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/turbopack-13ka30-f30mg3.js",
+    "initiatorType": "script",
+    "transferSize": 5227,
+    "encodedBodySize": 4927,
+    "duration": 479
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/3g05-ar7q__dz.js",
+    "initiatorType": "script",
+    "transferSize": 7866,
+    "encodedBodySize": 7566,
+    "duration": 479
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/2im7c515bo69p.js",
+    "initiatorType": "script",
+    "transferSize": 19181,
+    "encodedBodySize": 18881,
+    "duration": 484
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/1omor3m3y0zsq.js",
+    "initiatorType": "script",
+    "transferSize": 10838,
+    "encodedBodySize": 10538,
+    "duration": 486
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/0_07l6gn0pv9m.js",
+    "initiatorType": "script",
+    "transferSize": 10775,
+    "encodedBodySize": 10475,
+    "duration": 488
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/2b0b2zs_4oevf.js",
+    "initiatorType": "script",
+    "transferSize": 15269,
+    "encodedBodySize": 14969,
+    "duration": 492
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412873%2Frecipes%2FGarlic-Shrimp-Orzo-with-Cherry-Tomatoes-for-Two.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 47235,
+    "encodedBodySize": 46935,
+    "duration": 572
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410413%2Frecipes%2F30-Minute%2520Summer%2520Herb%2520Chicken%2520Orzo%2520with%2520Zucchini%2520for%2520Two.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 53906,
+    "encodedBodySize": 53606,
+    "duration": 636
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412767%2Frecipes%2F30-Minute-One-Pan-Lemon-Garlic-Chicken-for-Two.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 40859,
+    "encodedBodySize": 40559,
+    "duration": 637
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412317%2Frecipes%2F25-Minute%2520One-Pan%2520Garlic%2520Herb%2520Chicken%2520for%2520Two.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 36020,
+    "encodedBodySize": 35720,
+    "duration": 637
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410300%2Frecipes%2F30-Minute%2520Creamy%2520Parmesan%2520Garlic%2520Chicken%2520Orzo%2520for%2520Two.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 52850,
+    "encodedBodySize": 52550,
+    "duration": 638
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412815%2Frecipes%2FSalmon-Orzo-with-Dill-and-Capers-for-Two.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 46191,
+    "encodedBodySize": 45891,
+    "duration": 683
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412254%2Frecipes%2F40-Minute%2520White%2520Wine%2520Lemon%2520Chicken%2520Orzo%2520for%2520Two.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 41702,
+    "encodedBodySize": 41402,
+    "duration": 682
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412720%2Frecipes%2F35-Minute-One-Skillet-Chicken-and-Rice-for-Two.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 49543,
+    "encodedBodySize": 49243,
+    "duration": 639
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410533%2Frecipes%2FOne-Pan%2520Baked%2520Ziti%2520for%2520Two%2520%2528Romantic%2520Date%2520Night%2520Dinner%2529.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 33738,
+    "encodedBodySize": 33438,
+    "duration": 723
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/1kk82h9c5vcvo.js",
+    "initiatorType": "script",
+    "transferSize": 1947,
+    "encodedBodySize": 1647,
+    "duration": 577
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/2rzo76-zrob7j.js",
+    "initiatorType": "script",
+    "transferSize": 12353,
+    "encodedBodySize": 12053,
+    "duration": 577
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/27v892mm1t8sz.js",
+    "initiatorType": "script",
+    "transferSize": 2077,
+    "encodedBodySize": 1777,
+    "duration": 573
+   },
+   {
+    "name": "https://www.chefaugustin.com/privacy?_rsc=5CB68i4pnAekjehf",
+    "initiatorType": "fetch",
+    "transferSize": 622,
+    "encodedBodySize": 322,
+    "duration": 562
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes?_rsc=5CB68i4pnAekjehf",
+    "initiatorType": "fetch",
+    "transferSize": 622,
+    "encodedBodySize": 322,
+    "duration": 531
+   },
+   {
+    "name": "https://www.chefaugustin.com/dashboard?_rsc=5CB68i4pnAekjehf",
+    "initiatorType": "fetch",
+    "transferSize": 462,
+    "encodedBodySize": 162,
+    "duration": 531
+   },
+   {
+    "name": "https://www.chefaugustin.com/about?_rsc=5CB68i4pnAekjehf",
+    "initiatorType": "fetch",
+    "transferSize": 621,
+    "encodedBodySize": 321,
+    "duration": 531
+   },
+   {
+    "name": "https://www.chefaugustin.com/guides?_rsc=5CB68i4pnAekjehf",
+    "initiatorType": "fetch",
+    "transferSize": 622,
+    "encodedBodySize": 322,
+    "duration": 167
+   },
+   {
+    "name": "https://www.chefaugustin.com/techniques?_rsc=5CB68i4pnAekjehf",
+    "initiatorType": "fetch",
+    "transferSize": 622,
+    "encodedBodySize": 322,
+    "duration": 165
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes?_rsc=7h4NYy5eoyMcNlUN",
+    "initiatorType": "fetch",
+    "transferSize": 1199,
+    "encodedBodySize": 899,
+    "duration": 164
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes?_rsc=yIp22O3xgPPxC28X",
+    "initiatorType": "fetch",
+    "transferSize": 5423,
+    "encodedBodySize": 5123,
+    "duration": 165
+   },
+   {
+    "name": "https://www.chefaugustin.com/_vercel/insights/script.js",
+    "initiatorType": "script",
+    "transferSize": 300,
+    "encodedBodySize": 0,
+    "duration": 160
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes?_rsc=2DPgbq-ctFzwwlU9",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 164
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes?_rsc=4fc7r-vQPMNNTfNI",
+    "initiatorType": "fetch",
+    "transferSize": 20688,
+    "encodedBodySize": 20388,
+    "duration": 226
+   },
+   {
+    "name": "https://www.chefaugustin.com/dashboard?_rsc=tXyZJ52UQVBCVsD3",
+    "initiatorType": "fetch",
+    "transferSize": 1582,
+    "encodedBodySize": 1282,
+    "duration": 165
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/0y_3jbthxiolz.js",
+    "initiatorType": "script",
+    "transferSize": 12997,
+    "encodedBodySize": 12697,
+    "duration": 165
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/2y1-wlbg6q4wq.js",
+    "initiatorType": "script",
+    "transferSize": 6621,
+    "encodedBodySize": 6321,
+    "duration": 164
+   },
+   {
+    "name": "https://www.chefaugustin.com/about?_rsc=7h4NYy5eoyMcNlUN",
+    "initiatorType": "fetch",
+    "transferSize": 1233,
+    "encodedBodySize": 933,
+    "duration": 162
+   },
+   {
+    "name": "https://www.chefaugustin.com/about?_rsc=n4tDNspjD4yS_Xnd",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 164
+   },
+   {
+    "name": "https://www.chefaugustin.com/about?_rsc=hzcUC6YqarYE9pKE",
+    "initiatorType": "fetch",
+    "transferSize": 6165,
+    "encodedBodySize": 5865,
+    "duration": 161
+   },
+   {
+    "name": "https://www.chefaugustin.com/guides?_rsc=7h4NYy5eoyMcNlUN",
+    "initiatorType": "fetch",
+    "transferSize": 1239,
+    "encodedBodySize": 939,
+    "duration": 160
+   },
+   {
+    "name": "https://www.chefaugustin.com/guides?_rsc=dAdXdQJ-omyvBoKl",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 155
+   },
+   {
+    "name": "https://www.chefaugustin.com/guides?_rsc=gYCxHVIPHgSY50lU",
+    "initiatorType": "fetch",
+    "transferSize": 4255,
+    "encodedBodySize": 3955,
+    "duration": 165
+   },
+   {
+    "name": "https://www.chefaugustin.com/techniques?_rsc=7h4NYy5eoyMcNlUN",
+    "initiatorType": "fetch",
+    "transferSize": 1241,
+    "encodedBodySize": 941,
+    "duration": 166
+   },
+   {
+    "name": "https://www.chefaugustin.com/techniques?_rsc=WtWM-1ME3abIUEJl",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 156
+   },
+   {
+    "name": "https://www.chefaugustin.com/techniques?_rsc=ty88TX0wnAIhsArs",
+    "initiatorType": "fetch",
+    "transferSize": 4326,
+    "encodedBodySize": 4026,
+    "duration": 251
+   },
+   {
+    "name": "https://www.chefaugustin.com/?_rsc=7h4NYy5eoyMcNlUN",
+    "initiatorType": "fetch",
+    "transferSize": 1230,
+    "encodedBodySize": 930,
+    "duration": 160
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/40hxdvqwxc3fb.js",
+    "initiatorType": "script",
+    "transferSize": 10027,
+    "encodedBodySize": 9727,
+    "duration": 154
+   },
+   {
+    "name": "https://www.chefaugustin.com/?_rsc=8nTjltbQWvg6NcbE",
+    "initiatorType": "fetch",
+    "transferSize": 13010,
+    "encodedBodySize": 12710,
+    "duration": 160
+   },
+   {
+    "name": "https://www.chefaugustin.com/privacy?_rsc=7h4NYy5eoyMcNlUN",
+    "initiatorType": "fetch",
+    "transferSize": 1304,
+    "encodedBodySize": 1004,
+    "duration": 153
+   },
+   {
+    "name": "https://www.chefaugustin.com/privacy?_rsc=3XDUVntrE9f2g4uy",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 155
+   },
+   {
+    "name": "https://www.chefaugustin.com/privacy?_rsc=HrEtqPkwiCQvqKeY",
+    "initiatorType": "fetch",
+    "transferSize": 5744,
+    "encodedBodySize": 5444,
+    "duration": 155
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/02_vi0um-b7tv.js",
+    "initiatorType": "script",
+    "transferSize": 3154,
+    "encodedBodySize": 2854,
+    "duration": 153
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412191%2Frecipes%2F30-Minute%2520Lemon%2520Butter%2520Chicken%2520Pasta%2520for%2520Two.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 60518,
+    "encodedBodySize": 60218,
+    "duration": 407
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410049%2Frecipes%2FSmall-Batch%2520Edible%2520Cookie%2520Dough%2520for%2520Two.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 17024,
+    "encodedBodySize": 16724,
+    "duration": 286
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410165%2Frecipes%2FGarlic%2520Butter%2520Chicken%2520Bites%2520with%2520Blistered%2520Tomatoes%2520and%2520Saut%25C3%25A9ed%2520Spinach.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 42189,
+    "encodedBodySize": 41889,
+    "duration": 381
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410355%2Frecipes%2FOne-Sheet-Pan%2520Easter%2520Dinner%2520for%2520Two%3A%2520Herb-Crusted%2520Lamb%2520Chops%2520with%2520Spring%2520Vegetables.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 49724,
+    "encodedBodySize": 49424,
+    "duration": 380
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785339290%2Frecipes%2FSheet%2520Pan%2520Thanksgiving%2520Dinner%2520for%2520Two%2520with%2520Herb-Roasted%2520Chicken-v0.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 58532,
+    "encodedBodySize": 58232,
+    "duration": 383
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785339257%2Frecipes%2F25-Minute%2520Pan-Seared%2520Chicken%2520with%2520Herb-Butter%2520Pan%2520Sauce%2520for%2520Two-v0.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 35276,
+    "encodedBodySize": 34976,
+    "duration": 383
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785338939%2Frecipes%2FUntitled-v0.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 22088,
+    "encodedBodySize": 21788,
+    "duration": 383
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785337430%2Frecipes%2FUntitled-v0.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 22088,
+    "encodedBodySize": 21788,
+    "duration": 385
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785337154%2Frecipes%2FOne-Pan%2520Ground%2520Beef%2520and%2520Tomato%2520Rice%2520Skillet%3A%2520Your%2520Easy%2520Week%2520of%2520Meals%2520Starts%2520Here-v0.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 46503,
+    "encodedBodySize": 46203,
+    "duration": 385
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785336597%2Frecipes%2FPan-Seared%2520Chicken%2520Breast%2520with%2520Creamy%2520Tomato%2520Garlic%2520Pasta%2520for%2520Two-v0.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 44025,
+    "encodedBodySize": 43725,
+    "duration": 386
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785239176%2Frecipes%2F4-Ingredient%2520Feta%2520Brine%2520Chicken%2520Breast%2520for%2520Two-v0.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 31377,
+    "encodedBodySize": 31077,
+    "duration": 385
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785174295%2Frecipes%2FChocolate%2520Chip%2520Cookies%2520for%2520Two%3A%2520Small-Batch%252C%2520Ready%2520in%2520Under%252030%2520Minutes-v0.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 32214,
+    "encodedBodySize": 31914,
+    "duration": 387
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785238516%2Frecipes%2FEasy%2520Mexican%2520Dinner%2520for%2520Two%3A%2520One-Pan%2520Chicken%2520Enchilada%2520Skillet-v0.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 46900,
+    "encodedBodySize": 46600,
+    "duration": 388
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785173440%2Frecipes%2FMolten%2520Chocolate%2520Lava%2520Cakes%2520for%2520Two%2520%252825-Minute%2520Dessert%2520for%2520Two%2529-v0.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 29128,
+    "encodedBodySize": 28828,
+    "duration": 389
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785168380%2Frecipes%2F2-Quart%2520Slow%2520Cooker%2520Chicken%2520and%2520Gravy%2520for%2520Two-v0.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 27896,
+    "encodedBodySize": 27596,
+    "duration": 386
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785167193%2Frecipes%2FChicken%2520Pot%2520Pie%2520for%2520Two%2520with%2520a%2520Flaky%2520Puff%2520Pastry%2520Lid-v0.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 22465,
+    "encodedBodySize": 22165,
+    "duration": 388
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785166653%2Frecipes%2FPan-Seared%2520Steak%2520Dinner%2520for%2520Two%2520with%2520Garlic%2520Butter%2520and%2520Blistered%2520Green%2520Beans-v0.png&w=640&q=75",
+    "initiatorType": "img",
+    "transferSize": 38951,
+    "encodedBodySize": 38651,
+    "duration": 389
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/summer-herb-chicken-orzo-with-zucchini-for-two?_rsc=9kI010RZ6VLPt0i7",
+    "initiatorType": "fetch",
+    "transferSize": 694,
+    "encodedBodySize": 394,
+    "duration": 369
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/garlic-shrimp-orzo-with-cherry-tomatoes-for-two?_rsc=9kI010RZ6VLPt0i7",
+    "initiatorType": "fetch",
+    "transferSize": 693,
+    "encodedBodySize": 393,
+    "duration": 369
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/white-wine-lemon-chicken-orzo-for-two?_rsc=9kI010RZ6VLPt0i7",
+    "initiatorType": "fetch",
+    "transferSize": 687,
+    "encodedBodySize": 387,
+    "duration": 371
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/salmon-orzo-with-dill-and-capers-for-two?_rsc=9kI010RZ6VLPt0i7",
+    "initiatorType": "fetch",
+    "transferSize": 690,
+    "encodedBodySize": 390,
+    "duration": 369
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/creamy-parmesan-garlic-chicken-orzo-for-two?_rsc=9kI010RZ6VLPt0i7",
+    "initiatorType": "fetch",
+    "transferSize": 692,
+    "encodedBodySize": 392,
+    "duration": 158
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/mediterranean-chicken-orzo-with-feta-olives-for-two?_rsc=9kI010RZ6VLPt0i7",
+    "initiatorType": "fetch",
+    "transferSize": 697,
+    "encodedBodySize": 397,
+    "duration": 158
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/summer-herb-chicken-orzo-with-zucchini-for-two?_rsc=sFKMzk_48WBZbgMG",
+    "initiatorType": "fetch",
+    "transferSize": 1345,
+    "encodedBodySize": 1045,
+    "duration": 159
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/summer-herb-chicken-orzo-with-zucchini-for-two?_rsc=hQon4vHP8CY8WHe_",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 158
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/summer-herb-chicken-orzo-with-zucchini-for-two?_rsc=NeVFmG89ra-at98L",
+    "initiatorType": "fetch",
+    "transferSize": 29403,
+    "encodedBodySize": 29103,
+    "duration": 161
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/garlic-shrimp-orzo-with-cherry-tomatoes-for-two?_rsc=sFKMzk_48WBZbgMG",
+    "initiatorType": "fetch",
+    "transferSize": 1279,
+    "encodedBodySize": 979,
+    "duration": 159
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/garlic-shrimp-orzo-with-cherry-tomatoes-for-two?_rsc=hQon4vHP8CY8WHe_",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 160
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/garlic-shrimp-orzo-with-cherry-tomatoes-for-two?_rsc=NeVFmG89ra-at98L",
+    "initiatorType": "fetch",
+    "transferSize": 26268,
+    "encodedBodySize": 25968,
+    "duration": 162
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/white-wine-lemon-chicken-orzo-for-two?_rsc=sFKMzk_48WBZbgMG",
+    "initiatorType": "fetch",
+    "transferSize": 1307,
+    "encodedBodySize": 1007,
+    "duration": 155
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/3alpi4p0fpygj.js",
+    "initiatorType": "script",
+    "transferSize": 12967,
+    "encodedBodySize": 12667,
+    "duration": 282
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/09wusrrwhn0jp.js",
+    "initiatorType": "script",
+    "transferSize": 23538,
+    "encodedBodySize": 23238,
+    "duration": 344
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/38_1_780l08sg.js",
+    "initiatorType": "script",
+    "transferSize": 57680,
+    "encodedBodySize": 57380,
+    "duration": 348
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/white-wine-lemon-chicken-orzo-for-two?_rsc=hQon4vHP8CY8WHe_",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 155
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/white-wine-lemon-chicken-orzo-for-two?_rsc=NeVFmG89ra-at98L",
+    "initiatorType": "fetch",
+    "transferSize": 29011,
+    "encodedBodySize": 28711,
+    "duration": 159
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/salmon-orzo-with-dill-and-capers-for-two?_rsc=sFKMzk_48WBZbgMG",
+    "initiatorType": "fetch",
+    "transferSize": 1303,
+    "encodedBodySize": 1003,
+    "duration": 155
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/salmon-orzo-with-dill-and-capers-for-two?_rsc=hQon4vHP8CY8WHe_",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 158
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/salmon-orzo-with-dill-and-capers-for-two?_rsc=NeVFmG89ra-at98L",
+    "initiatorType": "fetch",
+    "transferSize": 32716,
+    "encodedBodySize": 32416,
+    "duration": 159
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/creamy-parmesan-garlic-chicken-orzo-for-two?_rsc=sFKMzk_48WBZbgMG",
+    "initiatorType": "fetch",
+    "transferSize": 1341,
+    "encodedBodySize": 1041,
+    "duration": 155
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/creamy-parmesan-garlic-chicken-orzo-for-two?_rsc=hQon4vHP8CY8WHe_",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 157
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/creamy-parmesan-garlic-chicken-orzo-for-two?_rsc=NeVFmG89ra-at98L",
+    "initiatorType": "fetch",
+    "transferSize": 27154,
+    "encodedBodySize": 26854,
+    "duration": 165
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/mediterranean-chicken-orzo-with-feta-olives-for-two?_rsc=sFKMzk_48WBZbgMG",
+    "initiatorType": "fetch",
+    "transferSize": 1275,
+    "encodedBodySize": 975,
+    "duration": 157
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/mediterranean-chicken-orzo-with-feta-olives-for-two?_rsc=hQon4vHP8CY8WHe_",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 158
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/mediterranean-chicken-orzo-with-feta-olives-for-two?_rsc=NeVFmG89ra-at98L",
+    "initiatorType": "fetch",
+    "transferSize": 31696,
+    "encodedBodySize": 31396,
+    "duration": 159
+   }
+  ],
+  "responses": [
+   {
+    "url": "https://www.chefaugustin.com/",
+    "status": 200,
+    "type": "document",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412672%2Frecipes%2FMediterranean-Chicken-Orzo-with-Feta-Olives-for-Two.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "44624",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/03g70739w6gu8.css",
+    "status": 200,
+    "type": "stylesheet",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/2swnbtkp595hv.css",
+    "status": 200,
+    "type": "stylesheet",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/0dp29ey5xybb3.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/2j0ntnypuz51a.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/0gp5ktsgx8lyg.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2",
+    "status": 200,
+    "type": "font",
+    "clen": "38460",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+    "status": 200,
+    "type": "font",
+    "clen": "29288",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/3nw5lwt6vl5ga.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/turbopack-13ka30-f30mg3.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/3g05-ar7q__dz.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/0mk1g55o6kl1e.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/2im7c515bo69p.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/1omor3m3y0zsq.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/0_07l6gn0pv9m.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/2b0b2zs_4oevf.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412873%2Frecipes%2FGarlic-Shrimp-Orzo-with-Cherry-Tomatoes-for-Two.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "46935",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410413%2Frecipes%2F30-Minute%2520Summer%2520Herb%2520Chicken%2520Orzo%2520with%2520Zucchini%2520for%2520Two.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "53606",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412767%2Frecipes%2F30-Minute-One-Pan-Lemon-Garlic-Chicken-for-Two.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "40559",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412317%2Frecipes%2F25-Minute%2520One-Pan%2520Garlic%2520Herb%2520Chicken%2520for%2520Two.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "35720",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410300%2Frecipes%2F30-Minute%2520Creamy%2520Parmesan%2520Garlic%2520Chicken%2520Orzo%2520for%2520Two.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "52550",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412720%2Frecipes%2F35-Minute-One-Skillet-Chicken-and-Rice-for-Two.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "49243",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412254%2Frecipes%2F40-Minute%2520White%2520Wine%2520Lemon%2520Chicken%2520Orzo%2520for%2520Two.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "41402",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412815%2Frecipes%2FSalmon-Orzo-with-Dill-and-Capers-for-Two.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "45891",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410533%2Frecipes%2FOne-Pan%2520Baked%2520Ziti%2520for%2520Two%2520%2528Romantic%2520Date%2520Night%2520Dinner%2529.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "33438",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/privacy?_rsc=5CB68i4pnAekjehf",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes?_rsc=5CB68i4pnAekjehf",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/dashboard?_rsc=5CB68i4pnAekjehf",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/about?_rsc=5CB68i4pnAekjehf",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/1kk82h9c5vcvo.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/2rzo76-zrob7j.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/27v892mm1t8sz.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/techniques?_rsc=5CB68i4pnAekjehf",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes?_rsc=7h4NYy5eoyMcNlUN",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/guides?_rsc=5CB68i4pnAekjehf",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes?_rsc=yIp22O3xgPPxC28X",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_vercel/insights/script.js",
+    "status": 404,
+    "type": "script",
+    "clen": null,
+    "cache": null,
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes?_rsc=2DPgbq-ctFzwwlU9",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/dashboard?_rsc=tXyZJ52UQVBCVsD3",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/about?_rsc=7h4NYy5eoyMcNlUN",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes?_rsc=4fc7r-vQPMNNTfNI",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/2y1-wlbg6q4wq.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/0y_3jbthxiolz.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/about?_rsc=n4tDNspjD4yS_Xnd",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/guides?_rsc=7h4NYy5eoyMcNlUN",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/about?_rsc=hzcUC6YqarYE9pKE",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/guides?_rsc=dAdXdQJ-omyvBoKl",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/techniques?_rsc=WtWM-1ME3abIUEJl",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/guides?_rsc=gYCxHVIPHgSY50lU",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/techniques?_rsc=7h4NYy5eoyMcNlUN",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/techniques?_rsc=ty88TX0wnAIhsArs",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/?_rsc=7h4NYy5eoyMcNlUN",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/40hxdvqwxc3fb.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/privacy?_rsc=7h4NYy5eoyMcNlUN",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/?_rsc=8nTjltbQWvg6NcbE",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/privacy?_rsc=3XDUVntrE9f2g4uy",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/privacy?_rsc=HrEtqPkwiCQvqKeY",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/02_vi0um-b7tv.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410049%2Frecipes%2FSmall-Batch%2520Edible%2520Cookie%2520Dough%2520for%2520Two.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "16724",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412191%2Frecipes%2F30-Minute%2520Lemon%2520Butter%2520Chicken%2520Pasta%2520for%2520Two.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "60218",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410355%2Frecipes%2FOne-Sheet-Pan%2520Easter%2520Dinner%2520for%2520Two%3A%2520Herb-Crusted%2520Lamb%2520Chops%2520with%2520Spring%2520Vegetables.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "49424",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410165%2Frecipes%2FGarlic%2520Butter%2520Chicken%2520Bites%2520with%2520Blistered%2520Tomatoes%2520and%2520Saut%25C3%25A9ed%2520Spinach.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "41889",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785339290%2Frecipes%2FSheet%2520Pan%2520Thanksgiving%2520Dinner%2520for%2520Two%2520with%2520Herb-Roasted%2520Chicken-v0.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "58232",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785339257%2Frecipes%2F25-Minute%2520Pan-Seared%2520Chicken%2520with%2520Herb-Butter%2520Pan%2520Sauce%2520for%2520Two-v0.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "34976",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785338939%2Frecipes%2FUntitled-v0.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "21788",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785337154%2Frecipes%2FOne-Pan%2520Ground%2520Beef%2520and%2520Tomato%2520Rice%2520Skillet%3A%2520Your%2520Easy%2520Week%2520of%2520Meals%2520Starts%2520Here-v0.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "46203",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785337430%2Frecipes%2FUntitled-v0.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "21788",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785239176%2Frecipes%2F4-Ingredient%2520Feta%2520Brine%2520Chicken%2520Breast%2520for%2520Two-v0.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "31077",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785336597%2Frecipes%2FPan-Seared%2520Chicken%2520Breast%2520with%2520Creamy%2520Tomato%2520Garlic%2520Pasta%2520for%2520Two-v0.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "43725",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785168380%2Frecipes%2F2-Quart%2520Slow%2520Cooker%2520Chicken%2520and%2520Gravy%2520for%2520Two-v0.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "27596",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785174295%2Frecipes%2FChocolate%2520Chip%2520Cookies%2520for%2520Two%3A%2520Small-Batch%252C%2520Ready%2520in%2520Under%252030%2520Minutes-v0.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "31914",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785238516%2Frecipes%2FEasy%2520Mexican%2520Dinner%2520for%2520Two%3A%2520One-Pan%2520Chicken%2520Enchilada%2520Skillet-v0.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "46600",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/garlic-shrimp-orzo-with-cherry-tomatoes-for-two?_rsc=9kI010RZ6VLPt0i7",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785167193%2Frecipes%2FChicken%2520Pot%2520Pie%2520for%2520Two%2520with%2520a%2520Flaky%2520Puff%2520Pastry%2520Lid-v0.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "22165",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785173440%2Frecipes%2FMolten%2520Chocolate%2520Lava%2520Cakes%2520for%2520Two%2520%252825-Minute%2520Dessert%2520for%2520Two%2529-v0.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "28828",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/summer-herb-chicken-orzo-with-zucchini-for-two?_rsc=9kI010RZ6VLPt0i7",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785166653%2Frecipes%2FPan-Seared%2520Steak%2520Dinner%2520for%2520Two%2520with%2520Garlic%2520Butter%2520and%2520Blistered%2520Green%2520Beans-v0.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "38651",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/salmon-orzo-with-dill-and-capers-for-two?_rsc=9kI010RZ6VLPt0i7",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/white-wine-lemon-chicken-orzo-for-two?_rsc=9kI010RZ6VLPt0i7",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/creamy-parmesan-garlic-chicken-orzo-for-two?_rsc=9kI010RZ6VLPt0i7",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/mediterranean-chicken-orzo-with-feta-olives-for-two?_rsc=9kI010RZ6VLPt0i7",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/summer-herb-chicken-orzo-with-zucchini-for-two?_rsc=sFKMzk_48WBZbgMG",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/summer-herb-chicken-orzo-with-zucchini-for-two?_rsc=hQon4vHP8CY8WHe_",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/garlic-shrimp-orzo-with-cherry-tomatoes-for-two?_rsc=sFKMzk_48WBZbgMG",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/summer-herb-chicken-orzo-with-zucchini-for-two?_rsc=NeVFmG89ra-at98L",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/garlic-shrimp-orzo-with-cherry-tomatoes-for-two?_rsc=hQon4vHP8CY8WHe_",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/garlic-shrimp-orzo-with-cherry-tomatoes-for-two?_rsc=NeVFmG89ra-at98L",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/white-wine-lemon-chicken-orzo-for-two?_rsc=sFKMzk_48WBZbgMG",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/white-wine-lemon-chicken-orzo-for-two?_rsc=hQon4vHP8CY8WHe_",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/salmon-orzo-with-dill-and-capers-for-two?_rsc=sFKMzk_48WBZbgMG",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/white-wine-lemon-chicken-orzo-for-two?_rsc=NeVFmG89ra-at98L",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/3alpi4p0fpygj.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/salmon-orzo-with-dill-and-capers-for-two?_rsc=hQon4vHP8CY8WHe_",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/salmon-orzo-with-dill-and-capers-for-two?_rsc=NeVFmG89ra-at98L",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/creamy-parmesan-garlic-chicken-orzo-for-two?_rsc=sFKMzk_48WBZbgMG",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/creamy-parmesan-garlic-chicken-orzo-for-two?_rsc=hQon4vHP8CY8WHe_",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/09wusrrwhn0jp.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/38_1_780l08sg.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/mediterranean-chicken-orzo-with-feta-olives-for-two?_rsc=sFKMzk_48WBZbgMG",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/mediterranean-chicken-orzo-with-feta-olives-for-two?_rsc=hQon4vHP8CY8WHe_",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/creamy-parmesan-garlic-chicken-orzo-for-two?_rsc=NeVFmG89ra-at98L",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/mediterranean-chicken-orzo-with-feta-olives-for-two?_rsc=NeVFmG89ra-at98L",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   }
+  ],
+  "by_type": {
+   "link": {
+    "count": 6,
+    "bytes": 141922,
+    "time": 2032
+   },
+   "script": {
+    "count": 21,
+    "bytes": 386830,
+    "time": 8033
+   },
+   "img": {
+    "count": 26,
+    "bytes": 1028942,
+    "time": 12318
+   },
+   "fetch": {
+    "count": 49,
+    "bytes": 266874,
+    "time": 10339
+   }
+  },
+  "by_host": {
+   "www.chefaugustin.com": {
+    "count": 102,
+    "bytes": 1824568
+   }
+  },
+  "third_party_hosts": {}
+ },
+ {
+  "name": "recipe-mobile-throttled",
+  "requested_url": "https://www.chefaugustin.com/recipes/easy-chicken-rice-bowls-for-two",
+  "final_url": "https://www.chefaugustin.com/recipes/easy-chicken-rice-bowls-for-two#article-body",
+  "title": "Garlic Butter Chicken Rice Bowls for Two | Chef Augustin",
+  "challenge_persisted": false,
+  "wall_s": 2.1,
+  "lcp_ms": 2476,
+  "fcp_ms": 0,
+  "ttfb_ms": 256,
+  "cls": 0.0253,
+  "dom_content_loaded_ms": 2111,
+  "load_ms": 3061,
+  "inp_approx_ms": 221,
+  "inp_event_type": "pointerdown",
+  "event_count": 18,
+  "longtask_count": 5,
+  "tbt_ms": 411,
+  "longtasks": [
+   {
+    "start": 2303,
+    "dur": 125
+   },
+   {
+    "start": 2782,
+    "dur": 244
+   },
+   {
+    "start": 3292,
+    "dur": 85
+   },
+   {
+    "start": 3419,
+    "dur": 70
+   },
+   {
+    "start": 3501,
+    "dur": 137
+   }
+  ],
+  "dom_scripts": 62,
+  "dom_links": 9,
+  "dom_imgs": 7,
+  "dom_inline_styles": 2,
+  "imgs_nodim": 7,
+  "imgs_lazy": 6,
+  "imgs_nolazy": 1,
+  "clicks": 6,
+  "resources": [
+   {
+    "name": "https://www.chefaugustin.com/_next/static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2",
+    "initiatorType": "link",
+    "transferSize": 38760,
+    "encodedBodySize": 38460,
+    "duration": 2009
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+    "initiatorType": "link",
+    "transferSize": 29588,
+    "encodedBodySize": 29288,
+    "duration": 1779
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785149091%2Frecipes%2FEasy%2520Lunch%2520Recipes%3A%252015-Minute%2520Garlic%2520Butter%2520Chicken%2520Rice%2520Bowls%2520for%2520Two-v0.png&w=640&q=75",
+    "initiatorType": "link",
+    "transferSize": 27861,
+    "encodedBodySize": 27561,
+    "duration": 1828
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/2swnbtkp595hv.css",
+    "initiatorType": "link",
+    "transferSize": 1311,
+    "encodedBodySize": 1011,
+    "duration": 204
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/03g70739w6gu8.css",
+    "initiatorType": "link",
+    "transferSize": 24834,
+    "encodedBodySize": 24534,
+    "duration": 1697
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/0dp29ey5xybb3.js",
+    "initiatorType": "link",
+    "transferSize": 2505,
+    "encodedBodySize": 2205,
+    "duration": 374
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/2j0ntnypuz51a.js",
+    "initiatorType": "script",
+    "transferSize": 11617,
+    "encodedBodySize": 11317,
+    "duration": 1125
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/3nw5lwt6vl5ga.js",
+    "initiatorType": "script",
+    "transferSize": 94743,
+    "encodedBodySize": 94443,
+    "duration": 2484
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/0gp5ktsgx8lyg.js",
+    "initiatorType": "script",
+    "transferSize": 14033,
+    "encodedBodySize": 13733,
+    "duration": 1332
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/0mk1g55o6kl1e.js",
+    "initiatorType": "script",
+    "transferSize": 53620,
+    "encodedBodySize": 53320,
+    "duration": 2255
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/turbopack-13ka30-f30mg3.js",
+    "initiatorType": "script",
+    "transferSize": 5227,
+    "encodedBodySize": 4927,
+    "duration": 693
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/3g05-ar7q__dz.js",
+    "initiatorType": "script",
+    "transferSize": 7866,
+    "encodedBodySize": 7566,
+    "duration": 907
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/2im7c515bo69p.js",
+    "initiatorType": "script",
+    "transferSize": 19181,
+    "encodedBodySize": 18881,
+    "duration": 1537
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/1omor3m3y0zsq.js",
+    "initiatorType": "script",
+    "transferSize": 10838,
+    "encodedBodySize": 10538,
+    "duration": 1157
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/0_07l6gn0pv9m.js",
+    "initiatorType": "script",
+    "transferSize": 10775,
+    "encodedBodySize": 10475,
+    "duration": 1193
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/3alpi4p0fpygj.js",
+    "initiatorType": "script",
+    "transferSize": 12967,
+    "encodedBodySize": 12667,
+    "duration": 1278
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/09wusrrwhn0jp.js",
+    "initiatorType": "script",
+    "transferSize": 23538,
+    "encodedBodySize": 23238,
+    "duration": 1728
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/38_1_780l08sg.js",
+    "initiatorType": "script",
+    "transferSize": 57680,
+    "encodedBodySize": 57380,
+    "duration": 2299
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/2y1-wlbg6q4wq.js",
+    "initiatorType": "script",
+    "transferSize": 6621,
+    "encodedBodySize": 6321,
+    "duration": 855
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410165%2Frecipes%2FGarlic%2520Butter%2520Chicken%2520Bites%2520with%2520Blistered%2520Tomatoes%2520and%2520Saut%25C3%25A9ed%2520Spinach.png&w=256&q=75",
+    "initiatorType": "img",
+    "transferSize": 12322,
+    "encodedBodySize": 12022,
+    "duration": 565
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412254%2Frecipes%2F40-Minute%2520White%2520Wine%2520Lemon%2520Chicken%2520Orzo%2520for%2520Two.png&w=256&q=75",
+    "initiatorType": "img",
+    "transferSize": 12053,
+    "encodedBodySize": 11753,
+    "duration": 536
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/1kk82h9c5vcvo.js",
+    "initiatorType": "script",
+    "transferSize": 1947,
+    "encodedBodySize": 1647,
+    "duration": 456
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/2rzo76-zrob7j.js",
+    "initiatorType": "script",
+    "transferSize": 12353,
+    "encodedBodySize": 12053,
+    "duration": 531
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/27v892mm1t8sz.js",
+    "initiatorType": "script",
+    "transferSize": 2077,
+    "encodedBodySize": 1777,
+    "duration": 467
+   },
+   {
+    "name": "https://www.chefaugustin.com/privacy?_rsc=NU1WL4d4t0qmTlMG",
+    "initiatorType": "fetch",
+    "transferSize": 622,
+    "encodedBodySize": 322,
+    "duration": 173
+   },
+   {
+    "name": "https://www.chefaugustin.com/privacy?_rsc=YpkqtfzkV12cLQPO",
+    "initiatorType": "fetch",
+    "transferSize": 1304,
+    "encodedBodySize": 1004,
+    "duration": 189
+   },
+   {
+    "name": "https://www.chefaugustin.com/privacy?_rsc=7ufrQojmQeWiSyRL",
+    "initiatorType": "fetch",
+    "transferSize": 5420,
+    "encodedBodySize": 5120,
+    "duration": 207
+   },
+   {
+    "name": "https://www.chefaugustin.com/privacy?_rsc=x43216CG-fYzgB_4",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 457
+   },
+   {
+    "name": "https://www.chefaugustin.com/privacy?_rsc=zSaFeXmBXgYnfAay",
+    "initiatorType": "fetch",
+    "transferSize": 5744,
+    "encodedBodySize": 5444,
+    "duration": 483
+   },
+   {
+    "name": "https://www.chefaugustin.com/_vercel/insights/script.js",
+    "initiatorType": "script",
+    "transferSize": 300,
+    "encodedBodySize": 0,
+    "duration": 275
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/02_vi0um-b7tv.js",
+    "initiatorType": "script",
+    "transferSize": 3154,
+    "encodedBodySize": 2854,
+    "duration": 225
+   },
+   {
+    "name": "https://www.chefaugustin.com/about?_rsc=NU1WL4d4t0qmTlMG",
+    "initiatorType": "fetch",
+    "transferSize": 621,
+    "encodedBodySize": 321,
+    "duration": 191
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=NU1WL4d4t0qmTlMG",
+    "initiatorType": "fetch",
+    "transferSize": 687,
+    "encodedBodySize": 387,
+    "duration": 190
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes?_rsc=NU1WL4d4t0qmTlMG",
+    "initiatorType": "fetch",
+    "transferSize": 622,
+    "encodedBodySize": 322,
+    "duration": 170
+   },
+   {
+    "name": "https://www.chefaugustin.com/?_rsc=NU1WL4d4t0qmTlMG",
+    "initiatorType": "fetch",
+    "transferSize": 612,
+    "encodedBodySize": 312,
+    "duration": 171
+   },
+   {
+    "name": "https://www.chefaugustin.com/about?_rsc=YpkqtfzkV12cLQPO",
+    "initiatorType": "fetch",
+    "transferSize": 1233,
+    "encodedBodySize": 933,
+    "duration": 165
+   },
+   {
+    "name": "https://www.chefaugustin.com/about?_rsc=Ys8gtUS2Q7WE-hnb",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 174
+   },
+   {
+    "name": "https://www.chefaugustin.com/about?_rsc=5QaZGsP62gror6M2",
+    "initiatorType": "fetch",
+    "transferSize": 6165,
+    "encodedBodySize": 5865,
+    "duration": 206
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=YpkqtfzkV12cLQPO",
+    "initiatorType": "fetch",
+    "transferSize": 1305,
+    "encodedBodySize": 1005,
+    "duration": 178
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=vVVR_NtDcBLijHxp",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 185
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=39nS4MgwUoB9AYaf",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 171
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=P03JTz6KCMVx7uj5",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 171
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=-ZJ62r1qIRRCJp5f",
+    "initiatorType": "fetch",
+    "transferSize": 11030,
+    "encodedBodySize": 10730,
+    "duration": 258
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes?_rsc=YpkqtfzkV12cLQPO",
+    "initiatorType": "fetch",
+    "transferSize": 1199,
+    "encodedBodySize": 899,
+    "duration": 172
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes?_rsc=f0P70CQPaFB-E2c2",
+    "initiatorType": "fetch",
+    "transferSize": 20688,
+    "encodedBodySize": 20388,
+    "duration": 300
+   },
+   {
+    "name": "https://www.chefaugustin.com/?_rsc=YpkqtfzkV12cLQPO",
+    "initiatorType": "fetch",
+    "transferSize": 1230,
+    "encodedBodySize": 930,
+    "duration": 171
+   },
+   {
+    "name": "https://www.chefaugustin.com/?_rsc=Kmydaq6VwPmBTrEI",
+    "initiatorType": "fetch",
+    "transferSize": 13010,
+    "encodedBodySize": 12710,
+    "duration": 230
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/1xwjdagz39tq0.js",
+    "initiatorType": "script",
+    "transferSize": 11882,
+    "encodedBodySize": 11582,
+    "duration": 235
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/0y_3jbthxiolz.js",
+    "initiatorType": "script",
+    "transferSize": 12997,
+    "encodedBodySize": 12697,
+    "duration": 229
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/2b0b2zs_4oevf.js",
+    "initiatorType": "script",
+    "transferSize": 15269,
+    "encodedBodySize": 14969,
+    "duration": 244
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785238516%2Frecipes%2FEasy%2520Mexican%2520Dinner%2520for%2520Two%3A%2520One-Pan%2520Chicken%2520Enchilada%2520Skillet-v0.png&w=256&q=75",
+    "initiatorType": "img",
+    "transferSize": 14359,
+    "encodedBodySize": 14059,
+    "duration": 235
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412317%2Frecipes%2F25-Minute%2520One-Pan%2520Garlic%2520Herb%2520Chicken%2520for%2520Two.png&w=256&q=75",
+    "initiatorType": "img",
+    "transferSize": 11166,
+    "encodedBodySize": 10866,
+    "duration": 220
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412672%2Frecipes%2FMediterranean-Chicken-Orzo-with-Feta-Olives-for-Two.png&w=256&q=75",
+    "initiatorType": "img",
+    "transferSize": 14544,
+    "encodedBodySize": 14244,
+    "duration": 266
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410300%2Frecipes%2F30-Minute%2520Creamy%2520Parmesan%2520Garlic%2520Chicken%2520Orzo%2520for%2520Two.png&w=256&q=75",
+    "initiatorType": "img",
+    "transferSize": 14089,
+    "encodedBodySize": 13789,
+    "duration": 275
+   },
+   {
+    "name": "https://www.chefaugustin.com/dashboard?_rsc=NU1WL4d4t0qmTlMG",
+    "initiatorType": "fetch",
+    "transferSize": 462,
+    "encodedBodySize": 162,
+    "duration": 178
+   },
+   {
+    "name": "https://www.chefaugustin.com/guides?_rsc=NU1WL4d4t0qmTlMG",
+    "initiatorType": "fetch",
+    "transferSize": 622,
+    "encodedBodySize": 322,
+    "duration": 183
+   },
+   {
+    "name": "https://www.chefaugustin.com/techniques?_rsc=NU1WL4d4t0qmTlMG",
+    "initiatorType": "fetch",
+    "transferSize": 622,
+    "encodedBodySize": 322,
+    "duration": 189
+   },
+   {
+    "name": "https://www.chefaugustin.com/dashboard?_rsc=nabzxsOAdjTvWpXB",
+    "initiatorType": "fetch",
+    "transferSize": 1582,
+    "encodedBodySize": 1282,
+    "duration": 184
+   },
+   {
+    "name": "https://www.chefaugustin.com/guides?_rsc=YpkqtfzkV12cLQPO",
+    "initiatorType": "fetch",
+    "transferSize": 1239,
+    "encodedBodySize": 939,
+    "duration": 189
+   },
+   {
+    "name": "https://www.chefaugustin.com/guides?_rsc=FlvblO_ETKcl7XiU",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 181
+   },
+   {
+    "name": "https://www.chefaugustin.com/guides?_rsc=yVFhRfMi1GgroQD2",
+    "initiatorType": "fetch",
+    "transferSize": 4255,
+    "encodedBodySize": 3955,
+    "duration": 202
+   },
+   {
+    "name": "https://www.chefaugustin.com/techniques?_rsc=YpkqtfzkV12cLQPO",
+    "initiatorType": "fetch",
+    "transferSize": 1241,
+    "encodedBodySize": 941,
+    "duration": 170
+   },
+   {
+    "name": "https://www.chefaugustin.com/techniques?_rsc=XBI75jyAzlPzxKF-",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 168
+   },
+   {
+    "name": "https://www.chefaugustin.com/techniques?_rsc=cWOflyui3J2tqItX",
+    "initiatorType": "fetch",
+    "transferSize": 4326,
+    "encodedBodySize": 4026,
+    "duration": 183
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/40hxdvqwxc3fb.js",
+    "initiatorType": "script",
+    "transferSize": 10027,
+    "encodedBodySize": 9727,
+    "duration": 213
+   }
+  ],
+  "responses": [
+   {
+    "url": "https://www.chefaugustin.com/recipes/easy-chicken-rice-bowls-for-two",
+    "status": 200,
+    "type": "document",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/2swnbtkp595hv.css",
+    "status": 200,
+    "type": "stylesheet",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/03g70739w6gu8.css",
+    "status": 200,
+    "type": "stylesheet",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785149091%2Frecipes%2FEasy%2520Lunch%2520Recipes%3A%252015-Minute%2520Garlic%2520Butter%2520Chicken%2520Rice%2520Bowls%2520for%2520Two-v0.png&w=640&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "27561",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/0dp29ey5xybb3.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/turbopack-13ka30-f30mg3.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/2y1-wlbg6q4wq.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/3g05-ar7q__dz.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/2j0ntnypuz51a.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/1omor3m3y0zsq.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/0_07l6gn0pv9m.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/3alpi4p0fpygj.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/0gp5ktsgx8lyg.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/2im7c515bo69p.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/09wusrrwhn0jp.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+    "status": 200,
+    "type": "font",
+    "clen": "29288",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2",
+    "status": 200,
+    "type": "font",
+    "clen": "38460",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/0mk1g55o6kl1e.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/38_1_780l08sg.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/3nw5lwt6vl5ga.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412254%2Frecipes%2F40-Minute%2520White%2520Wine%2520Lemon%2520Chicken%2520Orzo%2520for%2520Two.png&w=256&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "11753",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410165%2Frecipes%2FGarlic%2520Butter%2520Chicken%2520Bites%2520with%2520Blistered%2520Tomatoes%2520and%2520Saut%25C3%25A9ed%2520Spinach.png&w=256&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "12022",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/privacy?_rsc=NU1WL4d4t0qmTlMG",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/1kk82h9c5vcvo.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/27v892mm1t8sz.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/2rzo76-zrob7j.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/privacy?_rsc=7ufrQojmQeWiSyRL",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/privacy?_rsc=YpkqtfzkV12cLQPO",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/about?_rsc=NU1WL4d4t0qmTlMG",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_vercel/insights/script.js",
+    "status": 404,
+    "type": "script",
+    "clen": null,
+    "cache": null,
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=NU1WL4d4t0qmTlMG",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/02_vi0um-b7tv.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/privacy?_rsc=x43216CG-fYzgB_4",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/privacy?_rsc=zSaFeXmBXgYnfAay",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes?_rsc=NU1WL4d4t0qmTlMG",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/?_rsc=NU1WL4d4t0qmTlMG",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/about?_rsc=YpkqtfzkV12cLQPO",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/about?_rsc=Ys8gtUS2Q7WE-hnb",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/about?_rsc=5QaZGsP62gror6M2",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=YpkqtfzkV12cLQPO",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=vVVR_NtDcBLijHxp",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=39nS4MgwUoB9AYaf",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=P03JTz6KCMVx7uj5",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=-ZJ62r1qIRRCJp5f",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes?_rsc=YpkqtfzkV12cLQPO",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes?_rsc=f0P70CQPaFB-E2c2",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/?_rsc=YpkqtfzkV12cLQPO",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/?_rsc=Kmydaq6VwPmBTrEI",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/1xwjdagz39tq0.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/0y_3jbthxiolz.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/2b0b2zs_4oevf.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785238516%2Frecipes%2FEasy%2520Mexican%2520Dinner%2520for%2520Two%3A%2520One-Pan%2520Chicken%2520Enchilada%2520Skillet-v0.png&w=256&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "14059",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412317%2Frecipes%2F25-Minute%2520One-Pan%2520Garlic%2520Herb%2520Chicken%2520for%2520Two.png&w=256&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "10866",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412672%2Frecipes%2FMediterranean-Chicken-Orzo-with-Feta-Olives-for-Two.png&w=256&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "14244",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410300%2Frecipes%2F30-Minute%2520Creamy%2520Parmesan%2520Garlic%2520Chicken%2520Orzo%2520for%2520Two.png&w=256&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "13789",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/dashboard?_rsc=NU1WL4d4t0qmTlMG",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/guides?_rsc=NU1WL4d4t0qmTlMG",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/techniques?_rsc=NU1WL4d4t0qmTlMG",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/dashboard?_rsc=nabzxsOAdjTvWpXB",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/guides?_rsc=YpkqtfzkV12cLQPO",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/guides?_rsc=FlvblO_ETKcl7XiU",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/guides?_rsc=yVFhRfMi1GgroQD2",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/techniques?_rsc=YpkqtfzkV12cLQPO",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/techniques?_rsc=XBI75jyAzlPzxKF-",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/techniques?_rsc=cWOflyui3J2tqItX",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/40hxdvqwxc3fb.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   }
+  ],
+  "by_type": {
+   "link": {
+    "count": 6,
+    "bytes": 124859,
+    "time": 7891
+   },
+   "script": {
+    "count": 22,
+    "bytes": 398712,
+    "time": 21718
+   },
+   "img": {
+    "count": 6,
+    "bytes": 78533,
+    "time": 2097
+   },
+   "fetch": {
+    "count": 31,
+    "bytes": 89922,
+    "time": 6439
+   }
+  },
+  "by_host": {
+   "www.chefaugustin.com": {
+    "count": 65,
+    "bytes": 692026
+   }
+  },
+  "third_party_hosts": {}
+ },
+ {
+  "name": "recipe-desktop",
+  "requested_url": "https://www.chefaugustin.com/recipes/easy-chicken-rice-bowls-for-two",
+  "final_url": "https://www.chefaugustin.com/recipes/easy-chicken-rice-bowls-for-two#article-body",
+  "title": "Garlic Butter Chicken Rice Bowls for Two | Chef Augustin",
+  "challenge_persisted": false,
+  "wall_s": 1.3,
+  "lcp_ms": 1340,
+  "fcp_ms": 0,
+  "ttfb_ms": 531,
+  "cls": 0,
+  "dom_content_loaded_ms": 1320,
+  "load_ms": 1490,
+  "inp_approx_ms": 176,
+  "inp_event_type": "pointerdown",
+  "event_count": 15,
+  "longtask_count": 1,
+  "tbt_ms": 2,
+  "longtasks": [
+   {
+    "start": 1423,
+    "dur": 52
+   }
+  ],
+  "dom_scripts": 62,
+  "dom_links": 9,
+  "dom_imgs": 7,
+  "dom_inline_styles": 2,
+  "imgs_nodim": 7,
+  "imgs_lazy": 6,
+  "imgs_nolazy": 1,
+  "clicks": 6,
+  "resources": [
+   {
+    "name": "https://www.chefaugustin.com/_next/static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2",
+    "initiatorType": "link",
+    "transferSize": 38760,
+    "encodedBodySize": 38460,
+    "duration": 595
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+    "initiatorType": "link",
+    "transferSize": 29588,
+    "encodedBodySize": 29288,
+    "duration": 597
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785149091%2Frecipes%2FEasy%2520Lunch%2520Recipes%3A%252015-Minute%2520Garlic%2520Butter%2520Chicken%2520Rice%2520Bowls%2520for%2520Two-v0.png&w=768&q=75",
+    "initiatorType": "link",
+    "transferSize": 35225,
+    "encodedBodySize": 34925,
+    "duration": 580
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/2swnbtkp595hv.css",
+    "initiatorType": "link",
+    "transferSize": 1311,
+    "encodedBodySize": 1011,
+    "duration": 444
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/03g70739w6gu8.css",
+    "initiatorType": "link",
+    "transferSize": 24834,
+    "encodedBodySize": 24534,
+    "duration": 597
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/0dp29ey5xybb3.js",
+    "initiatorType": "link",
+    "transferSize": 2505,
+    "encodedBodySize": 2205,
+    "duration": 447
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/2j0ntnypuz51a.js",
+    "initiatorType": "script",
+    "transferSize": 11617,
+    "encodedBodySize": 11317,
+    "duration": 473
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/0mk1g55o6kl1e.js",
+    "initiatorType": "script",
+    "transferSize": 53620,
+    "encodedBodySize": 53320,
+    "duration": 589
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/3nw5lwt6vl5ga.js",
+    "initiatorType": "script",
+    "transferSize": 94743,
+    "encodedBodySize": 94443,
+    "duration": 742
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/0gp5ktsgx8lyg.js",
+    "initiatorType": "script",
+    "transferSize": 14033,
+    "encodedBodySize": 13733,
+    "duration": 457
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/turbopack-13ka30-f30mg3.js",
+    "initiatorType": "script",
+    "transferSize": 5227,
+    "encodedBodySize": 4927,
+    "duration": 482
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/3g05-ar7q__dz.js",
+    "initiatorType": "script",
+    "transferSize": 7866,
+    "encodedBodySize": 7566,
+    "duration": 489
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/2im7c515bo69p.js",
+    "initiatorType": "script",
+    "transferSize": 19181,
+    "encodedBodySize": 18881,
+    "duration": 604
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/1omor3m3y0zsq.js",
+    "initiatorType": "script",
+    "transferSize": 10838,
+    "encodedBodySize": 10538,
+    "duration": 496
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/0_07l6gn0pv9m.js",
+    "initiatorType": "script",
+    "transferSize": 10775,
+    "encodedBodySize": 10475,
+    "duration": 499
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/3alpi4p0fpygj.js",
+    "initiatorType": "script",
+    "transferSize": 12967,
+    "encodedBodySize": 12667,
+    "duration": 501
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/09wusrrwhn0jp.js",
+    "initiatorType": "script",
+    "transferSize": 23538,
+    "encodedBodySize": 23238,
+    "duration": 609
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/38_1_780l08sg.js",
+    "initiatorType": "script",
+    "transferSize": 57680,
+    "encodedBodySize": 57380,
+    "duration": 762
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/2y1-wlbg6q4wq.js",
+    "initiatorType": "script",
+    "transferSize": 6621,
+    "encodedBodySize": 6321,
+    "duration": 501
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/1kk82h9c5vcvo.js",
+    "initiatorType": "script",
+    "transferSize": 1947,
+    "encodedBodySize": 1647,
+    "duration": 194
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/2rzo76-zrob7j.js",
+    "initiatorType": "script",
+    "transferSize": 12353,
+    "encodedBodySize": 12053,
+    "duration": 179
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/27v892mm1t8sz.js",
+    "initiatorType": "script",
+    "transferSize": 2077,
+    "encodedBodySize": 1777,
+    "duration": 192
+   },
+   {
+    "name": "https://www.chefaugustin.com/privacy?_rsc=NU1WL4d4t0qmTlMG",
+    "initiatorType": "fetch",
+    "transferSize": 622,
+    "encodedBodySize": 322,
+    "duration": 181
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=NU1WL4d4t0qmTlMG",
+    "initiatorType": "fetch",
+    "transferSize": 687,
+    "encodedBodySize": 387,
+    "duration": 174
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes?_rsc=NU1WL4d4t0qmTlMG",
+    "initiatorType": "fetch",
+    "transferSize": 622,
+    "encodedBodySize": 322,
+    "duration": 174
+   },
+   {
+    "name": "https://www.chefaugustin.com/?_rsc=NU1WL4d4t0qmTlMG",
+    "initiatorType": "fetch",
+    "transferSize": 612,
+    "encodedBodySize": 312,
+    "duration": 174
+   },
+   {
+    "name": "https://www.chefaugustin.com/dashboard?_rsc=NU1WL4d4t0qmTlMG",
+    "initiatorType": "fetch",
+    "transferSize": 462,
+    "encodedBodySize": 162,
+    "duration": 169
+   },
+   {
+    "name": "https://www.chefaugustin.com/about?_rsc=NU1WL4d4t0qmTlMG",
+    "initiatorType": "fetch",
+    "transferSize": 621,
+    "encodedBodySize": 321,
+    "duration": 173
+   },
+   {
+    "name": "https://www.chefaugustin.com/guides?_rsc=NU1WL4d4t0qmTlMG",
+    "initiatorType": "fetch",
+    "transferSize": 622,
+    "encodedBodySize": 322,
+    "duration": 173
+   },
+   {
+    "name": "https://www.chefaugustin.com/techniques?_rsc=NU1WL4d4t0qmTlMG",
+    "initiatorType": "fetch",
+    "transferSize": 622,
+    "encodedBodySize": 322,
+    "duration": 172
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=YpkqtfzkV12cLQPO",
+    "initiatorType": "fetch",
+    "transferSize": 1305,
+    "encodedBodySize": 1005,
+    "duration": 171
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=7ufrQojmQeWiSyRL",
+    "initiatorType": "fetch",
+    "transferSize": 5423,
+    "encodedBodySize": 5123,
+    "duration": 171
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=vVVR_NtDcBLijHxp",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 173
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=39nS4MgwUoB9AYaf",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 171
+   },
+   {
+    "name": "https://www.chefaugustin.com/_vercel/insights/script.js",
+    "initiatorType": "script",
+    "transferSize": 300,
+    "encodedBodySize": 0,
+    "duration": 172
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=P03JTz6KCMVx7uj5",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 205
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/1xwjdagz39tq0.js",
+    "initiatorType": "script",
+    "transferSize": 11882,
+    "encodedBodySize": 11582,
+    "duration": 202
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=-ZJ62r1qIRRCJp5f",
+    "initiatorType": "fetch",
+    "transferSize": 11030,
+    "encodedBodySize": 10730,
+    "duration": 176
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes?_rsc=YpkqtfzkV12cLQPO",
+    "initiatorType": "fetch",
+    "transferSize": 1199,
+    "encodedBodySize": 899,
+    "duration": 195
+   },
+   {
+    "name": "https://www.chefaugustin.com/recipes?_rsc=f0P70CQPaFB-E2c2",
+    "initiatorType": "fetch",
+    "transferSize": 20688,
+    "encodedBodySize": 20388,
+    "duration": 169
+   },
+   {
+    "name": "https://www.chefaugustin.com/?_rsc=YpkqtfzkV12cLQPO",
+    "initiatorType": "fetch",
+    "transferSize": 1230,
+    "encodedBodySize": 930,
+    "duration": 177
+   },
+   {
+    "name": "https://www.chefaugustin.com/?_rsc=Kmydaq6VwPmBTrEI",
+    "initiatorType": "fetch",
+    "transferSize": 13010,
+    "encodedBodySize": 12710,
+    "duration": 174
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/0y_3jbthxiolz.js",
+    "initiatorType": "script",
+    "transferSize": 12997,
+    "encodedBodySize": 12697,
+    "duration": 174
+   },
+   {
+    "name": "https://www.chefaugustin.com/dashboard?_rsc=nabzxsOAdjTvWpXB",
+    "initiatorType": "fetch",
+    "transferSize": 1340,
+    "encodedBodySize": 1040,
+    "duration": 191
+   },
+   {
+    "name": "https://www.chefaugustin.com/about?_rsc=YpkqtfzkV12cLQPO",
+    "initiatorType": "fetch",
+    "transferSize": 1233,
+    "encodedBodySize": 933,
+    "duration": 301
+   },
+   {
+    "name": "https://www.chefaugustin.com/about?_rsc=Ys8gtUS2Q7WE-hnb",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 169
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/2b0b2zs_4oevf.js",
+    "initiatorType": "script",
+    "transferSize": 15269,
+    "encodedBodySize": 14969,
+    "duration": 452
+   },
+   {
+    "name": "https://www.chefaugustin.com/about?_rsc=5QaZGsP62gror6M2",
+    "initiatorType": "fetch",
+    "transferSize": 6165,
+    "encodedBodySize": 5865,
+    "duration": 170
+   },
+   {
+    "name": "https://www.chefaugustin.com/guides?_rsc=YpkqtfzkV12cLQPO",
+    "initiatorType": "fetch",
+    "transferSize": 1239,
+    "encodedBodySize": 939,
+    "duration": 341
+   },
+   {
+    "name": "https://www.chefaugustin.com/guides?_rsc=FlvblO_ETKcl7XiU",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 280
+   },
+   {
+    "name": "https://www.chefaugustin.com/guides?_rsc=yVFhRfMi1GgroQD2",
+    "initiatorType": "fetch",
+    "transferSize": 4255,
+    "encodedBodySize": 3955,
+    "duration": 278
+   },
+   {
+    "name": "https://www.chefaugustin.com/techniques?_rsc=YpkqtfzkV12cLQPO",
+    "initiatorType": "fetch",
+    "transferSize": 1241,
+    "encodedBodySize": 941,
+    "duration": 169
+   },
+   {
+    "name": "https://www.chefaugustin.com/techniques?_rsc=XBI75jyAzlPzxKF-",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 172
+   },
+   {
+    "name": "https://www.chefaugustin.com/techniques?_rsc=cWOflyui3J2tqItX",
+    "initiatorType": "fetch",
+    "transferSize": 4326,
+    "encodedBodySize": 4026,
+    "duration": 171
+   },
+   {
+    "name": "https://www.chefaugustin.com/privacy?_rsc=YpkqtfzkV12cLQPO",
+    "initiatorType": "fetch",
+    "transferSize": 1304,
+    "encodedBodySize": 1004,
+    "duration": 169
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/40hxdvqwxc3fb.js",
+    "initiatorType": "script",
+    "transferSize": 10027,
+    "encodedBodySize": 9727,
+    "duration": 168
+   },
+   {
+    "name": "https://www.chefaugustin.com/privacy?_rsc=x43216CG-fYzgB_4",
+    "initiatorType": "fetch",
+    "transferSize": 583,
+    "encodedBodySize": 283,
+    "duration": 166
+   },
+   {
+    "name": "https://www.chefaugustin.com/privacy?_rsc=zSaFeXmBXgYnfAay",
+    "initiatorType": "fetch",
+    "transferSize": 5744,
+    "encodedBodySize": 5444,
+    "duration": 168
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/static/chunks/02_vi0um-b7tv.js",
+    "initiatorType": "script",
+    "transferSize": 3154,
+    "encodedBodySize": 2854,
+    "duration": 166
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410165%2Frecipes%2FGarlic%2520Butter%2520Chicken%2520Bites%2520with%2520Blistered%2520Tomatoes%2520and%2520Saut%25C3%25A9ed%2520Spinach.png&w=384&q=75",
+    "initiatorType": "img",
+    "transferSize": 21235,
+    "encodedBodySize": 20935,
+    "duration": 571
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412254%2Frecipes%2F40-Minute%2520White%2520Wine%2520Lemon%2520Chicken%2520Orzo%2520for%2520Two.png&w=384&q=75",
+    "initiatorType": "img",
+    "transferSize": 20563,
+    "encodedBodySize": 20263,
+    "duration": 573
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785238516%2Frecipes%2FEasy%2520Mexican%2520Dinner%2520for%2520Two%3A%2520One-Pan%2520Chicken%2520Enchilada%2520Skillet-v0.png&w=384&q=75",
+    "initiatorType": "img",
+    "transferSize": 24077,
+    "encodedBodySize": 23777,
+    "duration": 570
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412317%2Frecipes%2F25-Minute%2520One-Pan%2520Garlic%2520Herb%2520Chicken%2520for%2520Two.png&w=384&q=75",
+    "initiatorType": "img",
+    "transferSize": 18761,
+    "encodedBodySize": 18461,
+    "duration": 586
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412672%2Frecipes%2FMediterranean-Chicken-Orzo-with-Feta-Olives-for-Two.png&w=384&q=75",
+    "initiatorType": "img",
+    "transferSize": 24651,
+    "encodedBodySize": 24351,
+    "duration": 569
+   },
+   {
+    "name": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410300%2Frecipes%2F30-Minute%2520Creamy%2520Parmesan%2520Garlic%2520Chicken%2520Orzo%2520for%2520Two.png&w=384&q=75",
+    "initiatorType": "img",
+    "transferSize": 24996,
+    "encodedBodySize": 24696,
+    "duration": 585
+   }
+  ],
+  "responses": [
+   {
+    "url": "https://www.chefaugustin.com/recipes/easy-chicken-rice-bowls-for-two",
+    "status": 200,
+    "type": "document",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/2swnbtkp595hv.css",
+    "status": 200,
+    "type": "stylesheet",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/0dp29ey5xybb3.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785149091%2Frecipes%2FEasy%2520Lunch%2520Recipes%3A%252015-Minute%2520Garlic%2520Butter%2520Chicken%2520Rice%2520Bowls%2520for%2520Two-v0.png&w=768&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "34925",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/0gp5ktsgx8lyg.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/03g70739w6gu8.css",
+    "status": 200,
+    "type": "stylesheet",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/2j0ntnypuz51a.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/turbopack-13ka30-f30mg3.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/3g05-ar7q__dz.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/1omor3m3y0zsq.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/0_07l6gn0pv9m.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/3alpi4p0fpygj.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/2y1-wlbg6q4wq.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/0mk1g55o6kl1e.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2",
+    "status": 200,
+    "type": "font",
+    "clen": "38460",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+    "status": 200,
+    "type": "font",
+    "clen": "29288",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/2im7c515bo69p.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/09wusrrwhn0jp.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/3nw5lwt6vl5ga.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/38_1_780l08sg.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/2rzo76-zrob7j.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/1kk82h9c5vcvo.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/privacy?_rsc=NU1WL4d4t0qmTlMG",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/27v892mm1t8sz.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=NU1WL4d4t0qmTlMG",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes?_rsc=NU1WL4d4t0qmTlMG",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/?_rsc=NU1WL4d4t0qmTlMG",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/dashboard?_rsc=NU1WL4d4t0qmTlMG",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/about?_rsc=NU1WL4d4t0qmTlMG",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/guides?_rsc=NU1WL4d4t0qmTlMG",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/techniques?_rsc=NU1WL4d4t0qmTlMG",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=YpkqtfzkV12cLQPO",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=7ufrQojmQeWiSyRL",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=39nS4MgwUoB9AYaf",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=vVVR_NtDcBLijHxp",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_vercel/insights/script.js",
+    "status": 404,
+    "type": "script",
+    "clen": null,
+    "cache": null,
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=-ZJ62r1qIRRCJp5f",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/1xwjdagz39tq0.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two?_rsc=P03JTz6KCMVx7uj5",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes?_rsc=f0P70CQPaFB-E2c2",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/recipes?_rsc=YpkqtfzkV12cLQPO",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/?_rsc=YpkqtfzkV12cLQPO",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/?_rsc=Kmydaq6VwPmBTrEI",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/0y_3jbthxiolz.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/dashboard?_rsc=nabzxsOAdjTvWpXB",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/about?_rsc=Ys8gtUS2Q7WE-hnb",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/about?_rsc=5QaZGsP62gror6M2",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/about?_rsc=YpkqtfzkV12cLQPO",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/techniques?_rsc=YpkqtfzkV12cLQPO",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/guides?_rsc=YpkqtfzkV12cLQPO",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/guides?_rsc=FlvblO_ETKcl7XiU",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/guides?_rsc=yVFhRfMi1GgroQD2",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/2b0b2zs_4oevf.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/techniques?_rsc=XBI75jyAzlPzxKF-",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/privacy?_rsc=YpkqtfzkV12cLQPO",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/techniques?_rsc=cWOflyui3J2tqItX",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/privacy?_rsc=x43216CG-fYzgB_4",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/40hxdvqwxc3fb.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/privacy?_rsc=zSaFeXmBXgYnfAay",
+    "status": 200,
+    "type": "fetch",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/static/chunks/02_vi0um-b7tv.js",
+    "status": 200,
+    "type": "script",
+    "clen": null,
+    "cache": "BYPASS",
+    "enc": "br"
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785238516%2Frecipes%2FEasy%2520Mexican%2520Dinner%2520for%2520Two%3A%2520One-Pan%2520Chicken%2520Enchilada%2520Skillet-v0.png&w=384&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "23777",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410165%2Frecipes%2FGarlic%2520Butter%2520Chicken%2520Bites%2520with%2520Blistered%2520Tomatoes%2520and%2520Saut%25C3%25A9ed%2520Spinach.png&w=384&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "20935",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412254%2Frecipes%2F40-Minute%2520White%2520Wine%2520Lemon%2520Chicken%2520Orzo%2520for%2520Two.png&w=384&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "20263",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412672%2Frecipes%2FMediterranean-Chicken-Orzo-with-Feta-Olives-for-Two.png&w=384&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "24351",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785410300%2Frecipes%2F30-Minute%2520Creamy%2520Parmesan%2520Garlic%2520Chicken%2520Orzo%2520for%2520Two.png&w=384&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "24696",
+    "cache": "BYPASS",
+    "enc": null
+   },
+   {
+    "url": "https://www.chefaugustin.com/_next/image?url=https%3A%2F%2Fres.cloudinary.com%2Fdpgm5gata%2Fimage%2Fupload%2Ff_auto%2Cq_auto%2Fv1785412317%2Frecipes%2F25-Minute%2520One-Pan%2520Garlic%2520Herb%2520Chicken%2520for%2520Two.png&w=384&q=75",
+    "status": 200,
+    "type": "image",
+    "clen": "18461",
+    "cache": "BYPASS",
+    "enc": null
+   }
+  ],
+  "by_type": {
+   "link": {
+    "count": 6,
+    "bytes": 132223,
+    "time": 3260
+   },
+   "script": {
+    "count": 22,
+    "bytes": 398712,
+    "time": 9103
+   },
+   "fetch": {
+    "count": 31,
+    "bytes": 89683,
+    "time": 5917
+   },
+   "img": {
+    "count": 6,
+    "bytes": 134283,
+    "time": 3454
+   }
+  },
+  "by_host": {
+   "www.chefaugustin.com": {
+    "count": 65,
+    "bytes": 754901
+   }
+  },
+  "third_party_hosts": {}
+ }
+]

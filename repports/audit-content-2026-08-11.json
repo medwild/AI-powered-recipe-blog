@@ -1,0 +1,957 @@
+{
+  "findings": [
+    {
+      "slug": "romantic-dinner-for-two-at-home",
+      "check": "word-repeat",
+      "line": 9,
+      "text": "The genius of this method is a technique pasta makers have used for centuries but home cooks often skip: cooking the dried pasta directly in the sauce. Instead of boiling ziti in a separate pot and then tossing it with sauce, you add the uncooked noodles straight into the healthy dinner recipes for "
+    },
+    {
+      "slug": "romantic-dinner-for-two-at-home",
+      "check": "non-english",
+      "line": 9,
+      "text": "The genius of this method is a technique pasta makers have used for centuries but home cooks often skip: cooking the dried pasta directly in the sauce. Instead of boiling ziti in a separate pot and then tossing it with sauce, you add the uncooked noodles straight into the healthy dinner recipes for "
+    },
+    {
+      "slug": "romantic-dinner-for-two-at-home",
+      "check": "non-english",
+      "line": 22,
+      "text": "A word on a few of these. **Diamond Crystal kosher salt** measures differently than Morton’s—Diamond Crystal’s flakes are larger and less dense, so if you’re using Morton’s, cut the volume by half. (This is why Cook’s Illustrated names Diamond Crystal their top pick; its flaky structure dissolves ea"
+    },
+    {
+      "slug": "romantic-dinner-for-two-at-home",
+      "check": "placeholder",
+      "line": 85,
+      "text": "Yes, and it’s a lifesaver for a planned dessert for 2. Assemble the entire skillet through step 7 (cheeses on top), let it cool, then cover tightly and refrigerate for up to 24 hours. When you’re ready, let it sit at room temperature for 20 minutes, then bake at 375°F for 20–25 minutes. Because it s"
+    },
+    {
+      "slug": "romantic-dinner-for-two-at-home",
+      "check": "empty-section",
+      "line": 81,
+      "text": "## FAQ"
+    },
+    {
+      "slug": "garlic-shrimp-orzo-with-cherry-tomatoes-for-two",
+      "check": "non-english",
+      "line": 51,
+      "text": "**The missed deglaze.** Most shrimp-orzo recipes share a pattern: they sauté aromatics, add healthy dinner ideas romantic dinner ideas for two liquid, then toss raw shrimp in at the end. Nothing wrong with that technique, except it throws away the single highest-impact flavor step—building and captu"
+    },
+    {
+      "slug": "garlic-shrimp-orzo-with-cherry-tomatoes-for-two",
+      "check": "empty-section",
+      "line": 65,
+      "text": "## FAQ"
+    },
+    {
+      "slug": "chicken-dinner-for-two",
+      "check": "placeholder",
+      "line": 5,
+      "text": "**[Video/Image placeholder]**"
+    },
+    {
+      "slug": "chicken-dinner-for-two",
+      "check": "standalone-z",
+      "line": 13,
+      "text": "z each), patted dry"
+    },
+    {
+      "slug": "chicken-dinner-for-two",
+      "check": "placeholder",
+      "line": 46,
+      "text": "Nestle the chicken back into the sauce. Spoon a little liquid over the top of each breast. Dot the butter around the pan and sprinkle in the red pepper flakes if you like a gentle hum of heat. Cover with a lid (or a sheet of foil), reduce the heat to low, and cook until an instant‑read thermometer i"
+    },
+    {
+      "slug": "chicken-dinner-for-two",
+      "check": "empty-section",
+      "line": 68,
+      "text": "## FAQ"
+    },
+    {
+      "slug": "one-pan-chicken-rice-dinner-for-two",
+      "check": "non-english",
+      "line": 96,
+      "text": "Because the dish already carries protein, starch, and a vegetable, I keep sides light and green. A simple arugula salad with lemon and olive oil cuts through the richness. Crusty bread is perfect for the tomatoey rice at the bottom of the pan. If you want something warm, quick-sautéed green beans or"
+    },
+    {
+      "slug": "one-pan-chicken-rice-dinner-for-two",
+      "check": "empty-section",
+      "line": 32,
+      "text": "## Instructions"
+    },
+    {
+      "slug": "white-wine-lemon-chicken-orzo-for-two",
+      "check": "empty-section",
+      "line": 61,
+      "text": "## FAQ"
+    },
+    {
+      "slug": "mac-and-cheese-for-2",
+      "check": "non-english",
+      "line": 9,
+      "text": "Cheese sauce is an emulsion — fat suspended in liquid, held together by proteins and starch. When you overheat cheddar, the proteins seize and squeeze out their fat, and the sauce \"breaks\" into greasy curds swimming in liquid. The fix is twofold. First, I build a light béchamel: butter and flour coo"
+    },
+    {
+      "slug": "mac-and-cheese-for-2",
+      "check": "non-english",
+      "line": 45,
+      "text": "**Chef Augustin's Tip:** A pinch of freshly grated nutmeg in the béchamel is the classic French move. It's invisible in the finished dish but it makes the dairy taste rounder and deeper. Add it with the milk, not the cheese."
+    },
+    {
+      "slug": "mac-and-cheese-for-2",
+      "check": "non-english",
+      "line": 51,
+      "text": "Use 8 ounces (about 2 cups dry) of pasta, a 2-tablespoon butter-and-flour roux, 1 cup of whole milk, 2 ounces of cream cheese, and 6 ounces of grated sharp cheddar. Boil the pasta one minute short of al dente, build a béchamel in the same pot, melt the cheese off the heat, and fold the pasta back in"
+    },
+    {
+      "slug": "easy-mexican-dinner-recipes",
+      "check": "empty-section",
+      "line": 33,
+      "text": "### Step 5: Fold in Tortillas and Corn"
+    },
+    {
+      "slug": "one-pan-chicken-tomato-garlic-rice",
+      "check": "empty-section",
+      "line": 34,
+      "text": "## Instructions"
+    },
+    {
+      "slug": "mediterranean-chicken-orzo-with-feta-olives-for-two",
+      "check": "non-english",
+      "line": 34,
+      "text": "### Step 2: Sauté the Aromatics"
+    },
+    {
+      "slug": "mediterranean-chicken-orzo-with-feta-olives-for-two",
+      "check": "empty-section",
+      "line": 67,
+      "text": "## Frequently Asked Questions"
+    },
+    {
+      "slug": "easy-lasagna-recipe",
+      "check": "empty-section",
+      "line": 19,
+      "text": "## Instructions"
+    },
+    {
+      "slug": "one-pan-chicken-rice-for-two",
+      "check": "empty-section",
+      "line": 33,
+      "text": "## Instructions"
+    },
+    {
+      "slug": "edible-cookie-dough-recipe-for-2",
+      "check": "word-repeat",
+      "line": 57,
+      "text": "You can, but mini chips distribute far more evenly in such a mac and cheese for 2 for 2 for 2 for 2](/recipes/mac-and-cheese-for-2). Regular chips tend to cluster in the middle and leave the edges bare. If regular chips are all you have, chop them roughly with a chef's knife — aim for pieces about t"
+    },
+    {
+      "slug": "edible-cookie-dough-recipe-for-2",
+      "check": "empty-section",
+      "line": 41,
+      "text": "## FAQ"
+    },
+    {
+      "slug": "chocolate-lava-cakes-for-two",
+      "check": "word-repeat",
+      "line": 3,
+      "text": "A spoon pressed into the center should release a slow, glossy river of chocolate — that's the whole point of a lava cake, and it's the one detail almost every chocolate chip cookies for 2 for 2 for 2 for 2](/recipes/chocolate-chip-cookies-for-2) version gets wrong. Plenty of \"dessert for two\" collec"
+    },
+    {
+      "slug": "steak-dinner-ideas-for-2",
+      "check": "placeholder",
+      "line": 61,
+      "text": "For medium-rare, pull the steak from the heat at 130°F / 54°C and let it rest 5 minutes — carryover cooking will carry it to about 135°F. Note that the USDA recommends a minimum internal temperature of 145°F / 63°C for whole-muscle beef for safety. Medium-rare below that is a personal choice made wi"
+    },
+    {
+      "slug": "easy-chicken-dinners-for-two",
+      "check": "standalone-z",
+      "line": 11,
+      "text": "z / 225g each)"
+    },
+    {
+      "slug": "easy-chicken-dinners-for-two",
+      "check": "non-english",
+      "line": 28,
+      "text": "Pearl couscous is the unsung hero here. Its larger, chewy pearls trap the lemon-garlic broth in their crevices, unlike fine couscous, which can turn mushy. Swapping in orzo works, but you’ll lose that pop of texture. The garlic is sliced thin, not minced, so it infuses the sauce with gentle sweetnes"
+    },
+    {
+      "slug": "easy-chicken-dinners-for-two",
+      "check": "placeholder",
+      "line": 78,
+      "text": "Use an instant-read digital thermometer. Insert the probe into the thickest part of the breast, avoiding the pan or any bone. Look for 165°F (74°C). I know it’s tempting to cut a slit to check, but that releases juices you’ve worked hard to seal in. Thermometers are cheap insurance—I keep a Thermape"
+    },
+    {
+      "slug": "easy-chicken-dinners-for-two",
+      "check": "empty-section",
+      "line": 32,
+      "text": "## Step-by-Step Instructions"
+    },
+    {
+      "slug": "easy-chicken-dinners-for-two",
+      "check": "empty-section",
+      "line": 70,
+      "text": "## FAQ"
+    },
+    {
+      "slug": "easy-4-ingredient-chicken-breast-recipes",
+      "check": "standalone-z",
+      "line": 17,
+      "text": "z (340g) total, pounded to even thickness"
+    },
+    {
+      "slug": "chicken-pot-pie-for-2",
+      "check": "non-english",
+      "line": 9,
+      "text": "The filling is a classic velouté-style sauce built on a butter-and-flour roux. When you cook flour in fat, the starch granules coat themselves in lipid, which lets them disperse into hot liquid without clumping into lumps. As the sauce reaches a simmer, those granules swell and burst, releasing amyl"
+    },
+    {
+      "slug": "chicken-pot-pie-for-2",
+      "check": "word-repeat",
+      "line": 61,
+      "text": "Sear one 8 oz / 227g [simple dinner recipes for 2 for 2 for 2](/recipes/creamy-parmesan-garlic-chicken-orzo-for-two) to 165°F / 74°C, dice it, and set aside. Build a roux from 3 tablespoons butter and 3 tablespoons flour, then whisk in 1 cup milk and 3/4 cup chicken broth until the sauce coats a spo"
+    },
+    {
+      "slug": "chicken-pot-pie-for-2",
+      "check": "non-english",
+      "line": 73,
+      "text": "Because the pie is rich and creamy, I pair it with something sharp and green. A simple arugula salad with lemon and olive oil cuts through the sauce beautifully, and it takes 3 minutes. Roasted asparagus or a handful of dinner for two recipes healthy-sautéed green beans also works if you want everyt"
+    },
+    {
+      "slug": "easter-dinner-for-two",
+      "check": "placeholder",
+      "line": 31,
+      "text": "Place the lamb rack fat-side up in the center. Slide the pan into the oven and roast 20-25 minutes. Start checking the temperature at 20 minutes. For medium-rare, I pull the lamb when an instant-read thermometer inserted into the thickest part reads 130°F. USDA food safety guidelines recommend a min"
+    },
+    {
+      "slug": "easter-dinner-for-two",
+      "check": "non-english",
+      "line": 85,
+      "text": "The plates land on the table just as the last spring light is fading. There's a glass of Rhône red catching the candle flame, and the lamb chops are still faintly steaming. You've used one sheet pan, one cutting board, and exactly two plates. Easter dinner for two — actual dinner, not a project — an"
+    },
+    {
+      "slug": "easter-dinner-for-two",
+      "check": "empty-section",
+      "line": 61,
+      "text": "## FAQ"
+    },
+    {
+      "slug": "salmon-orzo-with-dill-and-capers-for-two",
+      "check": "non-english",
+      "line": 78,
+      "text": "Because the orzo already bundles starch, vegetable, and sauce into one pan, I keep the side minimal. A simple arugula salad dressed with olive oil and lemon juice balances the richness beautifully. If you want something warm, quick-sautéed asparagus or green beans with a little garlic would echo the"
+    },
+    {
+      "slug": "salmon-orzo-with-dill-and-capers-for-two",
+      "check": "empty-section",
+      "line": 66,
+      "text": "## Frequently Asked Questions"
+    },
+    {
+      "slug": "easy-slow-cooker-pasta-recipes",
+      "check": "placeholder",
+      "line": 66,
+      "text": "A cold slow cooker insert can add 30 minutes to your cook time; if you can, let it come to room temperature before you fill it."
+    },
+    {
+      "slug": "easy-slow-cooker-pasta-recipes",
+      "check": "empty-section",
+      "line": 33,
+      "text": "## Instructions"
+    },
+    {
+      "slug": "lemon-butter-chicken-pasta-for-two",
+      "check": "empty-section",
+      "line": 73,
+      "text": "## FAQ"
+    },
+    {
+      "slug": "easy-beef-ramen-noodle-recipes",
+      "check": "empty-section",
+      "line": 17,
+      "text": "## Instructions"
+    },
+    {
+      "slug": "whole30-chicken-skillet-tomatoes-garlic",
+      "check": "process-speak",
+      "line": 5,
+      "text": "The angle here is simple. The top-ranking Whole30 roundups promise \"30 minutes\" but skip the one technique that makes a dairy-free tomato sauce worth eating: reducing hard enough to concentrate the sugars in the tomatoes. That's the whole secret, and nobody spells it out."
+    },
+    {
+      "slug": "whole30-chicken-skillet-tomatoes-garlic",
+      "check": "empty-section",
+      "line": 32,
+      "text": "## Instructions"
+    },
+    {
+      "slug": "cooking-for-two",
+      "check": "standalone-z",
+      "line": 15,
+      "text": "z / 170g each)"
+    },
+    {
+      "slug": "cooking-for-two",
+      "check": "non-english",
+      "line": 86,
+      "text": "Every time. Two quality chicken breasts, a can of tomatoes, half a box of pasta, and bits of pantry staples total around $10 to $12 — less than one restaurant entrée. And you’ll have a meal crafted exactly to your taste, with no delivery fees."
+    },
+    {
+      "slug": "cooking-for-two",
+      "check": "empty-section",
+      "line": 68,
+      "text": "## FAQ"
+    },
+    {
+      "slug": "one-pan-garlic-tomato-chicken-rice",
+      "check": "empty-section",
+      "line": 19,
+      "text": "## Instructions"
+    },
+    {
+      "slug": "one-pan-chicken-vegetable-skillet",
+      "check": "non-english",
+      "line": 81,
+      "text": "Absolutely, and it's a fast swap. Brown 12 oz (340g) of ground beef in the skillet first, breaking it into crumbles, and cook it to an internal temperature of 160°F / 71°C — ground meat must hit a higher safe temperature than whole muscle because grinding distributes surface bacteria throughout. Dra"
+    },
+    {
+      "slug": "one-pan-chicken-vegetable-skillet",
+      "check": "empty-section",
+      "line": 30,
+      "text": "## Instructions"
+    },
+    {
+      "slug": "easy-chili-colorado-recipe",
+      "check": "non-english",
+      "line": 11,
+      "text": "The second lever is the sear. I brown the beef in olive oil before it ever meets the sauce, building a fond—those dark stuck bits on the pan bottom. Deglazing that fond with the chile purée pulls Maillard compounds directly into the braise. I've made this dish both ways, searing and not searing, and"
+    },
+    {
+      "slug": "easy-chili-colorado-recipe",
+      "check": "non-english",
+      "line": 13,
+      "text": "Finally, straining. Guajillo skins never fully break down, even in a high-powered blender. Push the purée through a sieve and your sauce goes from grainy to velvet. It's two extra minutes that separate a good bowl from a great one."
+    },
+    {
+      "slug": "easy-chili-colorado-recipe",
+      "check": "non-english",
+      "line": 78,
+      "text": "Toasting the dried chiles before soaking them. Thirty seconds per side in a dry pan unlocks the aromatic oils in the skins, giving you the raisin-and-cherry depth that defines the dish. Skip this step and the sauce tastes flat. The second secret is straining the blended purée through a fine sieve—gu"
+    },
+    {
+      "slug": "easy-chili-colorado-recipe",
+      "check": "empty-section",
+      "line": 33,
+      "text": "## Instructions"
+    },
+    {
+      "slug": "one-pan-chicken-tomato-rice",
+      "check": "empty-section",
+      "line": 36,
+      "text": "## Instructions"
+    },
+    {
+      "slug": "one-pan-chicken-tomato-rice",
+      "check": "empty-section",
+      "line": 79,
+      "text": "## Frequently Asked Questions"
+    },
+    {
+      "slug": "dessert-for-2",
+      "check": "non-english",
+      "line": 4,
+      "text": "Lava cakes are a magic trick of baking — a thin, cakey shell surrounding a still-liquid center. The key is high heat and exactly the right bake time. At 425°F, the exterior sets quickly while the interior remains molten. Unlike a soufflé, there are no separated eggs to beat into stiff peaks; the who"
+    },
+    {
+      "slug": "dessert-for-2",
+      "check": "placeholder",
+      "line": 13,
+      "text": "#### Step 1: Preheat and Prep Ramekins"
+    },
+    {
+      "slug": "dessert-for-2",
+      "check": "placeholder",
+      "line": 16,
+      "text": "#### Step 2: Melt Chocolate and Butter"
+    },
+    {
+      "slug": "dessert-for-2",
+      "check": "placeholder",
+      "line": 21,
+      "text": "#### Step 3: Whip the Eggs and Sugar"
+    },
+    {
+      "slug": "dessert-for-2",
+      "check": "placeholder",
+      "line": 24,
+      "text": "#### Step 4: Fold in the Chocolate"
+    },
+    {
+      "slug": "dessert-for-2",
+      "check": "placeholder",
+      "line": 27,
+      "text": "#### Step 5: Add Flour and Salt"
+    },
+    {
+      "slug": "dessert-for-2",
+      "check": "placeholder",
+      "line": 30,
+      "text": "#### Step 6: Fill the Ramekins"
+    },
+    {
+      "slug": "dessert-for-2",
+      "check": "placeholder",
+      "line": 33,
+      "text": "#### Step 7: Bake and Watch the Jiggle"
+    },
+    {
+      "slug": "dessert-for-2",
+      "check": "placeholder",
+      "line": 36,
+      "text": "#### Step 8: Rest, Invert, Serve"
+    },
+    {
+      "slug": "dessert-for-2",
+      "check": "non-english",
+      "line": 57,
+      "text": "A small scoop of vanilla ice cream is classic for contrast. A dollop of lightly sweetened whipped cream or crème fraîche cuts the richness. Fresh raspberries add a tart burst. For an elegant twist, dust the plate with a little fleur de sel — the salt spikes the chocolate's fruit notes."
+    },
+    {
+      "slug": "dessert-for-2",
+      "check": "empty-section",
+      "line": 46,
+      "text": "### FAQ"
+    },
+    {
+      "slug": "easy-and-healthy-dinner-recipes-for-two",
+      "check": "word-repeat",
+      "line": 1,
+      "text": "I don't have a roundup of 100 ideas for you. I have something better: the one technique that makes a weeknight easy meal recipes for 2 for 2 for 2](/recipes/chicken-dinner-for-two) taste like it came from a restaurant — and it all happens in a single skillet. Most recipes gloss over why your chicken"
+    },
+    {
+      "slug": "easy-and-healthy-dinner-recipes-for-two",
+      "check": "non-english",
+      "line": 5,
+      "text": "The magic here is the trio of a proper sear, the fond it leaves behind, and the butter-sautéed vegetables that lift it all. When you drop cold, wet chicken into a hot pan, you steam it, not sear it. But when you pat the chicken dry and let it sit undisturbed in shimmering olive oil, the surface hits"
+    },
+    {
+      "slug": "easy-and-healthy-dinner-recipes-for-two",
+      "check": "word-repeat",
+      "line": 7,
+      "text": "Then the deglazing step — scraping up those brown bits with garlic and bursting tomatoes — folds that flavor into the sauce. No stock needed; the tomatoes release enough liquid, and the spinach's own moisture steam-sautés it right in the pan. I've tested this with both olive oil alone and the butter"
+    },
+    {
+      "slug": "easy-and-healthy-dinner-recipes-for-two",
+      "check": "non-english",
+      "line": 7,
+      "text": "Then the deglazing step — scraping up those brown bits with garlic and bursting tomatoes — folds that flavor into the sauce. No stock needed; the tomatoes release enough liquid, and the spinach's own moisture steam-sautés it right in the pan. I've tested this with both olive oil alone and the butter"
+    },
+    {
+      "slug": "easy-and-healthy-dinner-recipes-for-two",
+      "check": "placeholder",
+      "line": 26,
+      "text": "Flip each piece and cook the second side for 2–3 minutes more. At this point, the internal temperature should read 165°F / 74°C when the tip of an instant-read thermometer is inserted into the thickest chunk without touching the pan. Remove the chicken to a clean plate; don't wipe the skillet."
+    },
+    {
+      "slug": "easy-and-healthy-dinner-recipes-for-two",
+      "check": "non-english",
+      "line": 68,
+      "text": "Mushrooms are wonderful: slice them and sauté in the skillet after removing the chicken, before the garlic. They need 4–5 minutes to release their water and brown, so plan for an extra 5 minutes of cooking. Bell peppers soften faster — add them alongside the tomatoes. Both work, and the one-skillet "
+    },
+    {
+      "slug": "easy-and-healthy-dinner-recipes-for-two",
+      "check": "empty-section",
+      "line": 53,
+      "text": "## FAQ"
+    },
+    {
+      "slug": "easy-week-of-meals",
+      "check": "standalone-z",
+      "line": 10,
+      "text": "z / 170g), diced small"
+    },
+    {
+      "slug": "easy-week-of-meals",
+      "check": "empty-section",
+      "line": 54,
+      "text": "## FAQ"
+    },
+    {
+      "slug": "one-pan-chicken-rice-garlic-butter-tomato-sauce",
+      "check": "empty-section",
+      "line": 21,
+      "text": "## Instructions"
+    },
+    {
+      "slug": "creamy-mashed-potatoes-for-two",
+      "check": "empty-section",
+      "line": 41,
+      "text": "## FAQ"
+    },
+    {
+      "slug": "easy-meal-recipes-for-2",
+      "check": "standalone-z",
+      "line": 13,
+      "text": "z / 227 g each)"
+    },
+    {
+      "slug": "easy-meal-recipes-for-2",
+      "check": "credential-claim",
+      "line": 57,
+      "text": "What I’ve learned after making this 15 times: you can swap in two bone-in, skin-on 2 qt [2 qt slow cooker recipes](/recipes/2-qt-slow-cooker-recipes) recipes thighs—same method, but increase the simmer time to 20-22 minutes until the rice is tender. Bone conducts less heat to the rice, so the timing"
+    },
+    {
+      "slug": "easy-meal-recipes-for-2",
+      "check": "empty-section",
+      "line": 59,
+      "text": "## FAQ"
+    },
+    {
+      "slug": "slow-cooker-chicken-rice-for-two",
+      "check": "placeholder",
+      "line": 51,
+      "text": "The second miss is scale. A batch sized for a 6-quart cooker spread thin across the bottom scorches and overcooks. For two people, use a 1.5 to 2-quart slow cooker, or an insert that keeps the food at least two-thirds deep. Volume, not just quantity, protects your dinner."
+    },
+    {
+      "slug": "slow-cooker-chicken-rice-for-two",
+      "check": "empty-section",
+      "line": 21,
+      "text": "## Instructions"
+    },
+    {
+      "slug": "quick-recipes-for-two-for-dinner",
+      "check": "non-english",
+      "line": 3,
+      "text": "Most quick chicken recipes for two settle for bland, steamed‑looking meat with a watery glaze. I wanted something that develops real depth in under half an hour. The technique is a classic French sauté method, scaled for two people and stripped of fuss. You are going to get a crust that cracks under"
+    },
+    {
+      "slug": "quick-recipes-for-two-for-dinner",
+      "check": "standalone-z",
+      "line": 16,
+      "text": "z / 170–225 g each), patted very dry"
+    },
+    {
+      "slug": "quick-recipes-for-two-for-dinner",
+      "check": "placeholder",
+      "line": 42,
+      "text": "Flip the chicken. Reduce the heat to medium, drop in 1 tablespoon of butter, and tilt the pan. Use a spoon to baste the breasts continuously with the melted butter. Cook until a digital probe thermometer inserted into the thickest part reads 165°F / 74°C, about 4‑5 more minutes. This temperate is th"
+    },
+    {
+      "slug": "quick-recipes-for-two-for-dinner",
+      "check": "non-english",
+      "line": 48,
+      "text": "Lower the heat to medium‑low. Add the remaining 1 tablespoon butter and the minced garlic to the same skillet — no need to wipe it out. Sauté just until fragrant, about 30 seconds. Pour in the wine (or broth) and scrape the browned bits from the bottom of the pan with a wooden spoon. Let it bubble a"
+    },
+    {
+      "slug": "one-pan-garlic-butter-chicken-tomato-orzo",
+      "check": "non-english",
+      "line": 93,
+      "text": "This recipe already leans budget-friendly — chicken breast, orzo, canned tomatoes, and frozen peas are among the cheapest proteins and staples in the store. To stretch it further, swap the chicken for ground beef or skip the protein entirely and double the orzo for a meatless tomato-Parmesan pasta. "
+    },
+    {
+      "slug": "crockpot-chicken-tomato-rice-for-two",
+      "check": "non-english",
+      "line": 86,
+      "text": "Since the rice cooks right in the dish, you need almost nothing else. A simple green salad with a sharp vinaigrette cuts the richness of the tomato sauce beautifully. Crusty bread is perfect for mopping up the last of the sauce. If you want a warm vegetable, a handful of steamed green beans or a qui"
+    },
+    {
+      "slug": "crockpot-chicken-tomato-rice-for-two",
+      "check": "empty-section",
+      "line": 33,
+      "text": "## Instructions"
+    },
+    {
+      "slug": "thanksgiving-dinner-for-two",
+      "check": "standalone-z",
+      "line": 13,
+      "text": "z each)"
+    },
+    {
+      "slug": "thanksgiving-dinner-for-two",
+      "check": "empty-section",
+      "line": 82,
+      "text": "## FAQ"
+    },
+    {
+      "slug": "garlic-butter-chicken-pasta-for-two",
+      "check": "empty-section",
+      "line": 21,
+      "text": "## Instructions"
+    },
+    {
+      "slug": "garlic-butter-chicken-pasta-for-two",
+      "check": "empty-section",
+      "line": 61,
+      "text": "## Frequently Asked Questions"
+    },
+    {
+      "slug": "romantic-dinner-for-two-at-home",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "(This is why Cook’s Illustrated names Diamond Crystal their top pick; its flaky structure dissolves easy healthy dinner recipes for twoly and seasons evenly.) The **crushed tomatoes** are non-negotiable here."
+    },
+    {
+      "slug": "garlic-shrimp-orzo-with-cherry-tomatoes-for-two",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "## What Most Recipes Get Wrong\n\n**The missed deglaze.** Most shrimp-orzo recipes share a pattern: they sauté aromatics, add healthy dinner ideas romantic dinner ideas for two liquid, then toss raw shrimp in at the end."
+    },
+    {
+      "slug": "chicken-dinner-for-two",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "**25-Minute One-Pan Garlic Herb [easy chicken dinners for two](/recipes/easy-chicken-dinners-for-two) for two**\n\nSomewhere between the third dry chicken breast and the fifth failed pan sauce, I realized the problem wasn't me—it was the recipes."
+    },
+    {
+      "slug": "chicken-dinner-for-two",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "**[Video/Image placeholder]**\n\nMost “chicken dinner for two” recipes either lean on slow cookers or call for a dozen ingredients you won’t have on Wednesday night."
+    },
+    {
+      "slug": "chicken-dinner-for-two",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "## Why This Works\n\nThere’s a reason you can’t just slap a healthy dinner ideas romantic dinner ideas for two for two into a hot pan and walk away."
+    },
+    {
+      "slug": "easy-chicken-rice-bowls-for-two",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "This [steak dinner ideas for 2](/recipes/steak-dinner-ideas-for-2) easy healthy dinner recipes for two rice bowl is that answer — seared chicken breast, a fast pan sauce built on melted butter and garlic, spooned over rice with a handful of frozen vegetables that cook right in the pan."
+    },
+    {
+      "slug": "easy-chicken-rice-bowls-for-two",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "**healthy dinner ideas for two** is the lean, fast-cooking protein — but if you only have [easy week of meals](/recipes/easy-week-of-meals), brown 8 oz (225g) to 160°F / 71°C and skip the searing step; it'll still be excellent."
+    },
+    {
+      "slug": "easy-chicken-rice-bowls-for-two",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "Toss in cooked pasta and you've got a steak dinner ideas for 2 for 2 pasta bowl instead."
+    },
+    {
+      "slug": "mac-and-cheese-for-2",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "Reserving a half cup of starchy romantic dinner ideas for two](/recipes/summer-herb-chicken-orzo-with-zucchini-for-two) water gives you a lever to loosen the sauce at the very end without watering down the flavor."
+    },
+    {
+      "slug": "mac-and-cheese-for-2",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "**Chef Augustin's Tip:** If you want to turn this into a full dinner, sear 6 ounces of diced healthy dinner ideas for two to an internal 165°F / 74°C in a separate pan and fold it in at the end — the crispy edges against the creamy sauce are a genuine upgrade."
+    },
+    {
+      "slug": "easy-mexican-dinner-recipes",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "# Easy Mexican Dinner for Two: One-Pan Chicken Enchilada Skillet\n\nRolling enchiladas on a Tuesday night is a decision you regret halfway through, sauce dripping off your wrist and three tortillas already torn."
+    },
+    {
+      "slug": "easy-mexican-dinner-recipes",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "Searing the easy healthy dinner recipes romantic dinner ideas [for two](/recipes/easy-lasagna-recipe) for two matters just as much."
+    },
+    {
+      "slug": "one-pan-chicken-tomato-garlic-rice",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "# Simple Dinner Ideas for Two: One-Pan Chicken with Tomato-Garlic Rice\n\nThe best [dinner for](/recipes/easy-mexican-dinner-recipes) two is the one that leaves you with a single pan in the sink."
+    },
+    {
+      "slug": "one-pan-chicken-tomato-garlic-rice",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "## What is a good healthy dinner for two people?"
+    },
+    {
+      "slug": "easy-to-make-asian-food-recipes",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "Most romantic dinner ideas for two](/recipes/summer-herb-chicken-orzo-with-zucchini-for-two) Asian recipes online rush you to dump everything in at once, and you end up with gray, chewy beef swimming in a watery puddle."
+    },
+    {
+      "slug": "easy-to-make-asian-food-recipes",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "It's the same physics behind a restaurant wok, scaled down to a home healthy dinner recipes for 2 for 2 romantic dinner for two at home."
+    },
+    {
+      "slug": "easy-to-make-asian-food-recipes",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "Everything scales cleanly romantic dinner ideas for two."
+    },
+    {
+      "slug": "easy-to-make-asian-food-recipes",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "## What Most Recipes Get Wrong\n\nEvery 15-minute Asian recipe I read tells you to add the beef and healthy dinner ideas for two to the pan at the same time."
+    },
+    {
+      "slug": "edible-cookie-dough-recipe-for-2",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "I've designed this one to make exactly enough romantic dinner ideas for two for two generous ramekins — about one packed cup total."
+    },
+    {
+      "slug": "edible-cookie-dough-recipe-for-2",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "That's what easy dinner for two recipes is for — the tiny, quiet bargains that make the evening feel like ours."
+    },
+    {
+      "slug": "chocolate-lava-cakes-for-two",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "romantic dinner ideas for two for two lava cakes, 4 ounces of chocolate equals roughly a heaping ⅔ cup of chopped bar chocolate."
+    },
+    {
+      "slug": "chocolate-lava-cakes-for-two",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "A true 10-minute dessert for two means no baking: think chocolate mug cake (90 seconds in the microwave), whipped mascarpone with berries, or a easy healthy dinner recipes for two chocolate ganache poured over ice cream."
+    },
+    {
+      "slug": "steak-dinner-ideas-for-2",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "# Pan-Seared Steak Dinner for Two with Garlic Butter and Blistered Green Beans\n\nA single New York strip, cut thick and shared across two plates, is the smartest steak [easy mexican dinner recipes](/recipes/easy-mexican-dinner-recipes) recipes I know — because one good steak costs less than two medio"
+    },
+    {
+      "slug": "steak-dinner-ideas-for-2",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "## What sides go with a steak dinner for two?"
+    },
+    {
+      "slug": "easy-chicken-dinners-for-two",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "# 30-Minute One-Pan Lemon Garlic Chicken for Two\n\nThe best one-pan healthy dinner recipes for 2 for 2 dish [romantic dinner](/recipes/romantic-dinner-ideas-for-two) ideas for two doesn’t come from a list of 20—it comes from understanding why those golden seared edges matter."
+    },
+    {
+      "slug": "easy-4-ingredient-chicken-breast-recipes",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "# 4-Ingredient Feta Brine Chicken Breast for Two\n\nStop throwing away the cloudy liquid in your feta container — that's the single best thing you can do to a lean healthy dinner ideas for two."
+    },
+    {
+      "slug": "easy-4-ingredient-chicken-breast-recipes",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "z (340g) total, pounded to even thickness\n- 1/2 cup (120ml) feta brine, from a container of brined feta\n- 4 cloves garlic, smashed and peeled\n- 2 tablespoons (28g) unsalted butter, cold\n- Diamond Crystal kosher salt and black pepper, to taste (pantry given)\n\nThe garlic matters more than it looks — s"
+    },
+    {
+      "slug": "chicken-pot-pie-for-2",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "This is a healthy dinner ideas for two scaled down with intent."
+    },
+    {
+      "slug": "chicken-pot-pie-for-2",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "## Ingredients Notes\n\nUse one boneless, skinless easy [easy 4 ingredient chicken breast recipes](/recipes/easy-4-ingredient-chicken-breast-recipes) [healthy dinner ideas for two recipes](/recipes/easy-4-ingredient-chicken-breast-recipes) (about 8 oz / 227g); it shreds beautifully and stays lean unde"
+    },
+    {
+      "slug": "easter-dinner-for-two",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "The sheet pan alone wins because it's lighter, and the healthy dinner ideas for two gain a better roast when they're not competing with a heat-sucking slab of metal."
+    },
+    {
+      "slug": "easter-dinner-for-two",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "Meanwhile, give the vegetables a easy healthy dinner recipes for two toss in the pan juices."
+    },
+    {
+      "slug": "2-qt-slow-cooker-recipes",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "# 2-Quart Slow Cooker Chicken and Gravy for Two\n\nA 2-quart slow cooker fills up faster than anyone warns you, which is exactly why most \"recipes for two\" scaled down from a 6-quart pot end up watery, crowded, and disappointing."
+    },
+    {
+      "slug": "2-qt-slow-cooker-recipes",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "I built this [easy meal recipes for 2](/recipes/easy-meal-recipes-for-2) gravy from the pot size backward: two healthy dinner ideas for twos, just enough liquid to come halfway up the meat, and a searing step most slow-cooker recipes skip."
+    },
+    {
+      "slug": "lemon-butter-chicken-pasta-for-two",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "I’ve made this dish dozens of times, and I’ve learned that the easy healthy dinner recipes for two shape matters more than you’d think."
+    },
+    {
+      "slug": "cooking-for-two",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "This 35-minute one-pan [romantic dinner](/recipes/romantic-dinner-ideas-for-two) ideas for two for two actually works *better* for two than for a crowd."
+    },
+    {
+      "slug": "one-pan-garlic-tomato-chicken-rice",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "## What are some easy dinner ideas for two people?"
+    },
+    {
+      "slug": "one-pan-chicken-tomato-rice",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "# Easy Meal Ideas for Two: One-Pan Chicken and Tomato Rice\n\nMost easy [dinners for two](/recipes/healthy-dinner-ideas-for-two) die the moment you realize you've dirtied four pans for a Tuesday."
+    },
+    {
+      "slug": "one-pan-chicken-tomato-rice",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "## Frequently Asked Questions\n\n## What's a quick easy dinner for two on a budget?"
+    },
+    {
+      "slug": "summer-herb-chicken-orzo-with-zucchini-for-two",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "**Bring the broth to a simmer before adding it.** Cold liquid dropped into a hot pan shocks the healthy dinner ideas [for two](/recipes/creamy-parmesan-garlic-chicken-orzo-for-two) slows the cooking process, which can lead to uneven absorption."
+    },
+    {
+      "slug": "easy-and-healthy-dinner-recipes-for-two",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "Spinach — 4 cups looks like a mountain, but it wilts into just the right amount of greens romantic dinner ideas for two for two."
+    },
+    {
+      "slug": "easy-week-of-meals",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "You could swap ground turkey or easy healthy dinner recipes romantic dinner ideas for two for two, but those lack the fat for proper browning — add 1 tablespoon butter and cook to 165°F / 74°C."
+    },
+    {
+      "slug": "creamy-mashed-potatoes-for-two",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "It’s the kind of small-batch side that makes a Tuesday healthy dinner ideas for two feel like a date-night affair."
+    },
+    {
+      "slug": "easy-meal-recipes-for-2",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "I remember the night I decided I’d had enough of washing two pans and a lid for a healthy dinner ideas for two that served only two."
+    },
+    {
+      "slug": "quick-recipes-for-two-for-dinner",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "Not just any pan sauce — one built on the golden fond left by a properly seared healthy dinner ideas [romantic dinner](/recipes/romantic-dinner-ideas-for-two) ideas for two for two, finished with cold butter and fresh herbs."
+    },
+    {
+      "slug": "one-pan-garlic-butter-chicken-tomato-orzo",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "# Easy Dinner Ideas for Two: One-Pan Garlic Butter Chicken with Tomato Orzo\n\nThe best easy [dinner for](/recipes/easy-mexican-dinner-recipes) two is the one where the pasta cooks in the same pan as the chicken, soaking up every browned bit left behind by the sear."
+    },
+    {
+      "slug": "one-pan-garlic-butter-chicken-tomato-orzo",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "But almost every \"easy dinner for two\" list treats the pan as a place to cook things separately and then combine them."
+    },
+    {
+      "slug": "crockpot-chicken-tomato-rice-for-two",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "# Crockpot Recipes for Two: Slow Cooker Chicken & Tomato Rice\n\nMost crockpot recipes assume you're feeding a soccer team."
+    },
+    {
+      "slug": "thanksgiving-dinner-for-two",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "No amount of careful portioning will make a whole turkey feel reasonable romantic dinner ideas for two for two people."
+    },
+    {
+      "slug": "thanksgiving-dinner-for-two",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "This is a complete Thanksgiving dinner on a single rimmed sheet pan, built around two herb-roasted healthy dinner ideas for twos, a wild rice pilaf that bubbles alongside on the stovetop, and a shockingly good salad made from canned whole tomatoes."
+    },
+    {
+      "slug": "thanksgiving-dinner-for-two",
+      "check": "keyword-stuff",
+      "line": 0,
+      "text": "While the oven climbs, pat the easy [easy 4 ingredient chicken breast recipes](/recipes/easy-4-ingredient-chicken-breast-recipes) [healthy dinner ideas for two recipes](/recipes/easy-4-ingredient-chicken-breast-recipes)s thoroughly dry with paper towels—this is non-negotiable if you want skin that c"
+    }
+  ],
+  "brokenLinks": [
+    {
+      "slug": "romantic-dinner-for-two-at-home",
+      "target": "romantic-dinner-ideas-for-two"
+    },
+    {
+      "slug": "one-pan-chicken-rice-dinner-for-two",
+      "target": "easy-recipes-for-two"
+    },
+    {
+      "slug": "one-pan-chicken-rice-dinner-for-two",
+      "target": "dinner-recipe-ideas-for-two"
+    },
+    {
+      "slug": "one-pan-chicken-tomato-garlic-rice",
+      "target": "easy-recipes-for-two"
+    },
+    {
+      "slug": "easy-chicken-dinners-for-two",
+      "target": "romantic-dinner-ideas-for-two"
+    },
+    {
+      "slug": "easy-4-ingredient-chicken-breast-recipes",
+      "target": "romantic-dinner-ideas-for-two"
+    },
+    {
+      "slug": "whole30-chicken-skillet-tomatoes-garlic",
+      "target": "dinner-recipe-ideas-for-two"
+    },
+    {
+      "slug": "whole30-chicken-skillet-tomatoes-garlic",
+      "target": "recipes-for-two"
+    },
+    {
+      "slug": "cooking-for-two",
+      "target": "romantic-dinner-ideas-for-two"
+    },
+    {
+      "slug": "one-pan-garlic-tomato-chicken-rice",
+      "target": "easy-dinner-ideas-for-two"
+    },
+    {
+      "slug": "one-pan-chicken-vegetable-skillet",
+      "target": "easy-dinner-ideas-for-two"
+    },
+    {
+      "slug": "one-pan-chicken-tomato-rice",
+      "target": "healthy-dinner-ideas-for-two"
+    },
+    {
+      "slug": "one-pan-chicken-rice-garlic-butter-tomato-sauce",
+      "target": "easy-dinner-ideas-for-two"
+    },
+    {
+      "slug": "one-pan-chicken-rice-garlic-butter-tomato-sauce",
+      "target": "easy-meal-ideas-for-two"
+    },
+    {
+      "slug": "quick-recipes-for-two-for-dinner",
+      "target": "romantic-dinner-ideas-for-two"
+    },
+    {
+      "slug": "garlic-butter-chicken-pasta-for-two",
+      "target": "recipes-for-two"
+    },
+    {
+      "slug": "garlic-butter-chicken-pasta-for-two",
+      "target": "dinner-recipe-ideas-for-two"
+    }
+  ],
+  "dupTitles": []
+}

@@ -1,0 +1,356 @@
+{
+  "summary": {
+    "health_score": 75,
+    "business_type": "Food Blog / Recipe Publisher",
+    "top_findings": [
+      "97 of 165 sitemap URLs are noindex (thin-category gate not applied in sitemap.ts)",
+      "GPTBot hard-blocked (429) by Hostinger bot protection despite robots.txt allow — ChatGPT search cannot crawl",
+      "123 programmatic category pages for 30 recipes — tag dump; 9/16 sampled hold <=3 cards; 5 near-duplicate family clusters cannibalize",
+      "5 empty top-level hubs (/techniques /guides /histoire /idees /equipement) indexable, sitemapped, in nav (3 with French slugs on English site)",
+      "Hub-spoke internal linking broken: category pages link to zero clusters; homepage links to zero clusters; 119-pill cloud flattens equity"
+    ],
+    "quick_wins": [
+      "Filter noindex categories out of sitemap.ts (165 -> ~68 URLs) + dedupe 4 + add /contact (30 min)",
+      "Noindex + unsitemap the 5 empty hubs; 301 French slugs (30 min)",
+      "Whitelist GPTBot in Hostinger bot protection (30 min)",
+      "301-merge near-duplicate category families (30-minute x5, chicken x18, one-pan x7, dessert x4, quick x6)",
+      "Fix garbled garlic-shrimp intro + sanitize DB description fields (1-2h)"
+    ]
+  },
+  "categories": [
+    {
+      "name": "Technical SEO",
+      "score": 80,
+      "what_works": [
+        "All 169 sitemap URLs 200 OK; 0 canonical mismatches; 0 missing descriptions/titles/H1s",
+        "HTTPS 301, apex->www canonical, HSTS preload, security headers, prerendered SSR",
+        "Clean robots.txt; legacy /recettes 308 -> /recipes; clean URL structure"
+      ],
+      "findings": [
+        {
+          "title": "Soft-404s: unknown category/cluster/login slugs return 200 with generic shell",
+          "severity": "High",
+          "description": "/recipes/category/{unknown}, /recipes/cluster/{unknown}, /login -> HTTP 200 generic fallback title; category/cluster fallback emits duplicate noindex metas",
+          "recommendation": "Return true 404/410; fix duplicate robots meta in fallback template"
+        },
+        {
+          "title": "Sitemap hygiene: 97 noindexed URLs listed, 4 duplicates, /contact missing",
+          "severity": "High",
+          "description": "app/sitemap.ts lists all category tags unfiltered; page.tsx:132 noindexes <3-recipe categories; dinner-for-two/one-pan/one-pan-meal/small-batch listed twice; /contact 200 indexable not in sitemap",
+          "recommendation": "Apply MIN_RECIPES_FOR_INDEX gate in sitemap.ts; dedupe by slug; add /contact"
+        },
+        {
+          "title": "/dashboard + /login return 200 without noindex",
+          "severity": "Medium",
+          "description": "Client-side 307 shell; robots.txt blocks /dashboard but no noindex meta",
+          "recommendation": "404/401 server-side or noindex + X-Robots-Tag"
+        },
+        {
+          "title": "25 indexable categories vs 30 recipes; several with 3 cards only",
+          "severity": "Medium",
+          "description": "Near-duplicate title sets among indexable categories",
+          "recommendation": "Consolidate or differentiate; add recipes or noindex"
+        },
+        {
+          "title": "IndexNow not implemented",
+          "severity": "Low",
+          "description": "indexnow.txt 404",
+          "recommendation": "Add IndexNow key + submission for Bing/Yandex"
+        },
+        {
+          "title": "CSP minimal (upgrade-insecure-requests only)",
+          "severity": "Low",
+          "description": "No default-src/script-src directives",
+          "recommendation": "Extend CSP (self + Cloudinary images)"
+        },
+        {
+          "title": "Hostinger CDN edge cache BYPASS for HTML + static",
+          "severity": "Low",
+          "description": "x-hcdn-cache-status: BYPASS on all observed responses; 0.14-0.44s origin round-trip",
+          "recommendation": "Enable edge caching for immutable assets"
+        }
+      ]
+    },
+    {
+      "name": "Content Quality",
+      "score": 78,
+      "what_works": [
+        "Recipe pages avg 1,832 words; QRG quality 82-94/100; 0 AI-pattern flags; ~6th-7th grade",
+        "E-E-A-T: /about with brand-persona + AI-assistance disclosure; substantive /contact /privacy /terms",
+        "Bylines + real dates on recipes; dateModified in JSON-LD; FAQPage on recipes"
+      ],
+      "findings": [
+        {
+          "title": "5 empty hub pages (thin content, indexable, sitemapped, in nav)",
+          "severity": "Critical",
+          "description": "/techniques /guides /histoire /idees /equipement render '0 articles' + intro only (205-228 words); 3 use French slugs on English site",
+          "recommendation": "noindex + unsitemap until >=1 article; 301 French slugs to English"
+        },
+        {
+          "title": "~10 near-duplicate '-for-two' category pages with verbatim template",
+          "severity": "High",
+          "description": "Identical 'Looking for the best {kw} for two recipes for two people...' incl. 'for tworecipes' error; H1 collisions on 3 pairs; each holds 1 recipe card",
+          "recommendation": "301-merge into base categories; kill template intros"
+        },
+        {
+          "title": "Garbled keyword-stuffing artifact on garlic-shrimp recipe intro",
+          "severity": "High",
+          "description": "'25-minute easy easy mexican dinner recipes recipes two' visible in page body; same garbage in llms.txt for ~9-12 recipes",
+          "recommendation": "Rewrite polluted DB description fields; add token-repetition quality gate"
+        },
+        {
+          "title": "96/123 category pages under 500 words (mean 427); clusters 372-571",
+          "severity": "Medium",
+          "description": "Low information density; generic 'scaled for two' boilerplate",
+          "recommendation": "Expand intros to 150-250 words with topical coverage"
+        },
+        {
+          "title": "No meaningful dates on category pages; sitemap lastmod = build time",
+          "severity": "Medium",
+          "description": "All 139 non-recipe URLs share one build timestamp as lastmod",
+          "recommendation": "Real dates or omit lastmod"
+        },
+        {
+          "title": "Unverifiable about-page claims",
+          "severity": "Low",
+          "description": "'cookbook author' (no book anywhere); '7-criteria quality audit' (real gate = 4 checks)",
+          "recommendation": "Remove/qualify claims; align with real gate; add named human editor"
+        }
+      ]
+    },
+    {
+      "name": "On-Page SEO",
+      "score": 72,
+      "what_works": [
+        "Titles/descriptions/H1s clean across all 169 pages",
+        "Recipe pages: rich H2 structure, keyword in H1, FAQ section",
+        "Category/cluster cards above the fold; 53-word intro before cards on /category/30-minute"
+      ],
+      "findings": [
+        {
+          "title": "Hub-spoke internal linking broken (0 category -> cluster links; homepage -> 0 clusters)",
+          "severity": "High",
+          "description": "Category pages link to zero clusters; homepage links to zero of 6 clusters; recipes link to zero categories; clusters link all 119 categories via untargeted pill cloud",
+          "recommendation": "Mandatory category->cluster body links; targeted 8-12 cluster links; recipe breadcrumbs with category; homepage cluster cards"
+        },
+        {
+          "title": "Keyword cannibalization: 5 overlapping 30-minute pages, 18 chicken, 7 one-pan, 6 quick, 4 dessert",
+          "severity": "High",
+          "description": "Plus 5 category-vs-recipe collisions (e.g. /category/chicken-dinner-for-two vs /recipes/chicken-dinner-for-two)",
+          "recommendation": "301-merge families to one canonical per cluster; keep recipe as money page"
+        },
+        {
+          "title": "Chicken category tag imprecision (8 non-chicken cards)",
+          "severity": "High",
+          "description": "/category/chicken lists 8 broad 'for two' recipes with no chicken signal",
+          "recommendation": "Only render recipes carrying the tag, or rename intent"
+        },
+        {
+          "title": "119-link tag cloud on every page flattens link equity",
+          "severity": "Medium",
+          "description": "Cluster, category, homepage all link all 119 categories",
+          "recommendation": "Remove global pill cloud; curated 8-12 links per template"
+        },
+        {
+          "title": "Duplicate H1/H2 on category/cluster pages; '6 recipe s' typo",
+          "severity": "Medium",
+          "description": "H1 '30-Minute Recipes for Two' + H2 '30-minute recipes'; broken pluralization visible",
+          "recommendation": "Distinct question-oriented H2s; fix pluralization"
+        },
+        {
+          "title": "99 pages with meta descriptions < 90 chars",
+          "severity": "Low",
+          "description": "Category pages have short descriptions",
+          "recommendation": "Expand descriptions on kept categories"
+        }
+      ]
+    },
+    {
+      "name": "Schema / Structured Data",
+      "score": 76,
+      "what_works": [
+        "Recipe schema solid on 21/30 (author, HowToStep, ISO times, yield, ingredients); BlogPosting mainEntity; FAQPage in-graph",
+        "Homepage WebSite + SearchAction + Organization with logo + sameAs",
+        "All sampled pages emit valid JSON-LD; correctly no fake aggregateRating"
+      ],
+      "findings": [
+        {
+          "title": "9 of 30 recipe pages missing author on Recipe JSON-LD node",
+          "severity": "High",
+          "description": "mediterranean-chicken-orzo, white-wine-lemon-chicken, chicken-dinner-for-two, edible-cookie-dough, easy-and-healthy-dinner, easter-dinner, creamy-mashed-potatoes, easy-week-of-meals + 1",
+          "recommendation": "Add author Person to Recipe node for all; add schema check to quality gate"
+        },
+        {
+          "title": "Duplicate BreadcrumbList JSON-LD on category + cluster pages (129 URLs)",
+          "severity": "High",
+          "description": "Two identical blocks; labels disagree on /category/30-minute ('30-Minute' vs '30-minute')",
+          "recommendation": "Single BreadcrumbList from one source (page title)"
+        },
+        {
+          "title": "Recipe missing nutrition and recipeCuisine",
+          "severity": "Medium",
+          "description": "No NutritionInformation on any Recipe node; no recipeCuisine despite French positioning",
+          "recommendation": "Add computed factual values"
+        },
+        {
+          "title": "Author spelling inconsistent (Lefèvre vs Lefevre); no Person @id",
+          "severity": "Low",
+          "description": "chicken-pot-pie-for-2 uses unaccented form; homepage Organization description also unaccented",
+          "recommendation": "Canonical spelling + @id /about#person"
+        },
+        {
+          "title": "Recipe node missing dateModified (BlogPosting has it)",
+          "severity": "Low",
+          "description": "Recipes are updated (food-safety edits) but Recipe node carries datePublished only",
+          "recommendation": "Mirror dateModified onto Recipe node"
+        },
+        {
+          "title": "aggregateRating present on exactly one page (inconsistent)",
+          "severity": "Info",
+          "description": "creamy-parmesan-garlic-chicken-orzo-for-two has aggregateRating; all others none",
+          "recommendation": "Remove or back with real review data"
+        }
+      ]
+    },
+    {
+      "name": "Performance (CWV)",
+      "score": 75,
+      "what_works": [
+        "Prerendered static + CDN brotli + immutable 1y cache headers",
+        "Zero third-party hosts; lab warm-cache LCP 520ms / CLS 0",
+        "Images: next/image, width/height, lazy, hero preloaded with srcset"
+      ],
+      "findings": [
+        {
+          "title": "Hostinger JS bot-challenge served to non-JS clients (incl. Googlebot UA, sitemap, static)",
+          "severity": "Critical",
+          "description": "curl/Googlebot-UA GETs return challenge HTML (200/403, noindex challenge page); adds ~5s to every real first visit",
+          "recommendation": "Whitelist verified bots; exclude /_next/static, /sitemap.xml, /robots.txt from challenge"
+        },
+        {
+          "title": "Mobile LCP at threshold: 2.76s home / 2.48s recipe (throttled, incl. challenge)",
+          "severity": "High",
+          "description": "Script execution dominates (18.3s cumulative download time throttled)",
+          "recommendation": "Remove challenge overhead; reduce JS; preload hero"
+        },
+        {
+          "title": "Heavy JS: 62 script tags, 94.5KB inline, ~380KB external, 1 render-blocking chunk",
+          "severity": "High",
+          "description": "RSC bootstrap + hydration payloads",
+          "recommendation": "Slim inline payload; async the blocking chunk"
+        },
+        {
+          "title": "37-49 RSC prefetch fetches (88-261KB) per page on prerendered static site",
+          "severity": "Medium",
+          "description": "Prefetch payloads duplicate HTML cache content",
+          "recommendation": "prefetch=false on non-critical links"
+        },
+        {
+          "title": "Approx INP 176-237ms at 200ms boundary; TBT 309-411ms throttled mobile",
+          "severity": "Medium",
+          "description": "Main-thread pressure from JS/RSC",
+          "recommendation": "Reduce main-thread work"
+        },
+        {
+          "title": "CDN edge BYPASS on all browser requests; font-face load errors; h3 unconfirmed",
+          "severity": "Low",
+          "description": "0.14-0.44s origin per request; 7 @font-face faces report error",
+          "recommendation": "Enable edge caching; preload only used faces"
+        }
+      ]
+    },
+    {
+      "name": "AI Search Readiness",
+      "score": 62,
+      "what_works": [
+        "Prerendered SSR; robots.txt allows all AI crawlers",
+        "llms.txt present (200); answer-nugget sections at optimal passage lengths; FAQ + schema",
+        "Consistent brand entity across pages/socials/schema"
+      ],
+      "findings": [
+        {
+          "title": "GPTBot hard-blocked (429) by Hostinger bot protection despite robots.txt allow",
+          "severity": "Critical",
+          "description": "Verified 5/5 with official UA strings on all URLs; all other AI bots return 200. ChatGPT search cannot crawl the site",
+          "recommendation": "Whitelist GPTBot in Hostinger security settings; validate with curl"
+        },
+        {
+          "title": "Keyword artifacts in llms.txt descriptions",
+          "severity": "High",
+          "description": "'easy easy mexican dinner recipes recipes two', 'servings servings', wrong PT durations, 'Published Articles (0)'",
+          "recommendation": "Sanitize DB description fields; regenerate llms.txt; quality gate"
+        },
+        {
+          "title": "Category/cluster pages weak for AI Overviews",
+          "severity": "Medium",
+          "description": "Duplicate H1/H2, ~40-word intros, no ItemList schema",
+          "recommendation": "Distinct H2s, 80-120 word intros, ItemList JSON-LD"
+        },
+        {
+          "title": "Unverifiable about-page claims; no persona-transparency line",
+          "severity": "Medium",
+          "description": "'cookbook author', '7-criteria audit' vs real 4-check gate",
+          "recommendation": "Remove/qualify; disclose brand persona explicitly"
+        },
+        {
+          "title": "llms.txt not linked; /api/ disallowed while llms.txt links /api/recipes/raw",
+          "severity": "Low",
+          "description": "Only discoverable by direct-path convention",
+          "recommendation": "Footer link; explicit Allow: /api/recipes/raw"
+        }
+      ]
+    },
+    {
+      "name": "Images",
+      "score": 85,
+      "what_works": [
+        "30/30 recipes have hero images (og:image) — was 13 missing in July",
+        "All imgs: width+height, alt text, lazy below fold; hero preloaded with responsive srcset",
+        "next/image + Cloudinary f_auto,q_auto; Pinterest-first active"
+      ],
+      "findings": [
+        {
+          "title": "img tags carry no explicit srcset (preload link does); single schema image URL",
+          "severity": "Low",
+          "description": "Responsive candidates exist on preload link; img tag has one w param",
+          "recommendation": "Confirm next/image emits responsive candidates; schema image >= 720px"
+        }
+      ]
+    }
+  ],
+  "action_plan": {
+    "phases": [
+      {"name": "Phase 1: Critical Fixes", "timeframe": "Week 1", "items": [
+        "Sitemap: filter noindex categories, dedupe 4 URLs, add /contact",
+        "Hostinger: whitelist GPTBot, exclude static/sitemap from bot challenge",
+        "Noindex + unsitemap 5 empty hubs; 301 French slugs",
+        "Fix Recipe JSON-LD author on 9 recipes + quality-gate check",
+        "301-merge near-duplicate category families (123 -> ~35)"
+      ]},
+      {"name": "Phase 2: High-Impact Improvements", "timeframe": "Weeks 2-3", "items": [
+        "Category->cluster + homepage->cluster links; remove 119-pill cloud",
+        "Sanitize DB descriptions; regenerate llms.txt; token-repetition gate",
+        "Rewrite category intros (150-250 words); fix '6 recipe s'",
+        "Add nutrition + recipeCuisine; unify author spelling",
+        "True 404s for unknown category/cluster/login slugs"
+      ]},
+      {"name": "Phase 3: Content & Authority", "timeframe": "Month 2", "items": [
+        "Fill /techniques + /equipement with 2-3 articles",
+        "VAGUE 3 content (beef, seafood, vegetarian, pork)",
+        "Author byline + dates + filters on kept categories",
+        "ItemList of Recipe on category pages",
+        "Moz free tier + Bing Webmaster backlink baseline"
+      ]},
+      {"name": "Phase 4: Monitoring & Iteration", "timeframe": "Ongoing", "items": [
+        "Seobility re-crawl after sitemap fixes",
+        "PSI/CrUX with API key (field CWV)",
+        "Monthly cannibalization + link-graph audit",
+        "Common Crawl re-check after Q3 2026 graph"
+      ]}
+    ]
+  },
+  "artifacts": {
+    "findings_dir": "findings/",
+    "screenshots_dir": "screenshots/"
+  }
+}

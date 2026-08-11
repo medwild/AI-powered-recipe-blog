@@ -1,0 +1,76 @@
+{
+  "url": "https://www.chefaugustin.com/recipes/salmon-orzo-with-dill-and-capers-for-two",
+  "status_code": 200,
+  "content": "<!DOCTYPE html><html lang=\"en\" class=\"geist_deef94d5-module__Sms4YG__variable playfair_display_d5eda251-module__JGL7aG__variable bg-background\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"/><link rel=\"preload\" href=\"/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2\" as=\"font\" crossorigin=\"\" type=\"font/wo...",
+  "raw_content": "<!DOCTYPE html><html lang=\"en\" class=\"geist_deef94d5-module__Sms4YG__variable playfair_display_d5eda251-module__JGL7aG__variable bg-background\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" conte...",
+  "is_spa": false,
+  "extracted_text": "Article and tips\nThe one thing restaurants do with salmon orzo that most home cooks miss is the simplest: crisp skin. Not soggy, rubbery, peel-it-off-and-push-it-aside skin, but a shattering, glassy crust you want to eat on its own. And if you cook the orzo in the same pan after searing the fish, that skin-rendered fat and those browned bits on the bottom of the pan get swept into the pasta, where they form the backbone of a sauce so silky you won't believe there's no cream in it.\nThat's the dis...",
+  "publication_date": "2026-07-30",
+  "accessibility_tree": null,
+  "headers": {
+    "Date": "Wed, 05 Aug 2026 11:01:47 GMT",
+    "Content-Type": "text/html; charset=utf-8",
+    "Transfer-Encoding": "chunked",
+    "Connection": "keep-alive",
+    "X-Frame-Options": "DENY",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+    "Content-Security-Policy": "upgrade-insecure-requests",
+    "x-nextjs-cache": "HIT",
+    "x-nextjs-prerender": "1",
+    "x-nextjs-stale-time": "300",
+    "X-Powered-By": "Next.js",
+    "Cache-Control": "s-maxage=31536000",
+    "ETag": "\"svnmw5tf8h4h8i\"",
+    "Content-Encoding": "br",
+    "platform": "hostinger",
+    "panel": "hpanel",
+    "Server": "hcdn",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "x-hcdn-request-id": "bbda896fe525e5ad6e95a5c922a82859-srv-edge5",
+    "x-hcdn-cache-status": "BYPASS",
+    "x-hcdn-upstream-rt": "0.410"
+  },
+  "redirect_chain": [],
+  "console_errors": [],
+  "render_diagnostics": [],
+  "render_engine": null,
+  "render_ms": null,
+  "mode_used": "raw",
+  "error": null,
+  "structured_data": {
+    "block_count": 2,
+    "processed_count": 2,
+    "total_bytes": 8231,
+    "truncated": false,
+    "blocks": [
+      {
+        "index": 1,
+        "size_bytes": 584,
+        "valid": true,
+        "types": [
+          "BreadcrumbList",
+          "ListItem"
+        ],
+        "types_truncated": false
+      },
+      {
+        "index": 2,
+        "size_bytes": 7647,
+        "valid": true,
+        "types": [
+          "Answer",
+          "BlogPosting",
+          "FAQPage",
+          "HowToStep",
+          "Organization",
+          "Person",
+          "Question",
+          "Recipe"
+        ],
+        "types_truncated": false
+      }
+    ]
+  }
+}

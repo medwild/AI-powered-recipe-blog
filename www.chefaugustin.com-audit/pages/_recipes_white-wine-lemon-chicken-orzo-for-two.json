@@ -1,0 +1,77 @@
+{
+  "url": "https://www.chefaugustin.com/recipes/white-wine-lemon-chicken-orzo-for-two",
+  "status_code": 200,
+  "content": "<!DOCTYPE html><html lang=\"en\" class=\"geist_deef94d5-module__Sms4YG__variable playfair_display_d5eda251-module__JGL7aG__variable bg-background\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/><link rel=\"preload\" href=\"/_next/static/media/2a65768255d6b625-s.p.3u4lli0-axodc.woff2\" as=\"font\" crossorigin=\"\" type=\"font/woff2\"/><link rel=\"preload\" href=\"/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2\" as=\"font\" crossorigin=\"\" type=\"font/wo...",
+  "raw_content": "<!DOCTYPE html><html lang=\"en\" class=\"geist_deef94d5-module__Sms4YG__variable playfair_display_d5eda251-module__JGL7aG__variable bg-background\"><head><meta charSet=\"utf-8\"/><meta name=\"viewport\" conte...",
+  "is_spa": false,
+  "extracted_text": "Article and tips\nThere is a moment, about halfway through cooking, when the white wine hits the hot pan and the fragrance of lemon and thyme rushes up\u2014and you realize this is going to be better than any weeknight dinner has a right to be. It's the scent of a French bistro kitchen, yet all that elegance unfolds in one pan on your own stove. This white wine lemon mediterranean chicken orzo with feta and olives for two for two skips the heavy cream that so many recipes rely on, instead building a g...",
+  "publication_date": "2026-08-03",
+  "accessibility_tree": null,
+  "headers": {
+    "Date": "Wed, 05 Aug 2026 11:01:56 GMT",
+    "Content-Type": "text/html; charset=utf-8",
+    "Transfer-Encoding": "chunked",
+    "Connection": "keep-alive",
+    "X-Frame-Options": "DENY",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+    "Content-Security-Policy": "upgrade-insecure-requests",
+    "x-nextjs-cache": "HIT",
+    "x-nextjs-prerender": "1",
+    "x-nextjs-stale-time": "300",
+    "X-Powered-By": "Next.js",
+    "Cache-Control": "s-maxage=31536000",
+    "ETag": "\"k8sccxupzx4ako\"",
+    "Content-Encoding": "br",
+    "platform": "hostinger",
+    "panel": "hpanel",
+    "Server": "hcdn",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "x-hcdn-request-id": "1560215bfe028d72fabef6cb573a0b5a-srv-edge4",
+    "x-hcdn-cache-status": "BYPASS",
+    "x-hcdn-upstream-rt": "0.422"
+  },
+  "redirect_chain": [],
+  "console_errors": [],
+  "render_diagnostics": [],
+  "render_engine": null,
+  "render_ms": null,
+  "mode_used": "raw",
+  "error": null,
+  "structured_data": {
+    "block_count": 2,
+    "processed_count": 2,
+    "total_bytes": 6844,
+    "truncated": false,
+    "blocks": [
+      {
+        "index": 1,
+        "size_bytes": 582,
+        "valid": true,
+        "types": [
+          "BreadcrumbList",
+          "ListItem"
+        ],
+        "types_truncated": false
+      },
+      {
+        "index": 2,
+        "size_bytes": 6262,
+        "valid": true,
+        "types": [
+          "Answer",
+          "BlogPosting",
+          "FAQPage",
+          "HowToStep",
+          "NutritionInformation",
+          "Organization",
+          "Person",
+          "Question",
+          "Recipe"
+        ],
+        "types_truncated": false
+      }
+    ]
+  }
+}

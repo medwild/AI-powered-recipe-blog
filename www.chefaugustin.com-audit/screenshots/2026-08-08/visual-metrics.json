@@ -1,0 +1,340 @@
+{
+ "console_errors": [
+  {
+   "page": "home",
+   "vp": "desktop",
+   "type": "error",
+   "text": "Failed to load resource: the server responded with a status of 404 ()"
+  },
+  {
+   "page": "home",
+   "vp": "desktop",
+   "type": "error",
+   "text": "Refused to execute script from 'https://www.chefaugustin.com/_vercel/insights/script.js' because its MIME type ('text/html') is not executable, and strict MIME "
+  },
+  {
+   "page": "home",
+   "vp": "mobile",
+   "type": "error",
+   "text": "Failed to load resource: the server responded with a status of 404 ()"
+  },
+  {
+   "page": "home",
+   "vp": "mobile",
+   "type": "error",
+   "text": "Refused to execute script from 'https://www.chefaugustin.com/_vercel/insights/script.js' because its MIME type ('text/html') is not executable, and strict MIME "
+  },
+  {
+   "page": "recipe",
+   "vp": "desktop",
+   "type": "error",
+   "text": "Failed to load resource: the server responded with a status of 404 ()"
+  },
+  {
+   "page": "recipe",
+   "vp": "desktop",
+   "type": "error",
+   "text": "Refused to execute script from 'https://www.chefaugustin.com/_vercel/insights/script.js' because its MIME type ('text/html') is not executable, and strict MIME "
+  },
+  {
+   "page": "recipe",
+   "vp": "mobile",
+   "type": "error",
+   "text": "Failed to load resource: the server responded with a status of 404 ()"
+  },
+  {
+   "page": "recipe",
+   "vp": "mobile",
+   "type": "error",
+   "text": "Refused to execute script from 'https://www.chefaugustin.com/_vercel/insights/script.js' because its MIME type ('text/html') is not executable, and strict MIME "
+  }
+ ],
+ "home_desktop": {
+  "overflow": false,
+  "overflowX": 0,
+  "brokenImgs": [],
+  "imgs": 11,
+  "fontSizes": {
+   "h1": {
+    "fs": "48px",
+    "color": "lab(14.0649 4.58021 6.10547)"
+   },
+   "h2": {
+    "fs": "24px",
+    "color": "lab(14.0649 4.58021 6.10547)"
+   },
+   "h3": {
+    "fs": "20px",
+    "color": "lab(14.0649 4.58021 6.10547)"
+   },
+   "body": {
+    "fs": "16px",
+    "color": "lab(14.0649 4.58021 6.10547)"
+   },
+   "p": {
+    "fs": "16px",
+    "color": "lab(32.6104 6.18728 9.76909)"
+   }
+  },
+  "smallTargets": [
+   {
+    "tag": "BUTTON",
+    "text": "",
+    "w": 36,
+    "h": 36,
+    "cls": "rounded-md p-2 text-muted-foreground transition-colors hover"
+   }
+  ],
+  "consoleErrors": [],
+  "heroInfo": {
+   "h1Text": "Easy Dinners, Made for Two",
+   "h1Top": 177,
+   "h1Bottom": 297
+  },
+  "viewport": "desktop",
+  "cls": 0,
+  "contrast": [
+   {
+    "sel": "body",
+    "text": "Skip to content((a,b,c,d,e,f,g,h)=>{let ",
+    "fg": "lab(14.0649 4.58021 6.10547)",
+    "bg": "rgb(98,2924,0)",
+    "ratio": 35.34
+   },
+   {
+    "sel": "h1",
+    "text": "Easy Dinners, Made for Two",
+    "fg": "lab(14.0649 4.58021 6.10547)",
+    "bg": "rgb(98,2924,0)",
+    "ratio": 35.34
+   },
+   {
+    "sel": "h2",
+    "text": "Small-batch cooking, big French techniqu",
+    "fg": "lab(14.0649 4.58021 6.10547)",
+    "bg": "rgb(98,2924,0)",
+    "ratio": 35.34
+   },
+   {
+    "sel": "p",
+    "text": "Practical meals scaled for two people \u2014 ",
+    "fg": "lab(32.6104 6.18728 9.76909)",
+    "bg": "rgb(98,2924,0)",
+    "ratio": 5.81
+   },
+   {
+    "sel": "a",
+    "text": "Skip to content",
+    "fg": "lab(14.0649 4.58021 6.10547)",
+    "bg": "rgb(98,2924,0)",
+    "ratio": 35.34
+   },
+   {
+    "sel": "button",
+    "text": "",
+    "fg": "lab(32.6104 6.18728 9.76909)",
+    "bg": "rgb(0,984998,0)",
+    "ratio": 197867.64
+   }
+  ]
+ },
+ "home_mobile": {
+  "overflow": false,
+  "overflowX": 0,
+  "brokenImgs": [],
+  "imgs": 11,
+  "fontSizes": {
+   "h1": {
+    "fs": "32px",
+    "color": "lab(14.0649 4.58021 6.10547)"
+   },
+   "h2": {
+    "fs": "24px",
+    "color": "lab(14.0649 4.58021 6.10547)"
+   },
+   "h3": {
+    "fs": "20px",
+    "color": "lab(14.0649 4.58021 6.10547)"
+   },
+   "body": {
+    "fs": "16px",
+    "color": "lab(14.0649 4.58021 6.10547)"
+   },
+   "p": {
+    "fs": "16px",
+    "color": "lab(32.6104 6.18728 9.76909)"
+   }
+  },
+  "smallTargets": [
+   {
+    "tag": "BUTTON",
+    "text": "",
+    "w": 40,
+    "h": 40,
+    "cls": "md:hidden flex h-10 w-10 items-center justify-center rounded"
+   }
+  ],
+  "consoleErrors": [],
+  "heroInfo": {
+   "h1Text": "Easy Dinners, Made for Two",
+   "h1Top": 378,
+   "h1Bottom": 458
+  },
+  "viewport": "mobile",
+  "cls": 0,
+  "contrast": null
+ },
+ "home_desktop_dark": {
+  "bodyBg": "lab(98.2924 0.224292 3.04729)",
+  "bodyColor": "lab(14.0649 4.58021 6.10547)"
+ },
+ "recipe_desktop": {
+  "overflow": false,
+  "overflowX": 0,
+  "brokenImgs": [],
+  "imgs": 5,
+  "fontSizes": {
+   "h1": {
+    "fs": "44.8px",
+    "color": "lab(14.0649 4.58021 6.10547)"
+   },
+   "h2": {
+    "fs": "24px",
+    "color": "lab(14.0649 4.58021 6.10547)"
+   },
+   "h3": {
+    "fs": "14px",
+    "color": "lab(14.0649 4.58021 6.10547)"
+   },
+   "body": {
+    "fs": "16px",
+    "color": "lab(14.0649 4.58021 6.10547)"
+   },
+   "p": {
+    "fs": "12px",
+    "color": "lab(42.8281 52.1835 70.1237)"
+   }
+  },
+  "smallTargets": [
+   {
+    "tag": "BUTTON",
+    "text": "",
+    "w": 36,
+    "h": 36,
+    "cls": "rounded-md p-2 text-muted-foreground transition-colors hover"
+   },
+   {
+    "tag": "A",
+    "text": "Home",
+    "w": 37,
+    "h": 20,
+    "cls": "transition-colors hover:text-foreground"
+   }
+  ],
+  "consoleErrors": [],
+  "heroInfo": {
+   "h1Text": "Molten Chocolate Lava Cakes for Two (25-Minute Dessert for Two)",
+   "h1Top": 1253,
+   "h1Bottom": 1365
+  },
+  "viewport": "desktop",
+  "cls": 0,
+  "contrast": [
+   {
+    "sel": "body",
+    "text": "Skip to content((a,b,c,d,e,f,g,h)=>{let ",
+    "fg": "lab(14.0649 4.58021 6.10547)",
+    "bg": "rgb(98,2924,0)",
+    "ratio": 35.34
+   },
+   {
+    "sel": "h1",
+    "text": "Molten Chocolate Lava Cakes for Two (25-",
+    "fg": "lab(14.0649 4.58021 6.10547)",
+    "bg": "rgb(98,2924,0)",
+    "ratio": 35.34
+   },
+   {
+    "sel": "h2",
+    "text": "Ingredients",
+    "fg": "lab(14.0649 4.58021 6.10547)",
+    "bg": "rgb(100,0,107408)",
+    "ratio": 20115.04
+   },
+   {
+    "sel": "p",
+    "text": "Why This Recipe Works",
+    "fg": "lab(42.8281 52.1835 70.1237)",
+    "bg": "rgb(98,2924,0)",
+    "ratio": 12.07
+   },
+   {
+    "sel": "a",
+    "text": "Skip to content",
+    "fg": "lab(14.0649 4.58021 6.10547)",
+    "bg": "rgb(98,2924,0)",
+    "ratio": 35.34
+   },
+   {
+    "sel": "button",
+    "text": "",
+    "fg": "lab(32.6104 6.18728 9.76909)",
+    "bg": "rgb(0,984998,0)",
+    "ratio": 197867.64
+   }
+  ]
+ },
+ "recipe_mobile": {
+  "overflow": false,
+  "overflowX": 0,
+  "brokenImgs": [],
+  "imgs": 5,
+  "fontSizes": {
+   "h1": {
+    "fs": "28.8px",
+    "color": "lab(14.0649 4.58021 6.10547)"
+   },
+   "h2": {
+    "fs": "24px",
+    "color": "lab(14.0649 4.58021 6.10547)"
+   },
+   "h3": {
+    "fs": "14px",
+    "color": "lab(14.0649 4.58021 6.10547)"
+   },
+   "body": {
+    "fs": "16px",
+    "color": "lab(14.0649 4.58021 6.10547)"
+   },
+   "p": {
+    "fs": "12px",
+    "color": "lab(42.8281 52.1835 70.1237)"
+   }
+  },
+  "smallTargets": [
+   {
+    "tag": "BUTTON",
+    "text": "",
+    "w": 40,
+    "h": 40,
+    "cls": "md:hidden flex h-10 w-10 items-center justify-center rounded"
+   },
+   {
+    "tag": "A",
+    "text": "Home",
+    "w": 37,
+    "h": 20,
+    "cls": "transition-colors hover:text-foreground"
+   }
+  ],
+  "consoleErrors": [],
+  "heroInfo": {
+   "h1Text": "Molten Chocolate Lava Cakes for Two (25-Minute Dessert for Two)",
+   "h1Top": 464,
+   "h1Bottom": 572
+  },
+  "viewport": "mobile",
+  "cls": 0,
+  "contrast": null
+ }
+}
