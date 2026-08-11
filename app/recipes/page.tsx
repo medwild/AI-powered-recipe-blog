@@ -9,6 +9,7 @@ import { ArticleCard } from "@/components/article-card"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 
 const RecipeSearch = nextDynamic(() => import("@/components/recipe-search").then((m) => m.RecipeSearch))
+import { RecipeGrid } from "@/components/recipe-grid"
 import { searchPublishedRecipes, getRecipeCategories, getPublishedArticlesLight } from "@/lib/queries"
 import { getAllClusters } from "@/lib/cluster-resolver"
 import { canonicalCategories } from "@/lib/category-consolidation"
@@ -48,10 +49,22 @@ export async function generateMetadata({
 
 export default async function RecipesPage() {
   const [recipes, categories, articles] = await Promise.all([
-    searchPublishedRecipes(), // toutes les recettes (pas de filtre serveur — la recherche est client)
+    searchPublishedRecipes(), // toutes les recettes — le filtre ?q=/?cat= est client-side (RecipeGrid)
     getRecipeCategories(),
     getPublishedArticlesLight(),
   ])
+
+  // Sérialisation minimale pour le client (évite d'envoyer ingredients/jsonLd/workflowLog)
+  const cardData = recipes.map((r) => ({
+    id: r.id,
+    slug: r.slug,
+    title: r.title,
+    heroImageUrl: r.heroImageUrl,
+    difficulty: r.difficulty,
+    totalTime: r.totalTime,
+    servings: r.servings,
+    tags: r.tags ?? [],
+  }))
 
   const displayArticles = articles
   const clusters = getAllClusters()
@@ -86,7 +99,7 @@ export default async function RecipesPage() {
           </Suspense>
         </div>
 
-        {/* Recipe Grid */}
+        {/* Recipe Grid — filtrée côté client par ?q= et ?cat= */}
         <h2 className="sr-only">Browse recipes</h2>
         {recipes.length === 0 ? (
           <div className="rounded-xl border border-dashed border-border bg-card p-12 text-center">
@@ -95,11 +108,9 @@ export default async function RecipesPage() {
             </p>
           </div>
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {recipes.map((recipe) => (
-              <RecipeCard key={recipe.id} recipe={recipe} aspectRatio="4/3" />
-            ))}
-          </div>
+          <Suspense>
+            <RecipeGrid recipes={cardData} />
+          </Suspense>
         )}
 
         {/* Browse by category */}

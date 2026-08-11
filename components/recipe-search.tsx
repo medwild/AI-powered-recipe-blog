@@ -21,6 +21,8 @@ export function RecipeSearch({
   const searchParams = useSearchParams()
   const [, startTransition] = useTransition()
   const [showAll, setShowAll] = useState(false)
+  // La catégorie active vient de l'URL (filtre client) — le prop serveur est toujours vide
+  const activeCategory = searchParams.get("cat") ?? currentCategory
 
   const visibleCategories = showAll
     ? categories
@@ -50,7 +52,7 @@ export function RecipeSearch({
         <input
           type="search"
           placeholder='Search by ingredient, meal, or keyword…'
-          defaultValue={currentSearch}
+          defaultValue={searchParams.get("q") ?? currentSearch}
           onChange={(e) => {
             startTransition(() => {
               router.push(
@@ -62,7 +64,7 @@ export function RecipeSearch({
           className="w-full rounded-xl border border-border bg-card py-3 pl-12 pr-12 text-base outline-none transition-colors placeholder:text-muted-foreground/60 focus:border-primary focus:ring-2 focus:ring-primary/20"
           aria-label="Search recipes"
         />
-        {currentSearch ? (
+        {searchParams.get("q") ?? currentSearch ? (
           <button
             type="button"
             onClick={() => {
@@ -95,7 +97,7 @@ export function RecipeSearch({
               })
             }}
             className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
-              !currentCategory
+              !activeCategory
                 ? "bg-primary text-primary-foreground"
                 : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
             }`}
@@ -111,14 +113,14 @@ export function RecipeSearch({
                   router.push(
                     `${pathname}?${createQueryString(
                       "cat",
-                      cat === currentCategory ? "" : cat,
+                      cat === activeCategory ? "" : cat,
                     )}`,
                     { scroll: false },
                   )
                 })
               }}
               className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
-                cat === currentCategory
+                cat === activeCategory
                   ? "bg-primary text-primary-foreground"
                   : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
               }`}

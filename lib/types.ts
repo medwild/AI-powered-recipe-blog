@@ -13,10 +13,11 @@ export type ContentType = "recipe" | "article"
 // ── Component prop types ──────────────────────────────────────────────────
 
 /** Fields consumed by RecipeCard.
- *  Excerpt intentionally excluded — not rendered in listing cards (avoids duplicate content). */
+ *  Excerpt intentionally excluded — not rendered in listing cards (avoids duplicate content).
+ *  `tags` included : utilisé par RecipeGrid (filtre client ?cat= sur /recipes). */
 export type RecipeCardData = Pick<
   Recipe,
-  "id" | "slug" | "title" | "heroImageUrl" | "difficulty" | "totalTime" | "servings"
+  "id" | "slug" | "title" | "heroImageUrl" | "difficulty" | "totalTime" | "servings" | "tags"
 >
 
 /** Fields consumed by RecipeHero */
