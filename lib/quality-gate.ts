@@ -64,6 +64,10 @@ const BANNED_WORDS = [
   "probiotics", "gut health", "immune boost", "detox", "anti-inflammatory",
   "fat-burning", "miracle", "superfood", "cleanse", "cure", "heal your", "heal the body",
   "all-natural", "clinically proven", "scientifically proven",
+  // Process d'écriture — jamais de référence SERP/competitors dans le copy publié
+  "serp", "search results", "first page", "top results", "top ten", "top 10",
+  "competitor", "competing recipe", "seo", "ranking", "scan the top", "scroll through", "our angle",
+  "top-ranked", "top ranked", "the angle here", "my angle here", "that's the angle",
 ];
 
 // ---------------------------------------------------------------------------

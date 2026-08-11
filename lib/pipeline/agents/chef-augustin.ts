@@ -498,7 +498,7 @@ function parseIngredient(s: string): Ingredient {
   //   "3 large eggs, room temperature"   → qty: "3 large"          name: "eggs, room temperature"
   //   "Salt to taste"                    → qty: undefined          name: "Salt to taste"
   const match = s.match(
-    /^([\d¼½¾⅓⅔⅛⅜⅝⅞][\.\d\/\s]*(?:\s*(?:cup|tablespoon|teaspoon|ounce|oz|pound|lb|gram|g|kilogram|kg|ml|liter|piece|slice|clove|pinch|dash|bag|can|jar|bunch|small|medium|large)s?)?(?:\s*\([^)]+\))*\s*)\s*(.+)/i,
+    /^([\d¼½¾⅓⅔⅛⅜⅝⅞][\.\d\/\s]*(?:\s*(?:cup|tablespoon|teaspoon|ounce|oz|pound|lb|gram|g|kilogram|kg|ml|liter|piece|slice|clove|pinch|dash|bag|can|jar|bunch|small|medium|large)s?\b)?(?:\s*\([^)]+\))*\s*)\s*(.+)/i,
   )
   if (match) {
     return { quantity: match[1].trim(), name: match[2].trim() }
