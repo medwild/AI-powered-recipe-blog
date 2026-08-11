@@ -25,7 +25,7 @@
 | 10 ✅ | Garlic Butter Chicken Pasta | Pasta | 11/08 22:30 |
 | 9 ✅ | Crockpot Chicken & Tomato Rice | Slow Cooker | 12/08 13:30 |
 | 11 ✅ | Stovetop Mac and Cheese | Pasta | 12/08 18:30 |
-| 12 📅 | Asian Beef Noodle Stir-Fry | Asian | 12/08 22:30 |
+| 12 ✅ | Asian Beef Noodle Stir-Fry | Asian | 12/08 22:30 |
 | 13 📅 | Easy Mexican Dinner | Quick Weeknight | 13/08 13:30 |
 | 14 📅 | Pan-Seared Chicken Herb-Butter | Easy Chicken | 13/08 18:30 |
 | 15 📅 | One-Pan Chicken and Rice | One-Pan Meals | 14/08 13:30 |
