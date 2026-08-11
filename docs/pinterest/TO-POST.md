@@ -114,6 +114,7 @@ https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1785956301/reci
 Slow Cooker Chicken and Rice for Two (No Leftovers)
 
 **Alt text** :
+Slow cooker chicken and rice for two in a small crockpot, creamy tomato rice with tender chicken, cozy small-batch dinner
 
 **Description** :
 Most slow cooker recipes feed a crowd — this one feeds exactly two. Tender chicken and creamy rice, perfectly portioned for a 2-quart slow cooker. Set it and forget it, no leftovers to guilt you. Save this small-batch slow cooker dinner!
