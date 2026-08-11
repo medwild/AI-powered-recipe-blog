@@ -21,17 +21,17 @@
 | 5 ✅ | Lemon Butter Chicken Pasta | Romantic Dinner | 15/08 22:30 |
 | 6 ✅ | Baked Ziti | Romantic Dinner | 16/08 22:30 |
 | 7 ✅ | Slow Cooker Chicken & Rice | Slow Cooker | 17/08 22:30 |
-| 8 📅 | 2-Quart Slow Cooker Chicken & Gravy | Slow Cooker | 11/08 13:30 |
-| 10 📅 | Garlic Butter Chicken Pasta | Pasta | 11/08 18:30 |
-| 9 📅 | Crockpot Chicken & Tomato Rice | Slow Cooker | 11/08 22:30 |
-| 11 📅 | Stovetop Mac and Cheese | Pasta | 12/08 13:30 |
-| 12 📅 | Asian Beef Noodle Stir-Fry | Asian | 12/08 18:30 |
-| 13 📅 | Easy Mexican Dinner | Quick Weeknight | 12/08 22:30 |
-| 14 📅 | Pan-Seared Chicken Herb-Butter | Easy Chicken | 13/08 13:30 |
-| 15 📅 | One-Pan Chicken and Rice | One-Pan Meals | 13/08 18:30 |
-| 16 📅 | Garlic Butter Chicken Rice Bowls | Quick Weeknight | 14/08 13:30 |
-| 17 📅 | Edible Cookie Dough | Small-Batch Desserts | 14/08 18:30 |
-| 18 📅 | Creamy Mashed Potatoes | Small-Batch Sides | 15/08 13:30 |
+| 8 📅 | 2-Quart Slow Cooker Chicken & Gravy | Slow Cooker | 11/08 18:30 |
+| 10 📅 | Garlic Butter Chicken Pasta | Pasta | 11/08 22:30 |
+| 9 📅 | Crockpot Chicken & Tomato Rice | Slow Cooker | 12/08 13:30 |
+| 11 📅 | Stovetop Mac and Cheese | Pasta | 12/08 18:30 |
+| 12 📅 | Asian Beef Noodle Stir-Fry | Asian | 12/08 22:30 |
+| 13 📅 | Easy Mexican Dinner | Quick Weeknight | 13/08 13:30 |
+| 14 📅 | Pan-Seared Chicken Herb-Butter | Easy Chicken | 13/08 18:30 |
+| 15 📅 | One-Pan Chicken and Rice | One-Pan Meals | 14/08 13:30 |
+| 16 📅 | Garlic Butter Chicken Rice Bowls | Quick Weeknight | 14/08 18:30 |
+| 17 📅 | Edible Cookie Dough | Small-Batch Desserts | 15/08 13:30 |
+| 18 📅 | Creamy Mashed Potatoes | Small-Batch Sides | 15/08 18:30 |
 
 ---
 
