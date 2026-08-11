@@ -86,7 +86,7 @@ export default async function RecipesPage() {
         <div className="mb-8">
           <Suspense>
             <RecipeSearch
-              categories={categories}
+              categories={canonicalCategories(categories)}
               currentSearch=""
               currentCategory=""
             />

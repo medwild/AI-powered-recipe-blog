@@ -1,11 +1,8 @@
 "use client"
 
-import { useState } from "react"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import { useCallback, useTransition } from "react"
 import { Search, X } from "lucide-react"
-
-const VISIBLE_CATEGORIES = 12
 
 export function RecipeSearch({
   categories,
@@ -20,13 +17,8 @@ export function RecipeSearch({
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const [, startTransition] = useTransition()
-  const [showAll, setShowAll] = useState(false)
   // La catégorie active vient de l'URL (filtre client) — le prop serveur est toujours vide
   const activeCategory = searchParams.get("cat") ?? currentCategory
-
-  const visibleCategories = showAll
-    ? categories
-    : categories.slice(0, VISIBLE_CATEGORIES)
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -104,7 +96,7 @@ export function RecipeSearch({
           >
             All
           </button>
-          {visibleCategories.map((cat) => (
+          {categories.map((cat) => (
             <button
               key={cat}
               type="button"
@@ -128,24 +120,6 @@ export function RecipeSearch({
               {cat}
             </button>
           ))}
-          {categories.length > VISIBLE_CATEGORIES && !showAll ? (
-            <button
-              type="button"
-              onClick={() => setShowAll(true)}
-              className="rounded-full border border-primary/30 bg-primary/5 px-3.5 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/10"
-            >
-              +{categories.length - VISIBLE_CATEGORIES} more filters
-            </button>
-          ) : null}
-          {showAll && categories.length > VISIBLE_CATEGORIES ? (
-            <button
-              type="button"
-              onClick={() => setShowAll(false)}
-              className="rounded-full border border-border bg-card px-3.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              Show less
-            </button>
-          ) : null}
         </div>
       ) : null}
     </div>
