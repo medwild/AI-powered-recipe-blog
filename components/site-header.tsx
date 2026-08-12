@@ -52,7 +52,7 @@ export function SiteHeader({ actions }: { actions?: React.ReactNode }) {
             className="h-9 w-auto dark:hidden"
           />
           <Image
-            src="/logo-header-white.png"
+            src="/logo-header-dark.png"
             alt="Chef Augustin"
             width={2048}
             height={479}
