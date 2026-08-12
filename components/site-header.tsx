@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
-import { ChefHat, Menu, X } from "lucide-react"
+import Image from "next/image"
+import { Menu, X } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 
 const NAV_LINKS = [
@@ -40,13 +41,25 @@ export function SiteHeader({ actions }: { actions?: React.ReactNode }) {
     <header className="sticky top-0 z-40 border-b border-border bg-background/85 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-5xl items-center justify-between gap-4 px-4">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 shrink-0" onClick={close}>
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground">
-            <ChefHat className="h-5 w-5" aria-hidden="true" />
-          </span>
-          <span className="font-serif text-lg font-semibold tracking-tight">
-            Chef Augustin
-          </span>
+        <Link href="/" className="flex shrink-0 items-center" onClick={close}>
+          <Image
+            src="/logo-header.png"
+            alt="Chef Augustin"
+            width={2048}
+            height={479}
+            priority
+            sizes="154px"
+            className="h-9 w-auto dark:hidden"
+          />
+          <Image
+            src="/logo-header-white.png"
+            alt="Chef Augustin"
+            width={2048}
+            height={479}
+            priority
+            sizes="154px"
+            className="hidden h-9 w-auto dark:block"
+          />
         </Link>
 
         {/* Desktop nav — unchanged */}
