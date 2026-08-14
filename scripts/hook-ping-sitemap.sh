@@ -18,4 +18,10 @@ if [ -x "$VENV_PY" ] && [ -f "${PWD}/scripts/ping-sitemap.py" ]; then
   "$VENV_PY" "${PWD}/scripts/ping-sitemap.py" >> "$LOG_DIR/ping-sitemap.log" 2>&1
   echo "sitemap ping → $LOG_DIR/ping-sitemap.log"
 fi
+
+# IndexNow : soumission des URLs du sitemap (Bing/Seznam/Naver/Yandex/Yep)
+if [ -x "$VENV_PY" ] && [ -f "${PWD}/scripts/indexnow-hook.py" ]; then
+  "$VENV_PY" "${PWD}/scripts/indexnow-hook.py" >> "$LOG_DIR/ping-sitemap.log" 2>&1
+  echo "indexnow ping → $LOG_DIR/ping-sitemap.log"
+fi
 exit 0
