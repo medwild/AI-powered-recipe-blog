@@ -31,6 +31,15 @@ def load_env(path: Path) -> dict[str, str]:
 
 
 def main() -> int:
+    """Non-bloquant : toute erreur → message + exit 0 (le push ne doit pas casser)."""
+    try:
+        return _run()
+    except Exception as exc:
+        print(f"[indexnow] erreur: {exc}")
+        return 0
+
+
+def _run() -> int:
     env = load_env(ENV_PATH)
     key = env.get("INDEXNOW_KEY")
     key_location = env.get("INDEXNOW_KEY_LOCATION")
@@ -45,7 +54,12 @@ def main() -> int:
         print("[indexnow] sitemap vide — skip")
         return 0
 
-    sys.path.insert(0, str(sorted(PLUGIN_ROOT.glob("*/scripts"))[-1]))
+    plugin_paths = list(PLUGIN_ROOT.glob("*/scripts"))
+    if not plugin_paths:
+        print(f"[indexnow] erreur: plugin claude-seo introuvable ({PLUGIN_ROOT}) — skip")
+        return 0
+    # Tri semver (2.10.0 > 2.2.4), pas lexicographique
+    sys.path.insert(0, str(max(plugin_paths, key=lambda p: tuple(int(x) for x in p.name.split(".") if x.isdigit()))))
     import indexnow_submit  # noqa: E402
 
     result = indexnow_submit.submit(

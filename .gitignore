@@ -33,3 +33,6 @@ claude-nvidia-proxy/
 
 # Visual companion brainstorming (mockups éphémères)
 .superpowers/
+
+# Python bytecode residue
+__pycache__/

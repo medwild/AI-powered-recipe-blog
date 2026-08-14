@@ -21,7 +21,6 @@ from pathlib import Path
 
 SITEMAP_URL = "https://www.chefaugustin.com/sitemap.xml"
 SITE_URL = "sc-domain:chefaugustin.com"
-SITE_HOST = "https://www.chefaugustin.com"
 REPORTS_DIR = Path(__file__).resolve().parent.parent / "repports"
 PLUGIN_ROOT = Path.home() / ".claude/plugins/cache/agricidaniel-claude-seo/claude-seo"
 
@@ -62,10 +61,12 @@ def fetch_sitemap_urls() -> list[str]:
     return urls
 
 
-def inspect_google(urls: list[str], limit: int | None, delay: float = 1.0) -> list[dict]:
-    if limit:
-        urls = urls[:limit]
-    sys.path.insert(0, str(sorted(PLUGIN_ROOT.glob("*/scripts"))[-1]))
+def inspect_google(urls: list[str], delay: float = 1.0) -> list[dict]:
+    plugin_paths = list(PLUGIN_ROOT.glob("*/scripts"))
+    if not plugin_paths:
+        raise RuntimeError(f"Plugin claude-seo introuvable : {PLUGIN_ROOT}")
+    # Tri semver (2.10.0 > 2.2.4), pas lexicographique
+    sys.path.insert(0, str(max(plugin_paths, key=lambda p: tuple(int(x) for x in p.name.split(".") if x.isdigit()))))
     import gsc_inspect  # noqa: E402
 
     result = gsc_inspect.batch_inspect(urls, SITE_URL, delay=delay)
@@ -125,9 +126,15 @@ def write_report(urls: list[str], google_results: list[dict], bing_results: dict
     lines.append("")
     lines.append("## URLs non indexées (Google) — cliquer Request Indexing dans GSC")
     for r in rows:
-        if r["google"] != "indexed":
+        if r["google"] == "not_indexed":
             lines.append(f"- [{r['url']}]({r['url']}) — {r['google']} · [GSC UI]({gsc_inspect_link(r['url'])}) · Bing: {r['bing']}")
     lines.append("")
+    lines.append("## URLs en statut inconnu (❓) — ré-inspecter plus tard")
+    for r in rows:
+        if r["google"] == "unknown":
+            lines.append(f"- [{r['url']}]({r['url']}) — statut inconnu · [GSC UI]({gsc_inspect_link(r['url'])}) · Bing: {r['bing']}")
+    lines.append("")
+    lines.append("> Note : colonne Bing « — » = pas de statut API disponible (endpoints BWT inexistants, vérifié 14/08) — preuve d'indexation Bing : domaine vérifié + sitemap soumis + URLs acceptées via IndexNow.")
     md_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
     json_path.write_text(
@@ -141,6 +148,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Audit indexation Google + Bing")
     parser.add_argument("--limit", type=int, help="Limiter l'inspection Google à N URLs (test)")
     args = parser.parse_args()
+    if args.limit is not None and args.limit <= 0:
+        parser.error("--limit doit être un entier positif")
 
     urls = fetch_sitemap_urls()
     print(f"[audit] {len(urls)} URLs dans le sitemap")
@@ -148,7 +157,12 @@ def main() -> int:
         n = sum(1 for u in urls if classify_url(urllib.parse.urlparse(u).path) == label)
         print(f"[audit]   {label}: {n}")
 
-    google_results = inspect_google(urls, args.limit)
+    # Source unique de vérité : le slice s'applique à l'inspection ET au rapport
+    if args.limit is not None:
+        urls = urls[: args.limit]
+        print(f"[audit] --limit {args.limit} → inspection + rapport sur {len(urls)} URLs")
+
+    google_results = inspect_google(urls)
     bing_results = {u: s for u, s in ((u, bing_status(u)) for u in urls) if s}
     md_path, json_path = write_report(urls, google_results, bing_results)
     print(f"[audit] rapport : {md_path}")
