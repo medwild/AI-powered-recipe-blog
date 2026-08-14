@@ -102,7 +102,7 @@ Découverte API (14/08) : `SubmitSitemap`, `GetSitemaps`, `GetUrlSubmissionStatu
 | Cas | Comportement |
 |---|---|
 | Quota GSC dépassé (429/403) | backoff exponentiel, log, s'arrête proprement — reprise le lendemain |
-| URL inspect en échec | retry 3×, sinon "inconnu" dans le rapport |
+| URL inspect en échec | le plugin fait une seule tentative par URL ; dégradation honnête en ❓ "inconnu" dans le rapport (pas de retry applicatif — couvert par l'audit suivant) |
 | IndexNow KO | log non-bloquant |
 | API Bing KO | rapport mentionne le manque, pas de blocage |
 | Sitemap prod injoignable | arrêt avec message clair |
