@@ -15,7 +15,7 @@ LOG_DIR="${HOME}/.claude/logs"
 mkdir -p "$LOG_DIR"
 VENV_PY="${HOME}/.local/share/claude-seo/.venv/bin/python"
 if [ -x "$VENV_PY" ] && [ -f "${PWD}/scripts/ping-sitemap.py" ]; then
-  "$VENV_PY" "${PWD}/scripts/ping-sitemap.py" >> "$LOG_DIR/ping-sitemap.log" 2>&1
+  "$VENV_PY" "${PWD}/scripts/ping-sitemap.py" >> "$LOG_DIR/ping-sitemap.log" 2>&1 || true
   echo "sitemap ping → $LOG_DIR/ping-sitemap.log"
 fi
 

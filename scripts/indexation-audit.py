@@ -67,7 +67,7 @@ def inspect_google(urls: list[str], delay: float = 1.0) -> list[dict]:
     if not plugin_paths:
         raise RuntimeError(f"Plugin claude-seo introuvable : {PLUGIN_ROOT}")
     # Tri semver (2.10.0 > 2.2.4), pas lexicographique
-    sys.path.insert(0, str(max(plugin_paths, key=lambda p: tuple(int(x) for x in p.name.split(".") if x.isdigit()))))
+    sys.path.insert(0, str(max(plugin_paths, key=lambda p: tuple(int(x) for x in p.parent.name.split(".") if x.isdigit()))))
     import gsc_inspect  # noqa: E402
 
     result = gsc_inspect.batch_inspect(urls, SITE_URL, delay=delay)

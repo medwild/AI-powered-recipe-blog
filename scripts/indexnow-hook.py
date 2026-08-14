@@ -59,7 +59,7 @@ def _run() -> int:
         print(f"[indexnow] erreur: plugin claude-seo introuvable ({PLUGIN_ROOT}) — skip")
         return 0
     # Tri semver (2.10.0 > 2.2.4), pas lexicographique
-    sys.path.insert(0, str(max(plugin_paths, key=lambda p: tuple(int(x) for x in p.name.split(".") if x.isdigit()))))
+    sys.path.insert(0, str(max(plugin_paths, key=lambda p: tuple(int(x) for x in p.parent.name.split(".") if x.isdigit()))))
     import indexnow_submit  # noqa: E402
 
     result = indexnow_submit.submit(

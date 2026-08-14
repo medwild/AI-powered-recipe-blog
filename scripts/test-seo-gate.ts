@@ -94,13 +94,17 @@ async function main() {
     assert(r.status === "BLOCK", "no image in schema → BLOCK")
   })
 
-  // B5: Placeholder image
+  // B5: Placeholder image — warning, not BLOCK: the pipeline generates the hero
+  // image AFTER the gate (Persist + Image), so blocking would deadlock
+  // generation. Changed warn 2026-07-22 (c674c0e1, Human-First v14); tests updated 2026-08-14.
   await test("B5 — IMAGE_PLACEHOLDER", async () => {
     const r = await runSeoGate({ ...validInput, heroImageUrl: null })
-    assert(r.status === "BLOCK", "null heroImageUrl → BLOCK")
+    assert(r.warnings.some(w => w.code === "IMAGE_PLACEHOLDER"), "warning code: IMAGE_PLACEHOLDER")
+    assert(r.status !== "BLOCK", "warning only, not block")
 
     const r2 = await runSeoGate({ ...validInput, heroImageUrl: "/placeholder.svg" })
-    assert(r2.status === "BLOCK", "placeholder URL → BLOCK")
+    assert(r2.warnings.some(w => w.code === "IMAGE_PLACEHOLDER"), "warning code: IMAGE_PLACEHOLDER")
+    assert(r2.status !== "BLOCK", "warning only, not block")
   })
 
   // B6: Recipe name missing
