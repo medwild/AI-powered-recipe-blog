@@ -18,7 +18,8 @@ Au 08/08 : 43/46 recettes indexées sur Google. L'infra actuelle :
 
 ## 2. Contraintes
 
-- **Pas d'Indexing API Google** (usage restreint JobPosting/VideoObject/BroadcastEvent — illégal pour du contenu générique). Re-crawl via `requestIndexing` de l'URL Inspection API (quotas respectés).
+- **Pas d'Indexing API Google** (usage restreint JobPosting/VideoObject/BroadcastEvent — illégal pour du contenu générique).
+- **Pas de requestIndexing via API** : vérifié sur le discovery doc officiel (14/08) — l'API Search Console v1 n'expose que `urlInspection.index.inspect`, sitemaps.*, searchanalytics.query. Le "Request Indexing" de l'UI GSC n'est pas accessible via API. Re-crawl Google = soumission sitemap (en place) + clics UI GSC manuels pour les pages restantes.
 - Google ne participe pas à IndexNow (FAQ IndexNow) — IndexNow est un signal Bing/Seznam/Naver/Yandex/Yep.
 - Scripts en **Python** (précédent `ping-sitemap.py`, imports directs du plugin, venv partagé). Pas de tsx pour cette zone.
 - La clé IndexNow est **committée dans `public/{clé}.txt`** : par design d'IndexNow elle doit être servie à la racine ; ce n'est pas un secret (règle 8 non concernée).
@@ -37,14 +38,9 @@ SITEMAP PROD (https://www.chefaugustin.com/sitemap.xml)
 │  • Bing : statut URLs via API BWT (GetUrlSubmission…)  │
 │  • sortie : repports/indexation-YYYY-MM-DD.md + JSON   │
 └────────────────────────────────────────────────────────┘
-        │  (JSON des non-indexées)
+        │  (liste des non-indexées + liens GSC UI)
         ▼
-┌────────────────────────────────────────────────────────┐
-│ scripts/indexation-request.py  (venv plugin)           │
-│  • requestIndexing GSC URL Inspection API              │
-│  • délai 5s entre requêtes, retry exponentiel 429/403  │
-│  • priorité : recipe > article > static          │
-└────────────────────────────────────────────────────────┘
+   Clics "Request Indexing" UI GSC (utilisateur)
         │
         ▼
 hook-ping-sitemap.sh (étendu, post-push)
@@ -63,7 +59,7 @@ python3 scripts/indexation-audit.py [--site-url sc-domain:chefaugustin.com] [--l
 ```
 
 - Fetch du sitemap prod → liste d'URLs (93 au 14/08)
-- Classification par type via pattern d'URL : `/recettes/` → recipe ; hubs/articles → article ; le reste → static
+- Classification par type via pattern d'URL (vérifié sur le sitemap 14/08) : `/recipes/` → recipe (66) ; `/guides/` + `/idees/` → article (23) ; le reste (`/`, `/about`, `/privacy`, `/terms`) → static (4)
 - Google : réutilise `batch_inspect` de `gsc_inspect.py` (rate-limit intégré) → statut par URL (`indexStatus`, canonical, `lastCrawlTime`)
 - Bing : statut par URL via l'API BWT — **forme exacte de l'endpoint à confirmer à l'implémentation** (GetUrlSubmissionStatus / GetUrlSubmissionStatusByPage, base `https://ssl.bing.com/webmaster/api.svc/json`). Si l'endpoint n'est pas fiable, repli : sitemap submit status + liste des URLs poussées via IndexNow (acceptance = signal).
 - Sorties :
@@ -71,19 +67,15 @@ python3 scripts/indexation-audit.py [--site-url sc-domain:chefaugustin.com] [--l
   - `repports/indexation-last.json` — brut (réutilisé par le re-crawl)
 - Erreurs : retry 3× par URL, sinon statut "inconnu" (rapport honnête, jamais de faux ✅)
 
-### 4.2 `scripts/indexation-request.py` — re-crawl Google (phase B)
+### 4.2 Re-crawl Google (phase B) — clics UI manuels
 
-Interface :
+`requestIndexing` n'existe pas via API (vérifié discovery doc 14/08). Le re-crawl Google se fait :
 
-```
-python3 scripts/indexation-request.py --missing [--type recipe] [--dry-run] [--max N]
-python3 scripts/indexation-request.py --file urls.txt
-```
+1. L'audit (4.1) produit la liste des URLs non-indexées avec leurs liens directs
+2. L'utilisateur clique **Request Indexing** dans l'UI GSC (URL Inspection → la page → Request Indexing) sur les pages restantes — typiquement 5-10 clics après la première passe
+3. Re-audit après 5-7 jours pour vérifier ; itérer jusqu'à ~0
 
-- `--missing` : lit `repports/indexation-last.json` → URLs non-indexées (filtre `--type` optionnel : `recipe` / `article` / `static`)
-- `requestIndexing` de l'URL Inspection API : 1 requête / 5 s, retry exponentiel sur 429/403 (backoff ×2, max 3 essais)
-- `--dry-run` : affiche ce qui serait soumis sans rien envoyer
-- Log : `~/.claude/logs/indexation-request.log`
+Pas de script dédié (le rapport d'audit contient déjà la liste avec liens). Le sitemap submission post-push (existant) continue d'inciter au recrawl Google des pages modifiées.
 
 ### 4.3 IndexNow (phase C)
 
@@ -106,7 +98,7 @@ Déjà fait : vérification domaine ✅ (fichier, validée 14/08).
 ## 5. Flux de données
 
 1. `indexation-audit.py` : sitemap → listes → inspect Google + statut Bing → rapport + JSON
-2. `indexation-request.py` : JSON non-indexées → requestIndexing → log ; re-audit N jours après pour vérifier
+2. Clics UI GSC (utilisateur) sur les URLs non-indexées du rapport ; re-audit 5-7 jours après pour vérifier
 3. Hook post-push : ping Google (existant) + IndexNow (nouveau) → Bing recrawl rapide des pages modifiées
 
 ## 6. Gestion d'erreurs
@@ -135,8 +127,8 @@ Déjà fait : vérification domaine ✅ (fichier, validée 14/08).
 
 ## 9. Étapes d'implémentation (ordre)
 
-1. Phase A : `indexation-audit.py` + test 3 URLs + audit complet
+1. Phase A : `indexation-audit.py` (Google) + test 3 URLs + audit complet
 2. Phase C : clé IndexNow + `public/{clé}.txt` + `.env.local` + hook étendu + push
-3. Phase B : `indexation-request.py` + re-crawl des non-indexées
-4. Phase C' : clé API BWT (utilisateur) + config plugin + soumission sitemap
+3. Phase C' : clé API BWT (utilisateur) + config plugin + statut Bing dans l'audit + soumission sitemap
+4. Phase B : clics UI GSC sur les non-indexées (utilisateur)
 5. Phase D : re-audit, itérations jusqu'à ~0 non-indexées, décision cron
