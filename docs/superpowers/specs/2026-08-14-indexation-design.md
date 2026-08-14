@@ -61,7 +61,7 @@ python3 scripts/indexation-audit.py [--site-url sc-domain:chefaugustin.com] [--l
 - Fetch du sitemap prod → liste d'URLs (93 au 14/08)
 - Classification par type via pattern d'URL (vérifié sur le sitemap 14/08) : `/recipes/` → recipe (66) ; `/guides/` + `/idees/` → article (23) ; le reste (`/`, `/about`, `/privacy`, `/terms`) → static (4)
 - Google : réutilise `batch_inspect` de `gsc_inspect.py` (rate-limit intégré) → statut par URL (`indexStatus`, canonical, `lastCrawlTime`)
-- Bing : statut par URL via l'API BWT — **forme exacte de l'endpoint à confirmer à l'implémentation** (GetUrlSubmissionStatus / GetUrlSubmissionStatusByPage, base `https://ssl.bing.com/webmaster/api.svc/json`). Si l'endpoint n'est pas fiable, repli : sitemap submit status + liste des URLs poussées via IndexNow (acceptance = signal).
+- Bing : **pas de statut par URL via API** — sondage live 14/08 (clé BWT configurée) : `GetUrlSubmissionStatus`, `GetUrlSubmissionStatusByPage`, `SubmitSitemap`, `GetSitemaps` → tous « Endpoint not found » sur `https://ssl.bing.com/webmaster/api.svc/json` (seul `GetLinkCounts` existe — utilisé par le plugin). Repli appliqué : colonne « — » dans le rapport + preuve par IndexNow (acceptance 2xx) + sitemap soumis (robots.txt + UI BWT 14/08).
 - Sorties :
   - `repports/indexation-YYYY-MM-DD.md` — tableaux par type : ✅ indexée / ❌ non indexée / ❓ inconnue + résumé
   - `repports/indexation-last.json` — brut (réutilisé par le re-crawl)
@@ -87,13 +87,9 @@ Pas de script dédié (le rapport d'audit contient déjà la liste avec liens). 
 
 ### 4.4 Bing Webmaster Tools (phase C')
 
-Déjà fait : vérification domaine ✅ (fichier, validée 14/08).
+Fait le 14/08 : vérification domaine ✅ (fichier, validée), clé API configurée (`~/.config/claude-seo/backlinks-api.json` → `bing_api_key`, lue par `backlinks_auth.py`), sitemap soumis dans l'UI BWT ✅.
 
-À faire :
-1. Utilisateur : page **API Access** dans BWT → copier la clé → la transmettre
-2. Config : `~/.config/claude-seo/backlinks-api.json` → `"bing_api_key": "<clé>"` (lue par `backlinks_auth.py`)
-3. Soumission sitemap à Bing : API BWT `SubmitSitemap` (à confirmer à l'implémentation) — sinon le sitemap est découvert via robots.txt (déjà en place)
-4. Le statut URLs Bing est consommé par `indexation-audit.py` (4.1)
+Découverte API (14/08) : `SubmitSitemap`, `GetSitemaps`, `GetUrlSubmissionStatus*` → « Endpoint not found » sur `ssl.bing.com/webmaster/api.svc/json` (seul `GetLinkCounts` existe). → **Pas d'appel API Bing dans l'audit** ; le statut Bing est mesuré par : domaine vérifié + sitemap soumis + acceptance IndexNow (2xx).
 
 ## 5. Flux de données
 

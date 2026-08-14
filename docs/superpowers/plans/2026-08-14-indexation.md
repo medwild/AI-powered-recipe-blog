@@ -366,9 +366,11 @@ Expected: lignes `[ping] sitemap ...` (existant) et `[indexnow] OK — 93 URLs` 
 
 ### Task 3: Bing API — statut URLs + soumission sitemap (Phase C')
 
+> **RULING (14/08, découverte API faite avant dispatch)** : sondage live avec la clé BWT → `GetUrlSubmissionStatus`, `GetUrlSubmissionStatusByPage`, `SubmitSitemap`, `GetSitemaps` renvoient tous « Endpoint not found » sur `ssl.bing.com/webmaster/api.svc/json` (seul `GetLinkCounts` existe). Repli spec appliqué : pas d'appel API Bing dans l'audit (colonne « — »), preuve par IndexNow + sitemap soumis (fait par l'utilisateur dans l'UI BWT). Clé configurée (`~/.config/claude-seo/backlinks-api.json`). Étapes 1-6 de cette tâche : couvertes (key, discovery, sitemap UI). Reste : aucune modification de code (le stub `bing_status` → None est déjà correct).
+
 **Files:**
-- Create: `~/.config/claude-seo/backlinks-api.json` (HORS repo — clé API BWT fournie par l'utilisateur)
-- Modify: `scripts/indexation-audit.py` (fonction `bing_status` réelle)
+- Create: `~/.config/claude-seo/backlinks-api.json` (HORS repo — clé API BWT fournie par l'utilisateur) — **fait**
+- Modify: `scripts/indexation-audit.py` (fonction `bing_status` réelle) — **annulé (repli)**
 
 **Interfaces:**
 - Consumes: clé API BWT (fournie par l'utilisateur, page API Access), base `https://ssl.bing.com/webmaster/api.svc/json` + param `apikey` (pattern du plugin `bing_webmaster.py`)
