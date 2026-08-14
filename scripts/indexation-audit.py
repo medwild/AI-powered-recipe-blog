@@ -26,6 +26,7 @@ PLUGIN_ROOT = Path.home() / ".claude/plugins/cache/agricidaniel-claude-seo/claud
 
 _LOC_RE = re.compile(r"<loc>(.*?)</loc>")
 TYPE_PATTERNS = [
+    ("collection", re.compile(r"^/recipes/(?:cluster|collections)/")),
     ("recipe", re.compile(r"^/recipes(?:/|$)")),
     ("article", re.compile(r"^/(?:guides|idees)(?:/|$)")),
     ("static", re.compile(r"^/?(?:about|privacy|terms)?$")),
@@ -116,7 +117,7 @@ def write_report(urls: list[str], google_results: list[dict], bing_results: dict
     json_path = REPORTS_DIR / "indexation-last.json"
 
     lines = [f"# Rapport indexation — {today}", "", "| Type | Total | ✅ indexée | ❌ non indexée | ❓ inconnu |", "|---|---|---|---|---|"]
-    for t in ("recipe", "article", "static"):
+    for t in ("collection", "recipe", "article", "static"):
         rs = by_type.get(t, [])
         total = len(rs)
         ok = sum(1 for r in rs if r["google"] == "indexed")
@@ -153,7 +154,7 @@ def main() -> int:
 
     urls = fetch_sitemap_urls()
     print(f"[audit] {len(urls)} URLs dans le sitemap")
-    for label in ("recipe", "article", "static"):
+    for label in ("collection", "recipe", "article", "static"):
         n = sum(1 for u in urls if classify_url(urllib.parse.urlparse(u).path) == label)
         print(f"[audit]   {label}: {n}")
 

@@ -134,7 +134,7 @@ export default async function RecipesPage() {
               {clusters.map((c) => (
                 <Link
                   key={c.id}
-                  href={`/recipes/cluster/${c.id}`}
+                  href={`/recipes/collections/${c.id}`}
                   className="group rounded-xl border border-border bg-card p-5 transition-all hover:border-primary/30 hover:shadow-md"
                 >
                   <h3 className="font-serif text-lg group-hover:text-primary transition-colors">

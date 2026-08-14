@@ -1,5 +1,5 @@
 /**
- * /recipes/cluster/[slug] — Clean cluster hub URLs (v14.4)
+ * /recipes/collections/[slug] — Clean cluster hub URLs (v14.4)
  *
  * Replaces the old ?cluster= query parameter with static paths.
  * Each cluster is a pillar page in the hub-and-spoke topical architecture.
@@ -61,13 +61,13 @@ export async function generateMetadata({
   return {
     title: `${cluster.name}${suffix}`,
     description: cluster.description,
-    alternates: { canonical: `/recipes/cluster/${slug}` },
+    alternates: { canonical: `/recipes/collections/${slug}` },
     robots: "index, follow",
     openGraph: {
       title: cluster.name,
       description: cluster.description,
       type: "website",
-      url: `/recipes/cluster/${slug}`, // audit 2026-08-08 P2-10
+      url: `/recipes/collections/${slug}`, // audit 2026-08-08 P2-10
     },
   }
 }
@@ -125,7 +125,7 @@ export default async function ClusterPage({
           crumbs={[
             { label: "Home", href: "/" },
             { label: "Recipes", href: "/recipes" },
-            { label: cluster.name, href: `/recipes/cluster/${slug}` },
+            { label: cluster.name, href: `/recipes/collections/${slug}` },
           ]}
         />
 
@@ -192,7 +192,7 @@ export default async function ClusterPage({
               {siblingClusters.map((sibling) => (
                 <Link
                   key={sibling.id}
-                  href={`/recipes/cluster/${sibling.id}`}
+                  href={`/recipes/collections/${sibling.id}`}
                   className="group rounded-xl border border-border bg-card p-5 transition-all hover:border-primary/30 hover:shadow-md"
                 >
                   <h3 className="font-serif text-lg group-hover:text-primary transition-colors">

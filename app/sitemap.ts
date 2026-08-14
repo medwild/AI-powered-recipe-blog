@@ -79,7 +79,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Topical cluster hub pages — 6 pillar pages for content architecture
   const clusterEntries: MetadataRoute.Sitemap = clusters.map((c) => ({
-    url: `${BASE_URL}/recipes/cluster/${c.id}`,
+    url: `${BASE_URL}/recipes/collections/${c.id}`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
     priority: 0.7,

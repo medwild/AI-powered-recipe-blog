@@ -20,7 +20,7 @@ export function HomepageClusters({ clusters }: { clusters: ResolvedCluster[] }) 
         {clusters.map((c) => (
           <Link
             key={c.id}
-            href={`/recipes/cluster/${c.id}`}
+            href={`/recipes/collections/${c.id}`}
             className="group rounded-xl border border-border bg-card p-5 transition-colors hover:border-primary/50"
           >
             <h3 className="font-serif text-lg font-semibold leading-snug group-hover:text-primary transition-colors">
