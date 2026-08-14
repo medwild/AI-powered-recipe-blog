@@ -29,7 +29,7 @@
 
 ## 4. Partie 2 — Épaississement des piliers
 
-- `lib/topical-map.ts` : descriptions des 6 clusters étendues → **~500-650 mots de description** (le total visible page passe à 600-800+ quelle que soit la méthode de comptage des cards)
+- `lib/topical-map.ts` : descriptions des 6 clusters étendues → **~500-650 mots de description** (le total visible page passe à 600-800+ quelle que soit la méthode de comptage des cards). **Règle d'exactitude prime** : les petites collections (2-4 recettes réelles) peuvent descendre à 300-400 mots si le contenu factuel honnête ne suffit pas — pas de remplissage artificiel.
 - Contenu **dérivé des données réelles** (requêtes DB par collection : titres, temps moyens, nombre de membres) — **aucun claim inventé** (règles d'exactitude) ; les données utilisées sont embarquées dans le plan d'implémentation
 - Structure de description : ce qu'est la collection → ce qu'elle contient (vraies recettes) → spécificités (vraies durées, ustensiles cités dans les recettes) → comment choisir → conseils ancrés dans les vraies recettes
 - Rendu : multi-paragraphes existant (split `\n\n`)
