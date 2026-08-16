@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   description:
     "Practical small-batch dinner recipes scaled for two people. One-pan dinners, quick pastas, and mini slow cooker recipes — no waste, no stress.",
   alternates: { canonical: "/" },
+  verification: { yandex: "c801d0ce440e755e" },
   openGraph: {
     title: "Chef Augustin — Easy Weeknight Dinners for Two",
     description:
