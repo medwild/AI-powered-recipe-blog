@@ -298,7 +298,9 @@ grep -q "Max 3 retours" gemini-kit/gemini-stage-sequence.md
 grep -q "TRUNCATED" gemini-kit/gemini-stage-sequence.md
 grep -q "CANDIDATE LINKS" gemini-kit/gemini-stage-sequence.md
 # Le tableau d'audit contient exactement 14 checks numérotés 1-14
-grep -c "^| [0-9]* |" gemini-kit/gemini-stage-sequence.md | xargs -I{} test {} -eq 14 && echo "14 checks OK"
+# (pattern isolé sur la colonne Couche — le pattern large compte aussi
+#  l'exemple de sortie `| 1 | PASS | ...` du bloc Étape 3)
+grep -cE '^\| [0-9]+ \| (Gate|Contrat|Éditorial) \|' gemini-kit/gemini-stage-sequence.md | xargs -I{} test {} -eq 14 && echo "14 checks OK"
 ```
 Toutes les commandes doivent retourner 0.
 
