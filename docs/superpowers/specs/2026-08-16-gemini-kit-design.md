@@ -16,7 +16,7 @@ Le livrable est un **kit de documents** indépendant du workflow existant — pa
 
 1. **Zéro modification du système actuel** : `generate.ts`, `chef-augustin-mega.md`, `quality-gate.ts`, `generate-recipe-pure.ts`, `persist-phase.ts`, `image-phase.ts` → **intouchés**
 2. Le kit vit dans **`gemini-kit/`** à la racine (hors `skills/` qui appartient au pipeline)
-3. **Loop pur** : Claude n'écrit jamais de contenu — il audite et produit un feedback que Gemini exécute
+3. **Loop pur** : Claude ne rédige jamais le contenu de l'article — il audite et produit un feedback que Gemini exécute. (Claude peut en revanche préparer les blocs d'**entrée** du packet : contexte cuisine, liens candidats.)
 4. Le gate code reste la **seule autorité** sur les comptages et les blocages (le self-audit Gemini est un pré-filtre)
 5. Le kit est **supprimable sans trace** : le pipeline Tokenmix reste le fallback, intact
 
@@ -30,7 +30,7 @@ GOOGLE AI STUDIO (Gemini)
   [system prompt stable]  → collé une fois
   [packet + Étape 1]      → analyse SERP + angle  ← checkpoint humain (optionnel)
   Étape 2                 → draft complet (JSON 14 champs)
-  Étape 3                 → auto-audit strict (9 checks, 3 couches)
+  Étape 3                 → auto-audit strict (14 checks, 3 couches)
   Étape 4                 → correction → JSON final   (loop interne borné : max 2 passes)
         │ JSON copié
         ▼
@@ -40,7 +40,7 @@ CLAUDE CODE (review)
   3. Décision : PASS → publication | FAIL → rapport feedback P0/P1/P2
         │ feedback collé dans le chat AI Studio (la recette est déjà en contexte)
         ▼
-Étape 4 bis (loop externe, itérable jusqu'à PASS)
+Étape 4 bis (loop externe, max 3 retours)
         │
         ▼
 PUBLICATION : scripts/import-gemini-recipe.ts (colle sur l'existant, jetable)
@@ -53,7 +53,7 @@ PUBLICATION : scripts/import-gemini-recipe.ts (colle sur l'existant, jetable)
 | `gemini-kit/gemini-system-prompt.md` | Persona, contraintes critiques, voix, contrat de sortie (14 champs) | Stable |
 | `gemini-kit/gemini-stage-sequence.md` | Les 4 étapes du loop, chacune = bloc copiable | Semi-stable (évolue avec feedbacks) |
 | `gemini-kit/review-protocol.md` | Protocole Claude Code : gate + audit + format feedback | Stable |
-| `scripts/import-gemini-recipe.ts` | Publication d'un JSON validé (optionnel au début, requis pour le volume) | Jetable |
+| `scripts/import-gemini-recipe.ts` | Publication d'un JSON validé — créé au pilot, requis pour toute publication Gemini | Jetable |
 
 ## 5. Packet SERP (entrée de l'Étape 1)
 
@@ -132,7 +132,7 @@ Chaque étape = bloc copiable envoyé comme nouveau message dans le chat AI Stud
 
 **Étape 3 — Auto-audit strict** (prompt « auditeur de conformité »)
 - Entrée : draft. Sortie : tableau `PASS/FAIL` + preuve (champ/étape n°), **sans corrections** (séparation générateur/validateur)
-- 9 checks en 3 couches :
+- 14 checks en 3 couches (7 gate + 4 contrat + 3 éditorial) :
   - **Gate** (réplique des 7 checks code) : food safety, word count (floor dynamique 600/800/1200 + cible 1800-2200), mots bannis (union, process-speak inclus), metaTitle ≤60, H2 ≥3, JSON-LD author, répétition tokens
   - **Contrat** : 14 champs + types, ISO 8601, metaDescription 150-160, cohérence dual output
   - **Éditorial** : angle de l'Étape 1 livré, FAQ ≥5, nutrition présente
@@ -169,7 +169,7 @@ Le loop complet ≈ 25k tokens de contexte — largement dans la fenêtre Gemini
 - Seuil PASS : gate code + zéro P0 + ≤2 P1 (paramètre ajustable)
 - UX du loop : coller **seulement le feedback** dans le chat AI Studio (la recette est en contexte) ; **max 3 retours** — au-delà, le problème vient du kit, pas de la recette
 
-**4. Traçabilité** : `gemini-outputs/<slug>.json` + rapport archivés — les échecs récurrents alimentent l'amélioration du kit (mécanisme d'auto-optimisation)
+**4. Traçabilité** : `gemini-outputs/<slug>.json` (dossier à la racine du repo) + rapport archivés — les échecs récurrents alimentent l'amélioration du kit (mécanisme d'auto-optimisation)
 
 ## 9. Publication — `scripts/import-gemini-recipe.ts`
 
