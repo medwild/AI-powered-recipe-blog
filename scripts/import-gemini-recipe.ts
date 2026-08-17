@@ -1,6 +1,6 @@
 // Import a Gemini-generated recipe JSON into the blog — standalone, disposable.
 // Usage: npx tsx scripts/import-gemini-recipe.ts "<keyword>" <path-to-json> [--dry-run]
-// Pattern: mirrors scripts/generate.ts (draft insert) + app/api/internal/regenerate-recipe/route.ts (gate → persist → image).
+// Pattern: mirrors scripts/generate.ts (draft insert) + lib/generate-recipe-pure.ts (gate → persist → image).
 import dotenv from "dotenv"
 import path from "path"
 import fs from "fs"
@@ -65,25 +65,32 @@ async function main() {
   await persistFinalDraft(recipeId, legacy, gateResult.status as "PASS" | "BLOCK", false)
 
   // ── 5. Image (non-blocking, same as pipeline) ────────────────────
+  // runImagePhase never throws on its own failures (returns heroImageUrl: null).
+  // The db.update below ALWAYS runs so a failed image never leaves a literal
+  // `[IMAGE: …]` marker rendering as visible text on the live page.
   try {
     const imageResult = await runImagePhase(recipeId, article, keyword)
+    const persisted = await db.query.recipes.findFirst({
+      where: (r, { eq }) => eq(r.id, recipeId),
+      columns: { contentMarkdown: true },
+    })
+    const baseMd = persisted?.contentMarkdown ?? article.contentMarkdown
+    const contentWithImages = baseMd.replace(/\[IMAGE:\s*(.+?)\]/g, (_: string, alt: string) =>
+      imageResult.heroImageUrl
+        ? `<img src="${imageResult.heroImageUrl}" alt="${alt.trim()}" loading="lazy" />`
+        : "",
+    )
+    await db.update(recipes).set({
+      ...(imageResult.heroImageUrl ? { heroImageUrl: imageResult.heroImageUrl } : {}),
+      contentMarkdown: contentWithImages, updatedAt: new Date(),
+    }).where(eq(recipes.id, recipeId))
     if (imageResult.heroImageUrl) {
-      const persisted = await db.query.recipes.findFirst({
-        where: (r, { eq }) => eq(r.id, recipeId),
-        columns: { contentMarkdown: true },
-      })
-      const baseMd = persisted?.contentMarkdown ?? article.contentMarkdown
-      const contentWithImages = baseMd.replace(
-        /\[IMAGE:\s*(.+?)\]/g,
-        (_: string, alt: string) => `<img src="${imageResult.heroImageUrl}" alt="${alt.trim()}" loading="lazy" />`,
-      )
-      await db.update(recipes).set({
-        heroImageUrl: imageResult.heroImageUrl, contentMarkdown: contentWithImages, updatedAt: new Date(),
-      }).where(eq(recipes.id, recipeId))
       console.log(`🖼️  Image: ${imageResult.heroImageUrl}`)
+    } else {
+      console.warn("⚠️  Image generation failed (non-blocking) — [IMAGE:] markers cleaned, recipe published without image")
     }
   } catch (err) {
-    console.warn(`⚠️  Image generation failed (non-blocking): ${(err as Error).message}`)
+    console.warn(`⚠️  Image step failed (non-blocking): ${(err as Error).message}`)
   }
 
   console.log(`✅ Published — Recipe #${recipeId} (${slug})`)

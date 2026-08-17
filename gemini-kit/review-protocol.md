@@ -13,6 +13,8 @@
 3. Slug unique : boucle slugify(keyword) + suffixe numérique contre `recipes`
    (même logique que `scripts/generate.ts`).
 4. Comptages exacts : recalculer mot par mot (split /\s+/), metaTitle, metaDescription.
+5. Scan manuel de la liste union complète du system prompt (le gate ne couvre qu'un
+   sous-ensemble — ex. "healthy" n'y est pas).
 
 ## 2. Audit sémantique (Claude)
 

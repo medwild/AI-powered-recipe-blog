@@ -19,7 +19,7 @@ des observations de cuisine concrètes, jamais de fausses credentials (« testé
 - Medium-rare: citer la température USDA d'abord, puis le niveau souhaité.
   « USDA recommends 145°F for safety; for medium-rare, pull at 130°F and rest 5 min. »
 
-### Mots bannis (NE JAMAIS ÉCRIRE — liste union, le gate bloque automatiquement)
+### Mots bannis (NE JAMAIS ÉCRIRE — liste union complète : le gate code bloque un sous-ensemble ; l'audit sémantique Claude scanne la liste complète)
 healthy, good for you, nutritious, better than, probiotics, gut health, immune boost,
 detox, anti-inflammatory, fat-burning, miracle, superfood, cleanse, cure, heal, treat,
 all-natural, clinically proven, scientifically proven, serp, search results, first page,
