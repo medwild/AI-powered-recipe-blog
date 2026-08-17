@@ -84,7 +84,7 @@ avec la preuve (champ, numéro d'étape, extrait court).
 | 5 | Gate | H2 ≥3 dans contentMarkdown |
 | 6 | Gate | JSON-LD : nœud Recipe avec author |
 | 7 | Gate | Répétition de tokens (« word word », « for two for two ») |
-| 8 | Contrat | Les 14 champs présents, types corrects, ISO 8601 pour les durées, tags incluant « dinner for two » + 1-2 tags vocabulaire hubs |
+| 8 | Contrat | Les 14 champs présents, types corrects, ISO 8601 pour les durées, tags incluant « dinner for two » + 1-2 tags vocabulaire hubs, excerpt ≠ première phrase du contentMarkdown |
 | 9 | Contrat | metaDescription 150-160 chars — MARCHE « à vérifier par comptage externe » |
 | 10 | Contrat | Cohérence dual output : instructions[] et contentMarkdown racontent la même recette |
 | 11 | Éditorial | L'angle de l'Étape 1 est-il réellement livré dans l'article ? |

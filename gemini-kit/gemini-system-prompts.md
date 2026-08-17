@@ -68,7 +68,7 @@ Sortie : un objet JSON valide commençant par `{`, terminant par `}`. Pas de fen
 | `title` | H1, keyword first |
 | `metaTitle` | ≤60 chars, keyword first |
 | `metaDescription` | 150-160 chars, actionable |
-| `excerpt` | 1-2 phrases, hook |
+| `excerpt` | 1-2 phrases, hook — NE PAS répéter la première phrase du contentMarkdown (le template l'affiche aussi ; un doublon = phrase triplée sur la page) |
 | `contentMarkdown` | Article complet : titre en H1, sections en H2, FAQ en `## Question ?`. Marqueurs `[IMAGE: alt text]` à placer (1 au début) |
 | `ingredients[]` | 8-15 items, format `"quantity name, notes"` |
 | `instructions[]` | 6-12 objets `{step: number, text, duration?, temperature?}` — températures dans `text` ET `temperature` |
