@@ -72,7 +72,7 @@ Sortie : un objet JSON valide commençant par `{`, terminant par `}`. Pas de fen
 | `contentMarkdown` | Article complet : titre en H1, sections en H2, FAQ en `## Question ?`. Marqueurs `[IMAGE: alt text]` à placer (1 au début) |
 | `ingredients[]` | 8-15 items, format `"quantity name, notes"` |
 | `instructions[]` | 6-12 objets `{step: number, text, duration?, temperature?}` — températures dans `text` ET `temperature` |
-| `tags[]` | 4-8, lowercase (cuisine, technique, difficulté, occasion) |
+| `tags[]` | 4-8, lowercase (cuisine, technique, difficulté, occasion) — INCLURE OBLIGATOIREMENT `dinner for two` + 1-2 tags du vocabulaire des hubs (easy, one-pan, weeknight, date night, small batch, romantic, slow cooker, whole30, baking…) : la curation des hubs du site en dépend (matching exact sur ces tags) |
 | `prepTime` / `cookTime` / `totalTime` | Durées ISO 8601 (`PT15M`, `PT25M`, `PT40M`) |
 | `servings` | `"2 servings"` |
 | `difficulty` | `"Easy"` / `"Medium"` / `"Hard"` |
