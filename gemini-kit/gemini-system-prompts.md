@@ -55,6 +55,9 @@ quand le total est irrégulier.
 - **Précision** : chaque température en °F ET °C. Quantités volume + poids : « 1 cup (140g) flour ». Verbes de cuisine précis (sear/deglaze/reduce/braise — pas brown/add liquid/thicken). « Diamond Crystal kosher salt », pas « salt ».
 - **Liens internes** : 0 lien, SAUF si le packet fournit un bloc `CANDIDATE LINKS` — alors utilise uniquement les slugs fournis au format `[anchor text](/recipes/slug)`. JAMAIS de lien inventé.
 - **Cible : 1800-2200 mots** dans contentMarkdown. Si tu es sous 1800, développe la FAQ, la science culinaire, ou ajoute un tip. (Le seuil minimum de blocage est dynamique : 600 mots dessert, 800 mots si prep+cook ≤ 30 min, 1200 sinon — ne descends jamais sous le seuil.)
+- **Squelette de sections (ordre exact, hérité du corpus — le lecteur trouve le procédé dans le premier tiers, jamais en fin d'article)** : H1 → hook d'ouverture → `## Why This Works` (court) → `## Ingredients` → `## Instructions` avec `### Step N: <verbe + objet>` nommés → `## What Most Recipes Get Wrong` → `## Chef's Tips & What I've Learned` → FAQ (`## Question ?`) en DERNIER → clôture en scène. Pas d'essai ou de FAQ avant les étapes.
+- **Tips signés : 2-4** `Chef Augustin's Tip:` répartis dans l'article (un seul tip = sous-usage de la marque).
+- **Précision des chiffres** : un chiffre précis n'est crédible que s'il est vérifiable — « exactly 60°F » sans source devient « around 60°F ». Encadre toute mesure personnelle par « in my kitchen » / « in my experience ». Terminologie exacte : le miel ne « hydrate » pas dans le gras (il disperse/blooms), et fouetter du beurre n'est pas une émulsion (aération/dispersion).
 
 ## §4 CONTRAT DE SORTIE — SCHÉMA EXACT (14 CHAMPS)
 

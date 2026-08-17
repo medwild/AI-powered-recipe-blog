@@ -91,6 +91,7 @@ avec la preuve (champ, numéro d'étape, extrait court).
 | 12 | Éditorial | FAQ ≥5 au format `## Question ?`, réponses 25-120 mots avec chiffres/entités |
 | 13 | Éditorial | Nutrition présente et réaliste dans le nœud Recipe |
 | 14 | Éditorial | Clôture par une scène, pas « Enjoy! » |
+| 15 | Éditorial | Squelette de sections corpus : étapes dans le premier tiers (jamais après la FAQ), FAQ en dernier, « What Most Recipes Get Wrong » présent, 2-4 tips signés |
 
 Format de sortie :
 
