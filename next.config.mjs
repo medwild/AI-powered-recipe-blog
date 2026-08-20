@@ -113,6 +113,16 @@ const nextConfig = {
       { source: "/recipes/2-quart-slow-cooker-chicken-gravy-for-two", destination: "/recipes/2-qt-slow-cooker-recipes", permanent: true },
       { source: "/recipes/slow-cooker-chicken-beef-pasta-for-two", destination: "/recipes/easy-slow-cooker-pasta-recipes", permanent: true },
       { source: "/recipes/chicken-pot-pie-for-two", destination: "/recipes/chicken-pot-pie-for-2", permanent: true },
+      // 2026-08-20 GSC "Exclues par noindex" (audit 74 pages) — 7 anciens slugs
+      // de recettes renommées servaient 404 natif alors qu'un successeur actif
+      // existe (titre identique). 301 vers le slug actuel pour récupérer l'équité.
+      { source: "/recipes/easy-whole30-chicken-skillet-for-two", destination: "/recipes/whole30-chicken-skillet-tomatoes-garlic", permanent: true },
+      { source: "/recipes/one-pan-chicken-vegetable-skillet-for-two", destination: "/recipes/one-pan-chicken-vegetable-skillet", permanent: true },
+      { source: "/recipes/4-ingredient-feta-brine-chicken-breast", destination: "/recipes/easy-4-ingredient-chicken-breast-recipes", permanent: true },
+      { source: "/recipes/easy-meal-ideas-for-two-one-pan-chicken-tomato-rice", destination: "/recipes/one-pan-chicken-tomato-rice", permanent: true },
+      { source: "/recipes/easy-4-ingredient-chicken-breast-recipes-2", destination: "/recipes/easy-4-ingredient-chicken-breast-recipes", permanent: true },
+      { source: "/recipes/slow-cooker-chicken-and-rice-for-two", destination: "/recipes/slow-cooker-chicken-rice-for-two", permanent: true },
+      { source: "/recipes/whole30", destination: "/recipes/whole30-chicken-skillet-tomatoes-garlic", permanent: true },
       // Category consolidation 2026-08-05 — 1-2 recipe categories 301 to their
       // canonical parent (kill thin pages + keyword cannibalization, ~119 → ~35)
       { source: "/recipes/category/30-minute-meals", destination: "/recipes/category/quick", permanent: true },
