@@ -6,7 +6,9 @@ import { ArrowRight } from "lucide-react"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { RecipeCard } from "@/components/recipe-card"
-import { getArticleBySlug, getRelatedForArticle } from "@/lib/queries"
+import { RecipeIndex } from "@/components/recipe-index"
+import { getArticleBySlug, getRelatedForArticle, getRecipesBySlugs } from "@/lib/queries"
+import type { RecipeCardData } from "@/lib/types"
 import { FOOD_BLUR_PLACEHOLDER } from "@/lib/utils/cn"
 import { cloudinaryUrl } from "@/lib/cloudinary-url"
 import { MarkdownRenderer } from "@/components/markdown-renderer"
@@ -14,6 +16,22 @@ import { CATEGORY_LABELS } from "@/components/category-listing"
 import { PinButton } from "@/components/pin-button"
 import { Breadcrumbs } from "@/components/breadcrumbs"
 import { ArticleJsonLd } from "@/components/article/article-jsonld"
+
+/** Extraire les slugs `/recipes/{slug}` du markdown, en ordre d'apparition,
+ *  dédupliqués. L'ordre = ordre de l'index (et de l'ItemList jsonLd). */
+function extractRecipeSlugs(markdown: string): string[] {
+  const slugs: string[] = []
+  const seen = new Set<string>()
+  const re = /\/recipes\/([a-z0-9][a-z0-9-]*)/g
+  let m
+  while ((m = re.exec(markdown)) !== null) {
+    if (!seen.has(m[1])) {
+      seen.add(m[1])
+      slugs.push(m[1])
+    }
+  }
+  return slugs
+}
 
 export function articleMetadata(article: NonNullable<Awaited<ReturnType<typeof getArticleBySlug>>>, category: string): Metadata {
   return {
@@ -44,6 +62,25 @@ export async function ArticleDetail({ slug }: { slug: string }) {
 
   const relatedRecipes = await getRelatedForArticle(article.linked_content_id as number | null)
   const categoryLabel = CATEGORY_LABELS[article.category ?? ""] ?? article.category ?? "Blog"
+
+  // --- Index de recettes (roundups) : mini-cartes sous l'intro ---
+  const contentMarkdown = article.contentMarkdown ?? ""
+  const recipeSlugs = extractRecipeSlugs(contentMarkdown)
+  let indexRecipes: RecipeCardData[] = []
+  if (recipeSlugs.length > 0) {
+    const fetched = await getRecipesBySlugs(recipeSlugs)
+    const bySlug = new Map(fetched.map((r) => [r.slug, r]))
+    // Réordonner selon le markdown (inArray ne garantit pas l'ordre)
+    indexRecipes = recipeSlugs
+      .map((s) => bySlug.get(s))
+      .filter((r): r is NonNullable<typeof r> => Boolean(r))
+  }
+
+  // Split au premier "\n## " — l'index se place SOUS le paragraphe d'intro,
+  // avant la première section H2. Split uniquement si un index existe.
+  const splitAt = indexRecipes.length > 0 ? contentMarkdown.indexOf("\n## ") : -1
+  const introPart = splitAt !== -1 ? contentMarkdown.slice(0, splitAt) : contentMarkdown
+  const bodyPart = splitAt !== -1 ? contentMarkdown.slice(splitAt) : ""
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -120,8 +157,16 @@ export async function ArticleDetail({ slug }: { slug: string }) {
           </header>
 
           <div className="prose prose-lg max-w-none">
-            <MarkdownRenderer content={article.contentMarkdown ?? ""} />
+            <MarkdownRenderer content={introPart} />
           </div>
+
+          {indexRecipes.length > 0 ? <RecipeIndex recipes={indexRecipes} /> : null}
+
+          {splitAt !== -1 ? (
+            <div className="prose prose-lg max-w-none">
+              <MarkdownRenderer content={bodyPart} />
+            </div>
+          ) : null}
         </article>
 
         {relatedRecipes.length > 0 ? (

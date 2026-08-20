@@ -1,7 +1,7 @@
 import { db } from "@/lib/db"
 import { recipes, selfImprovementLogs, pinDrafts, recipeRatings } from "@/lib/db/schema"
 import type { Recipe } from "@/lib/db/schema"
-import { desc, eq, and, ne, ilike, or, sql } from "drizzle-orm"
+import { desc, eq, and, ne, ilike, or, sql, inArray } from "drizzle-orm"
 
 export async function getAllRecipes() {
   return db.select().from(recipes).orderBy(desc(recipes.createdAt))
@@ -283,6 +283,24 @@ export async function getRelatedForArticle(linkedRecipeId: number | null) {
     )
     .limit(2)
   return [...linked, ...others]
+}
+
+/** Lightweight: fetch a set of recipes by slug (roundup / article index).
+ *  content_type="recipe" + published obligatoires — jamais servir un article
+ *  comme carte recette (global.md rule 2). L'ordre de retour n'est PAS garanti
+ *  (inArray) — le caller réordonne via une Map slug→recipe. */
+export async function getRecipesBySlugs(slugs: string[]) {
+  if (slugs.length === 0) return []
+  return db
+    .select(recipeCardSelect)
+    .from(recipes)
+    .where(
+      and(
+        eq(recipes.status, "published"),
+        eq(recipes.content_type, "recipe"),
+        inArray(recipes.slug, slugs),
+      ),
+    )
 }
 
 // ---------------------------------------------------------------------------
