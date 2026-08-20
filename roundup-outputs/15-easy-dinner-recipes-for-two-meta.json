@@ -1,6 +1,6 @@
 {
   "title": "15 Easy Dinner Recipes for Two – Quick, Cozy Meals from My Kitchen",
-  "metaTitle": "15 Easy Dinner Recipes for Two | Chef Augustin",
+  "metaTitle": "15 Easy Dinner Recipes for Two",
   "metaDescription": "Discover 15 practical, flavorful dinner recipes scaled perfectly for two people. From 20-minute garlic butter pasta to a small-batch lasagna, each dish minimizes leftovers and cleanup.",
   "excerpt": "These 15 dinner recipes for two are built for real weeknights — quick, one-pan whenever possible, and full of the kind of flavor that makes cooking feel like a treat, not a chore.",
   "faq": [
@@ -28,5 +28,6 @@
       "q": "Can I make these recipes ahead of time?",
       "a": "Several of these dinners work well as make-ahead meals. The chicken enchilada skillet, chili colorado, and lasagna can be assembled or fully cooked the day before and reheated. The garlic butter chicken pasta is best fresh, but you can prep the chicken and measure out ingredients ahead of time. For the salmon orzo, I’d recommend cooking it just before serving, as the orzo can absorb liquid and soften further upon sitting."
     }
-  ]
+  ],
+  "metaTitleFixed": "template layout ajoute | Chef Augustin — suffixe retiré du metaTitle DB"
 }
