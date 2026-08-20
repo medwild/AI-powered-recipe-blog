@@ -4,9 +4,11 @@
 // markdown-renderer) sont des server components — aucun client ne l'importe.
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
+import Image from "next/image"
 import { sanitizeMarkdown } from "@/lib/utils/sanitize"
+import { cloudinaryUrl } from "@/lib/cloudinary-url"
 
-const DISALLOWED = ["script", "style", "meta", "link", "img", "head", "html", "body"]
+const DISALLOWED = ["script", "style", "meta", "link", "head", "html", "body"]
 
 const BASE_COMPONENTS = {
   h2: (props: React.ComponentPropsWithoutRef<"h2">) => (
@@ -36,6 +38,23 @@ const BASE_COMPONENTS = {
   a: (props: React.ComponentPropsWithoutRef<"a">) => (
     <a className="text-primary underline hover:text-primary/80" {...props} />
   ),
+  // Images from the site's own Cloudinary CDN only — blocks any other src
+  // (LLM content could otherwise inject a tracking pixel or off-site image).
+  img: (props: React.ComponentPropsWithoutRef<"img">) => {
+    const src = typeof props.src === "string" ? props.src : ""
+    if (!src.startsWith("https://res.cloudinary.com/")) return null
+    return (
+      <span className="relative my-6 block aspect-[2/3] w-full max-w-[420px] overflow-hidden rounded-2xl">
+        <Image
+          src={cloudinaryUrl(src, 900)}
+          alt={props.alt ?? ""}
+          fill
+          sizes="(max-width: 640px) 100vw, 420px"
+          className="object-cover"
+        />
+      </span>
+    )
+  },
   blockquote: (props: React.ComponentPropsWithoutRef<"blockquote">) => (
     <blockquote className="border-l-4 border-primary/40 pl-5 italic my-4 text-muted-foreground" {...props} />
   ),
