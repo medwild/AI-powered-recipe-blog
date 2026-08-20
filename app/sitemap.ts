@@ -85,7 +85,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  // Topical hub pages from the code catalog (guides/idees) — 22 collection hubs
+  // Topical hub pages from the code catalog (guides/idees) — 11 collection hubs
+  // (21 → 11 on 2026-08-20 cannibalization consolidation; removed hubs 301).
   const hubEntries: MetadataRoute.Sitemap = HUBS.map((hub) => ({
     url: `${BASE_URL}/${hub.category}/${hub.slug}`,
     lastModified: new Date(),

@@ -123,6 +123,21 @@ const nextConfig = {
       { source: "/recipes/easy-4-ingredient-chicken-breast-recipes-2", destination: "/recipes/easy-4-ingredient-chicken-breast-recipes", permanent: true },
       { source: "/recipes/slow-cooker-chicken-and-rice-for-two", destination: "/recipes/slow-cooker-chicken-rice-for-two", permanent: true },
       { source: "/recipes/whole30", destination: "/recipes/whole30-chicken-skillet-tomatoes-garlic", permanent: true },
+      // 2026-08-20 cannibalization fix — 10 generic "dinner for two" hubs merged
+      // into survivors. easy-dinner-ideas-for-two = head keyword (43 recipes,
+      // most GSC impressions); slow-cooker kept over crockpot (same appliance,
+      // 36/36 recipes identical). Kept hubs still serve their curated recipes —
+      // the survivors' tag sets already cover them.
+      { source: "/guides/quick-and-easy-dinner-recipes-for-two", destination: "/guides/easy-dinner-ideas-for-two", permanent: true },
+      { source: "/guides/fast-and-easy-dinner-for-2", destination: "/guides/easy-dinner-ideas-for-two", permanent: true },
+      { source: "/guides/easy-recipes-for-two", destination: "/guides/easy-dinner-ideas-for-two", permanent: true },
+      { source: "/guides/crockpot-recipes-for-two", destination: "/guides/slow-cooker-recipes-for-two", permanent: true },
+      { source: "/idees/dinner-recipes-for-two", destination: "/guides/easy-dinner-ideas-for-two", permanent: true },
+      { source: "/idees/dinner-recipe-ideas-for-two", destination: "/guides/easy-dinner-ideas-for-two", permanent: true },
+      { source: "/idees/easy-meal-ideas-for-two", destination: "/guides/easy-dinner-ideas-for-two", permanent: true },
+      { source: "/idees/easy-to-cook-dinner-for-two", destination: "/guides/easy-dinner-ideas-for-two", permanent: true },
+      { source: "/idees/healthy-dinner-ideas-for-two", destination: "/guides/easy-dinner-ideas-for-two", permanent: true },
+      { source: "/idees/simple-healthy-dinner-ideas-for-two", destination: "/guides/easy-dinner-ideas-for-two", permanent: true },
       // Category consolidation 2026-08-05 — 1-2 recipe categories 301 to their
       // canonical parent (kill thin pages + keyword cannibalization, ~119 → ~35)
       { source: "/recipes/category/30-minute-meals", destination: "/recipes/category/quick", permanent: true },

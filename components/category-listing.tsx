@@ -111,7 +111,7 @@ export async function CategoryListing({ category }: { category: string }) {
 
   const label = CATEGORY_LABELS[category] ?? category
 
-  // Hubs catalogue (lib/hub-content.ts) pour cette catégorie — les 22 pages
+  // Hubs catalogue (lib/hub-content.ts) pour cette catégorie — les 11 pages
   // de collection guides/idees. S'ils existent, on les liste sous les articles
   // (évite le "0 articles" alors que le contenu existe).
   const catalogHubs = HUBS.filter((h) => h.category === category)

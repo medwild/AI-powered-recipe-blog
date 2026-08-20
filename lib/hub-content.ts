@@ -1,8 +1,9 @@
 // lib/hub-content.ts
-// Topical map — level 2: category hubs for the 21 collection keywords whose
+// Topical map — level 2: category hubs for the 11 collection keywords whose
 // SERP intent is GUIDE/IDEAS (verified by SERP research 2026-08-04). Each hub
 // curates EXISTING recipes by tags (deterministic — no hallucinated links).
-// A hub is served on /guides/{slug} or /idees/{slug} (see HubListing + routes).
+// 10 generic "dinner for two" hubs consolidated into 2 survivors on 2026-08-20
+// (cannibalization fix: easy-dinner-ideas-for-two + recipes-for-two retained).
 
 export interface Hub {
   slug: string
@@ -33,32 +34,6 @@ export const HUBS: Hub[] = [
     heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279107/recipes/collections-easy-dinner-ideas-for-two.jpg",
   },
   {
-    slug: "quick-and-easy-dinner-recipes-for-two",
-    category: "guides",
-    title: "Quick & Easy Dinner Recipes for Two",
-    metaTitle: "Quick & Easy Dinner Recipes for Two (30 Minutes or Less)",
-    metaDescription:
-      "Dinner on the table fast — quick and easy recipes for two, from one-pan chicken to 30-minute pasta. No fuss, no leftovers.",
-    intro: [
-      "Some nights you just need dinner on the table — fast. These quick recipes for two are built around short cook times and minimal cleanup, without cutting corners on flavor.",
-    ],
-    curateTags: ["quick", "easy", "dinner for two"],
-    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279119/recipes/collections-quick-and-easy-dinner-recipes-for-two.jpg",
-  },
-  {
-    slug: "healthy-dinner-ideas-for-two",
-    category: "idees",
-    title: "Healthy Dinner Ideas for Two",
-    metaTitle: "Healthy Dinner Ideas for Two (Light & Satisfying)",
-    metaDescription:
-      "Healthy dinners for two that are actually satisfying — balanced one-pan meals, lean proteins, and vegetable-forward recipes.",
-    intro: [
-      "Healthy doesn't have to mean boring, and it definitely doesn't mean cooking two separate meals. These dinners for two balance lean protein, vegetables, and flavor — in portions that make sense for two people.",
-    ],
-    curateTags: ["healthy", "dinner for two", "30-minute"],
-    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279117/recipes/collections-healthy-dinner-ideas-for-two.jpg",
-  },
-  {
     slug: "romantic-dinner-ideas-for-two",
     category: "idees",
     title: "Romantic Dinner Ideas for Two",
@@ -70,32 +45,6 @@ export const HUBS: Hub[] = [
     ],
     curateTags: ["romantic", "date night", "dinner for two"],
     heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279120/recipes/collections-romantic-dinner-ideas-for-two.jpg",
-  },
-  {
-    slug: "easy-meal-ideas-for-two",
-    category: "idees",
-    title: "Easy Meal Ideas for Two",
-    metaTitle: "Easy Meal Ideas for Two (Plan a Week of Dinners)",
-    metaDescription:
-      "Easy meal ideas for two — plan a week of dinners with one-pan meals, skillet dinners, and recipes that use what you have.",
-    intro: [
-      "The hardest part of cooking for two is often deciding what to make. These easy meal ideas cover a week of dinners — from skillet meals to one-pan bakes — so you can plan ahead and shop once.",
-    ],
-    curateTags: ["easy", "dinner for two", "meal"],
-    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279111/recipes/collections-easy-meal-ideas-for-two.jpg",
-  },
-  {
-    slug: "dinner-recipe-ideas-for-two",
-    category: "idees",
-    title: "Dinner Recipe Ideas for Two",
-    metaTitle: "Dinner Recipe Ideas for Two (Browse & Cook Tonight)",
-    metaDescription:
-      "Dinner recipe ideas for two — browse our collection of small-batch dinners, from pasta to chicken to slow-cooker favorites.",
-    intro: [
-      "Looking for dinner tonight? Browse our recipe ideas for two — every dish is scaled for two people, tested in a home kitchen, and most come together in one pan.",
-    ],
-    curateTags: ["dinner for two", "ideas", "easy"],
-    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279105/recipes/collections-dinner-recipe-ideas-for-two.jpg",
   },
   {
     slug: "slow-cooker-recipes-for-two",
@@ -111,32 +60,6 @@ export const HUBS: Hub[] = [
     heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279122/recipes/collections-slow-cooker-recipes-for-two.jpg",
   },
   {
-    slug: "crockpot-recipes-for-two",
-    category: "guides",
-    title: "Crockpot Recipes for Two",
-    metaTitle: "Crockpot Recipes for Two (Easy Small-Batch Dinners)",
-    metaDescription:
-      "Easy crockpot recipes for two people — small-batch slow cooker dinners that make weeknights effortless.",
-    intro: [
-      "The crockpot is the original set-it-and-forget-it tool. These recipes are built for two — small batches, 2-quart-friendly, and ready when you are.",
-    ],
-    curateTags: ["crockpot", "slow cooker", "dinner for two"],
-    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279104/recipes/collections-crockpot-recipes-for-two.jpg",
-  },
-  {
-    slug: "easy-recipes-for-two",
-    category: "guides",
-    title: "Easy Recipes for Two",
-    metaTitle: "Easy Recipes for Two (Simple Small-Batch Cooking)",
-    metaDescription:
-      "Easy recipes for two — simple, small-batch cooking with one-pan meals, quick pastas, and weeknight chicken dinners.",
-    intro: [
-      "Simple cooking for two is about scale and technique — a smaller pan, the right portion, and recipes that don't complicate things. These are our easiest recipes for two, made for real weeknights.",
-    ],
-    curateTags: ["easy", "dinner for two", "one-pan"],
-    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279112/recipes/collections-easy-recipes-for-two.jpg",
-  },
-  {
     slug: "recipes-for-two",
     category: "guides",
     title: "Recipes for Two",
@@ -148,32 +71,6 @@ export const HUBS: Hub[] = [
     ],
     curateTags: ["dinner for two", "small batch"],
     heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279120/recipes/collections-recipes-for-two.jpg",
-  },
-  {
-    slug: "fast-and-easy-dinner-for-2",
-    category: "guides",
-    title: "Fast & Easy Dinner for 2",
-    metaTitle: "Fast & Easy Dinner for 2 (Ready in 30 Minutes)",
-    metaDescription:
-      "Fast and easy dinners for 2 — 30-minute meals, one-pan cooking, and quick weeknight recipes sized for two.",
-    intro: [
-      "When it's 6 PM and you're hungry, 'fast and easy' is the whole brief. These dinners for two are ready in 30 minutes or less, with minimal dishes to wash.",
-    ],
-    curateTags: ["fast", "easy", "dinner for two", "30-minute"],
-    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279115/recipes/collections-fast-and-easy-dinner-for-2.jpg",
-  },
-  {
-    slug: "simple-healthy-dinner-ideas-for-two",
-    category: "idees",
-    title: "Simple Healthy Dinner Ideas for Two",
-    metaTitle: "Simple Healthy Dinner Ideas for Two (Balanced & Easy)",
-    metaDescription:
-      "Simple, healthy dinner ideas for two — balanced, satisfying, and easy to make on a weeknight.",
-    intro: [
-      "Healthy dinners for two don't need to be complicated. These simple ideas balance protein, vegetables, and flavor — the kind of meals you can make on autopilot after a long day.",
-    ],
-    curateTags: ["healthy", "simple", "dinner for two"],
-    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279121/recipes/collections-simple-healthy-dinner-ideas-for-two.jpg",
   },
   {
     slug: "easy-whole30-recipes",
@@ -268,32 +165,6 @@ export const HUBS: Hub[] = [
     curateTags: ["baking", "small batch", "dessert"],
     heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279103/recipes/collections-baking-for-2.jpg",
   },
-  {
-    slug: "dinner-recipes-for-two",
-    category: "idees",
-    title: "Dinner Recipes for Two",
-    metaTitle: "Dinner Recipes for Two (Our Full Collection)",
-    metaDescription:
-      "Our full collection of dinner recipes for two — one-pan chicken, pasta, slow-cooker favorites, and more, all scaled for two.",
-    intro: [
-      "This is the collection hub for all our dinner recipes for two. Browse by what you're craving — chicken, pasta, seafood, slow-cooker — every recipe is scaled for two servings.",
-    ],
-    curateTags: ["dinner for two", "easy", "one-pan"],
-    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279106/recipes/collections-dinner-recipes-for-two.jpg",
-  },
-  {
-    slug: "easy-to-cook-dinner-for-two",
-    category: "idees",
-    title: "Easy-to-Cook Dinner for Two",
-    metaTitle: "Easy-to-Cook Dinners for Two (Beginner-Friendly)",
-    metaDescription:
-      "Easy-to-cook dinners for two — beginner-friendly recipes that are simple, quick, and hard to mess up.",
-    intro: [
-      "Some recipes just want to be cooked. These easy-to-cook dinners for two are forgiving, fast, and perfect when you want a good meal without a project.",
-    ],
-    curateTags: ["easy", "dinner for two", "beginner"],
-    heroImageUrl: "https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786279113/recipes/collections-easy-to-cook-dinner-for-two.jpg",
-  },
 ]
 
 export function getHubBySlug(slug: string): Hub | undefined {
@@ -306,11 +177,14 @@ export function getHubBySlug(slug: string): Hub | undefined {
  */
 export function getHubForRecipe(tags: string[]): Hub | undefined {
   const priority: Array<[string, string]> = [
-    ["healthy", "healthy-dinner-ideas-for-two"],
+    // healthy hub merged into easy-dinner-ideas (2026-08-20 cannibalization
+    // consolidation) — healthy-tagged recipes now link to the generic head hub.
+    ["healthy", "easy-dinner-ideas-for-two"],
     ["romantic", "romantic-dinner-ideas-for-two"],
     ["date night", "romantic-dinner-ideas-for-two"],
     ["slow cooker", "slow-cooker-recipes-for-two"],
-    ["crockpot", "crockpot-recipes-for-two"],
+    // crockpot hub merged into slow-cooker (2026-08-20) — same appliance, one page.
+    ["crockpot", "slow-cooker-recipes-for-two"],
     ["low fodmap", "easy-low-fodmap-recipes"],
     ["whole30", "easy-whole30-recipes"],
     ["carnivore", "easy-carnivore-recipes"],
@@ -340,8 +214,9 @@ const CLUSTER_TO_HUB: Record<string, string> = {
   "small-batch-slow-cooker": "slow-cooker-recipes-for-two",
   "one-pan-dinners-for-two": "easy-dinner-ideas-for-two",
   "asian-inspired-dinners": "easy-dinner-ideas-for-two",
-  "budget-meals-for-two": "easy-meal-ideas-for-two",
-  "quick-healthy-dinners": "healthy-dinner-ideas-for-two",
+  // budget-meals + quick-healthy hubs merged into easy-dinner-ideas (2026-08-20).
+  "budget-meals-for-two": "easy-dinner-ideas-for-two",
+  "quick-healthy-dinners": "easy-dinner-ideas-for-two",
 }
 
 /**
