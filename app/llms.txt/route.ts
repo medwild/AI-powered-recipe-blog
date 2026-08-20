@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { recipes } from "@/lib/db/schema"
-import { desc, eq, and } from "drizzle-orm"
+import { desc, eq } from "drizzle-orm"
+import { HUBS } from "@/lib/hub-content"
 
 export const dynamic = "force-dynamic"
 
@@ -46,6 +47,15 @@ export async function GET() {
     )
     .join("\n")
 
+  // Collection hubs come from the code catalog (lib/hub-content.ts), not the DB
+  // articles table — they were invisible to llms.txt before this fix (audit claude 20/08).
+  const hubList = HUBS
+    .map(
+      (h) =>
+        `- [${h.title}](${BASE_URL}/${h.category}/${h.slug}): ${h.metaDescription}`,
+    )
+    .join("\n")
+
   const content = `# Chef Augustin — Easy Weeknight Dinners for Two
 
 ## About
@@ -57,6 +67,7 @@ Small-batch recipes designed for two people — one-pan meals, mini slow cooker 
 - [All Recipes](${BASE_URL}/recipes)
 - [Cooking Techniques](${BASE_URL}/techniques)
 - [Guides](${BASE_URL}/guides)
+- [Ideas](${BASE_URL}/idees)
 - [About Chef Augustin](${BASE_URL}/about)
 - [Privacy Policy](${BASE_URL}/privacy)
 
@@ -67,6 +78,10 @@ Small-batch recipes designed for two people — one-pan meals, mini slow cooker 
 ## Published Recipes (${publishedRecipes.length})
 
 ${recipeList}
+
+## Collection Hubs (${HUBS.length})
+
+${hubList}
 
 ## Published Articles (${publishedArticles.length})
 

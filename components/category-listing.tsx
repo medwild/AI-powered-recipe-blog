@@ -116,6 +116,11 @@ export async function CategoryListing({ category }: { category: string }) {
   // (évite le "0 articles" alors que le contenu existe).
   const catalogHubs = HUBS.filter((h) => h.category === category)
 
+  // Le compteur reflète le total affiché dans la grille (hubs + articles) —
+  // avant il ne comptait que les articles DB ("1 article" alors que 15 cartes
+  // s'affichent, audit claude 20/08).
+  const totalCount = catalogHubs.length + articles.length
+
   // Images des cartes hubs : image dédiée par hub (champ heroImageUrl,
   // Cloudinary). Plus de greedy — chaque hub a sa propre image.
 
@@ -140,7 +145,7 @@ export async function CategoryListing({ category }: { category: string }) {
           ) : null}
           <p className="mt-3 text-sm text-muted-foreground">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary">
-              {articles.length} article{articles.length !== 1 ? "s" : ""}
+              {totalCount} {label.toLowerCase()}{totalCount !== 1 ? "s" : ""}
             </span>
           </p>
         </header>
@@ -220,7 +225,14 @@ export async function CategoryListing({ category }: { category: string }) {
                   <h2 className="font-serif text-lg font-semibold leading-snug group-hover:text-primary transition-colors">
                     {article.title}
                   </h2>
-                  {/* Excerpt omitted — same rationale as RecipeCard */}
+                  {/* Excerpt shown — few article cards per category (unlike the
+                      260+ recipe grid where RecipeCard omits it to avoid duplicate
+                      content blocks). Keeps cards consistent with hub cards. */}
+                  {article.excerpt ? (
+                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                      {article.excerpt}
+                    </p>
+                  ) : null}
                 </div>
               </Link>
               </article>

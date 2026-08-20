@@ -109,6 +109,14 @@ export async function ArticleDetail({ slug }: { slug: string }) {
             <h1 className="font-serif text-3xl font-bold tracking-tight text-balance md:text-4xl">
               {article.title}
             </h1>
+            {/* Author byline — E-E-A-T signal for AI crawlers and Google
+                 (audit claude 20/08: "zero signal E-E-A-T visible en haut").
+                 Only claims sourced by the brand: French technique + real-world
+                 kitchen experience. NO invented years (global.md rule 13). */}
+            <p className="mt-4 text-sm text-muted-foreground">
+              By <span className="font-medium text-foreground">Chef Augustin Lefèvre</span>
+              {" "}— small-batch dinners for two, grounded in French technique
+            </p>
           </header>
 
           <div className="prose prose-lg max-w-none">
