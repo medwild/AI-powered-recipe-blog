@@ -145,7 +145,7 @@ export async function CategoryListing({ category }: { category: string }) {
           ) : null}
           <p className="mt-3 text-sm text-muted-foreground">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary">
-              {totalCount} {label.toLowerCase()}{totalCount !== 1 ? "s" : ""}
+              {totalCount} {label.toLowerCase()}
             </span>
           </p>
         </header>
