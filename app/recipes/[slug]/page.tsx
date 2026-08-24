@@ -173,7 +173,10 @@ function RecipeJsonLd({
           recipeInstructions: (recipe.instructions ?? []).map((s) => ({
             "@type": "HowToStep",
             position: s.step,
-            image: s.step === 1 && recipe.heroImageUrl ? [recipe.heroImageUrl] : undefined,
+            // GSC enrichissement « image/video dans recipeInstructions » (non critique) :
+            // chaque étape doit porter une image. Fix rapide 24/08 : image hero sur toutes
+            // les étapes (photo du plat — honnête). Upgrade futur : image distincte/étape.
+            image: recipe.heroImageUrl ? [recipe.heroImageUrl] : undefined,
             name: (() => {
               // Extract a short name from the instruction text (first sentence, max 80 chars)
               const firstSentence = s.text.split(/[.!?][\s\n]/)[0] ?? s.text
@@ -224,6 +227,7 @@ function RecipeJsonLd({
     recipeInstructions: (recipe.instructions ?? []).map((s) => ({
       "@type": "HowToStep",
       position: s.step,
+      image: recipe.heroImageUrl ? [recipe.heroImageUrl] : undefined,
       text: s.text,
     })),
   }
