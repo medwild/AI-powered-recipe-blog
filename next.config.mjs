@@ -56,7 +56,11 @@ const nextConfig = {
   async redirects() {
     return [
       { source: "/recettes", destination: "/recipes", permanent: true },
-      { source: "/recettes/:path*", destination: "/recipes/:path*", permanent: true },
+      // /recettes/{slug} — plus de wildcard aveugle : il servait une chaîne
+      // 308 → 404 (soft-404) pour les slugs morts (validation GSC 22/08).
+      // Résolu dynamiquement par app/recettes/[slug]/route.ts (308 mono-saut
+      // vers le successeur live, 404 natif sinon). Ligne 58 ci-dessus conserve
+      // la redirection de /recettes + /recettes?cat= (query pass-through).
       // Cluster → collections migration 2026-08-14 — renamed route, 301 wildcard
       { source: "/recipes/cluster/:path*", destination: "/recipes/collections/:path*", permanent: true },
       // Empty legacy hubs (2026-08-06 Semrush audit — no published articles, no

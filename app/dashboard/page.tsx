@@ -13,6 +13,9 @@ export const dynamic = "force-dynamic"
 export const metadata: Metadata = {
   title: "Editorial Studio",
   description: "Generate and manage your SEO-optimized recipes.",
+  // Zone d'admin privée — jamais indexer (GSC "Toutes les pages connues"
+  // listait /dashboard). Auth required côté page (redirect /login).
+  robots: { index: false, follow: false },
 }
 
 export default async function DashboardPage() {
