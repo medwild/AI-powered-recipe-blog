@@ -20,7 +20,9 @@ export function RecipeInstructions({
       </h2>
       <ol className="mt-8 flex flex-col gap-8" role="list">
         {instructions.map((step) => (
-          <li key={step.step} className="relative flex gap-5">
+          // id="step-N" : ancre consommée par le JSON-LD HowToStep.url (GSC
+          // « Champ url manquant dans recipeInstructions » — non critique).
+          <li key={step.step} id={`step-${step.step}`} className="relative flex gap-5">
             {/* Oversized background number — decorative watermark */}
             <span
               className="absolute -top-8 -left-2 select-none font-serif text-[7rem] leading-none text-primary/[0.04] pointer-events-none hidden sm:block"

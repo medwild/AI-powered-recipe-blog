@@ -177,6 +177,9 @@ function RecipeJsonLd({
             // chaque étape doit porter une image. Fix rapide 24/08 : image hero sur toutes
             // les étapes (photo du plat — honnête). Upgrade futur : image distincte/étape.
             image: recipe.heroImageUrl ? [recipe.heroImageUrl] : undefined,
+            // GSC « Champ url manquant dans recipeInstructions » : url = ancre réelle
+            // #step-N (id posé par components/recipe-instructions.tsx).
+            url: `${SITE}/recipes/${recipe.slug}#step-${s.step}`,
             name: (() => {
               // Extract a short name from the instruction text (first sentence, max 80 chars)
               const firstSentence = s.text.split(/[.!?][\s\n]/)[0] ?? s.text
@@ -228,6 +231,8 @@ function RecipeJsonLd({
       "@type": "HowToStep",
       position: s.step,
       image: recipe.heroImageUrl ? [recipe.heroImageUrl] : undefined,
+      // GSC « Champ url manquant dans recipeInstructions » — ancre réelle #step-N
+      url: `${process.env.NEXT_PUBLIC_SITE_URL || "https://www.chefaugustin.com"}/recipes/${recipe.slug}#step-${s.step}`,
       text: s.text,
     })),
   }
