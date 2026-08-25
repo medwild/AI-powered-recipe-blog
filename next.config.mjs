@@ -94,12 +94,20 @@ const nextConfig = {
       { source: "/recipes/easy-meal-ideas-for-two", destination: "/recipes/one-pan-chicken-tomato-rice", permanent: true },
       { source: "/recipes/dinner-recipe-ideas-for-two", destination: "/recipes/one-pan-chicken-rice-garlic-butter-tomato-sauce", permanent: true },
       { source: "/recipes/slow-cooker-recipes-for-two", destination: "/recipes/slow-cooker-chicken-rice-for-two", permanent: true },
-      { source: "/recipes/crockpot-recipes-for-two", destination: "/recipes/crockpot-chicken-tomato-rice-for-two", permanent: true },
+      { source: "/recipes/crockpot-recipes-for-two", destination: "/recipes/slow-cooker-chicken-rice-for-two", permanent: true },
       { source: "/recipes/easy-recipes-for-two", destination: "/recipes/one-pan-chicken-rice-for-two", permanent: true },
-      { source: "/recipes/recipes-for-two", destination: "/recipes/one-pan-chicken-rice-dinner-for-two", permanent: true },
+      { source: "/recipes/recipes-for-two", destination: "/recipes/one-pan-chicken-rice-for-two", permanent: true },
       { source: "/recipes/fast-and-easy-dinner-for-2", destination: "/recipes/garlic-butter-chicken-pasta-for-two", permanent: true },
-      { source: "/recipes/simple-healthy-dinner-ideas-for-two", destination: "/recipes/one-pan-chicken-tomato-garlic-rice", permanent: true },
+      { source: "/recipes/simple-healthy-dinner-ideas-for-two", destination: "/recipes/one-pan-chicken-rice-for-two", permanent: true },
       { source: "/recipes/easy-whole30-recipes", destination: "/recipes/whole30-chicken-skillet-tomatoes-garlic", permanent: true },
+      // 2026-08-25 cannibalization fix — 3 chicken-rice recettes consolidées :
+      // one-pan-chicken-rice-dinner-for-two + one-pan-chicken-tomato-garlic-rice
+      // → one-pan-chicken-rice-for-two ; crockpot-chicken-tomato-rice-for-two
+      // → slow-cooker-chicken-rice-for-two (keyword: "crockpot recipes for two").
+      // Les hubs existants sont re-pointés ci-dessus vers les survivants.
+      { source: "/recipes/one-pan-chicken-rice-dinner-for-two", destination: "/recipes/one-pan-chicken-rice-for-two", permanent: true },
+      { source: "/recipes/one-pan-chicken-tomato-garlic-rice", destination: "/recipes/one-pan-chicken-rice-for-two", permanent: true },
+      { source: "/recipes/crockpot-chicken-tomato-rice-for-two", destination: "/recipes/slow-cooker-chicken-rice-for-two", permanent: true },
       // 2026-08-10 GSC "Exclues par noindex" — vieux slugs renommés/supprimés
       // qui servaient 200 + noindex (soft-404). 301 vers les slugs actuels ;
       // les slugs sans successeur (sourdough, banana-bread, honey-garlic-salmon,
