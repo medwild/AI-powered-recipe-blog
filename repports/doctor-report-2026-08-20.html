@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<title>Doctor Report</title>
+<description>Claude Code health check report for 2026-08-20 — 10 checks including install health, unused skills, hooks, and permissions</description>
+<base href=".">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root { --bg: #fff; --fg: #1a1a2e; --muted: #6b7280; --border: #e5e7eb; --green: #059669; --yellow: #d97706; --red: #dc2626; --blue: #2563eb; --card: #f9fafb; }
+  :root[data-theme="dark"] { --bg: #0f172a; --fg: #e2e8f0; --muted: #94a3b8; --border: #334155; --green: #34d399; --yellow: #fbbf24; --red: #f87171; --blue: #60a5fa; --card: #1e293b; }
+  @media (prefers-color-scheme:dark) { :root:not([data-theme="light"]) { --bg: #0f172a; --fg: #e2e8f0; --muted: #94a3b8; --border: #334155; --green: #34d399; --yellow: #fbbf24; --red: #f87171; --blue: #60a5fa; --card: #1e293b; } }
+  body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--fg); max-width: 800px; margin: 0 auto; padding: 2rem 1rem; line-height: 1.6; }
+  h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: .25rem; }
+  .subtitle { color: var(--muted); font-size: .9rem; margin-bottom: 2rem; }
+  h2 { font-size: 1.2rem; margin-top: 2rem; border-bottom: 1px solid var(--border); padding-bottom: .4rem; }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: .75rem; font-weight: 600; }
+  .badge.green { background: #d1fae5; color: #065f46; }
+  .badge.yellow { background: #fef3c7; color: #92400e; }
+  .badge.red { background: #fee2e2; color: #991b1b; }
+  .badge.blue { background: #dbeafe; color: #1e40af; }
+  .badge.gray { background: #f3f4f6; color: #374151; }
+  [data-theme="dark"] .badge.green { background: #064e3b; color: #6ee7b7; }
+  [data-theme="dark"] .badge.yellow { background: #78350f; color: #fcd34d; }
+  [data-theme="dark"] .badge.red { background: #7f1d1d; color: #fca5a5; }
+  [data-theme="dark"] .badge.blue { background: #1e3a5f; color: #93c5fd; }
+  [data-theme="dark"] .badge.gray { background: #374151; color: #d1d5db; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; margin: 1rem 0; }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: .75rem; margin: 1rem 0; }
+  .stat-box { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: .75rem; text-align: center; }
+  .stat-box .num { font-size: 1.6rem; font-weight: 700; }
+  .stat-box .label { font-size: .8rem; color: var(--muted); }
+  .stat-box .num.green { color: var(--green); }
+  .stat-box .num.yellow { color: var(--yellow); }
+  .stat-box .num.red { color: var(--red); }
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .9rem; }
+  th, td { text-align: left; padding: .5rem .75rem; border-bottom: 1px solid var(--border); }
+  th { font-weight: 600; color: var(--muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .03em; }
+  .verdict { font-size: .85rem; display: inline-block; padding: 1px 6px; border-radius: 4px; }
+  .verdict.remove { background: #fee2e2; color: #991b1b; }
+  .verdict.keep { background: #d1fae5; color: #065f46; }
+  .verdict.maybe { background: #fef3c7; color: #92400e; }
+  [data-theme="dark"] .verdict.remove { background: #7f1d1d; color: #fca5a5; }
+  [data-theme="dark"] .verdict.keep { background: #064e3b; color: #6ee7b7; }
+  [data-theme="dark"] .verdict.maybe { background: #78350f; color: #fcd34d; }
+  .flex { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; }
+  .hook-bar { height: 1.2rem; border-radius: 4px; background: #e5e7eb; position: relative; overflow: hidden; }
+  .hook-bar .fill { height: 100%; background: var(--red); border-radius: 4px; }
+  .hook-bar .fill.green { background: var(--green); }
+  .hook-bar .fill.yellow { background: var(--yellow); }
+  .hook-bar .sleep { position: absolute; top: 0; left: 0; height: 100%; background: #fde68a; opacity: .5; }
+  ul { padding-left: 1.2rem; }
+  li { margin: .3rem 0; }
+  .summary-line { font-size: 1rem; margin: 1.5rem 0; padding: 1rem; border-left: 4px solid var(--green); background: var(--card); border-radius: 0 8px 8px 0; }
+  .summary-line.problem { border-left-color: var(--red); }
+  .summary-line.info { border-left-color: var(--blue); }
+</style>
+
+<h1>🩺 Claude Code Doctor Report</h1>
+<p class="subtitle">2026-08-20 · 205 startups lifetime · 50 sessions in window (Jul 31 – Aug 20)</p>
+
+<div class="stat-grid">
+  <div class="stat-box"><div class="num green">2.1.237</div><div class="label">Installed version</div></div>
+  <div class="stat-box"><div class="num green">2.1.237</div><div class="label">Latest on npm</div></div>
+  <div class="stat-box"><div class="num green">auto</div><div class="label">Permission mode</div></div>
+  <div class="stat-box"><div class="num green">3</div><div class="label">Plugins enabled</div></div>
+  <div class="stat-box"><div class="num yellow">31</div><div class="label">Total skills loaded</div></div>
+  <div class="stat-box"><div class="num yellow">14</div><div class="label">Unused skills (30d+)</div></div>
+</div>
+
+<h2>✅ Check 0 — Setup health</h2>
+<div class="card">
+  <div class="flex"><span class="badge green">PASS</span> <strong>Installation</strong></div>
+  <p>npm global install at <code>/home/user/.nvm/versions/node/v22.23.1</code>. No duplicate installs, no leftover npm-local. Binary resolves correctly.</p>
+
+  <div class="flex"><span class="badge green">PASS</span> <strong>Settings files</strong></div>
+  <p>All 3 settings files parse clean. No broken JSON.</p>
+
+  <div class="flex"><span class="badge green">PASS</span> <strong>Agent definitions</strong></div>
+  <p>No agent definition files — not needed.</p>
+
+  <div class="flex"><span class="badge green">PASS</span> <strong>Skill frontmatter</strong></div>
+  <p>All 2 user skills + 3 project skills have valid frontmatter with <code>name</code> and <code>description</code>.</p>
+
+  <div class="flex"><span class="badge yellow">WARN</span> <strong>claude-seo Python hook fails every session</strong></div>
+  <p>The <code>run-python-hook.js</code> hook fails on every PostToolUse:Write, producing 276 non-blocking errors across the 50 most recent transcripts. Root cause: <code>python3</code> and <code>python</code> are not in PATH, and while <code>CLAUDE_SEO_PYTHON</code> is set in <code>~/.bashrc</code>, hooks don't source bashrc — they inherit only the Claude Code launch environment. The env var is not set when hooks run.</p>
+  <p><strong>Fix:</strong> Add <code>CLAUDE_SEO_PYTHON</code> to the <code>env</code> block in <code>~/.claude/settings.json</code> so hooks inherit it.</p>
+</div>
+
+<h2>✅ Check 1 — Unused skills</h2>
+<div class="card">
+  <p>Window: <strong>21 days</strong> (Jul 31 – Aug 20), <strong>50 sessions</strong>. Last-used timestamps are from <code>skillUsage</code> counters.</p>
+  <table>
+    <tr><th>Skill</th><th>Lifetime</th><th>Last used</th><th>Verdict</th></tr>
+    <tr><td>skill-creator:skill-creator</td><td>3</td><td>Jul 9</td><td><span class="verdict remove">Remove</span></td></tr>
+    <tr><td>deep-research</td><td>7</td><td>Jul 23</td><td><span class="verdict remove">Remove</span></td></tr>
+    <tr><td>code-review</td><td>7</td><td>Jul 29</td><td><span class="verdict maybe">Borderline</span></td></tr>
+    <tr><td>frontend-design</td><td>2</td><td>Jul 10</td><td><span class="verdict remove">Remove</span></td></tr>
+    <tr><td>debug</td><td>1</td><td>Jul 16</td><td><span class="verdict remove">Remove</span></td></tr>
+    <tr><td>find-skills</td><td>5</td><td>Jul 31</td><td><span class="verdict maybe">Borderline</span></td></tr>
+    <tr><td>vercel-react-best-practices</td><td>1</td><td>Jul 23</td><td><span class="verdict remove">Remove</span></td></tr>
+    <tr><td>next-best-practices</td><td>1</td><td>Jul 23</td><td><span class="verdict remove">Remove</span></td></tr>
+    <tr><td>update-config</td><td>1</td><td>Jul 25</td><td><span class="verdict remove">Remove</span></td></tr>
+    <tr><td>claude-seo:seo</td><td>2</td><td>Jul 31</td><td><span class="verdict maybe">Borderline</span></td></tr>
+  </table>
+  <p>All 3 plugins (superpowers, claude-seo, skill-creator) are actively used. MCP server <strong>dataforseo</strong> has 44 invocations in transcripts — clearly in use. No MCP servers to disable.</p>
+  <p>Note: The plugin <code>claude-seo</code> sub-skills (seo-content, seo-backlinks, etc.) are already disabled via local <code>skillOverrides</code> — that's correct since their <code>seo-audit</code> parent delegates to subagents when needed.</p>
+</div>
+
+<h2>✅ Check 2 — LOCAL CLAUDE.md dedup</h2>
+<div class="card">
+  <div class="flex"><span class="badge green">PASS</span> <strong>No dedup needed</strong></div>
+  <p><code>CLAUDE.local.md</code> (416 bytes) contains only: <code>AUTO_APPROVE=true</code> (local preference, not in checked-in files) and a rapports note. No <code>~/.claude/CLAUDE.md</code> exists. Nothing to deduplicate.</p>
+</div>
+
+<h2>✅ Check 3 — CLAUDE.md trim</h2>
+<div class="card">
+  <div class="flex"><span class="badge green">PASS</span> <strong>No trimming needed</strong></div>
+  <p>CLAUDE.md is 2,120 bytes (~530 est. tokens). All content is project-specific (pipeline config, quality gate, rules pointers) — not derivable from code. The Next.js agent-rules block is auto-generated by <code>next dev</code>.</p>
+</div>
+
+<h2>✅ Check 4 — Lazy loading</h2>
+<div class="card">
+  <div class="flex"><span class="badge green">PASS</span> <strong>Already properly structured</strong></div>
+  <p>Rules are already in <code>.claude/rules/</code> (4 files: global.md, accuracy.md, karpathy.md, security.md). These are per-directory lazy-loaded rules, not always-loaded. No further migration needed.</p>
+</div>
+
+<h2>⚠️ Check 5 — Slow hooks</h2>
+<div class="card">
+  <div class="flex"><span class="badge red">SLOW</span> <strong>ping-sitemap hook: ~35-40s average</strong></div>
+  <div class="hook-bar" style="margin: .5rem 0;"><div class="fill" style="width: 67%;"></div></div>
+  <p><strong>59/88 runs (67%) exceed 30s</strong>. The <code>sleep 30</code> in <code>hook-ping-sitemap.sh</code> accounts for most of this (it waits for the Hostinger deploy to rebuild). The actual ping-sitemap.py + indexnow-hook.py take ~5-10s combined. This is <strong>intentional</strong> — the sleep is needed before checking the new deploy.</p>
+
+  <div class="flex"><span class="badge red">NOISY</span> <strong>claude-seo Python hook: fails every session</strong></div>
+  <p>276 non-blocking error attachments across 50 transcripts (about 5-6 per session). Each error is harmless but produces noise. <strong>Fix:</strong> Add <code>CLAUDE_SEO_PYTHON</code> to the settings <code>env</code> block so hooks find Python.</p>
+</div>
+
+<h2>✅ Check 6 — Context weight</h2>
+<div class="card">
+  <table>
+    <tr><th>Component</th><th>Size</th><th>Est. tokens</th><th>Status</th></tr>
+    <tr><td>CLAUDE.md</td><td>2,120 B</td><td>~530</td><td><span class="badge green">OK</span></td></tr>
+    <tr><td>CLAUDE.local.md</td><td>416 B</td><td>~104</td><td><span class="badge green">OK</span></td></tr>
+    <tr><td>4 rules files</td><td>10,514 B</td><td>~2,630</td><td><span class="badge green">OK</span></td></tr>
+    <tr><td>Skill listing (31 entries)</td><td>~3,100 B</td><td>~775</td><td><span class="badge green">OK</span></td></tr>
+    <tr><td>Memory index (66 files)</td><td>loaded on demand</td><td>~0</td><td><span class="badge green">OK</span></td></tr>
+    <tr><td>MCP tools</td><td>deferred</td><td>~0</td><td><span class="badge green">OK</span></td></tr>
+    <tr><td><strong>Total</strong></td><td></td><td><strong>~4,040</strong></td><td><span class="badge green">Low</span></td></tr>
+  </table>
+  <p>Context is well within budget (~2% of 200K window). Skill listing is under the 1% budget. Deferred MCP tools cost nothing up front. No action needed.</p>
+</div>
+
+<h2>✅ Check 7 — Version currency</h2>
+<div class="card">
+  <div class="flex"><span class="badge green">CURRENT</span> <strong>2.1.237</strong></div>
+  <p>Installed version matches the latest on npm. No update available.</p>
+</div>
+
+<h2>✅ Check 8 — Auto mode</h2>
+<div class="card">
+  <div class="flex"><span class="badge green">ALREADY SET</span> <strong>permissions.defaultMode = auto</strong></div>
+  <p>Already configured in <code>~/.claude/settings.json</code>. No change needed.</p>
+</div>
+
+<h2>✅ Check 9 — Pre-approve read-only commands</h2>
+<div class="card">
+  <div class="flex"><span class="badge green">PASS</span> <strong>No pre-approval rules needed</strong></div>
+  <p>123 auto-classifier denials breakdown:</p>
+  <ul>
+    <li><strong>22</strong> Modify Shared Resources — DB writes, tag merges, slug renames (correctly denied)</li>
+    <li><strong>10</strong> Credential Materialization — DB connection strings, Vercel tokens (correctly denied)</li>
+    <li><strong>2</strong> Secret Store Writes — correctly denied</li>
+    <li><strong>2</strong> Cloud Storage Mass Delete — correctly denied</li>
+  </ul>
+  <p>30 user-rejected denials: 15 Bash, 14 AskUserQuestion, 1 ExitPlanMode, 1 Edit, 1 Agent. No repeated read-only command pattern. All denials are for write/mutate operations — no pre-approval rule to add.</p>
+</div>
+
+<h2>📋 Proposed actions</h2>
+
+<div class="summary-line">
+  <strong>Fix claude-seo hook Python detection:</strong> Add <code>CLAUDE_SEO_PYTHON</code> to the <code>env</code> block in <code>~/.claude/settings.json</code> so hooks inherit it. This will stop 276 non-blocking errors per session window.
+</div>
+
+<div class="summary-line problem">
+  <strong>Disable unused skills:</strong> 6 skills with no usage in the last 3+ weeks can be disabled via <code>skillOverrides</code> in <code>.claude/settings.local.json</code>.
+</div>
+
+<div class="summary-line info">
+  <strong>Remove duplicate superpowers 6.2.0:</strong> Both 6.2.0 and 6.3.0 are cached; 6.3.0 is the active version. The old one can be removed.
+</div>

@@ -65,3 +65,35 @@ Ces slugs ont été **renommés** (le titre de l'ancien slug = titre de la recet
 3. Push → redeploy Hostinger auto → re-crawl GSC (les 7 URLs quitteront le rapport noindex et pointeront vers leurs recettes indexées).
 
 Le rapport GSC passera naturellement de 74 → ~65-67 (les 404 sans successeur + filtres + thin restent, mais c'est **normal**).
+
+---
+
+## ✅ État 2026-08-20 (après déploiement)
+
+- **7 redirects 308 déployés et vérifiés live** (commit `c172272`, push → redeploy Hostinger auto) :
+  - `/recipes/easy-whole30-chicken-skillet-for-two` → `/recipes/whole30-chicken-skillet-tomatoes-garlic` ✅
+  - `/recipes/one-pan-chicken-vegetable-skillet-for-two` → `/recipes/one-pan-chicken-vegetable-skillet` ✅
+  - `/recipes/4-ingredient-feta-brine-chicken-breast` → `/recipes/easy-4-ingredient-chicken-breast-recipes` ✅
+  - `/recipes/easy-meal-ideas-for-two-one-pan-chicken-tomato-rice` → `/recipes/one-pan-chicken-tomato-rice` ✅
+  - `/recipes/easy-4-ingredient-chicken-breast-recipes-2` → `/recipes/easy-4-ingredient-chicken-breast-recipes` ✅
+  - `/recipes/slow-cooker-chicken-and-rice-for-two` → `/recipes/slow-cooker-chicken-rice-for-two` ✅
+  - `/recipes/whole30` → `/recipes/whole30-chicken-skillet-tomatoes-garlic` ✅
+- `npx tsc --noEmit` : ✅
+- **À suivre** : re-crawl GSC (demander via GSC URL Inspection ou attendre le crawl naturel) — vérifier que les 7 quittent le rapport « Exclues par noindex ».
+
+---
+
+## 🔎 Re-audit 2026-08-29 (URL Inspection API)
+
+**Les 7 slugs du 20/08 : re-crawl PAS encore fait.** L'API renvoie toujours
+« Excluded by 'noindex' tag » (données du dernier crawl effectué, antérieur au
+déploiement `c172272`). Les redirects sont bien live (308 vérifié curl 29/08) —
+c'est le cache de crawl de Google qui n'est pas rafraîchi. Google recrawlera
+quand sa planification le décidera ; les URLs ne sont pas dans le sitemap,
+donc pas de signal de re-crawl fort. Aucune action bloquante : l'état se
+corrige au fur et à mesure des recrawls naturels.
+
+Bonus — les 3× 308 chicken-rice du 29/08 (`a7ec093`) : verdict GSC **PASS /
+« Submitted and indexed »** sur les 3 anciennes URLs (état hérité, elles
+étaient indexées avant le redirect — attendu, se corrigera vers
+« Page with redirect » au prochain crawl).

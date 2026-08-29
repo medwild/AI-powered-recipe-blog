@@ -36,3 +36,11 @@ claude-nvidia-proxy/
 
 # Python bytecode residue
 __pycache__/
+
+# Fichiers locaux éphémères — vidéos UGC Pinterest, exports analytics, captures
+# (source de vérité des pins = docs/pinterest/TO-POST.md, specs tracées dans le brief)
+*.mp4
+*.mov
+Pinterest Analytics*.csv
+screencapture-*.png
+tsconfig.tsbuildinfo

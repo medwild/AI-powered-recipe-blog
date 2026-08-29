@@ -3,6 +3,8 @@
 > Ouvre ce fichier dans l'éditeur (pas le terminal) pour un copier-coller classique.
 > Cadence : 3 pins/jour (13:30, 18:30, 22:30 Paris), espacés de 4-5h. Coche au fur et à mesure.
 > **Ordre : boards variés** (pas de répétition du même board) — Pinterest préfère un compte diversifié.
+>
+> ⛔ **WARM-UP ARRÊTÉ AU PIN 14** (13/08) — pins 15-18 **non envoyés** (sections conservées en bas, au cas où une reprogrammation serait décidée).
 
 > 📐 **RAPPEL VISUEL** : ratio **2:3 (1000×1500 px)** — le standard Pinterest (le 4:5 est trop court, le 9:16 rogne). Texte overlay dans le tiers bas, dégradé brun foncé, marges 10-15%.
 > ♿ **ALT TEXT** : décrit l'image (pas une vente) — Pinterest l'utilise pour classer le pin. ≤ 300 caractères.
@@ -26,12 +28,11 @@
 | 9 ✅ | Crockpot Chicken & Tomato Rice | Slow Cooker | 12/08 13:30 |
 | 11 ✅ | Stovetop Mac and Cheese | Pasta | 12/08 18:30 |
 | 12 ✅ | Asian Beef Noodle Stir-Fry | Asian | 12/08 22:30 |
-| 13 📅 | Easy Mexican Dinner | Quick Weeknight | 13/08 13:30 |
-| 14 📅 | Pan-Seared Chicken Herb-Butter | Easy Chicken | 13/08 18:30 |
-| 15 📅 | One-Pan Chicken and Rice | One-Pan Meals | 14/08 13:30 |
-| 16 📅 | Garlic Butter Chicken Rice Bowls | Quick Weeknight | 14/08 18:30 |
-| 17 📅 | Edible Cookie Dough | Small-Batch Desserts | 15/08 13:30 |
-| 18 📅 | Creamy Mashed Potatoes | Small-Batch Sides | 15/08 18:30 |
+| 13 ✅ | Easy Mexican Dinner | Quick Weeknight | 13/08 13:30 publié |
+| 14 ✅ | Pan-Seared Chicken Herb-Butter | Easy Chicken | 13/08 18:30 publié |
+| 🎬 ✅ | Garlic Butter Shrimp (vidéo UGC) | Quick Weeknight | 24/08 publié |
+| 🎬 ✅ | Garlic Butter Chicken Rice Bowls (vidéo 2) | Easy Chicken | 24/08 publié |
+| 🎬 ✅ | Easy Chili Colorado (vidéo 3) | Quick Weeknight | 29/08 publié |
 
 ---
 
@@ -277,6 +278,12 @@ When 45 minutes is off the table, the answer is a pan sauce — one built on her
 
 ---
 
+## ⛔ PINS 15-18 — NON ENVOYÉS (warm-up arrêté au pin 14, 13/08)
+
+> Sections conservées au cas où une reprogrammation serait décidée.
+
+---
+
 ## PIN 15 — One-Pan Chicken and Rice for Two (board One-Pan Meals)
 
 **Image** :
@@ -317,7 +324,7 @@ Garlic butter chicken rice bowls for two with seared chicken on rice in bowls, q
 **Description** :
 A seared garlic butter chicken rice bowl that comes together in one pan in about twenty minutes — the lunch I make when I want something really good. Perfectly portioned for two, meal-prep friendly. Save this!
 
-**Tags** : Chicken Recipes / Rice Recipes / Easy Meal / Meal Prep Recipes
+**Tags** : Chicken Recipes / Rice Recipes / Rice Recipes / Meal Prep Recipes
 
 ---
 
@@ -362,3 +369,86 @@ Creamy mashed potatoes for two in a rustic ceramic bowl with melting butter and 
 Two servings of impossibly fluffy mashed potatoes built on hot butter, warm milk, and a ricer. The perfect small-batch side dish for two — a quiet act of precision, not excess. Save this for your next dinner for two!
 
 **Tags** : Side Dish Recipes / Comfort Food / Easy Meal / Potato Recipes
+
+---
+
+## 🎬 PIN VIDÉO — 30-Minute Garlic Butter Shrimp for Two (board Quick Weeknight) — 24/08
+
+> **Premier video pin** (contenu UGC 9:16). À uploader manuellement sur Pinterest (fichier local).
+
+**Vidéo** (fichier local) :
+`30-Minute Garlic Butter Shrimp for Two (One-Pan Skillet).mp4`
+→ 720×1280 (9:16), ~10 s, 2.41 Mo, H.264 + audio
+
+**Board** : Quick Weeknight Dinners for Two
+
+**URL** : https://www.chefaugustin.com/recipes/easy-dinner-recipes-for-two
+
+**Title** :
+30-Minute Garlic Butter Shrimp for Two — One-Pan Skillet (Video)
+
+**Alt text** (≤ 300 caractères) :
+Garlic butter shrimp for two sizzling in a skillet with fresh parsley and lemon, quick one-pan dinner video, easy shrimp recipe
+
+**Description** :
+A quick garlic butter shrimp for two that comes together in a single skillet in 30 minutes flat. Juicy shrimp, garlic butter, and a squeeze of lemon — the perfect easy weeknight dinner for two. Watch the full recipe on the blog! 🍤✨
+
+**Tags** : Shrimp Recipes / Quick Dinner / Easy Meal / One-Pan Recipes / Weeknight Dinner
+
+> 📹 **Notes video pin Pinterest** : cover image = première frame par défaut (choisir une meilleure frame dans l'interface) · ratio 9:16 vertical conforme · corrélée au warning GSC « video manquant » accepté 24/08 → si d'autres vidéos arrivent, ré-évaluer le champ `video` dans le schema Recipe.
+
+---
+
+## 🎬 PIN VIDÉO 2 — Garlic Butter Chicken Rice Bowls for Two (board Easy Chicken) — 24/08
+
+> **2e video pin** (contenu UGC 9:16). À uploader manuellement sur Pinterest (fichier local).
+
+**Vidéo** (fichier local) :
+`Chef_preparing_garlic_butter_chi…_202608242040.mp4`
+→ 720×1280 (9:16), ~10 s, 2.54 Mo, H.264 + audio
+
+**Board** : Easy Chicken Dinners for Two
+> Board volontairement différent du pin vidéo shrimp (Quick Weeknight) pour varier (règle « boards variés ») — cohérent : plat de poulet. La même recette en pin image (PIN 16) reste sur Quick Weeknight.
+
+**URL** : https://www.chefaugustin.com/recipes/easy-chicken-rice-bowls-for-two
+
+**Title** :
+Garlic Butter Chicken Rice Bowls for Two — One-Pan Lunch in 20 Minutes (Video)
+
+**Alt text** (≤ 300 caractères) :
+Chef preparing garlic butter chicken rice bowls for two in a skillet, seared chicken over rice with fresh herbs, quick one-pan lunch video
+
+**Description** :
+Seared garlic butter chicken over a bowl of warm rice — the easiest lunch for two, ready in 20 minutes in a single pan. No sad desk lunch today. Meal-prep friendly and endlessly adaptable. Save this and watch the full recipe on the blog! 🍗🍚✨
+
+**Tags** : Chicken Recipes / Rice Recipes / Easy Meal / Meal Prep Recipes / One-Pan Recipes
+
+---
+
+## 🎬 PIN VIDÉO 3 — Easy Chili Colorado for Two (board Quick Weeknight) — 29/08 ✅ PUBLIÉ
+
+> **3e video pin** (1080×1920 natif 9:16). ~~À uploader manuellement~~ **Publié 29/08**.
+
+**Vidéo** (fichier local) :
+`Easy Chili Colorado for Two -Tender Beef in a 45-Minute Dried-Chile Sauce.mp4`
+→ 1080×1920 (9:16), ~20 s, 86.8 Mo, H.264 + AAC, 30 fps
+> ⚠️ 86.8 Mo (34 Mbps) —Pinterest l'accepte (limite ~2 Go) mais l'upload sera lent ; si besoin, ré-encoder à ~8 Mbps (~20 Mo).
+
+**Board** : Quick Weeknight Dinners for Two
+> Précédent : PIN 13 (Easy Mexican Dinner) déjà sur Quick Weeknight — cohérent cuisine mexicaine + angle « 45 minutes en semaine ». Board précédent (vidéo 2) = Easy Chicken → règle « boards variés » respectée. Pas de board mexicain/beef dédié existant — en créer un (« Mexican Dinners for Two ») si d'autres recettes mexicaines suivent.
+
+**URL** : https://www.chefaugustin.com/recipes/easy-chili-colorado-recipe
+> ⚠️ NE PAS utiliser l'ancien slug `easy-chili-colorado-for-two` (308 vers celui-ci).
+
+**Title** :
+Easy Chili Colorado for Two — Tender Beef in 45 Minutes (Video)
+
+**Alt text** (≤ 300 caractères) :
+Tender chunks of beef simmering in a smoky red dried-chile sauce, easy chili colorado recipe for two, Mexican beef dinner video
+
+**Description** :
+Tender beef in a smoky dried-chile sauce — this easy chili colorado for two comes together in 45 minutes, no canned shortcuts. Real toasted guajillo flavor, just the right amount for a cozy weeknight dinner for two. Save this and watch the full recipe on the blog! 🌶️🥩✨
+
+**Tags** : Mexican Recipes / Beef Recipes / Easy Dinner / Comfort Food / Weeknight Dinner
+
+> 📹 **Notes video pin** : cover = première frame par défaut — choisir dans l'interface une frame où le bœuf/sauce est le plus appétissant (l'alt text ci-dessus décrit le plat ; à ajuster si la vidéo montre autre chose, ex. plan sur les piments).

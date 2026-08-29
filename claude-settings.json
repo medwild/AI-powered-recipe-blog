@@ -1,5 +1,1 @@
-{
-  "apiBaseUrl": "https://api.deepseek.com/anthropic",
-  "apiKey": "",
-  "model": "deepseek-v4-pro[1m]"
-}
+{}

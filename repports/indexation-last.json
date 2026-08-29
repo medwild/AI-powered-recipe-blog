@@ -1,0 +1,1542 @@
+{
+  "date": "2026-08-29",
+  "rows": [
+    {
+      "url": "https://www.chefaugustin.com",
+      "type": "static",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-23T05:59:27Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/guides/easy-ibs-dinner-recipes",
+          "https://www.chefaugustin.com/recettes/one-pot-chicken-pasta-for-two",
+          "https://chefaugustin.com/"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-20T09:42:06Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/easy-asian-beef-noodle-stir-fry-for-two",
+          "https://www.chefaugustin.com/recipes/honey-garlic-salmon-for-two"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/about",
+      "type": "static",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-25T05:17:06Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/easy-meal-ideas-for-two",
+          "https://chefaugustin.com/"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/guides",
+      "type": "article",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-21T14:20:09Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/chocolate-lava-cakes-for-two",
+          "https://www.chefaugustin.com/recettes/easy-chicken-parmesan-for-two-the-double-butter-pan-sauce-method",
+          "https://chefaugustin.com/"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/idees",
+      "type": "article",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-21T02:32:33Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/recipes-for-two",
+          "https://www.chefaugustin.com/recipes/category/easy"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/privacy",
+      "type": "static",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-23T10:07:09Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://chefaugustin.com/"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/terms",
+      "type": "static",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-13T11:43:16Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/category/quick",
+          "https://www.chefaugustin.com/recettes/sourdough-bread-for-two-small-loaves"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/easy-dinner-recipes-for-two",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-18T02:39:24Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/texas-roadhouse-dinner-for-two",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-17T19:50:30Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/slow-cooker-chicken-rice-for-two"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/whole30-chicken-skillet-tomatoes-garlic",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-24T20:41:24Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/sitemap.xml"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/garlic-butter-chicken-pasta-for-two",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-25T04:09:44Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/fast-and-easy-dinner-for-2"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/one-pan-chicken-rice-for-two",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-24T17:02:05Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/easy-recipes-for-two",
+          "https://www.chefaugustin.com/recipes/dinner-recipe-ideas-for-two"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/slow-cooker-chicken-rice-for-two",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-24T18:08:44Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/sitemap.xml"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/one-pan-chicken-rice-garlic-butter-tomato-sauce",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-24T21:28:02Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/sitemap.xml"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/one-pan-chicken-tomato-rice",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-24T19:58:48Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/sitemap.xml"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/one-pan-chicken-vegetable-skillet",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-19T16:18:32Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/sitemap.xml"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/one-pan-garlic-tomato-chicken-rice",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-08T19:47:30Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/sitemap.xml"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/one-pan-garlic-butter-chicken-tomato-orzo",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-29T08:45:32Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/easy-dinner-ideas-for-two"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/easy-beef-ramen-noodle-recipes",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-11T01:31:54Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/guides/easy-low-fodmap-recipes",
+          "https://www.chefaugustin.com/recipes?cat=chicken",
+          "https://www.chefaugustin.com/guides/easy-recipes-for-two"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/easy-chili-colorado-recipe",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-11T01:10:27Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes?cat=chicken",
+          "https://www.chefaugustin.com/guides/easy-recipes-for-two"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/easy-slow-cooker-pasta-recipes",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-11T11:55:12Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes?cat=chicken",
+          "https://www.chefaugustin.com/guides/easy-recipes-for-two"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/easy-lasagna-recipe",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-28T22:46:25Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/easy-chili-colorado-recipe",
+          "https://www.chefaugustin.com/recipes/creamy-parmesan-garlic-chicken-orzo-for-two"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/mediterranean-chicken-orzo-with-feta-olives-for-two",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-12T00:24:57Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/collections/chicken-dinners-for-two",
+          "https://www.chefaugustin.com/recipes"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/creamy-parmesan-garlic-chicken-orzo-for-two",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-22T06:41:45Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/easy-lasagna-recipe",
+          "https://www.chefaugustin.com/recipes"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/salmon-orzo-with-dill-and-capers-for-two",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-08T02:29:08Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/2-qt-slow-cooker-recipes",
+          "https://www.chefaugustin.com/recipes/easy-mexican-dinner-recipes"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/white-wine-lemon-chicken-orzo-for-two",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-19T01:01:02Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes?cat=chocolate",
+          "https://www.chefaugustin.com/recipes/easy-dinner-for-two-recipes"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/garlic-shrimp-orzo-with-cherry-tomatoes-for-two",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-18T21:22:12Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/easy-chicken-dinners-for-two",
+          "https://www.chefaugustin.com/recipes/easy-4-ingredient-chicken-breast-recipes"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/summer-herb-chicken-orzo-with-zucchini-for-two",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-17T23:11:28Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/idees/healthy-dinner-ideas-for-two",
+          "https://www.chefaugustin.com/recipes"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/easy-chicken-dinners-for-two",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-13T07:09:52Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/2-qt-slow-cooker-recipes",
+          "https://www.chefaugustin.com/recipes/easy-mexican-dinner-recipes"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/chicken-dinner-for-two",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-21T17:58:35Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/garlic-shrimp-orzo-with-cherry-tomatoes-for-two"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/easy-meal-recipes-for-2",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-13T07:47:30Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": []
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/romantic-dinner-for-two-at-home",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-11T17:41:56Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/easy-healthy-dinner-recipes-for-two"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/lemon-butter-chicken-pasta-for-two",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-15T19:30:02Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/sitemap.xml"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/edible-cookie-dough-recipe-for-2",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-10T08:27:38Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes?cluster=quick-healthy-dinners"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/easy-and-healthy-dinner-recipes-for-two",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-10T10:53:17Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/salmon-orzo-with-dill-and-capers-for-two"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/easter-dinner-for-two",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-04T03:37:34Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/chocolate-lava-cakes-for-two",
+          "https://www.chefaugustin.com/recipes/mac-and-cheese-for-2"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/thanksgiving-dinner-for-two",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-10T06:24:45Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/easter-dinner-for-two"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/quick-recipes-for-two-for-dinner",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-15T06:15:13Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/collections/chicken-dinners-for-two",
+          "https://www.chefaugustin.com/recipes/romantic-dinner-ideas-for-two"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/creamy-mashed-potatoes-for-two",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-10T06:49:09Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/chocolate-lava-cakes-for-two",
+          "https://www.chefaugustin.com/recipes/mac-and-cheese-for-2"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/dessert-for-2",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-21T16:43:37Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes?cat=chocolate",
+          "https://www.chefaugustin.com/recipes/chocolate-lava-cakes-for-two"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/easy-week-of-meals",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-10T11:33:53Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/idees/healthy-dinner-ideas-for-two",
+          "https://www.chefaugustin.com/recipes/cluster/one-pan-dinners-for-two"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/cooking-for-two",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-15T15:51:57Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/collections/chicken-dinners-for-two",
+          "https://www.chefaugustin.com/recipes/category/chicken"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/easy-4-ingredient-chicken-breast-recipes",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-17T00:10:39Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/2-qt-slow-cooker-recipes",
+          "https://www.chefaugustin.com/recipes/easy-mexican-dinner-recipes"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/easy-mexican-dinner-recipes",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-04T23:36:16Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/easy-lunch-recipes",
+          "https://chefaugustin.com/"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/chocolate-chip-cookies-for-2",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-11T00:49:01Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes?cat=chocolate",
+          "https://chefaugustin.com/"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/chocolate-lava-cakes-for-two",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-10T12:50:10Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/easy-lunch-recipes",
+          "https://chefaugustin.com/"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/2-qt-slow-cooker-recipes",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-04T12:41:18Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/easy-mexican-dinner-recipes",
+          "https://chefaugustin.com/"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/chicken-pot-pie-for-2",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-10T10:56:23Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/easy-to-make-asian-food-recipes",
+          "https://chefaugustin.com/"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/steak-dinner-ideas-for-2",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-07-31T15:16:15Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/easy-mexican-dinner-recipes",
+          "https://www.chefaugustin.com/recipes/2-qt-slow-cooker-recipes"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/mac-and-cheese-for-2",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-14T14:04:12Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/chocolate-lava-cakes-for-two",
+          "https://www.chefaugustin.com/recipes"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/easy-to-make-asian-food-recipes",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-24T17:35:22Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/2-qt-slow-cooker-recipes"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/easy-chicken-rice-bowls-for-two",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-04T03:01:18Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/chicken-dinner-for-two"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/category/chicken-breast",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-22T18:09:44Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/category/mediterranean-chicken",
+          "https://www.chefaugustin.com/recipes?cat=chocolate"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/category/comfort-food",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-19T17:44:15Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/category/easy-chicken-dinner",
+          "https://www.chefaugustin.com/recipes/category/chicken-breast"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/category/date-night",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-24T02:08:28Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/category/summer-dinner",
+          "https://www.chefaugustin.com/recipes/category/chicken-breast"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/category/dinner-for-two",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-22T16:15:10Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/category/chicken-breast"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/category/easy",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-22T00:35:02Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/category/pan-seared-chicken",
+          "https://www.chefaugustin.com/recipes/category/chicken-breast"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/category/ground-beef",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-25T01:47:06Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/category/chicken-breast"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/category/orzo",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-22T00:25:05Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/category/chicken-breast"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/category/pasta",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-02T06:03:36Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/category/pan-seared-chicken",
+          "https://www.chefaugustin.com/recipes/category/chicken-breast"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/category/quick",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-18T00:26:27Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/category/chicken-breast"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/category/rice",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-19T17:13:06Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/category/summer-dinner",
+          "https://www.chefaugustin.com/recipes/category/chicken-breast"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/category/slow-cooker",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-02T01:25:32Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/category/chicken-breast"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/category/small-batch",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-27T22:42:41Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/category/chicken-breast"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/category/weeknight",
+      "type": "recipe",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-18T04:48:58Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/category/mediterranean-chicken",
+          "https://www.chefaugustin.com/recipes/category/chicken-breast"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/collections/small-batch-slow-cooker",
+      "type": "collection",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-16T21:59:09Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/sitemap.xml"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/collections/one-pan-dinners-for-two",
+      "type": "collection",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-23T14:49:42Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/sitemap.xml"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/collections/budget-meals-for-two",
+      "type": "collection",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-15T02:42:57Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/sitemap.xml"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/collections/chicken-dinners-for-two",
+      "type": "collection",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-23T13:18:30Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/sitemap.xml"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/collections/asian-inspired-dinners",
+      "type": "collection",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-15T10:29:34Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/sitemap.xml"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/recipes/collections/quick-healthy-dinners",
+      "type": "collection",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-17T21:56:34Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/sitemap.xml"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/guides/easy-dinner-ideas-for-two",
+      "type": "article",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-27T04:56:39Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/easy-chili-colorado-recipe",
+          "https://www.chefaugustin.com/recipes/easy-mexican-dinner-recipes"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/idees/romantic-dinner-ideas-for-two",
+      "type": "article",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-11T23:50:42Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/chocolate-lava-cakes-for-two"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/guides/slow-cooker-recipes-for-two",
+      "type": "article",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-16T09:31:38Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/guides"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/guides/recipes-for-two",
+      "type": "article",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-11T23:25:33Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/recipes/creamy-parmesan-garlic-chicken-orzo-for-two",
+          "https://www.chefaugustin.com/recipes/white-wine-lemon-chicken-orzo-for-two"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/guides/easy-whole30-recipes",
+      "type": "article",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-10T03:41:28Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/guides"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/guides/easy-carnivore-recipes",
+      "type": "article",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-16T00:30:04Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/guides"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/guides/easy-low-fodmap-recipes",
+      "type": "article",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-10T03:54:11Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/guides"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/guides/easy-ibs-dinner-recipes",
+      "type": "article",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-10T04:03:10Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/guides"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/guides/easy-lactose-free-dinner-recipes",
+      "type": "article",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-05T16:38:40Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/guides"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/guides/easy-meals-for-beginners",
+      "type": "article",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-29T08:46:33Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://chefaugustin.com/sitemap.xml",
+          "https://www.chefaugustin.com/guides"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/guides/baking-for-2",
+      "type": "article",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-11T18:50:35Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/guides"
+        ]
+      },
+      "bing": "—"
+    },
+    {
+      "url": "https://www.chefaugustin.com/guides/15-easy-dinner-recipes-for-two",
+      "type": "article",
+      "google": "indexed",
+      "google_detail": {
+        "verdict": "PASS",
+        "coverage_state": "Submitted and indexed",
+        "robots_txt_state": "ALLOWED",
+        "indexing_state": "INDEXING_ALLOWED",
+        "page_fetch_state": "SUCCESSFUL",
+        "last_crawl_time": "2026-08-25T04:02:06Z",
+        "crawled_as": "MOBILE",
+        "referring_urls": [
+          "https://www.chefaugustin.com/sitemap.xml"
+        ]
+      },
+      "bing": "—"
+    }
+  ]
+}

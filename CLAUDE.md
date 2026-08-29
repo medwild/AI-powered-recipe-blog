@@ -11,7 +11,7 @@ SERP → Mega-Skill (1 LLM call, Opus 4.8) → Quality Gate (4 checks) → Persi
 
 | Paramètre | Valeur |
 |---|---|
-| Modèle primaire | **Claude Opus 4.8** (via FlatKey — `router.flatkey.ai/v1/messages`) |
+| Modèle primaire | **Claude Opus 4.8** (via `LLM_PROVIDER`, voir `.env.example`) |
 | Max tokens | 32000 |
 | Skill | `skills/chef-augustin-mega.md` |
 L'agent unique gère en un seul appel LLM : analyse SERP, structuration, rédaction, auto-édition, food safety, image prompt, et JSON-LD.
@@ -32,3 +32,13 @@ Retry loop avec feedback injecté via le user message. Après max retries → dr
 - **Après toute modification du pipeline** : `npx tsc --noEmit` obligatoire
 - **Ne jamais modifier un skill Markdown** sans vérifier l'agent runtime correspondant
 - Les variables d'env sont documentées dans `.env.example` — ne pas les hardcoder
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
