@@ -33,6 +33,7 @@
 | 🎬 ✅ | Garlic Butter Shrimp (vidéo UGC) | Quick Weeknight | 24/08 publié |
 | 🎬 ✅ | Garlic Butter Chicken Rice Bowls (vidéo 2) | Easy Chicken | 24/08 publié |
 | 🎬 ✅ | Easy Chili Colorado (vidéo 3) | Quick Weeknight | 29/08 publié |
+| 🎬 ✅ | Creamy Mashed Potatoes (vidéo 4) | Small-Batch Sides | 31/08 publié |
 
 ---
 
@@ -452,3 +453,36 @@ Tender beef in a smoky dried-chile sauce — this easy chili colorado for two co
 **Tags** : Mexican Recipes / Beef Recipes / Easy Dinner / Comfort Food / Weeknight Dinner
 
 > 📹 **Notes video pin** : cover = première frame par défaut — choisir dans l'interface une frame où le bœuf/sauce est le plus appétissant (l'alt text ci-dessus décrit le plat ; à ajuster si la vidéo montre autre chose, ex. plan sur les piments).
+
+---
+
+## 🎬 PIN VIDÉO 4 — Creamy Mashed Potatoes for Two (board Small-Batch Sides) — 31/08 ✅ PUBLIÉ
+
+> **4e video pin** (UGC 9:16, 15 s). ⚠️ Fichier fourni en **HEVC** → **ré-encodé en H.264** (copie sûre ci-dessous), l'original est conservé. Upload manual Pinterest.
+> 1ʳᵉ pin de cette recette (le PIN 18 image n'avait jamais été envoyé — warm-up arrêté au 14).
+
+**Vidéo** (fichier local — **utiliser celle-ci**) :
+`Creamy-Mashed-Potatoes-for-Two-H264.mp4`
+→ 720×1280 (9:16), 15,1 s, **3,8 Mo, H.264 High + AAC, 24 fps, faststart** ✅
+> Original `Creamy Mashed Potatoes for Two.mp4` (1,7 Mo) = **HEVC/hvc1** — codec non confirmé par la doc Pinterest (pages 404 au 31/08) ; les 3 vidéos publiées étaient en H.264 → ne pas uploader l'HEVC.
+
+**Board** : Small-Batch Sides for Two
+> Board du PIN 18 (même recette) ; règle « boards variés » respectée — dernier pin publié (vidéo 3) = Quick Weeknight.
+
+**URL** : https://www.chefaugustin.com/recipes/creamy-mashed-potatoes-for-two
+> Vérifiée live 31/08 (200 OK, JSON-LD propre : PT10M + PT20M = 30 min ✓).
+
+**Title** :
+Creamy Mashed Potatoes for Two — Fluffy, Small-Batch in 30 Minutes (Video)
+
+**Alt text** (≤ 300 caractères) :
+Close-up video of creamy mashed potatoes for two — butter melting into warm milk in a saucepan, potatoes being cubed, and the finished dish in a rustic bowl with melting butter, chives and flaky salt
+
+**Description** :
+Two servings of impossibly fluffy mashed potatoes — hot butter, warm milk, and a ricer. This easy dinner side comes together in 30 minutes, small-batch precision, not excess. Save this and watch the full recipe on the blog! 🥔✨
+
+**Tags** : Side Dish Recipes / Easy Dinner Side / Comfort Food / Potato Recipes
+> Basés sur l'autocomplétion Pinterest 31/08 (demande réelle : « potato recipes easy », « side dishes », « for dinner »). Éviter : crockpot/air fryer/oven/baked/casserole/snacks (hors-intention — recette au faitout) + healthy (positionnement faux + règle claims santé).
+
+> ️ **Cover** : la frame **7 s** (bol fini avec beurre qui fond + ciboulette) est la plus appétissante — candidats extraits dans `/tmp/mashed-frames/` (2 s lait+beurre, 7 s plat fini, 13 s découpe).
+> ⚠️ **Watermark « Dola AI »** visible en bas à droite sur toutes les frames — à surveiller (règles Pinterest sur le contenu IA / branding d'un outil tiers sur l'aperçu). Si une version sans watermark existe, préférer la re-upload.
