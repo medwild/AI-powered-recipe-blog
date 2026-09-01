@@ -310,6 +310,7 @@ class DeepSeekProvider implements LlmProvider {
 // ---------------------------------------------------------------------------
 
 const CLOUDFLARE_MODEL_MAP: Record<string, string> = {
+  "glm-5.3": "@cf/zai-org/glm-5.3",
   "glm-5.2": "@cf/zai-org/glm-5.2",
   "glm-5": "@cf/zai-org/glm-5.2",
   "kimi-k2.6": "@cf/moonshotai/kimi-k2.6",
@@ -714,7 +715,8 @@ class TokenmixProvider implements LlmProvider {
 
     try {
       const model = options?.model ?? this.defaultModel
-      const body = {
+      const useStream = process.env.TOKENMIX_STREAM === "1" || process.env.TOKENMIX_STREAM === "true"
+      const body: Record<string, unknown> = {
         model,
         messages: [
           { role: "system" as const, content: systemPrompt },
@@ -723,14 +725,27 @@ class TokenmixProvider implements LlmProvider {
         max_tokens: options?.maxTokens ?? 16384,
         temperature: options?.temperature ?? 1,
         top_p: 0.95,
-        stream: false,
+        stream: useStream,
       }
+      if (useStream) body.stream_options = { include_usage: true }
 
       const res = await this.fetchWithRotation(body, timeoutMs, controller.signal)
 
       if (!res.ok) {
         const text = await res.text()
         throw new Error(`Tokenmix API error (${res.status}): ${text.substring(0, 500)}`)
+      }
+
+      if (useStream) {
+        const { text, usageIn, usageOut } = await consumeSse(res)
+        if (text.trim().length === 0) {
+          throw new Error(`Tokenmix stream returned no content. Model: ${model}`)
+        }
+        console.log(
+          `[provider] Tokenmix ${model} — success (stream) ` +
+          `(in:${usageIn ?? "?"} out:${usageOut ?? "?"})`,
+        )
+        return text
       }
 
       const data = (await res.json()) as Record<string, unknown>
@@ -822,6 +837,129 @@ class TokenmixProvider implements LlmProvider {
 }
 
 // ---------------------------------------------------------------------------
+// Shared: OpenAI-compatible SSE stream consumption (Tokenmix stream + B.Ai)
+// ---------------------------------------------------------------------------
+
+/** Consume an OpenAI-compatible SSE stream, accumulating delta.content.
+ *  Reasoning tokens (delta.reasoning_content) are ignored — output text only. */
+async function consumeSse(res: Response): Promise<{ text: string; usageIn?: number; usageOut?: number }> {
+  const reader = res.body?.getReader()
+  if (!reader) throw new Error("SSE stream: no response body")
+  const decoder = new TextDecoder()
+  let buffer = ""
+  let text = ""
+  let usageIn: number | undefined
+  let usageOut: number | undefined
+  for (;;) {
+    const { done, value } = await reader.read()
+    if (done) break
+    buffer += decoder.decode(value, { stream: true })
+    let nl: number
+    while ((nl = buffer.indexOf("\n")) >= 0) {
+      const line = buffer.slice(0, nl).trim()
+      buffer = buffer.slice(nl + 1)
+      if (!line.startsWith("data:")) continue
+      const payload = line.slice(5).trim()
+      if (payload === "[DONE]") continue
+      try {
+        const chunk = JSON.parse(payload) as Record<string, unknown>
+        const choice = (chunk.choices as Array<Record<string, unknown>> | undefined)?.[0]
+        const delta = choice?.delta as Record<string, unknown> | undefined
+        if (typeof delta?.content === "string") text += delta.content
+        if (chunk.usage && typeof chunk.usage === "object") {
+          const u = chunk.usage as Record<string, unknown>
+          if (typeof u.prompt_tokens === "number") usageIn = u.prompt_tokens
+          if (typeof u.completion_tokens === "number") usageOut = u.completion_tokens
+        }
+      } catch { /* skip keepalive / non-JSON lines */ }
+    }
+  }
+  return { text, usageIn, usageOut }
+}
+
+// ---------------------------------------------------------------------------
+// B.Ai Provider (OpenAI-compatible, single key — streaming mandatory)
+// ---------------------------------------------------------------------------
+// api.b.ai drops non-streaming requests after ~90 s (fetch failed / curl exit
+// 56) while a mega-skill run takes ~370 s — so this provider ALWAYS streams.
+// Gateway aborts (seen 2× before success on 31/08-01/09) surface as "aborted",
+// already retried by the pipeline's recoverable-error loop.
+// ---------------------------------------------------------------------------
+
+class BaiProvider implements LlmProvider {
+  private baseUrl: string
+  private apiKey: string
+  private defaultModel: string
+
+  constructor() {
+    const base = (process.env.BAI_BASE_URL || "https://api.b.ai").replace(/\/+$/, "")
+    this.baseUrl = base + "/v1/chat/completions"
+    this.apiKey = process.env.BAI_API_KEY || ""
+    this.defaultModel = process.env.BAI_MODEL || "glm-5.3-flash"
+    if (!this.apiKey) {
+      console.warn("[provider] B.Ai — no API key found. Set BAI_API_KEY.")
+    } else {
+      console.log(`[provider] B.Ai — model: ${this.defaultModel} (streaming)`)
+    }
+  }
+
+  async runText(
+    systemPrompt: string,
+    userPrompt: string,
+    options?: LlmProviderOptions,
+  ): Promise<string> {
+    if (!this.apiKey) {
+      throw new Error("BAI_API_KEY must be set for B.Ai provider.")
+    }
+
+    const timeoutMs = options?.timeout ?? 420_000
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), timeoutMs)
+
+    try {
+      const model = options?.model ?? this.defaultModel
+      const res = await fetch(this.baseUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.apiKey}`,
+        },
+        body: JSON.stringify({
+          model,
+          messages: [
+            { role: "system" as const, content: systemPrompt },
+            { role: "user" as const, content: userPrompt },
+          ],
+          max_tokens: options?.maxTokens ?? 16384,
+          temperature: options?.temperature ?? 1,
+          top_p: 0.95,
+          stream: true,
+          stream_options: { include_usage: true },
+        }),
+        signal: controller.signal,
+      })
+
+      if (!res.ok) {
+        const text = await res.text()
+        throw new Error(`B.Ai API error (${res.status}): ${text.substring(0, 500)}`)
+      }
+
+      const { text, usageIn, usageOut } = await consumeSse(res)
+      if (text.trim().length === 0) {
+        throw new Error(`B.Ai stream returned no content. Model: ${model}`)
+      }
+      console.log(
+        `[provider] B.Ai ${model} — success (stream) ` +
+        `(in:${usageIn ?? "?"} out:${usageOut ?? "?"})`,
+      )
+      return text
+    } finally {
+      clearTimeout(timer)
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Provider factory
 // ---------------------------------------------------------------------------
 
@@ -829,7 +967,7 @@ let _provider: LlmProvider | null = null
 
 /**
  * Returns the configured LLM provider. Selection is based on
- * LLM_PROVIDER env var ("anthropic" | "deepseek" | "cloudflare" | "gemini" | "tokenmix").
+ * LLM_PROVIDER env var ("anthropic" | "deepseek" | "cloudflare" | "gemini" | "tokenmix" | "bai").
  */
 export function getProvider(): LlmProvider {
   if (_provider) return _provider
@@ -848,15 +986,18 @@ export function getProvider(): LlmProvider {
     || (configuredModel.startsWith("claude-") ? "anthropic" : null)
 
   // Reject unrecognized explicit provider values
-  const VALID = new Set(["deepseek", "anthropic", "cloudflare", "gemini", "tokenmix"])
+  const VALID = new Set(["deepseek", "anthropic", "cloudflare", "gemini", "tokenmix", "bai"])
   if (explicitProvider && !VALID.has(resolve ?? "")) {
     throw new Error(
       `Unsupported LLM_PROVIDER: "${explicitProvider}". ` +
-      `Supported values: "anthropic", "deepseek", "cloudflare", "gemini", "tokenmix".`
+      `Supported values: "anthropic", "deepseek", "cloudflare", "gemini", "tokenmix", "bai".`
     )
   }
 
-  if (resolve === "tokenmix") {
+  if (resolve === "bai") {
+    console.log("[provider] → BaiProvider")
+    _provider = new BaiProvider()
+  } else if (resolve === "tokenmix") {
     console.log("[provider] → TokenmixProvider")
     _provider = new TokenmixProvider()
   } else if (resolve === "cloudflare") {

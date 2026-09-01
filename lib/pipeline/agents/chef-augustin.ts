@@ -347,7 +347,16 @@ export function normalizeRecipeArticle(raw: Record<string, unknown>): RecipeArti
     metaTitle: str(raw.metaTitle, str(raw.title, "")).substring(0, 60),
     metaDescription: str(raw.metaDescription),
     excerpt: str(raw.excerpt),
-    contentMarkdown: str(raw.contentMarkdown),
+    contentMarkdown: str(raw.contentMarkdown)
+      // Models can leak the skill's internal labels ("Wisdom lines:", "Standalone
+      // wisdom:") as literal text (qwen3.8-flash 31/08, glm-5.3-flash 01/09) — the
+      // skill asks for standalone wisdom lines with no heading. Strip the label, keep the lines.
+      .replace(/^[ \t]*(?:(?:wisdom lines?|standalone wisdom)[ \t]*):[ \t]*\n+/gim, "")
+      .replace(/^[ \t]*(?:(?:wisdom lines?|standalone wisdom)[ \t]*):[ \t]+/gim, "")
+      // "Opening" is a structural label in the skill's H2 list (chef-augustin-mega.md §H2),
+      // never a real heading — Opus drops it, glm-5.3-flash leaked it as "## Opening" (01/09).
+      // Remove the heading line, keep the intro prose that follows.
+      .replace(/^##[ \t]*opening[ \t]*\r?\n+/gim, ""),
     ingredients: strArr(raw.ingredients, str(raw.contentMarkdown)),
     instructions: instructionsArr(raw.instructions, str(raw.contentMarkdown)),
     tags: tagsArr(raw.tags),
@@ -436,6 +445,40 @@ function injectUsdaTemps(
   })
 }
 
+// Deterministic author on the Recipe JSON-LD node — Google Recipe rich results
+// require it, and models sometimes emit author on BlogPosting only (quality-gate
+// check 6 blocks for this — seen with Opus 24/08 and qwen3.8-flash 31/08).
+// Chef Augustin is the fixed brand persona, so this is a fallback, not an
+// invented claim.
+// Canonical persona name — flash models reproduce it without the accent ("Lefevre",
+// qwen 31/08 + glm 01/09). Force the established form on every author node.
+const CANONICAL_AUTHOR_NAME = "Chef Augustin Lefèvre"
+
+function canonicalizeAuthorName(author: unknown): unknown {
+  if (typeof author === "string") {
+    return /^chef\s+augustin/i.test(author.trim()) ? CANONICAL_AUTHOR_NAME : author
+  }
+  if (author && typeof author === "object") {
+    const a = author as Record<string, unknown>
+    if (typeof a.name === "string" && /^chef\s+augustin/i.test(a.name.trim())) {
+      a.name = CANONICAL_AUTHOR_NAME
+    }
+  }
+  return author
+}
+
+function ensureRecipeAuthor(jsonLd: Record<string, unknown>): Record<string, unknown> {
+  const graph = Array.isArray(jsonLd["@graph"]) ? (jsonLd["@graph"] as Record<string, unknown>[]) : null
+  if (!graph) return jsonLd
+  const recipe = graph.find((n) => n["@type"] === "Recipe")
+  if (!recipe) return jsonLd
+  const blog = graph.find((n) => n["@type"] === "BlogPosting")
+  if (!recipe.author) recipe.author = blog?.author ?? { "@type": "Person", name: CANONICAL_AUTHOR_NAME }
+  recipe.author = canonicalizeAuthorName(recipe.author)
+  if (blog) blog.author = canonicalizeAuthorName(blog.author)
+  return jsonLd
+}
+
 export function recipeArticleToChefAugustinOutput(r: RecipeArticle): ChefAugustinOutput {
   // jsonLd is a JSON string from the LLM — parse it to an object for DB storage
   let parsedJsonLd: Record<string, unknown> = {}
@@ -482,7 +525,7 @@ export function recipeArticleToChefAugustinOutput(r: RecipeArticle): ChefAugusti
     servings: r.servings,
     difficulty: r.difficulty,
     imagePrompt: undefined, // v14.3: image prompts are generated deterministically, not by the LLM
-    jsonLd: ensureFAQPage(parsedJsonLd, r.contentMarkdown),
+    jsonLd: ensureFAQPage(ensureRecipeAuthor(parsedJsonLd), r.contentMarkdown),
   }
 }
 
@@ -552,7 +595,7 @@ export async function agentChefAugustinMega(
       userPrompt += `\n\n---\nQUALITY GATE FEEDBACK (fix these issues):\n${feedback}`
     }
 
-    userPrompt += `\n\n---\nGenerate a complete ${keyword} recipe article. Follow the mega-skill exactly. Output valid JSON only.\n\nCRITICAL — USDA food safety temperatures (MANDATORY): Every protein in your ingredients must have its USDA-safe internal temperature mentioned in BOTH the step text AND the structured \`temperature\` field. Poultry (chicken/turkey/duck) → 165°F / 74°C. Ground meat (beef/pork/lamb) → 160°F / 71°C. Beef/lamb/veal whole muscle → 145°F / 63°C. Pork whole muscle → 145°F / 63°C. Fish/seafood → 145°F / 63°C. Missing any required temperature = automatic rejection. No exceptions.`
+    userPrompt += `\n\n---\nGenerate a complete ${keyword} recipe article. Follow the mega-skill exactly. Output valid JSON only.\n\nCRITICAL — KEYWORD INTENT: Respect the plain reading of the keyword. If it reads as vegetarian/vegan (no meat/fish word in it), the recipe MUST be vegetarian: no poultry, meat, or fish as a central ingredient — a "add chicken" line may appear ONLY as an optional variation. Violating the keyword's implied diet = automatic rejection.\n\nCRITICAL — USDA food safety temperatures (MANDATORY): Every protein in your ingredients must have its USDA-safe internal temperature mentioned in BOTH the step text AND the structured \`temperature\` field. Poultry (chicken/turkey/duck) → 165°F / 74°C. Ground meat (beef/pork/lamb) → 160°F / 71°C. Beef/lamb/veal whole muscle → 145°F / 63°C. Pork whole muscle → 145°F / 63°C. Fish/seafood → 145°F / 63°C. Missing any required temperature = automatic rejection. No exceptions.`
 
     // On retry (feedback present), use text+parse mode — the feedback can
     // cause strict JSON schema validation to reject valid responses.
@@ -568,7 +611,7 @@ export async function agentChefAugustinMega(
         {
           model: process.env.ANTHROPIC_MODEL || "anthropic/claude-sonnet-5",
           maxTokens: 32000,
-          timeout: 180_000,
+          timeout: 420_000,
         },
       )
     } else {
@@ -577,7 +620,7 @@ export async function agentChefAugustinMega(
       raw = await runTextAndParseJson<RecipeArticle>(
         systemPrompt,
         userPrompt + schemaPrompt,
-        { model: process.env.ANTHROPIC_MODEL || "anthropic/claude-sonnet-5", maxTokens: 32000, timeout: 180_000 },
+        { model: process.env.ANTHROPIC_MODEL || "anthropic/claude-sonnet-5", maxTokens: 32000, timeout: 420_000 },
       )
     }
 
