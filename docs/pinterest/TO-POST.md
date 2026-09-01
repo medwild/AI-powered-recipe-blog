@@ -34,6 +34,9 @@
 | 🎬 ✅ | Garlic Butter Chicken Rice Bowls (vidéo 2) | Easy Chicken | 24/08 publié |
 | 🎬 ✅ | Easy Chili Colorado (vidéo 3) | Quick Weeknight | 29/08 publié |
 | 🎬 ✅ | Creamy Mashed Potatoes (vidéo 4) | Small-Batch Sides | 31/08 publié |
+| 19 ⏳ | Copycat Texas Roadhouse | Romantic Dinner | 01/09 22:30 |
+| 20 ⏳ | Edible Cookie Dough | Small-Batch Desserts | 02/09 22:30 |
+| 21 ⏳ | Salmon Orzo Dill & Capers | Romantic Dinner | 03/09 22:30 |
 
 ---
 
@@ -486,3 +489,74 @@ Two servings of impossibly fluffy mashed potatoes — hot butter, warm milk, and
 
 > ️ **Cover** : la frame **7 s** (bol fini avec beurre qui fond + ciboulette) est la plus appétissante — candidats extraits dans `/tmp/mashed-frames/` (2 s lait+beurre, 7 s plat fini, 13 s découpe).
 > ⚠️ **Watermark « Dola AI »** visible en bas à droite sur toutes les frames — à surveiller (règles Pinterest sur le contenu IA / branding d'un outil tiers sur l'aperçu). Si une version sans watermark existe, préférer la re-upload.
+
+---
+
+## 📌 BATCH ROMANTIC/DESSERTS — Pins 19-21 (relance production, 31/08)
+
+> Stratégie backlog 29/08 : le décollage vient des **images** sur Romantic (volume) + Desserts (conversion). Cadence : 1 pin/jour à 22:30, boards alternés R→D→R. URLs vérifiées live 31/08 (200 OK).
+
+### PIN 19 — Copycat Texas Roadhouse Dinner for Two (board Romantic) — 01/09 22:30
+
+**Image** (héro Cloudinary, recette #110) :
+https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786962714/recipes/45-Minute-Texas-Roadhouse-Dinner-for-Two.png
+
+**Board** : Romantic Dinner Ideas for Two
+
+**URL** : https://www.chefaugustin.com/recipes/texas-roadhouse-dinner-for-two
+
+**Title** :
+Copycat Texas Roadhouse Dinner for Two — Steak & Honey Butter in 45 Minutes
+
+**Alt text** :
+Copycat Texas Roadhouse dinner for two — spice-crusted sirloin steaks with warm yeast rolls and whipped cinnamon-honey butter, steakhouse date night at home
+
+**Description** :
+Two spice-crusted sirloins, warm yeast rolls, and that whipped cinnamon-honey butter — the Texas Roadhouse dinner for two, made at home in 45 minutes. Skip the queue on date night. Save this! Full recipe on the blog. 🥩🧈✨
+
+**Tags** : Steak Recipes / Date Night Dinner / Copycat Recipes / Beef Recipes
+
+### PIN 20 — Edible Cookie Dough for Two (board Desserts) — 02/09 22:30
+
+> Brief déjà rédigé 2× (warmup-18 #4 + PIN 17 TO-POST) — recette jamais épinglée (warm-up arrêté au 14).
+
+**Image** :
+https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1785410049/recipes/Small-Batch%20Edible%20Cookie%20Dough%20for%20Two.png
+
+**Board** : Small-Batch Desserts for Two
+
+**URL** : https://www.chefaugustin.com/recipes/edible-cookie-dough-recipe-for-2
+
+**Title** :
+Edible Cookie Dough for Two (No-Bake, 15 Minutes)
+
+**Alt text** :
+Spoonful of edible chocolate chip cookie dough in a small bowl, no-bake dessert for two, ready in minutes
+
+**Description** :
+The best edible cookie dough for two — egg-free, no-bake, ready in minutes. A small-batch treat that's perfect for a movie night or a sweet craving. Safe to eat by the spoonful! Save this quick dessert.
+
+**Tags** : No-Bake Desserts / Dessert Recipes / Easy Meal / Cookie Recipes
+
+### PIN 21 — Salmon Orzo with Dill and Capers for Two (board Romantic) — 03/09 22:30
+
+**Image** (héro Cloudinary) :
+https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1785412815/recipes/Salmon-Orzo-with-Dill-and-Capers-for-Two.png
+
+**Board** : Romantic Dinner Ideas for Two
+
+**URL** : https://www.chefaugustin.com/recipes/salmon-orzo-with-dill-and-capers-for-two
+
+**Title** :
+Salmon Orzo with Dill and Capers for Two — Crispy Skin in 30 Minutes
+
+**Alt text** :
+Pan-seared salmon with crisp golden skin over creamy orzo with dill, capers and lemon for two, elegant one-pan seafood dinner
+
+**Description** :
+The one thing restaurants do that home cooks skip: shattering, glassy salmon skin. Creamy dill-caper orzo underneath, one pan, 30 minutes — the elegant seafood dinner for two. Save this and get the full recipe on the blog! 🐟✨
+
+**Tags** : Salmon Recipes / Seafood Dinners / One-Pan Recipes / Date Night Dinner
+
+> **Suite du batch (pins 22+)** : Easy Lasagna (#72, Romantic-cozy), Chicken Pot Pie (#10, comfort automnal), Easter/Thanksgiving (#44/#38, saisonnier — fenêtre idéale fin sept). ⚠️ Il faudra un 3ᵉ board alterné — **me confirmer les noms exacts des 13 boards** dans l'app Pinterest (je n'ai que les 9 utilisés dans TO-POST.md).
+> 🍰 **Gap catalogue** : le cookie dough est le DERNIER dessert non épinglé (4 desserts / 45 recettes) alors que Desserts = board qui convertit (69 % outbound). → Ajouter des recettes dessert au prochain plan éditorial (VAGUE 3 ou 4).

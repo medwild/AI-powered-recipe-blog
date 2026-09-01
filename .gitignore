@@ -44,3 +44,6 @@ __pycache__/
 Pinterest Analytics*.csv
 screencapture-*.png
 tsconfig.tsbuildinfo
+
+# Scripts scratch de session (diagnostics one-shot)
+scripts/_*.ts
