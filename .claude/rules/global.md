@@ -18,7 +18,9 @@
 - Sans ce filtre : un article servi comme recette → `/recettes/{article-slug}` → 404
 
 ### 3. Ne jamais utiliser le mauvais composant card
-- `RecipeCard` → UNIQUEMENT pour `content_type = "recipe"` → href `/recettes/{slug}`
+- `RecipeCard` → UNIQUEMENT pour `content_type = "recipe"` → href `/recipes/{slug}`
+  (`/recettes/` n'est plus qu'un handler de redirection legacy — `app/recettes/[slug]/route.ts` ;
+  lier `/recettes/` ferait passer chaque clic par un 308. Audit maillage 02/09.)
 - `ArticleCard` → UNIQUEMENT pour `content_type = "article"` → href `/{category}/{slug}`
 - Inverser les deux → liens cassés → 404 utilisateur
 
