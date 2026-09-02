@@ -82,6 +82,19 @@ Découvertes en préparant les correctifs (probing d'ancres) : des insertions de
 - **Règle #3** de `.claude/rules/global.md` alignée sur le code (`/recipes/{slug}`).
 - ⏳ Vérification finale par recrawl après redeploy (voir bas de document).
 
+## 🟡 Medium (ajout 02/09, signal utilisateur) — 14 ancres fragments de liens contextuels
+
+Constat : sur la page gnocchi, lien ancré « with tomatoes » → `whole30-chicken-skillet-tomatoes-garlic`. Vérification DB exhaustive : **14/80 liens contextuels (17,5 %)** ancrés sur un fragment commençant par une préposition, dont **« for two » ×11** (ancre sans aucune valeur descriptive).
+
+**Cause racine double** :
+1. `buildPhrases()` (`lib/internal-linker.ts`) génère des chunks de 2 mots des titres sans filtrer les prépositions initiales — ex. titres avec suffixe parenthéthéé « … for Two (Ready in 30 Minutes) » : le strip `for two$` échoue → chunk « for two » candidat → match n'importe où dans le prose.
+2. `skills/chef-augustin-mega.md` §Internal Links n'exigeait aucune qualité d'ancre du modèle.
+
+**Corrections** :
+- Code : `FUNCTION_START` filter dans `buildPhrases()` + `buildHubPhrases()`, « for two » ajouté à `GENERIC_PHRASES` (`tsc` OK).
+- Skill : règle d'ancre (≥3 mots descriptifs de la cible, jamais préposition initiale, sinon 0 lien).
+- Contenu : 14 UPDATE (13 drops — phrases comme « 45 minutes for two plates » trahissaient une insertion aveugle — + 1 élargissement « the beef and cheese »). Post-vol : `Ancres fragments restantes : 0`. Backup : `repports/backup-ancres-2026-09-02.json`. Aucune cible orphelinisée (re-compt inbounds ✓).
+
 ## ✅ Post-vérification (recrawl après redeploy `8f4bc5a`, 02/09)
 
 | Métrique | Avant | Après |

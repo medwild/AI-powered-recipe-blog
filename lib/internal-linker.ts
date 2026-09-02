@@ -58,8 +58,13 @@ const GENERIC_PHRASES = new Set([
   "dinner for two", "for two people", "recipe for two", "recipes for two",
   "weeknight dinner", "one pan dinner", "easy dinner", "quick dinner",
   "small batch", "30 minute", "cook for two", "serves two",
-  "for two servings", "dinner for 2", "ready in",
+  "for two servings", "dinner for 2", "ready in", "for two",
 ])
+
+/** A phrase that starts with a function word can never read as a descriptive
+ * anchor — "for two", "with tomatoes", "and cheese" are 2-word-chunk debris
+ * from buildPhrases (audit maillage 02/09: 14/80 contextual links impacted). */
+const FUNCTION_START = /^(with|and|or|for|in|to|of|on|by|a|an|the)\s/i
 
 /**
  * Generate search phrases for a recipe — these are the terms that, if found
@@ -164,7 +169,7 @@ function buildPhrases(title: string, keyword: string, tags: string[]): string[] 
   // Deduplicate, sort by length descending (longer = more specific)
   const seen = new Set<string>()
   return phrases
-    .filter((p) => p.includes(" ") && !seen.has(p) && seen.add(p))
+    .filter((p) => p.includes(" ") && !FUNCTION_START.test(p) && !seen.has(p) && seen.add(p))
     .sort((a, b) => b.length - a.length)
     .slice(0, 10)
 }
@@ -193,7 +198,7 @@ function buildHubPhrases(hub: Hub): string[] {
     // shorter or generic words ("easy", "for", "two") read as broken anchors.
     if (w.length >= 6 && !STOP_WORDS.test(w) && !GENERIC_PHRASES.has(w)) phrases.push(w)
   }
-  return [...new Set(phrases)]
+  return [...new Set(phrases)].filter((p) => !FUNCTION_START.test(p))
 }
 
 // ---------------------------------------------------------------------------

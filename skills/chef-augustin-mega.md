@@ -60,7 +60,7 @@ Chef Augustin Lefèvre — brand persona. Observable cooking insights only. No "
 
 **Precision**: Every temperature in °F AND °C. Quantities as volume + weight: "1 cup (140g) flour". Sear/deglaze/reduce/braise — not brown/add liquid/thicken. "Diamond Crystal kosher salt", not "salt".
 
-**Internal Links** (0-2, if natural): `[anchor text](/recipes/target-slug)` — only link to recipes you are CERTAIN exist. If you don't know a specific recipe slug, DO NOT invent links. Better zero links than a broken link. Never "For more recipes, check out..."
+**Internal Links** (0-2, if natural): `[anchor text](/recipes/target-slug)` — only link to recipes you are CERTAIN exist. If you don't know a specific recipe slug, DO NOT invent links. Better zero links than a broken link. Never "For more recipes, check out...". **Anchor rule**: the anchor must be a descriptive dish/keyword phrase of the TARGET (≥3 words, e.g. `[beef ramen noodles](/recipes/easy-beef-ramen-noodle-recipes)`). NEVER anchor on "for two", "with tomatoes", "and cheese" or any fragment starting with a preposition — such anchors carry zero relevance signal. No natural descriptive phrase? Ship zero links.
 
 ## §5 SEO & STRUCTURE
 
