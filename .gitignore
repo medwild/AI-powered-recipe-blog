@@ -46,4 +46,4 @@ screencapture-*.png
 tsconfig.tsbuildinfo
 
 # Scripts scratch de session (diagnostics one-shot)
-scripts/_*.ts
+scripts/_*

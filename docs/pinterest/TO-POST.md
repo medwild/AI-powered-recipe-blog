@@ -37,6 +37,7 @@
 | 19 ⏳ | Copycat Texas Roadhouse | Romantic Dinner | 01/09 22:30 |
 | 20 ⏳ | Edible Cookie Dough | Small-Batch Desserts | 02/09 22:30 |
 | 21 ⏳ | Salmon Orzo Dill & Capers | Romantic Dinner | 03/09 22:30 |
+| 🎬 ⏳ | Pan-Seared Chicken Creamy Tomato Pasta (vidéo 5) | Pasta | 04/09 22:30 |
 
 ---
 
@@ -560,3 +561,36 @@ The one thing restaurants do that home cooks skip: shattering, glassy salmon ski
 
 > **Suite du batch (pins 22+)** : Easy Lasagna (#72, Romantic-cozy), Chicken Pot Pie (#10, comfort automnal), Easter/Thanksgiving (#44/#38, saisonnier — fenêtre idéale fin sept). ⚠️ Il faudra un 3ᵉ board alterné — **me confirmer les noms exacts des 13 boards** dans l'app Pinterest (je n'ai que les 9 utilisés dans TO-POST.md).
 > 🍰 **Gap catalogue** : le cookie dough est le DERNIER dessert non épinglé (4 desserts / 45 recettes) alors que Desserts = board qui convertit (69 % outbound). → Ajouter des recettes dessert au prochain plan éditorial (VAGUE 3 ou 4).
+
+---
+
+## 🎬 PIN VIDÉO 5 — Pan-Seared Chicken with Creamy Tomato Garlic Pasta for Two (board Pasta) — 04/09 ⏳
+
+> **5ᵉ video pin** (UGC 9:16, 15 s). ⚠️ Fichier fourni en **HEVC** → **ré-encodé en H.264** (copie sûre ci-dessous), l'original est conservé. Upload manual Pinterest.
+> 1ᵉʳ pin de cette recette (recette #31, jamais épinglée).
+
+**Vidéo** (fichier local — **utiliser celle-ci**) :
+`Pan-Seared-Chicken-Creamy-Tomato-Garlic-Pasta-H264.mp4`
+→ 720×1280 (9:16), 15,1 s, **5,2 Mo, H.264 High + AAC, 24 fps, faststart** ✅
+> Original `Pan-Seared Chicken Breast with Creamy Tomato Garlic Pasta for Two recipe.mp4` (2,9 Mo) = **HEVC/hvc1** — ne pas uploader (même raison que vidéo 4 : codec non confirmé par la doc Pinterest, les 4 vidéos publiées = H.264).
+
+**Board** : Pasta & Noodles for Two
+> Règle « boards variés » : pin 21 (03/09) = Romantic → Pasta ✓. Le board Pasta n'avait encore **aucun video pin** (dernier pin image 12/08) → élargit le test vidéo à un 3ᵉ board (après Quick Weeknight & Easy Chicken). Alternative cohérente : Easy Chicken (mais déjà testé en vidéo le 24/08).
+
+**URL** : https://www.chefaugustin.com/recipes/cooking-for-two
+> Vérifiée live 01/09 (200 OK). ⚠️.slug historique `cooking-for-two` (recette #31, PT15M+PT30M=45 min, cohérent DB↔affiché).
+> ⚠️ **Bug contenu relevé au passage (à corriger hors pin)** : ① `metaTitle` = « Cooking for Two: The Complete Guide » (titre du vieux hub — c'est CE que Google affiche en SERP) ; ② JSON-LD servi = PT10M/PT25M/35 min ≠ 45 min affiché dans la page → mismatch structured data.
+
+**Title** :
+Pan-Seared Chicken & Creamy Tomato Garlic Pasta for Two (Video)
+
+**Alt text** (≤ 300 caractères) :
+Video recipe of pan-seared chicken breast over creamy tomato garlic spaghetti for two — red onion and garlic sizzling in a skillet, cream poured into bubbling tomato sauce, sliced chicken plated with peas and fresh basil
+
+**Description** :
+Golden, grill-marked chicken breast over spaghetti in a silky cream-swirled tomato sauce with peas and basil — this creamy tomato garlic pasta for two comes together in 45 minutes. Save this and watch the full recipe on the blog! 🍗🍝✨
+
+**Tags** : Pasta Recipes / Chicken Recipes / Easy Meal / Tomato Sauce Recipes / Weeknight Dinner
+
+> 📹 **Cover** : frame **13 s** (sauce crème versée sur le poulet tranché + spaghetti, pois & basilic) = la plus appétissante. Candidats extraits dans `/tmp/video5-frames/` (1 s oignons, 4 s poulet saisi, 7 s crème dans la sauce, 10 s découpe, 13 s versement, 15 s plat fini).
+> ⚠️ **Watermark « Dola AI »** visible en bas à droite sur toutes les frames (comme vidéo 4) — risque à surveiller (règles Pinterest contenu IA / branding outil tiers). Si une version sans watermark existe, préférer la re-upload.

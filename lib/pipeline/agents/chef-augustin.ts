@@ -611,7 +611,7 @@ export async function agentChefAugustinMega(
         {
           model: process.env.ANTHROPIC_MODEL || "anthropic/claude-sonnet-5",
           maxTokens: 32000,
-          timeout: 420_000,
+          timeout: 900_000,
         },
       )
     } else {
@@ -620,7 +620,7 @@ export async function agentChefAugustinMega(
       raw = await runTextAndParseJson<RecipeArticle>(
         systemPrompt,
         userPrompt + schemaPrompt,
-        { model: process.env.ANTHROPIC_MODEL || "anthropic/claude-sonnet-5", maxTokens: 32000, timeout: 420_000 },
+        { model: process.env.ANTHROPIC_MODEL || "anthropic/claude-sonnet-5", maxTokens: 32000, timeout: 900_000 },
       )
     }
 

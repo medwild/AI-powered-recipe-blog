@@ -912,7 +912,9 @@ class BaiProvider implements LlmProvider {
       throw new Error("BAI_API_KEY must be set for B.Ai provider.")
     }
 
-    const timeoutMs = options?.timeout ?? 420_000
+    // B.Ai generations legitimately exceed 10 min sometimes (slow stream observed
+    // 01/09: 3/3 attempts aborted at our 420 s cap while healthy runs finish ~370 s).
+    const timeoutMs = options?.timeout ?? 900_000
     const controller = new AbortController()
     const timer = setTimeout(() => controller.abort(), timeoutMs)
 
