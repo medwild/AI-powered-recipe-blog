@@ -34,7 +34,7 @@
 | 🎬 ✅ | Garlic Butter Chicken Rice Bowls (vidéo 2) | Easy Chicken | 24/08 publié |
 | 🎬 ✅ | Easy Chili Colorado (vidéo 3) | Quick Weeknight | 29/08 publié |
 | 🎬 ✅ | Creamy Mashed Potatoes (vidéo 4) | Small-Batch Sides | 31/08 publié |
-| 19 ⏳ | Copycat Texas Roadhouse | Romantic Dinner | 01/09 22:30 |
+| 19 ✅ | Copycat Texas Roadhouse | Romantic Dinner | 01/09 22:30 publié |
 | 20 ⏳ | Edible Cookie Dough | Small-Batch Desserts | 02/09 22:30 |
 | 21 ⏳ | Salmon Orzo Dill & Capers | Romantic Dinner | 03/09 22:30 |
 | 🎬 ⏳ | Pan-Seared Chicken Creamy Tomato Pasta (vidéo 5) | Pasta | 04/09 22:30 |
@@ -497,7 +497,7 @@ Two servings of impossibly fluffy mashed potatoes — hot butter, warm milk, and
 
 > Stratégie backlog 29/08 : le décollage vient des **images** sur Romantic (volume) + Desserts (conversion). Cadence : 1 pin/jour à 22:30, boards alternés R→D→R. URLs vérifiées live 31/08 (200 OK).
 
-### PIN 19 — Copycat Texas Roadhouse Dinner for Two (board Romantic) — 01/09 22:30
+### PIN 19 — Copycat Texas Roadhouse Dinner for Two (board Romantic) — 01/09 ✅ PUBLIÉ
 
 **Image** (héro Cloudinary, recette #110) :
 https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1786962714/recipes/45-Minute-Texas-Roadhouse-Dinner-for-Two.png
