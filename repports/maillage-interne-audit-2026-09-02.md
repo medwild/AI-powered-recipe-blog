@@ -82,6 +82,18 @@ Découvertes en préparant les correctifs (probing d'ancres) : des insertions de
 - **Règle #3** de `.claude/rules/global.md` alignée sur le code (`/recipes/{slug}`).
 - ⏳ Vérification finale par recrawl après redeploy (voir bas de document).
 
+## ✅ Post-vérification (recrawl après redeploy `8f4bc5a`, 02/09)
+
+| Métrique | Avant | Après |
+|---|---|---|
+| Liens internes → 308 | **7** | **0** |
+| Liens cassés / orphelines / profondeur >3 / ancres génériques | 0 | 0 |
+| Recettes sans inbound recette→recette | 5 | 3 |
+| `edible-cookie-dough-recipe-for-2` inbound contextuel | 0 | 1 (lien live dans `/recipes/chocolate-lava-cakes-for-two`) |
+| `one-pan-chicken-tomato-rice` | 0 | ✓ reçoit le lien repointé de `garlic-butter-chicken-pasta-for-two` |
+
+Les 3 restantes (chili, texas-roadhouse, romantic-dinner-for-two-at-home) reçoivent en réalité des liens de l'article roundup `/guides/15-easy-dinner-recipes-for-two` (classé « hub » par le script) — pas de forçage artificiel. Spot-checks prod : `/recipes/garlic-butter-chicken-pasta-for-two`, `/recipes/easy-chicken-dinners-for-two`, `/recipes/chocolate-lava-cakes-for-two`, `/guides` → 200.
+
 ## Méthodologie
 
 1. Crawl : `scripts/_crawl-maillage.mjs` — seed sitemap 86 URLs, `redirect: manual` pour les destinations hors-seed, UA identifié, robots.txt respecté, 5 requêtes simultanées (auto-hébergé).
