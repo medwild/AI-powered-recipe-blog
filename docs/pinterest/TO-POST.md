@@ -35,9 +35,9 @@
 | 🎬 ✅ | Easy Chili Colorado (vidéo 3) | Quick Weeknight | 29/08 publié |
 | 🎬 ✅ | Creamy Mashed Potatoes (vidéo 4) | Small-Batch Sides | 31/08 publié |
 | 19 ✅ | Copycat Texas Roadhouse | Romantic Dinner | 01/09 22:30 publié |
-| 20 ⏳ | Edible Cookie Dough | Small-Batch Desserts | 02/09 22:30 |
-| 21 ⏳ | Salmon Orzo Dill & Capers | Romantic Dinner | 03/09 22:30 |
-| 🎬 ⏳ | Pan-Seared Chicken Creamy Tomato Pasta (vidéo 5) | Pasta | 04/09 22:30 |
+| 20 ⏳ 🎬 | Edible Cookie Dough (vidéo) | Small-Batch Desserts | 03/09 22:30 (décalé de 02/09) |
+| 21 ⏳ | Salmon Orzo Dill & Capers | Romantic Dinner | 04/09 22:30 (décalé +1 j) |
+| 🎬 ⏳ | Pan-Seared Chicken Creamy Tomato Pasta (vidéo 5) | Pasta | 05/09 22:30 (décalé +1 j) |
 
 ---
 
@@ -517,9 +517,11 @@ Two spice-crusted sirloins, warm yeast rolls, and that whipped cinnamon-honey bu
 
 **Tags** : Steak Recipes / Date Night Dinner / Copycat Recipes / Beef Recipes
 
-### PIN 20 — Edible Cookie Dough for Two (board Desserts) — 02/09 22:30
+### PIN 20 — Edible Cookie Dough for Two (board Desserts) — 03/09 ⏳ VIDÉO
 
-> Brief déjà rédigé 2× (warmup-18 #4 + PIN 17 TO-POST) — recette jamais épinglée (warm-up arrêté au 14).
+> Décalé du 02/09 (décision utilisateur 02/09) ; format **vidéo** au lieu du pin statique.
+
+**Vidéo** : `cookie-dough-pin20.mp4` (racine du repo, non commitée) → 1000×1500 (2:3), 15,1 s, **13,3 Mo, H.264 `avc1` + AAC, faststart corrigé 02/09** (`scripts/_fix-faststart.mjs` — l'export Canva `download.mp4` était moov-en-fin et un 1ᵉʳ export était en HEVC `hvc1` ❌). L'image ci-dessous sert de cover/fallback.
 
 **Image** :
 https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1785410049/recipes/Small-Batch%20Edible%20Cookie%20Dough%20for%20Two.png
