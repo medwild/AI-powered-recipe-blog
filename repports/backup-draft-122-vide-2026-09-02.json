@@ -1,0 +1,133 @@
+{
+ "id": 122,
+ "slug": "vegetable-stir-fry-for-two",
+ "keyword": "vegetable stir fry for two",
+ "title": "vegetable stir fry for two",
+ "meta_title": null,
+ "meta_description": null,
+ "excerpt": null,
+ "content_markdown": null,
+ "hero_image_url": null,
+ "prep_time": null,
+ "cook_time": null,
+ "total_time": null,
+ "servings": null,
+ "difficulty": null,
+ "ingredients": [],
+ "instructions": [],
+ "tags": [],
+ "serp_data": {
+  "images": [],
+  "videos": [],
+  "organic": [
+   {
+    "link": "https://www.loveandlemons.com/stir-fry-recipe/",
+    "title": "Easy Veggie Stir Fry Recipe",
+    "snippet": "This easy stir fry recipe features colorful vegetables in a flavorful sauce made with soy sauce and sesame oil. It's quick and delicious!",
+    "position": 1
+   },
+   {
+    "link": "https://www.budgetbytes.com/easy-vegetable-stir-fry/",
+    "title": "Easy Vegetable Stir Fry",
+    "snippet": "For my stir fry mix, I used 1 small yellow onion, 1⁄2 lb. broccoli, 2 carrots, 8 oz. mushrooms, and 8 oz. sugar snap peas.",
+    "position": 2
+   },
+   {
+    "link": "https://natashaskitchen.com/vegetable-stir-fry/",
+    "title": "Vegetable Stir Fry Recipe",
+    "snippet": "EASY one-pan vegetable stir fry recipe. This veggie stir fry has the best homemade sweet and savory stir fry sauce with garlic and ginger.",
+    "position": 3
+   },
+   {
+    "link": "https://therecipecritic.com/vegetable-stir-fry/",
+    "title": "Easiest Vegetable Stir Fry",
+    "snippet": "Add red bell pepper, yellow bell pepper, zucchini, sugar snap peas, carrots, mushrooms, broccoli, baby corn, and water chestnuts. Cook for 2-3 ...",
+    "position": 4
+   },
+   {
+    "link": "https://www.nutrition.gov/recipes/vegetable-stir-fry",
+    "title": "Vegetable Stir Fry",
+    "snippet": "Heat oil in a skillet over medium-high heat. Add broccoli, cauliflower, celery, and carrots. Cook for 2 minutes. Add bell pepper and cook for 2 more minutes.",
+    "position": 5
+   },
+   {
+    "link": "https://ohsweetbasil.com/favorite-easy-vegetable-stir-fry/",
+    "title": "Favorite Easy Vegetable Stir Fry",
+    "snippet": "Learn how to whip up a delicious vegetable stir fry in under 30 minutes. Carrots, Zucchini, Mushrooms, Broccoli and Baby Corn Sauce: Add bell ...",
+    "position": 6
+   },
+   {
+    "link": "https://www.momontimeout.com/easy-chicken-stir-fry-recipe/",
+    "title": "Easy Chicken Stir Fry Recipe",
+    "snippet": "You can use virtually any vegetable in a stir fry including snow peas, green beans, mushroom, onions, sugar snap peas, and green onions.",
+    "position": 7
+   },
+   {
+    "link": "https://www.facebook.com/groups/DelhiFoodFreak/posts/1877137123108061/",
+    "title": "Simple stir fry recipe for two",
+    "snippet": "Simple Stir Fry 1lb lean ground beef, pork, or chicken 1/4 cup teriyaki sauce 1 tbsp sesame or olive oil 4 cups stir fry vegetables, fresh or ...",
+    "position": 8
+   }
+  ],
+  "recipes": [],
+  "relatedSearches": [
+   "Chinese stir fry vegetables recipe",
+   "Vegetable stir fry for two with noodles",
+   "Stir fry vegetables list",
+   "Indian stir fry vegetables recipe",
+   "Simple vegetable stir fry for two",
+   "Healthy vegetable stir fry",
+   "Easy vegetable stir fry for two",
+   "Chinese vegetable stir fry sauce"
+  ],
+  "relatedQuestions": [
+   {
+    "question": "How to make a simple vegetable stir fry?"
+   },
+   {
+    "question": "What are some common mistakes to avoid when making vegetable stir fry?"
+   },
+   {
+    "question": "What vegetables are good to stir fry together?"
+   },
+   {
+    "question": "What is the secret to making the best stir fry?"
+   }
+  ]
+ },
+ "status": "draft",
+ "workflow_log": [
+  {
+   "at": "2026-09-02T14:10:35.277Z",
+   "agent": "SERP",
+   "status": "running",
+   "message": "Google analysis for \"vegetable stir fry for two\""
+  },
+  {
+   "at": "2026-09-02T14:10:36.935Z",
+   "agent": "SERP",
+   "status": "done",
+   "message": "8 organic, 4 PAA"
+  },
+  {
+   "at": "2026-09-02T14:10:38.958Z",
+   "agent": "MegaSkill",
+   "status": "running",
+   "message": "Generating article for \"vegetable stir fry for two\" with Opus 4.8 mega-skill"
+  },
+  {
+   "at": "2026-09-02T14:23:39.176Z",
+   "agent": "Workflow",
+   "status": "error",
+   "message": "Pipeline failed: [ChefAugustinMega] LLM call failed for \"vegetable stir fry for two\": Unexpected character \"{\" at position 18364"
+  }
+ ],
+ "published_at": null,
+ "created_at": "2026-09-02 14:10:35.253171+00",
+ "updated_at": "2026-09-02 14:23:39.176+00",
+ "json_ld": null,
+ "image_variants": [],
+ "content_type": "recipe",
+ "category": null,
+ "linked_content_id": null
+}
