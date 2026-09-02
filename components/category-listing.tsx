@@ -89,6 +89,11 @@ export function categoryMetadata(category: string): Metadata {
   }
 }
 
+/** Pages de section réellement montées (app/guides, app/idees). Les autres
+ * clés de CATEGORY_LABELS sont 308-pées depuis la consolidation 06/08 —
+ * les lier ferait passer chaque clic par une redirection (audit 02/09). */
+const LIVE_SECTION_PAGES = ["guides", "idees"]
+
 export async function CategoryListing({ category }: { category: string }) {
   const articles = await db
     .select({
@@ -256,7 +261,7 @@ export async function CategoryListing({ category }: { category: string }) {
           <h2 className="font-serif text-2xl mb-4">Explore more</h2>
           <div className="flex flex-wrap justify-center gap-2">
             {Object.entries(CATEGORY_LABELS)
-              .filter(([key]) => key !== category)
+              .filter(([key]) => key !== category && LIVE_SECTION_PAGES.includes(key))
               .map(([key, label]) => (
                 <Link
                   key={key}
