@@ -596,3 +596,33 @@ Golden, grill-marked chicken breast over spaghetti in a silky cream-swirled toma
 
 > 📹 **Cover** : frame **13 s** (sauce crème versée sur le poulet tranché + spaghetti, pois & basilic) = la plus appétissante. Candidats extraits dans `/tmp/video5-frames/` (1 s oignons, 4 s poulet saisi, 7 s crème dans la sauce, 10 s découpe, 13 s versement, 15 s plat fini).
 > ⚠️ **Watermark « Dola AI »** visible en bas à droite sur toutes les frames (comme vidéo 4) — risque à surveiller (règles Pinterest contenu IA / branding outil tiers). Si une version sans watermark existe, préférer la re-upload.
+
+---
+
+## 🎬 PIN VIDÉO 6 — One-Pan Breakfast Sandwich for Two (board One-Pan Meals) — 06/09 22:30 ⏳ PILOTE BREAKFAST
+
+> **6ᵉ video pin** — **pilot micro-cluster breakfast** (décision 03/09, trend YouTube « egg-wrap breakfast sandwich »). Upload manual du rush 9:16 (ratio conforme — prouvé par vidéos 1-5 publiées, pas de re-montage 2:3 Canva nécessaire).
+> ⚠️ **Ne poster qu'APRÈS publication de la fiche** (run 3a 04/09 + push redeploy — vérifier 200 live avant, cf. fenêtre SSG sitemap).
+
+**Vidéo** (fichier local — à tourner) : `one-pan-breakfast-sandwich-reel.mp4` (nom à ajuster)
+→ cible : 9:16, 10-15 s, **H.264 (avc1) + AAC, faststart** — Sonder avant upload : `node scripts/_probe-mp4.mjs <fichier>` (⚠️ jamais HEVC, cf. vidéo 4/5)
+
+**Board** : One-Pan Meals for Two
+> Le board « Meals » (pas « Dinners ») accueille la promesse « one vessel, minimal cleanup » sans mentir sur le contenu. Règle boards variés : 04/09 = Romantic (pin 21) + Pasta (vidéo 5) → One-Pan ✓.
+
+**URL** : https://www.chefaugustin.com/recipes/one-pan-breakfast-sandwich-for-two
+> ⚠️ Slug prévu run 3a (vérifié libre 03/09) — à confirmer après génération ; si le slug diffère, corriger ici AVANT upload.
+
+**Title** :
+One-Pan Breakfast Sandwich for Two — The Egg-Wrap Method (Video)
+
+**Alt text** (≤ 300 caractères) :
+Egg poured into a buttered skillet with a toasted bun pressed in, folded around it, stacked with cheddar, bacon, tomato and red onion, then cut to show the layers — one-pan breakfast sandwich for two video
+
+**Description** :
+The trick that makes this breakfast sandwich: pour the egg into the pan, press the toasted bun right into it, then fold the egg up and around the bun like a wrapper. Cheddar, crispy bacon, tomato, red onion — one pan, two sandwiches, single-digit cleanup. Save this and get the full recipe on the blog! 🍳✨
+
+**Tags** : Breakfast Recipes / One-Pan Recipes / Breakfast Sandwiches / Easy Meal / Morning Recipes
+
+> 📹 **Cover** : choisir la frame **cross-section** (l'œuf replié + couches visibles, fin de vidéo) = la plus cliquable.
+> 🔬 **Verdict pilote à J+7 (~11/09)** : si impressions/clicks Pinterest + vues TikTok/Reels sur ce pin > médiane des 5 vidéos précédentes → engager le hub « Breakfast for Two » (2-3 recettes + board dédié). Sinon, la fiche reste telle quelle, aucune suite. Maillage : exception orpheline assumée (0 inbound forcé depuis un hub diners) jusqu'au verdict.
