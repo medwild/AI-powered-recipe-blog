@@ -38,6 +38,7 @@
 | 20 ✅ 🎬 | Edible Cookie Dough (vidéo) | Small-Batch Desserts | 03/09 publié (~14:15 Maroc, avancé du slot 22:30) |
 | 21 ⏳ | Salmon Orzo Dill & Capers | Romantic Dinner | 04/09 22:30 (décalé +1 j) |
 | 🎬 ⏳ | Pan-Seared Chicken Creamy Tomato Pasta (vidéo 5) | Pasta | 05/09 22:30 (décalé +1 j) |
+| 🎬 ⏳ | One-Pan Breakfast Sandwich (vidéo 6, PILOTE — fiche #125 publiée) | One-Pan Meals for Two | 06/09 22:30 — rush 9:16 à tourner |
 
 ---
 
@@ -601,8 +602,8 @@ Golden, grill-marked chicken breast over spaghetti in a silky cream-swirled toma
 
 ## 🎬 PIN VIDÉO 6 — One-Pan Breakfast Sandwich for Two (board One-Pan Meals) — 06/09 22:30 ⏳ PILOTE BREAKFAST
 
-> **6ᵉ video pin** — **pilot micro-cluster breakfast** (décision 03/09, trend YouTube « egg-wrap breakfast sandwich »). Upload manual du rush 9:16 (ratio conforme — prouvé par vidéos 1-5 publiées, pas de re-montage 2:3 Canva nécessaire).
-> ⚠️ **Ne poster qu'APRÈS publication de la fiche** (run 3a 04/09 + push redeploy — vérifier 200 live avant, cf. fenêtre SSG sitemap).
+> **6ᵉ video pin** — **pilot micro-cluster breakfast** (décision 03/09, trend YouTube « egg-wrap breakfast sandwich »). ⛔ La fiche publiée #125 (03/09) enseigne la variante **EGG-FLIP** — title/alt/description ci-dessous verrouillés sur la fiche (le rush doit la montrer, pas la méthode « bun pressé » de la référence). Upload manual du rush 9:16 (ratio conforme — prouvé par vidéos 1-5 publiées, pas de re-montage 2:3 Canva nécessaire).
+> ✅ **Fiche publiée 03/09** — ne poster qu'APRÈS vérification 200 live (push + redeploy Hostinger, cf. fenêtre SSG sitemap).
 
 **Vidéo** (fichier local — à tourner) : `one-pan-breakfast-sandwich-reel.mp4` (nom à ajuster)
 → cible : 9:16, 10-15 s, **H.264 (avc1) + AAC, faststart** — Sonder avant upload : `node scripts/_probe-mp4.mjs <fichier>` (⚠️ jamais HEVC, cf. vidéo 4/5)
@@ -611,16 +612,16 @@ Golden, grill-marked chicken breast over spaghetti in a silky cream-swirled toma
 > Le board « Meals » (pas « Dinners ») accueille la promesse « one vessel, minimal cleanup » sans mentir sur le contenu. Règle boards variés : 04/09 = Romantic (pin 21) + Pasta (vidéo 5) → One-Pan ✓.
 
 **URL** : https://www.chefaugustin.com/recipes/one-pan-breakfast-sandwich-for-two
-> ⚠️ Slug prévu run 3a (vérifié libre 03/09) — à confirmer après génération ; si le slug diffère, corriger ici AVANT upload.
+> ✅ Slug confirmé — fiche #125 publiée 03/09 (live 200 à vérifier après le push du soir).
 
 **Title** :
-One-Pan Breakfast Sandwich for Two — The Egg-Wrap Method (Video)
+One-Pan Breakfast Sandwich for Two — The Egg-Flip Method (Video)
 
 **Alt text** (≤ 300 caractères) :
-Egg poured into a buttered skillet with a toasted bun pressed in, folded around it, stacked with cheddar, bacon, tomato and red onion, then cut to show the layers — one-pan breakfast sandwich for two video
+Eggs poured into a buttered 12-inch skillet, bread laid on the wet egg, the whole sheet flipped like a pancake, cheddar added and the egg edges folded in, toasted and cut diagonally — one-pan breakfast sandwich for two
 
 **Description** :
-The trick that makes this breakfast sandwich: pour the egg into the pan, press the toasted bun right into it, then fold the egg up and around the bun like a wrapper. Cheddar, crispy bacon, tomato, red onion — one pan, two sandwiches, single-digit cleanup. Save this and get the full recipe on the blog! 🍳✨
+The trick that makes this breakfast sandwich: pour the beaten eggs into a buttered skillet, lay the bread right on the wet egg, then flip the whole sheet like a pancake. Cheddar on the eggy face, fold the edges in, cap, toast — two sandwiches, one pan, seventeen minutes. Save this and get the full recipe on the blog! 🍳✨
 
 **Tags** : Breakfast Recipes / One-Pan Recipes / Breakfast Sandwiches / Easy Meal / Morning Recipes
 

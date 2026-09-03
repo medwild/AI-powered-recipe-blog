@@ -1,0 +1,17 @@
+◇ injected env (29) from .env.local // tip: ⌘ suppress logs { quiet: true }
+
+🔬 Generating: "one pan breakfast sandwich for two"
+
+Recipe #125 created — slug: one-pan-breakfast-sandwich-for-two
+
+[ChefAugustinMega] Calling structured output for "one pan breakfast sandwich for two" (8186 chars skill, 3001 chars prompt)
+[provider] Selection — LLM_PROVIDER=bai ANTHROPIC_MODEL=glm-5.3-flash hasBaseUrl=true ANTHROPIC_API_KEY=MISSING
+[provider] → BaiProvider
+[provider] B.Ai — model: glm-5.3-flash (streaming)
+[provider] Non-Anthropic — falling back to text+parse (structured output not supported)
+[provider] B.Ai glm-5.3-flash — success (stream) (in:4134 out:7279)
+[normalize] Ingredients: using JSON (10 items)
+[normalize] Instructions: using JSON (8 steps)
+[ChefAugustinMega] Success — 2442 words, 0 tags
+
+✅ Done in 328.0s — Recipe #125

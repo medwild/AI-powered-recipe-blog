@@ -42,7 +42,7 @@
 ## 🎬 REELS-1 — One-Pan Breakfast Sandwich for Two (07/09) — PILOTE
 
 - Rush : **même mp4 que TIKTOK-5** (`docs/tiktok/TO-POST.md` — structure, hook, money shot et verrou d'intégrité décrits là-bas) | watermark : [ ] vérifié NON
-- **Caption** : One pan breakfast sandwich for two — the egg IS the wrapper 🍳 Full recipe in the comments. #breakfastsandwich #onepanmeals #breakfastfor2
+- **Caption** : One pan breakfast sandwich for two — the EGG-FLIP method, 17 minutes 🍳 Full recipe in the comments. #breakfastsandwich #onepanmeals #breakfastfor2
 - **Pinned comment** : https://www.chefaugustin.com/recipes/one-pan-breakfast-sandwich-for-two?utm_source=facebook&utm_medium=social
 - Créneau : DIM 07/09 ~00:00 (soit ~1 h après le TikTok de 23:00) — à confirmer selon l'audience US de la page | Statut : [x] briefé → [ ] posté → [ ] analytics D+7
 - 🔬 Ce Reel entre dans le **verdict pilote J+7 (11/09)** : critère = engagement croisé des 3 canaux sur ce rush (vues Reels + vues TikTok + clicks pin) vs médiane des contenus vidéo publiés 24/08-06/09. Positif → hub « Breakfast for Two » (2-3 recettes + board) ; neutre → la fiche reste, aucune suite.

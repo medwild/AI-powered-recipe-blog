@@ -22,7 +22,7 @@
 | 2 🎬 | Molten Lava Cakes | `chocolate-lava-cakes-for-two` | JEU 04/09 23:00 | ⏳ vidéo à générer |
 | 3 🎬 | One-Pan Gnocchi | `one-pan-gnocchi-for-two` | VEN 05/09 23:00 | ⏳ vidéo à générer |
 | 4 🎬 | Search-content « what to cook for two tonight » | hub `/guides/15-easy-dinner-recipes-for-two` | SAM 06/09 23:00 | ⏳ vidéo à générer |
-| 5 🎬 | **One-Pan Breakfast Sandwich** (PILOTE trend) | `one-pan-breakfast-sandwich-for-two` | DIM 07/09 23:00 | ⛔ bloqué : run 3a 04/09 + tournage |
+| 5 🎬 | **One-Pan Breakfast Sandwich** (PILOTE trend) | `one-pan-breakfast-sandwich-for-two` | DIM 07/09 23:00 | ⏳ fiche publiée ✅ (#125, 03/09) — rush 9:16 à tourner |
 
 > J5-J7 : recalibrés (décision 03/09) — J5 = **TIKTOK-5 sandwich**, capturer la fenêtre du trend egg-wrap (la vidéo de référence date du 03/09 ; J5 = J+4, dernier moment utile). J6/J7 restent à briefer après les 4 premières (spec §7 : aucun jugement avant J14).
 > ℹ️ TIKTOK-1 recycle `cookie-dough-pin20.mp4` (publié en pin Pinterest 20 le 03/09 ~14:15) — cross-post délibéré, test de la chaîne complète.
@@ -135,19 +135,19 @@
 
 ## TIKTOK-5 — One-Pan Breakfast Sandwich for Two (one-pan-breakfast-sandwich-for-two) — PILOTE TREND
 
-> 📐 **Structure calquée sur la vidéo de référence** (repo `Easy one pan breakfast sandwich.mp4`, 10,06 s 9:16 analysée 03/09) : hook contrarien 0-2 s → gimmick egg-wrap 2-4 s → empilement rythmé 4-6 s → chapeau + cut 6-8 s → **cross-section money shot 8-10 s**. POV mains seules, pas de visage, une seule poêle. Version for two : **deux buns côte à côte**, oeuf réparti, cadrage identique.
-> ⛔ **Verrou d'intégrité (spec §5)** : overlays & TTS ci-dessous = brouillon dérivé de la MÉTHODE de la vidéo de référence. Les verrouiller sur les **étapes réelles de la fiche** (DB #suite-run-3a) AVANT tournage — le 04/09 en review. Si la fiche génère une méthode générique (oeuf frit posé), soit patcher la fiche avant publish (playbook #124), soit le tournage ne sort pas.
+> 📐 **Structure rythmique calquée sur la vidéo de référence** (repo `Easy one pan breakfast sandwich.mp4`, 10,06 s 9:16 analysée 03/09) : hook contrarien 0-2 s → gimmick 2-4 s → empilement rythmé 4-6 s → chapeau + cut 6-8 s → **cross-section money shot 8-10 s**. POV mains seules, pas de visage, une seule poêle. Version for two : **deux sandwichs côte à côte** dans la même poêle, cadrage identique.
+> ⛔ **Verrou d'intégrité (spec §5) — VERROUILLÉ 03/09 sur la fiche publiée #125** : la fiche enseigne la méthode **EGG-FLIP** (verser les œufs, poser le pain sur l'œuf humide, retourner toute la feuille comme une crêpe, replier les bords sur le cheddar), variante publiée du trend « egg-wrap » de la référence. Overlays/TTS ci-dessous = étapes RÉELLES de la fiche (4 œufs, 4 tranches de pain solide beurrées, cheddar, ciboulette, sauce piquante option — **pas de bacon/légume dans la fiche**, ne rien filmer qui n'y est pas). Temps affiché : « 17 minutes » = le titre de la fiche (⚠️ pas les durées génériques).
 
 - Vidéo : à tourner — 9:16, 10-15 s, anglais, export **H.264 + faststart** SANS watermark → `node scripts/_probe-mp4.mjs <fichier>` AVANT upload. **Même rush** cross-posté : TikTok (ici) + Facebook Reels (`docs/facebook/TO-POST.md`) + Pinterest PIN VIDÉO 6 (`docs/pinterest/TO-POST.md`) | watermark : [ ] vérifié NON
 - **Hook (0-2 s)** : « You don't need a toaster for a breakfast sandwich — just ONE pan » (esprit contrarien de la référence, sans cloner leur ligne)
-- **Overlays étapes** (brouillon — à verrouiller sur la fiche 04/09) :
-  1. « butter the pan → pour the egg »
-  2. « press the toasted bun RIGHT INTO the egg »
-  3. « fold the egg up around the bun — that's the wrapper »
-  4. « cheddar on the hot egg → it melts itself »
-  5. « bacon · lettuce · tomato · red onion »
-  6. « lid on → CUT → look at those layers »
-- **Voix off TTS** (brouillon, même contrainte) : « You don't need a toaster — this breakfast sandwich is made in one pan. Butter the pan, pour in the egg, and press the toasted bun right into it. Fold the egg up around the bun — now the egg IS the wrapper. Cheddar goes on hot so it melts itself, then bacon, lettuce, tomato, red onion. Top bun, and look at that cross-section. Two of them, one pan. Full recipe ↓ in bio. »
-- **Caption** : One pan breakfast sandwich for two — the egg IS the wrapper 🍳 Full recipe ↓ in bio. #cookwithaugustin #breakfastsandwich #onepanmeals #breakfastfor2
+- **Overlays étapes** (verrouillés 03/09 sur les 8 étapes de la fiche #125) :
+  1. « 4 eggs + splash of water — whisk 30 s »
+  2. « pour into a buttered 12-inch pan → thin rectangle »
+  3. « 2 buttered bread slices ON THE WET EGG · lid, 2-3 min »
+  4. « THE FLIP — the whole sheet, at once 🤯 »
+  5. « cheddar on the eggy face → fold the edges in »
+  6. « cap · toast 2-3 min a side → rest 1 min → CUT »
+- **Voix off TTS** (cible ~15 s pour un rush 10-15 s) : « Eggs go into the buttered pan. Bread straight onto the wet egg — lid on, two minutes. Then the flip: the whole sheet, at once. Cheddar on the eggy face, fold the edges in, cap, toast both sides. Two sandwiches, one pan, seventeen minutes. Full recipe ↓ in bio. »
+- **Caption** : One pan breakfast sandwich for two — the EGG-FLIP method, 17 minutes 🍳 Full recipe ↓ in bio. #cookwithaugustin #breakfastsandwich #onepanmeals #breakfastfor2
 - **Pinned comment** : https://www.chefaugustin.com/recipes/one-pan-breakfast-sandwich-for-two?utm_source=tiktok&utm_medium=social
-- Créneau : J5 DIM 07/09 23:00 | Statut : [x] briefé (brouillon) → [ ] overlays/TTS verrouillés sur la fiche (04/09) → [ ] vidéo ok → [ ] posté → [ ] analytics D+7
+- Créneau : J5 DIM 07/09 23:00 | Statut : [x] briefé → [x] overlays/TTS verrouillés sur la fiche (#125 publiée 03/09) → [ ] vidéo ok → [ ] posté → [ ] analytics D+7
