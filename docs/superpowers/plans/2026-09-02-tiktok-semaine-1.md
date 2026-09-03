@@ -29,7 +29,7 @@
 **Interfaces:**
 - Produces : le fichier que les Tasks 2-5 remplissent et que l'utilisateur lit avant tout post (source de vérité).
 
-- [ ] **Step 1: Écrire le fichier**
+- [x] **Step 1: Écrire le fichier**
 
 ```markdown
 # TikTok — TO-POST (source de vérité)
@@ -73,7 +73,7 @@
 
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit** (fusionné avec les Tasks 2-5 en un commit — contrainte « un seul push en fin de plan »)
 
 ```bash
 git add docs/tiktok/TO-POST.md
@@ -93,7 +93,7 @@ Co-Authored-By: Claude Code <noreply@anthropic.com>"
 - Consumes : `cookie-dough-pin20.mp4` (racine repo, validé 02/09 : 15,1 s, 1000×1500, avc1+AAC, faststart, 13,3 Mo, sans watermark) ; recette #11 (slug `edible-cookie-dough-recipe-for-2`, 5 étapes réelles).
 - Produces : la vidéo de test de la chaîne complète (Task 7).
 
-- [ ] **Step 1: Écrire la section** (copier tel quel — données vérifiées DB 02/09)
+- [x] **Step 1: Écrire la section** (copier tel quel — données vérifiées DB 02/09)
 
 ```markdown
 ## TIKTOK-1 — Small-Batch Edible Cookie Dough for Two (edible-cookie-dough-recipe-for-2)
@@ -112,7 +112,7 @@ Co-Authored-By: Claude Code <noreply@anthropic.com>"
 - Créneau : J1 23:00 (Maroc) | Statut : [x] briefé → [ ] vidéo ok (déjà ✅) → [ ] posté → [ ] analytics D+7
 ```
 
-- [ ] **Step 2: Commit** (`docs(tiktok): brief TIKTOK-1 cookie dough (vidéo prête, chaîne de test)`)
+- [x] **Step 2: Commit** (`docs(tiktok): brief TIKTOK-1 cookie dough (vidéo prête, chaîne de test)`)
 
 ---
 
@@ -125,7 +125,7 @@ Co-Authored-By: Claude Code <noreply@anthropic.com>"
 - Consumes : recette `chocolate-lava-cakes-for-two` (6 étapes réelles, PT25M ✓ claimable).
 - Produces : brief complet pour génération par l'utilisateur.
 
-- [ ] **Step 1: Écrire la section**
+- [x] **Step 1: Écrire la section**
 
 ```markdown
 ## TIKTOK-2 — Molten Chocolate Lava Cakes for Two (chocolate-lava-cakes-for-two)
@@ -145,7 +145,7 @@ Co-Authored-By: Claude Code <noreply@anthropic.com>"
 - Créneau : J2 23:00 | Statut : [x] briefé → [ ] vidéo ok → [ ] posté → [ ] analytics D+7
 ```
 
-- [ ] **Step 2: Commit** (`docs(tiktok): brief TIKTOK-2 lava cakes`)
+- [x] **Step 2: Commit** (`docs(tiktok): brief TIKTOK-2 lava cakes`)
 
 ---
 
@@ -154,7 +154,7 @@ Co-Authored-By: Claude Code <noreply@anthropic.com>"
 **Files:**
 - Modify: `docs/tiktok/TO-POST.md`
 
-- [ ] **Step 1: Écrire la section**
+- [x] **Step 1: Écrire la section**
 
 ```markdown
 ## TIKTOK-3 — One-Pan Gnocchi for Two (one-pan-gnocchi-for-two)
@@ -174,7 +174,7 @@ Co-Authored-By: Claude Code <noreply@anthropic.com>"
 - Créneau : J3 23:00 | Statut : [x] briefé → [ ] vidéo ok → [ ] posté → [ ] analytics D+7
 ```
 
-- [ ] **Step 2: Commit** (`docs(tiktok): brief TIKTOK-3 one-pan gnocchi`)
+- [x] **Step 2: Commit** (`docs(tiktok): brief TIKTOK-3 one-pan gnocchi`)
 
 ---
 
@@ -186,7 +186,7 @@ Co-Authored-By: Claude Code <noreply@anthropic.com>"
 **Interfaces:**
 - Consumes : 3 recettes réelles live 200 (gnocchi 30 min ✓, `one-pan-garlic-butter-chicken-tomato-orzo` 35 min ✓, `vegetable-stir-fry-for-two` 22 min ✓ — #123) ; roundup hub `/guides/15-easy-dinner-recipes-for-two` (200 vérifié 02/09).
 
-- [ ] **Step 1: Écrire la section**
+- [x] **Step 1: Écrire la section**
 
 ```markdown
 ## TIKTOK-4 — Search-content : what to cook for two tonight (hub 15-easy-dinner-recipes-for-two)
@@ -200,7 +200,7 @@ Co-Authored-By: Claude Code <noreply@anthropic.com>"
 - Créneau : J4 23:00 | Statut : [x] briefé → [ ] vidéo ok → [ ] posté → [ ] analytics D+7
 ```
 
-- [ ] **Step 2: Commit** (`docs(tiktok): brief TIKTOK-4 search-content what to cook for two`)
+- [x] **Step 2: Commit** (`docs(tiktok): brief TIKTOK-4 search-content what to cook for two`)
 
 ---
 
