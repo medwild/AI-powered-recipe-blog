@@ -610,7 +610,7 @@ export async function agentChefAugustinMega(
         RECIPE_JSON_SCHEMA!,
         {
           model: process.env.ANTHROPIC_MODEL || "anthropic/claude-sonnet-5",
-          maxTokens: 32000,
+          maxTokens: 48000,
           timeout: 900_000,
         },
       )
@@ -620,7 +620,7 @@ export async function agentChefAugustinMega(
       raw = await runTextAndParseJson<RecipeArticle>(
         systemPrompt,
         userPrompt + schemaPrompt,
-        { model: process.env.ANTHROPIC_MODEL || "anthropic/claude-sonnet-5", maxTokens: 32000, timeout: 900_000 },
+        { model: process.env.ANTHROPIC_MODEL || "anthropic/claude-sonnet-5", maxTokens: 48000, timeout: 900_000 },
       )
     }
 
@@ -633,6 +633,15 @@ export async function agentChefAugustinMega(
       result.instructions as Array<{ step: number; text: string; temperature?: string }>,
       result.ingredients as string[],
     ) as typeof result.instructions
+
+    // Safety net (same pattern, #124 03/09): quality-gate check 6 reads the RAW
+    // article.jsonLd, but ensureRecipeAuthor only ran at persist (step 3, after the
+    // gate) — an author-less Recipe node was a final BLOCK even though the code
+    // fixed it deterministically 100 ms later. When the model returns jsonLd as an
+    // object we can see it; string jsonLd can't trip check 6 (no @graph property).
+    if (result.jsonLd && typeof result.jsonLd === "object") {
+      result.jsonLd = ensureRecipeAuthor(result.jsonLd as unknown as Record<string, unknown>) as typeof result.jsonLd
+    }
 
     console.log(`[ChefAugustinMega] Success — ${result.contentMarkdown?.split(/\s+/).filter(Boolean).length ?? 0} words, ${result.tags?.length ?? 0} tags`)
 

@@ -1,0 +1,26 @@
+◇ injected env (29) from .env.local // tip: ⌘ override existing { override: true }
+
+🔬 Generating: "stuffed peppers for two"
+
+Recipe #124 created — slug: stuffed-peppers-for-two
+
+[ChefAugustinMega] Calling structured output for "stuffed peppers for two" (8186 chars skill, 3396 chars prompt)
+[provider] Selection — LLM_PROVIDER=bai ANTHROPIC_MODEL=glm-5.3-flash hasBaseUrl=true ANTHROPIC_API_KEY=MISSING
+[provider] → BaiProvider
+[provider] B.Ai — model: glm-5.3-flash (streaming)
+[provider] Non-Anthropic — falling back to text+parse (structured output not supported)
+[provider] Attempt 1 failed: This operation was aborted — retrying in 5s
+[provider] B.Ai glm-5.3-flash — success (stream) (in:3668 out:29159)
+[normalize] Ingredients: using JSON (14 items)
+[normalize] Instructions: using JSON (8 steps)
+[ChefAugustinMega] Success — 2466 words, 8 tags
+[ChefAugustinMega] Calling text+parse for "stuffed peppers for two" (8186 chars skill, 3931 chars prompt) [retry]
+[provider] Attempt 1 failed: B.Ai API error (429): {"error":{"message":"您已达到请求数限制：1分钟内最多请求200次 (request id: 202609031052164797511788268d9d6OR7AqmTH)","type":"new_api_error","param":"","code":""}} — retrying in 5s
+[provider] B.Ai glm-5.3-flash — success (stream) (in:3800 out:27939)
+[normalize] Ingredients: using JSON (14 items)
+[normalize] Instructions: using JSON (9 steps)
+[ChefAugustinMega] Success — 2522 words, 8 tags
+[ChefAugustinMega] Calling text+parse for "stuffed peppers for two" (8186 chars skill, 3957 chars prompt) [retry]
+[provider] Attempt 1 failed: This operation was aborted — retrying in 5s
+
+✅ Done in 3278.8s — Recipe #124

@@ -1043,7 +1043,8 @@ export function resetProvider(): void {
 
 const RECOVERABLE_PATTERNS = [
   "No JSON found", "No JSON object", "Failed to parse JSON", "aborted",
-  "returned no response", "returned no text content", "timed out", "timeout",
+  "returned no response", "returned no text content", "returned no content",
+  "timed out", "timeout",
   "terminated",
   "403", "408", "429", "500", "502", "503", "504",
   "overloaded_error",

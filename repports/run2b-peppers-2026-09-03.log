@@ -1,0 +1,18 @@
+◇ injected env (29) from .env.local // tip: ⌘ override existing { override: true }
+Regenerating #124 (draft) — keyword: "stuffed peppers for two"
+[ChefAugustinMega] Calling structured output for "stuffed peppers for two" (8186 chars skill, 3396 chars prompt)
+[provider] Selection — LLM_PROVIDER=bai ANTHROPIC_MODEL=glm-5.3-flash hasBaseUrl=true ANTHROPIC_API_KEY=MISSING
+[provider] → BaiProvider
+[provider] B.Ai — model: glm-5.3-flash (streaming)
+[provider] Non-Anthropic — falling back to text+parse (structured output not supported)
+[provider] B.Ai glm-5.3-flash — success (stream) (in:3668 out:25477)
+[normalize] Ingredients: using JSON (15 items)
+[normalize] Instructions: using JSON (10 steps)
+[ChefAugustinMega] Success — 2253 words, 8 tags
+[ChefAugustinMega] Calling text+parse for "stuffed peppers for two" (8186 chars skill, 3957 chars prompt) [retry]
+[provider] B.Ai glm-5.3-flash — success (stream) (in:3763 out:7719)
+[normalize] Ingredients: using JSON (13 items)
+[normalize] Instructions: using JSON (8 steps)
+[ChefAugustinMega] Success — 2349 words, 8 tags
+
+✅ generateRecipe returned in 872.3s — check status in DB
