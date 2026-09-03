@@ -35,7 +35,7 @@
 | 🎬 ✅ | Easy Chili Colorado (vidéo 3) | Quick Weeknight | 29/08 publié |
 | 🎬 ✅ | Creamy Mashed Potatoes (vidéo 4) | Small-Batch Sides | 31/08 publié |
 | 19 ✅ | Copycat Texas Roadhouse | Romantic Dinner | 01/09 22:30 publié |
-| 20 ⏳ 🎬 | Edible Cookie Dough (vidéo) | Small-Batch Desserts | 03/09 22:30 (décalé de 02/09) |
+| 20 ✅ 🎬 | Edible Cookie Dough (vidéo) | Small-Batch Desserts | 03/09 publié (~14:15 Maroc, avancé du slot 22:30) |
 | 21 ⏳ | Salmon Orzo Dill & Capers | Romantic Dinner | 04/09 22:30 (décalé +1 j) |
 | 🎬 ⏳ | Pan-Seared Chicken Creamy Tomato Pasta (vidéo 5) | Pasta | 05/09 22:30 (décalé +1 j) |
 
@@ -517,7 +517,7 @@ Two spice-crusted sirloins, warm yeast rolls, and that whipped cinnamon-honey bu
 
 **Tags** : Steak Recipes / Date Night Dinner / Copycat Recipes / Beef Recipes
 
-### PIN 20 — Edible Cookie Dough for Two (board Desserts) — 03/09 ⏳ VIDÉO
+### PIN 20 — Edible Cookie Dough for Two (board Desserts) — 03/09 ✅ PUBLIÉ (VIDÉO)
 
 > Décalé du 02/09 (décision utilisateur 02/09) ; format **vidéo** au lieu du pin statique.
 
@@ -541,7 +541,7 @@ The best edible cookie dough for two — egg-free, no-bake, ready in minutes. A 
 
 **Tags** : No-Bake Desserts / Dessert Recipes / Easy Meal / Cookie Recipes
 
-### PIN 21 — Salmon Orzo with Dill and Capers for Two (board Romantic) — 03/09 22:30
+### PIN 21 — Salmon Orzo with Dill and Capers for Two (board Romantic) — 04/09 22:30
 
 **Image** (héro Cloudinary) :
 https://res.cloudinary.com/dpgm5gata/image/upload/f_auto,q_auto/v1785412815/recipes/Salmon-Orzo-with-Dill-and-Capers-for-Two.png
