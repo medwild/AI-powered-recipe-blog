@@ -1,0 +1,18 @@
+◇ injected env (29) from .env.local // tip: ◈ encrypted .env [www.dotenvx.com]
+
+🔬 Generating: "mushroom risotto for two"
+
+Recipe #126 created — slug: mushroom-risotto-for-two
+
+[ChefAugustinMega] Calling structured output for "mushroom risotto for two" (8186 chars skill, 3941 chars prompt)
+[provider] Selection — LLM_PROVIDER=bai ANTHROPIC_MODEL=glm-5.3-flash hasBaseUrl=true ANTHROPIC_API_KEY=MISSING
+[provider] → BaiProvider
+[provider] B.Ai — model: glm-5.3-flash (streaming)
+[provider] Non-Anthropic — falling back to text+parse (structured output not supported)
+[provider] B.Ai glm-5.3-flash — success (stream) (in:3780 out:27841)
+[normalize] Ingredients: using JSON (12 items)
+[normalize] Instructions: using JSON (9 steps)
+[ChefAugustinMega] Success — 2253 words, 8 tags
+[provider] Ideogram V4 — success (5557623 bytes)
+
+✅ Done in 336.0s — Recipe #126
