@@ -38,7 +38,7 @@
 
 | # | Vidéo (twin TikTok) | Titre YT | Créneau | Statut |
 |---|---|---|---|---|
-| YT-1 | Cookie Dough (TIKTOK-1) | Edible Cookie Dough for Two — No Eggs, No Baking | VEN 05/09 23:00 | ⛔ GATE : confirmer que TIKTOK-1 est posté (03/09, non confirmé au 04/09) |
+| YT-1 | Cookie Dough (TIKTOK-1) | Edible Cookie Dough for Two — No Eggs, No Baking | VEN 05/09 23:00 | ✅ dégaté 04/09 (TIKTOK-1 posté 03/09 ; ⚠️ 0 vues TikTok + format source 4:5 — voir diag `docs/tiktok/TO-POST.md` § Diagnostic TIKTOK-1) |
 | YT-2 | Lava Cakes (TIKTOK-2) | Molten Lava Cakes for Two — Ready in 25 Minutes | SAM 06/09 23:00 | ⏳ twin à poster 04/09 |
 | YT-3 | Gnocchi (TIKTOK-3) | One-Pan Gnocchi for Two — No Boiling, 30 Minutes | DIM 07/09 23:00 | ⏳ vidéo à générer (TIKTOK-3) |
 | YT-4 | Search-content hub (TIKTOK-4) | What to Cook for Two Tonight — 3 One-Pan Dinners | LUN 08/09 23:00 | ⏳ vidéo à générer (TIKTOK-4) |

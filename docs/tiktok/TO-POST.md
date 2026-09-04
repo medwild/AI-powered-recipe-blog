@@ -18,7 +18,7 @@
 
 | # | Vidéo | Recette / cible | Créneau | Statut |
 |---|---|---|---|---|
-| 1 🎬 | Edible Cookie Dough | `edible-cookie-dough-recipe-for-2` | **MER 03/09 23:00** | ⏳ vidéo prête — à poster ce soir |
+| 1 🎬 | Edible Cookie Dough | `edible-cookie-dough-recipe-for-2` | MER 03/09 23:00 | ✅ posté 03/09 — ⚠️ **0 vues à D+1** (diag 04/09 : format 1000×1500 ≠ 9:16 + config ⚙️ non cochée — voir § Diagnostic TIKTOK-1) |
 | 2 🎬 | Molten Lava Cakes | `chocolate-lava-cakes-for-two` | JEU 04/09 23:00 | ⏳ vidéo à générer |
 | 3 🎬 | One-Pan Gnocchi | `one-pan-gnocchi-for-two` | VEN 05/09 23:00 | ⏳ vidéo à générer |
 | 4 🎬 | Search-content « what to cook for two tonight » | hub `/guides/15-easy-dinner-recipes-for-two` | SAM 06/09 23:00 | ⏳ vidéo à générer |
@@ -26,6 +26,20 @@
 
 > J5-J7 : recalibrés (décision 03/09) — J5 = **TIKTOK-5 sandwich**, capturer la fenêtre du trend egg-wrap (la vidéo de référence date du 03/09 ; J5 = J+4, dernier moment utile). J6/J7 restent à briefer après les 4 premières (spec §7 : aucun jugement avant J14).
 > ℹ️ TIKTOK-1 recycle `cookie-dough-pin20.mp4` (publié en pin Pinterest 20 le 03/09 ~14:15) — cross-post délibéré, test de la chaîne complète.
+
+### 🔍 Diagnostic TIKTOK-1 — 0 vues à D+1 (04/09)
+
+Causes classées, par test le plus rapide d'abord. ⚠️ Hygiène : **NE PAS supprimer/reposter en boucle** (facteur signalement spam rapporté par les praticiens).
+
+| # | Cause probable | Test (2 min) | Si oui → |
+|---|---|---|---|
+| 1 | Visibilité du post limitée | Ouvre le lien de la vidéo en **navigation privée, déconnecté** (ou téléphone d'un tiers) | « vidéo indisponible » → Share/Who can watch ≠ Tout le monde → corriger la visibilité |
+| 2 | En attente de modération (compte neuf + contenu IA : rétention fréquente rapportée, ⚠️ non confirmable par source) | App → profil de la vidéo → statut ; et Studio → contenu | Ça dure < 48-72 h d'habitude → poster TIKTOK-2 ce soir quand même, re-mesurer J+3 |
+| 3 | **Format non natif** : TIKTOK-1 = 1000×1500 (**4:5**, pilier letterboxé) et non 9:16. Guidelines d'upload TikTok = 9:16 recommandé (confiance moyenne-high, doc officiel existant non re-vérifié ici) | Regarder le rendu du post dans le feed : barres latérales ? | Les twins suivants (lava/gnocchi/sandwich) en **1080×1920 strict**, et envisager re-render 9:16 du cookie dough pour YT-1 |
+| 4 | Compte/VPN : case ⚙️ « sortie fixée » **jamais remplie** — rotation de pays = cause classique de 0-diffusion sur compte neuf (consensus praticiens, ⚠️ pas de source primaire) | De quoi la publication s'est-elle faite ? (VPN actif ?quel pays ? changé récemment ?) | Fixer la sortie dès ce soir AVANT TIKTOK-2, ne plus jamais la bouger |
+| 5 | Cold-start normal compte neuf (0-50 vues / 24 h = fréquent, ⚠️ observation praticiens) — mais « 0 » strict est plus suspect | Re-regarder à D+2/D+3 | Si déverrouillage sans rien toucher → cold start ; sinon cause 1-4 |
+
+**Règle de jugement inchangée (spec §7) : aucun verdict avant J14 (17/09).** Ce diagnostic sert à corriger le pipeline, pas à conclure sur le canal.
 
 ---
 
