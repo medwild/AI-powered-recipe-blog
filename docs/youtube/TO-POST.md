@@ -49,7 +49,7 @@
 ## 📋 Briefs
 
 ### YT-1 — Edible Cookie Dough for Two (`edible-cookie-dough-recipe-for-2`)
-- Vidéo = twin TIKTOK-1 (`Small-Batch Edible Cookie Dough for Two (2).mp4` ou `cookie-dough-pin20.mp4` — celui réellement posté en TikTok) | watermark : [ ] vérifié NON
+- Vidéo = **repost 9:16 du 04/09** (l'original 4:5 `cookie-dough-pin20.mp4` est écarté) — noter le nom exact du fichier ici : … | watermark : [ ] vérifié NON
 - **Titre** : `Edible Cookie Dough for Two — No Eggs, No Baking`
 - **Description** :
   `Edible cookie dough for two — no eggs, no baking, 15 minutes. Full recipe with the exact measurements:`

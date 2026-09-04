@@ -18,7 +18,7 @@
 
 | # | Vidéo | Recette / cible | Créneau | Statut |
 |---|---|---|---|---|
-| 1 🎬 | Edible Cookie Dough | `edible-cookie-dough-recipe-for-2` | MER 03/09 23:00 | ✅ posté 03/09 — ⚠️ **0 vues à D+1** (diag 04/09 : format 1000×1500 ≠ 9:16 + config ⚙️ non cochée — voir § Diagnostic TIKTOK-1) |
+| 1 🎬 | Edible Cookie Dough | `edible-cookie-dough-recipe-for-2` | MER 03/09 23:00 | ⚠️ postée 03/09 en 4:5 (1000×1500) → 0 vues à D+1 → **REPOST 04/09 en 9:16 recommandé par TikTok** (ancien post : supprimé ou en ligne ? → à noter). Verdict 24 h : ~05/09 23:00. |
 | 2 🎬 | Molten Lava Cakes | `chocolate-lava-cakes-for-two` | JEU 04/09 23:00 | ⏳ vidéo à générer |
 | 3 🎬 | One-Pan Gnocchi | `one-pan-gnocchi-for-two` | VEN 05/09 23:00 | ⏳ vidéo à générer |
 | 4 🎬 | Search-content « what to cook for two tonight » | hub `/guides/15-easy-dinner-recipes-for-two` | SAM 06/09 23:00 | ⏳ vidéo à générer |
