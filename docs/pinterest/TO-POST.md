@@ -38,7 +38,7 @@
 | 20 ✅ 🎬 | Edible Cookie Dough (vidéo) | Small-Batch Desserts | 03/09 publié (~14:15 Maroc, avancé du slot 22:30) |
 | 21 ⏳ | Salmon Orzo Dill & Capers | Romantic Dinner | 04/09 22:30 (décalé +1 j) |
 | 🎬 ⏳ | Pan-Seared Chicken Creamy Tomato Pasta (vidéo 5) | Pasta | 05/09 22:30 (décalé +1 j) |
-| 🎬 ⏳ | One-Pan Breakfast Sandwich (vidéo 6, PILOTE — fiche #125 publiée) | One-Pan Meals for Two | 06/09 22:30 — rush 9:16 à tourner |
+| 🎬 ✅ | One-Pan Breakfast Sandwich (vidéo 6, PILOTE — fiche #125 publiée) | One-Pan Meals for Two | **04/09 publié** (~11:20 Maroc, avancé du slot 06/09) |
 
 ---
 
@@ -600,7 +600,9 @@ Golden, grill-marked chicken breast over spaghetti in a silky cream-swirled toma
 
 ---
 
-## 🎬 PIN VIDÉO 6 — One-Pan Breakfast Sandwich for Two (board One-Pan Meals) — 06/09 22:30 ⏳ PILOTE BREAKFAST
+## 🎬 PIN VIDÉO 6 — One-Pan Breakfast Sandwich for Two (board One-Pan Meals) — ✅ PUBLIÉ 04/09 ~11:20 Maroc (avancé du slot 06/09) — PILOTE BREAKFAST
+
+> 📝 **Titre réellement posté** : « 17-Minute One Pan Breakfast Sandwich for Two » (l'utilisateur a pris le titre de la fiche plutôt que le brief « The Egg-Flip Method (Video) » — cohérent avec la fiche #125 PT17M, aucune correction nécessaire). Verdict pilote J+7 = **11/09**.
 
 > **6ᵉ video pin** — **pilot micro-cluster breakfast** (décision 03/09, trend YouTube « egg-wrap breakfast sandwich »). ⛔ La fiche publiée #125 (03/09) enseigne la variante **EGG-FLIP** — title/alt/description ci-dessous verrouillés sur la fiche (le rush doit la montrer, pas la méthode « bun pressé » de la référence). Upload manual du rush 9:16 (ratio conforme — prouvé par vidéos 1-5 publiées, pas de re-montage 2:3 Canva nécessaire).
 > ✅ **Fiche publiée 03/09** — ne poster qu'APRÈS vérification 200 live (push + redeploy Hostinger, cf. fenêtre SSG sitemap).
