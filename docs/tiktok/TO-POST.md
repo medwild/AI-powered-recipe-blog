@@ -18,7 +18,7 @@
 
 | # | Vidéo | Recette / cible | Créneau | Statut |
 |---|---|---|---|---|
-| 1 🎬 | Edible Cookie Dough | `edible-cookie-dough-recipe-for-2` | MER 03/09 23:00 | ⚠️ postée 03/09 en 4:5 (1000×1500) → 0 vues à D+1 → **REPOST 04/09 en 9:16 recommandé par TikTok** (ancien post : supprimé ou en ligne ? → à noter). Verdict 24 h : ~05/09 23:00. |
+| 1 🎬 | Edible Cookie Dough | `edible-cookie-dough-recipe-for-2` | MER 03/09 23:00 | ⚠️ postée 03/09 en 2:3 (1000×1500) → **0 vues à D+1** → **REPOST 04/09 dimensions « recommandées » (fichier à identifier — ni `cookie-dough-pin20.mp4` (2:3) ni `(2).mp4` (3:4 HEVC) ne sont du 9:16 H.264)** ; ancien post **supprimé** (⛔ à ne plus faire, compte neuf). **5 vues à quelques heures du repost** → distribution débloquée. Confondant honnête : 24 h d'âge du compte en plus — format non seul coupable prouvé. Verdict 24 h : ~05/09 23:00. |
 | 2 🎬 | Molten Lava Cakes | `chocolate-lava-cakes-for-two` | JEU 04/09 23:00 | ⏳ vidéo à générer |
 | 3 🎬 | One-Pan Gnocchi | `one-pan-gnocchi-for-two` | VEN 05/09 23:00 | ⏳ vidéo à générer |
 | 4 🎬 | Search-content « what to cook for two tonight » | hub `/guides/15-easy-dinner-recipes-for-two` | SAM 06/09 23:00 | ⏳ vidéo à générer |
@@ -57,8 +57,7 @@ Causes classées, par test le plus rapide d'abord. ⚠️ Hygiène : **NE PAS su
 
 ## ⚙️ Configuration du compte (spec §2 + §9 — à faire / à vérifier dans l'app)
 
-- [ ] Username → `cookwithaugustin` (Pinterest est déjà sous ce nom ; cohérence multi-canal)
-      Probe : `curl -s -o /dev/null -w '%{http_code}\n' https://www.tiktok.com/@cookwithaugustin` → 404 = libre ; 200 = pris → variante proche uniquement.
+- [x] Username → `cookwithaugustin` ✅ (compte créé et actif — posts 03-04/09 ; probe 200 le 04/09)
 - [ ] Nom affiché : `Chef Augustin`
 - [ ] Photo de profil : logo master `repports/logos-master-2026-08-12/`
 - [ ] Bio (~79 car.) : `French-style dinners for 2 🍳 Quick, cheap, from scratch` / `Full recipes ↓ 80+ tested`
@@ -66,7 +65,7 @@ Causes classées, par test le plus rapide d'abord. ⚠️ Hygiène : **NE PAS su
 - [ ] VPN : sortie **fixée une fois** (Allemagne ou 4G sans VPN) — jamais de rotation de pays → notée : **VPN ALLEMAGNE (04/09)**. Reste à confirmer : même sortie Allemagne à CHAQUE session (pas de changement de serveur/ville/pays entre 03/09 et ce soir) — la rotation, pas l'Allemagne, est le risque → réponse : …
 - [ ] §9.1 Champ « Website » présent sans seuil d'abonnés ? → réponse : …
 - [ ] §9.2 Creator Rewards éligible (compte marocain) ? → réponse : …
-- [ ] §9.3 Username disponible ? → réponse : …
+- [x] §9.3 Username disponible ? → **oui, c'est notre compte actif** (04/09).
 
 ---
 
