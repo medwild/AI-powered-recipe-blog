@@ -38,7 +38,7 @@
 
 | # | Vidéo (twin TikTok) | Titre YT | Créneau | Statut |
 |---|---|---|---|---|
-| **YT-0** ⚡ | **Lava Cakes = 1ᵉʳ Short publié (04/09 ~19-20 h Maroc)** — posté AVANT son twin TikTok (règle J+1 inversée, sans impact evergreen) | (titre réellement utilisé : à noter) | ✅ publié | ⚠️ 4 inconnues à renseigner : handle chaîne (`@cookwithaugustin` → 404 au probe 04/09, donc handle DIFFÉRENT ou non réglé) ; description = brief YT ou caption TikTok collée ? ; lien + UTM présent et cliquable ? ; case « contenu synthétique » proposée et cochée ? |
+| **YT-0** ⚡ | **Lava Cakes = 1ᵉʳ Short publié 04/09 (~19-20 h)** — posté AVANT son twin TikTok (J+1 inversée, sans impact evergreen) — Short `6rdYtBRkaB0`, chaîne `@Cook-with-august` (200 vérifié) | **Titre réel (vérifié public)** : « Chocolate Lava Cake for Two 🤎 The Center Is INSANE! #shorts » | ✅ publié — **0 vues au probe public ~20 h** (immédiat après post = normal, re-mesure D+1) | ⚠️ **CHAÎNE DE TRAFIC CASSEE** : description = blurb + 7 hashtags, **AUCUN lien blog, aucune UTM** (vérifié dans le HTML public 04/09) → ACTION CE SOIR : éditer la description (pas besoin de republier) et ajouter en ligne 2 : `https://www.chefaugustin.com/recipes/chocolate-lava-cakes-for-two?utm_source=youtube&utm_medium=social`. Puis test J1 : lien cliquable en nav privée ? Réponse : … + case « contenu synthétique » proposée à l'upload ? Réponse : … |
 | YT-1 | Cookie Dough (TIKTOK-1) | Edible Cookie Dough for Two — No Eggs, No Baking | VEN 05/09 23:00 | ✅ dégaté 04/09 — ⚠️ filename du repost 9:16 toujours non donné (probe YT-1 en attente) |
 | YT-2 | Lava Cakes (TIKTOK-2) | Molten Lava Cakes for Two — Ready in 25 Minutes | — | 🔁 FONDU dans YT-0 (publié ce soir sous ce numéro) |
 | YT-3 | Gnocchi (TIKTOK-3) | One-Pan Gnocchi for Two — No Boiling, 30 Minutes | DIM 07/09 23:00 (glissé +1) | ⏳ vidéo à générer (TIKTOK-3) |
@@ -110,7 +110,7 @@
 
 ## ⚙️ Configuration du compte (à faire / à vérifier dans l'app)
 
-- [ ] Handle : `@cookwithaugustin` — **libre vérifié le 04/09** (probe HTTP 404). Nom affiché : `Chef Augustin`.
+- [x] Handle : **`@Cook-with-august` actif** (vérifié HTTP 200 le 04/09 — chaîne `UCtSZL8dOroArIG0rHb_MqsQ`). ⚠️ Diffère de la cible `@cookwithaugustin` (« in » coupé) et du nom des autres canaux → **ACTION : retenter `@cookwithaugustin` dans YT Studio → Personnalisation → Infos de base** ; si refusé (réservé/bloqué — le 404 du probe n'était pas fiable), garder et accepter la variante. Résultat : …
 - [ ] Photo de profil : master `repports/logos-master-2026-08-12/`.
 - [ ] Description chaîne (À propos) : 2 lignes + **lien site web du champ À propos** (confiance élevée : le champ existe) → `https://www.chefaugustin.com/?utm_source=youtube&utm_medium=channel`.
 - [ ] **TEST J1 (YT-1)** : le lien en description du Short est-il cliquable ? → réponse : …
