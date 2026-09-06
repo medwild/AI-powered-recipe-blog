@@ -18,8 +18,8 @@
 
 | # | Vidéo | Recette / cible | Créneau | Statut |
 |---|---|---|---|---|
-| 1 🎬 | Edible Cookie Dough | `edible-cookie-dough-recipe-for-2` | MER 03/09 23:00 | ⚠️ postée 03/09 en 2:3 (1000×1500) → **0 vues à D+1** → **REPOST 04/09 dimensions « recommandées » (fichier à identifier — ni `cookie-dough-pin20.mp4` (2:3) ni `(2).mp4` (3:4 HEVC) ne sont du 9:16 H.264)** ; ancien post **supprimé** (⛔ à ne plus faire, compte neuf). **5 vues à quelques heures du repost** → distribution débloquée. **06/09 : ~800 vues (794 ou 779 — attribution exacte à confirmer)** → verdict 24 h large-OUI. |
-| 2 🎬 | Molten Lava Cakes | `chocolate-lava-cakes-for-two` | JEU 04/09 23:00 | ✅ postée 04/09 23:00. **06/09 : ~800 vues (794 ou 779 — attribution exacte à confirmer)** → même palier que TIKTOK-1, distribution confirmée sur 2 posts. |
+| 1 🎬 | Edible Cookie Dough | `edible-cookie-dough-recipe-for-2` | MER 03/09 23:00 | ⚠️ postée 03/09 en 2:3 (1000×1500) → **0 vues à D+1** → **REPOST 04/09 dimensions « recommandées » (fichier à identifier — ni `cookie-dough-pin20.mp4` (2:3) ni `(2).mp4` (3:4 HEVC) ne sont du 9:16 H.264)** ; ancien post **supprimé** (⛔ à ne plus faire, compte neuf). **5 vues à quelques heures du repost** → distribution débloquée. **06/09 : 797 vues (~48 h après repost)** → verdict 24 h large-OUI. |
+| 2 🎬 | Molten Lava Cakes | `chocolate-lava-cakes-for-two` | JEU 04/09 23:00 | ✅ postée 04/09 23:00. **06/09 : 794 vues (~48 h)** → même palier que TIKTOK-1, distribution confirmée sur 2 posts. |
 | 3 🎬 | One-Pan Gnocchi | `one-pan-gnocchi-for-two` | VEN 05/09 23:00 | ⏳ vidéo à générer |
 | 4 🎬 | Search-content « what to cook for two tonight » | hub `/guides/15-easy-dinner-recipes-for-two` | SAM 06/09 23:00 | ⏳ vidéo à générer |
 | 5 🎬 | **One-Pan Breakfast Sandwich** (PILOTE trend) | `one-pan-breakfast-sandwich-for-two` | DIM 07/09 23:00 | ⏳ fiche publiée ✅ (#125, 03/09) — rush 9:16 à tourner |
@@ -41,7 +41,7 @@ Causes classées, par test le plus rapide d'abord. ⚠️ Hygiène : **NE PAS su
 
 **Règle de jugement inchangée (spec §7) : aucun verdict avant J14 (17/09).** Ce diagnostic sert à corriger le pipeline, pas à conclure sur le canal.
 
-> ✅ **Résolution 06/09 : cause 5 (cold-start compte neuf) + cause 4 (sortie VPN fixée) — le canal diffuse.** Les 2 posts (TIKTOK-1 repost + TIKTOK-2) sont à ~800 vues chacun (794 et 779, attribution à confirmer). Le format 2:3 du repost n'a donc pas empêché la distribution → la cause 3 (format non natif) est **déclassée** en « optimisation possible », plus en coupable du 0. Prochain KPI : les **clics** (commentaires épinglés, vues du profil, sessions GA4 `utm_source=tiktok`) — des vues sans clic = pas de trafic blog.
+> ✅ **Résolution 06/09 : cause 5 (cold-start compte neuf) + cause 4 (sortie VPN fixée) — le canal diffuse.** Les 2 posts : **TIKTOK-2 lava cakes = 794 vues**, **TIKTOK-1 cookie dough repost = 797 vues** (relevé 06/09, ~48 h après publication pour les deux ; chiffres donnés par l'utilisateur, instantané pas un cumul final). Le format 2:3 du repost n'a donc pas empêché la distribution → la cause 3 (format non natif) est **déclassée** en « optimisation possible », plus en coupable du 0. Prochain KPI : les **clics** (commentaires épinglés, vues du profil, sessions GA4 `utm_source=tiktok`) — des vues sans clic = pas de trafic blog.
 
 ---
 
@@ -96,7 +96,7 @@ Causes classées, par test le plus rapide d'abord. ⚠️ Hygiène : **NE PAS su
 - **Voix off TTS** : « This is edible cookie dough — for two, zero baking. The one non-negotiable step: heat-treat the flour to 165°F, because that is what makes raw dough safe. Cream soft butter with brown and white sugar, add vanilla and a splash of milk until fluffy, fold in the flour, then a handful of mini chocolate chips. Chill ten minutes, grab two spoons. Full recipe is ↓ in bio. »
 - **Caption** : Edible cookie dough recipe for 2 — egg-free and no-bake 🍪 Full recipe ↓ in bio. #cookwithaugustin #ediblecookiedough #dessertfor2 #nobakedessert
 - **Pinned comment** : https://www.chefaugustin.com/recipes/edible-cookie-dough-recipe-for-2?utm_source=tiktok&utm_medium=social
-- Créneau : J1 MER 03/09 23:00 (Maroc) | Statut : [x] briefé → [x] vidéo ok (repost 04/09) → [x] posté → [ ] analytics D+7 (~800 vues à J+2, voir table PUBLIÉES)
+- Créneau : J1 MER 03/09 23:00 (Maroc) | Statut : [x] briefé → [x] vidéo ok (repost 04/09) → [x] posté → [ ] analytics D+7 (797 vues au relevé 06/09, voir table PUBLIÉES)
 
 ---
 
@@ -114,7 +114,7 @@ Causes classées, par test le plus rapide d'abord. ⚠️ Hygiène : **NE PAS su
 - **Voix off TTS** : « Restaurant molten lava cakes — two ramekins, twenty-five minutes. Butter and cocoa-dust them. Melt chocolate and butter, then cool it two minutes so it doesn't cook the eggs. Whisk one whole egg, one yolk and sugar until pale — use pasteurized eggs, because the middle stays soft. Fold in flour, fill, bake at four-twenty-five for twelve minutes — the center must still jiggle. Rest one minute, invert, and watch it pour. Full recipe ↓ in bio. »
 - **Caption** : Molten chocolate lava cakes for two — 25 minutes, the center pours 🍫 Full recipe ↓ in bio. #cookwithaugustin #lavacake #dessertfor2 #datenightdessert
 - **Pinned comment** : https://www.chefaugustin.com/recipes/chocolate-lava-cakes-for-two?utm_source=tiktok&utm_medium=social
-- Créneau : J2 JEU 04/09 23:00 | Statut : [x] briefé → [x] vidéo ok → [x] posté 04/09 → [ ] analytics D+7 (~800 vues à J+1, voir table PUBLIÉES)
+- Créneau : J2 JEU 04/09 23:00 | Statut : [x] briefé → [x] vidéo ok → [x] posté 04/09 → [ ] analytics D+7 (794 vues au relevé 06/09, voir table PUBLIÉES)
 
 ---
 
