@@ -43,6 +43,7 @@ __pycache__/
 *.mov
 Pinterest Analytics*.csv
 screencapture-*.png
+ChatGPT Image *.png
 tsconfig.tsbuildinfo
 
 # Scripts scratch de session (diagnostics one-shot)
