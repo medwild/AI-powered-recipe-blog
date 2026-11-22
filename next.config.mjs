@@ -28,7 +28,6 @@ const nextConfig = {
       {
         source: "/(.*)",
         headers: [
-          { key: "X-Frame-Options", value: "DENY" },
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           {
@@ -44,7 +43,6 @@ const nextConfig = {
               "img-src 'self' https://res.cloudinary.com data: blob:",
               "font-src 'self'",
               "connect-src 'self' https://res.cloudinary.com",
-              "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action *",
             ].join("; "),
