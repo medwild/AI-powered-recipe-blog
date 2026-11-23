@@ -1,4 +1,4 @@
-import { getPublishedRecipes } from "@/lib/queries"
+import { getPublishedRecipes } from "@/lib/public-data"
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.chefaugustin.com"
 

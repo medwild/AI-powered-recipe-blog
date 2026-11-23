@@ -12,7 +12,7 @@ import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { RecipeCard } from "@/components/recipe-card"
 import { Breadcrumbs } from "@/components/breadcrumbs"
-import { getPublishedRecipesByTag, getRecipeCategories } from "@/lib/queries"
+import { getPublishedRecipesByTag, getRecipeCategories } from "@/lib/public-data"
 import { tagToSlug, slugToTag } from "@/lib/tag-utils"
 import { CANONICAL_CATEGORIES } from "@/lib/category-consolidation"
 

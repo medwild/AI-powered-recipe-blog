@@ -7,7 +7,7 @@ import { RecipeInstructions } from "@/components/recipe-instructions"
 import { RecipeArticleBody } from "@/components/recipe-article-body"
 import { RelatedRecipes } from "@/components/related-recipes"
 import { RecipeRating } from "@/components/recipe-rating"
-import { getRecipeRating } from "@/lib/queries"
+import { getRecipeRating } from "@/lib/public-data"
 import { getHubForRecipe } from "@/lib/hub-content"
 
 export async function RecipeArticle({ recipe }: { recipe: Recipe }) {

@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { resolveCluster } from "@/lib/cluster-resolver"
-import { getRelatedRecipes, getPublishedRecipesLight } from "@/lib/queries"
+import { getRelatedRecipes, getPublishedRecipesLight } from "@/lib/public-data"
 import { FOOD_BLUR_PLACEHOLDER } from "@/lib/utils/cn"
 import { cloudinaryUrl } from "@/lib/cloudinary-url"
 import { fromIsoDuration } from "@/lib/utils/duration"

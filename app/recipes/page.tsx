@@ -10,7 +10,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs"
 
 const RecipeSearch = nextDynamic(() => import("@/components/recipe-search").then((m) => m.RecipeSearch))
 import { RecipeGrid } from "@/components/recipe-grid"
-import { searchPublishedRecipes, getRecipeCategories, getPublishedArticlesLight } from "@/lib/queries"
+import { searchPublishedRecipes, getRecipeCategories, getPublishedArticlesLight } from "@/lib/public-data"
 import { getAllClusters } from "@/lib/cluster-resolver"
 import { canonicalCategories } from "@/lib/category-consolidation"
 import { tagToSlug } from "@/lib/tag-utils"

@@ -1,0 +1,12 @@
+{
+  "name": "chef-augustin-public",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "next build --webpack",
+    "generate:assets": "npx tsx scripts/generate-static-assets.ts",
+    "validate:snapshot": "npx tsx scripts/validate-public-snapshot.ts",
+    "validate:out": "npx tsx scripts/validate-out.ts",
+    "test": "npx tsx scripts/validate-public-snapshot.ts && npx tsx scripts/validate-out.ts"
+  }
+}

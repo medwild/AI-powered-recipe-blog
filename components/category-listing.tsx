@@ -2,9 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowLeft } from "lucide-react"
-import { db } from "@/lib/db"
-import { recipes } from "@/lib/db/schema"
-import { and, eq, desc } from "drizzle-orm"
+import { getPublishedArticles } from "@/lib/public-data"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { HUBS } from "@/lib/hub-content"
@@ -95,24 +93,8 @@ export function categoryMetadata(category: string): Metadata {
 const LIVE_SECTION_PAGES = ["guides", "idees"]
 
 export async function CategoryListing({ category }: { category: string }) {
-  const articles = await db
-    .select({
-      slug: recipes.slug,
-      title: recipes.title,
-      excerpt: recipes.excerpt,
-      heroImageUrl: recipes.heroImageUrl,
-      publishedAt: recipes.publishedAt,
-      category: recipes.category,
-    })
-    .from(recipes)
-    .where(
-      and(
-        eq(recipes.content_type, "article"),
-        eq(recipes.category, category),
-        eq(recipes.status, "published"),
-      ),
-    )
-    .orderBy(desc(recipes.publishedAt))
+  const allArticles = await getPublishedArticles()
+  const articles = allArticles.filter((a) => a.category === category)
 
   const label = CATEGORY_LABELS[category] ?? category
 

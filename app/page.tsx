@@ -10,7 +10,7 @@ import { HomepageArticles } from "@/components/homepage/homepage-articles"
 import { HomepageCTA } from "@/components/homepage/homepage-cta"
 import { HomepageJsonLd } from "@/components/homepage/homepage-jsonld"
 import { getAllClusters } from "@/lib/cluster-resolver"
-import { getPublishedRecipesLight, getPublishedArticlesLight, getRecipeCategories, getLatestRecipeHero } from "@/lib/queries"
+import { getPublishedRecipesLight, getPublishedArticlesLight, getRecipeCategories, getLatestRecipeHero } from "@/lib/public-data"
 
 export const metadata: Metadata = {
   title: "Easy Weeknight Dinners for Two",

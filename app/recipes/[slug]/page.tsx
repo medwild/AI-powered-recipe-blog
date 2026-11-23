@@ -6,7 +6,7 @@ import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { RecipeArticle } from "@/components/recipe-article"
 import { JumpToRecipeDesktop, JumpToRecipeMobile } from "@/components/jump-to-recipe"
-import { getRecipeBySlug, getPublishedRecipesLight, getLinkedArticle, getRecipeRating } from "@/lib/queries"
+import { getRecipeBySlug, getPublishedRecipesLight, getLinkedArticle, getRecipeRating } from "@/lib/public-data"
 
 // SSG pure — pages generated at build time. dynamicParams = false : un slug
 // inconnu sert un 404 natif (comme category/cluster). Avec true, notFound()

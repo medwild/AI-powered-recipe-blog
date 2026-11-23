@@ -39,6 +39,7 @@
     "node_modules",
     "scripts",
     "__tests__",
-    "vitest.config.ts"
+    "vitest.config.ts",
+    "chef-augustin-public"
   ]
 }

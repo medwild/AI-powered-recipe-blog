@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import { getRecipeBySlug } from "@/lib/queries"
+import { getRecipeBySlug } from "@/lib/public-data"
 import { RECIPE_SLUG_REDIRECTS } from "@/lib/recipe-slug-redirects"
 import { getAuthorizedPublicOrigin } from "@/lib/auth"
 

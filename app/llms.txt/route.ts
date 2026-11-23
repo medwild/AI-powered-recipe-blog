@@ -1,41 +1,18 @@
 import { NextResponse } from "next/server"
-import { db } from "@/lib/db"
-import { recipes } from "@/lib/db/schema"
-import { desc, eq } from "drizzle-orm"
+import { getPublishedRecipes, getPublishedArticles } from "@/lib/public-data"
 import { HUBS } from "@/lib/hub-content"
-
-export const dynamic = "force-dynamic"
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.chefaugustin.com"
 
 export async function GET() {
-  const all = await db
-    .select({
-      slug: recipes.slug,
-      title: recipes.title,
-      keyword: recipes.keyword,
-      tags: recipes.tags,
-      difficulty: recipes.difficulty,
-      prepTime: recipes.prepTime,
-      cookTime: recipes.cookTime,
-      totalTime: recipes.totalTime,
-      servings: recipes.servings,
-      excerpt: recipes.excerpt,
-      publishedAt: recipes.publishedAt,
-      content_type: recipes.content_type,
-      category: recipes.category,
-    })
-    .from(recipes)
-    .where(eq(recipes.status, "published"))
-    .orderBy(desc(recipes.publishedAt))
-
-  const publishedRecipes = all.filter((r) => r.content_type !== "article")
-  const publishedArticles = all.filter((r) => r.content_type === "article")
+  const [publishedRecipes, publishedArticles] = await Promise.all([
+    getPublishedRecipes(),
+    getPublishedArticles(),
+  ])
 
   const recipeList = publishedRecipes
     .map(
       (r) =>
-        // servings already reads "2 servings" — avoid "2 servings servings"
         `- [${r.title}](${BASE_URL}/recipes/${r.slug}): ${r.excerpt ?? "Small-batch dinner recipe for two."} (${r.totalTime ?? "N/A"}, ${r.difficulty ?? "N/A"}, ${r.servings ?? "2 servings"})`,
     )
     .join("\n")
@@ -47,8 +24,6 @@ export async function GET() {
     )
     .join("\n")
 
-  // Collection hubs come from the code catalog (lib/hub-content.ts), not the DB
-  // articles table — they were invisible to llms.txt before this fix (audit claude 20/08).
   const hubList = HUBS
     .map(
       (h) =>

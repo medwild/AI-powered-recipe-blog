@@ -4,7 +4,7 @@
 import Image from "next/image"
 import { cloudinaryUrl } from "@/lib/cloudinary-url"
 import { getHubBySlug } from "@/lib/hub-content"
-import { getPublishedRecipes } from "@/lib/queries"
+import { getPublishedRecipes } from "@/lib/public-data"
 import { RecipeCard } from "@/components/recipe-card"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"

@@ -1,46 +1,31 @@
 import type { Metadata } from "next"
-import { and, eq } from "drizzle-orm"
-import { db } from "@/lib/db"
-import { recipes } from "@/lib/db/schema"
-import { getArticleBySlug } from "@/lib/queries"
+import { getPublishedArticles, getArticleBySlug } from "@/lib/public-data"
 import { articleMetadata, ArticleDetail } from "@/components/article-detail"
 import { getHubBySlug } from "@/lib/hub-content"
 import { HubListing } from "@/components/hub-listing"
 
-
 export const dynamicParams = true
 
 export async function generateStaticParams() {
-  const articles = await db
-    .select({ slug: recipes.slug })
-    .from(recipes)
-    .where(
-      and(
-        eq(recipes.content_type, "article"),
-        eq(recipes.category, "guides"),
-        eq(recipes.status, "published"),
-      ),
-    )
-  return articles.map((a) => ({ slug: a.slug }))
+  const articles = await getPublishedArticles()
+  return articles
+    .filter((a) => a.category === "guides")
+    .map((a) => ({ slug: a.slug }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
-  // Topical hubs are served from the code catalog (not the DB) — check it
-  // before the DB lookup so hub pages get their real title/meta, not
-  // "Article not found" (the page render already prioritizes hubs).
   const hub = getHubBySlug(slug)
   if (hub) {
     return {
       title: hub.metaTitle,
       description: hub.metaDescription,
-      // Canonical self — hub pages were missing it (audit 2026-08-08 P1-4)
       alternates: { canonical: `/guides/${slug}` },
       openGraph: {
         title: hub.metaTitle,
         description: hub.metaDescription,
         type: "website",
-        url: `/guides/${slug}`, // audit 2026-08-08 P2-10
+        url: `/guides/${slug}`,
       },
     }
   }

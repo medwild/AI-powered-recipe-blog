@@ -1,8 +1,5 @@
 import type { MetadataRoute } from "next"
-import { eq, and, desc } from "drizzle-orm"
-import { db } from "@/lib/db"
-import { recipes } from "@/lib/db/schema"
-import { getRecipeCategories } from "@/lib/queries"
+import { getPublishedRecipes, getPublishedArticles, getRecipeCategories } from "@/lib/public-data"
 import { getAllClusters } from "@/lib/cluster-resolver"
 import { tagToSlug } from "@/lib/tag-utils"
 import { HUBS } from "@/lib/hub-content"
@@ -10,41 +7,18 @@ import { CANONICAL_CATEGORIES } from "@/lib/category-consolidation"
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.chefaugustin.com"
 
-// Force dynamic — Vercel caches the sitemap otherwise (x-vercel-cache: HIT)
-export const dynamic = "force-dynamic"
-
 const ARTICLE_CATEGORIES = ["techniques", "guides", "histoire", "equipement", "idees"]
-const STATIC_PAGES = ["privacy", "terms"]
+const STATIC_PAGES = ["privacy", "terms", "about"]
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [recipeRows, articles, categories] = await Promise.all([
-    // Lightweight: only fetch columns the sitemap actually needs
-    db
-      .select({
-        slug: recipes.slug,
-        updatedAt: recipes.updatedAt,
-        ingredients: recipes.ingredients,
-        instructions: recipes.instructions,
-      })
-      .from(recipes)
-      .where(and(
-        eq(recipes.content_type, "recipe"),
-        eq(recipes.status, "published"),
-      ))
-      .orderBy(desc(recipes.publishedAt)),
-    db
-      .select({ slug: recipes.slug, category: recipes.category, updatedAt: recipes.updatedAt })
-      .from(recipes)
-      .where(and(
-        eq(recipes.content_type, "article"),
-        eq(recipes.status, "published"),
-      )),
+    getPublishedRecipes(),
+    getPublishedArticles(),
     getRecipeCategories(),
   ])
 
   const clusters = getAllClusters()
 
-  // Exclude test pages and ghost recipes (no ingredients AND no instructions)
   const cleanRecipes = recipeRows.filter((r) => {
     if (r.slug.startsWith("test-")) return false
     const hasContent = (r.ingredients?.length ?? 0) > 0 || (r.instructions?.length ?? 0) > 0
@@ -59,15 +33,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   const articleEntries: MetadataRoute.Sitemap = articles.map((a) => ({
-    url: `${BASE_URL}/${a.category}/${a.slug}`,
-    lastModified: a.updatedAt ?? new Date(),
+    url: `${BASE_URL}/${a.category || "guides"}/${a.slug}`,
+    lastModified: a.updatedAt ? new Date(a.updatedAt) : new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.7,
   }))
 
-  // Recipe tag categories — only the canonical deep categories (>=3 recipes)
-  // are included; merged thin categories (1-2 recipes) 301 to their canonical
-  // parent (lib/category-consolidation.ts) and must not appear in the sitemap.
   const recipeCategoryEntries: MetadataRoute.Sitemap = categories
     .filter((tag) => CANONICAL_CATEGORIES.has(tag.toLowerCase()))
     .map((tag) => ({
@@ -77,7 +48,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
     }))
 
-  // Topical cluster hub pages — 6 pillar pages for content architecture
   const clusterEntries: MetadataRoute.Sitemap = clusters.map((c) => ({
     url: `${BASE_URL}/recipes/collections/${c.id}`,
     lastModified: new Date(),
@@ -85,8 +55,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  // Topical hub pages from the code catalog (guides/idees) — 11 collection hubs
-  // (21 → 11 on 2026-08-20 cannibalization consolidation; removed hubs 301).
   const hubEntries: MetadataRoute.Sitemap = HUBS.map((hub) => ({
     url: `${BASE_URL}/${hub.category}/${hub.slug}`,
     lastModified: new Date(),
@@ -94,9 +62,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  // Article category pages (techniques, guides, etc.) — only those with
-  // content (catalog hubs) are included; empty hubs are noindex + excluded
-  // (thin content, Seobility/audit 2026-08-05).
   const articleCategoryEntries: MetadataRoute.Sitemap = ARTICLE_CATEGORIES
     .filter((cat) => HUBS.some((h) => h.category === cat))
     .map((cat) => ({
