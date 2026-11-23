@@ -14,8 +14,12 @@ import { agentChefAugustinMega, recipeArticleToChefAugustinOutput } from "@/lib/
 import { persistFinalDraft } from "@/lib/pipeline/steps/persist-phase"
 import { appendLog, logEntry } from "@/lib/pipeline/helpers"
 import { qualityGate } from "@/lib/quality-gate"
+import { requireDashboardAuth } from "@/lib/auth"
 
 export async function POST(req: Request) {
+  const authError = await requireDashboardAuth(req)
+  if (authError) return authError
+
   const body = await req.json()
   const id = parseInt(body?.id, 10)
   const newKeyword = body?.keyword?.toString().trim()

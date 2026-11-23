@@ -1,16 +1,12 @@
 import { NextResponse } from "next/server"
-import { cookies } from "next/headers"
 import { db } from "@/lib/db"
 import { recipes } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
+import { requireDashboardAuth } from "@/lib/auth"
 
-export async function GET() {
-  // Auth — raw API is internal (dashboard use)
-  const cookieStore = await cookies()
-  const token = cookieStore.get("dashboard_auth")?.value
-  if (!token || token !== process.env.DASHBOARD_SECRET_TOKEN) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-  }
+export async function GET(req: Request) {
+  const authError = await requireDashboardAuth(req)
+  if (authError) return authError
 
   try {
     const rows = await db

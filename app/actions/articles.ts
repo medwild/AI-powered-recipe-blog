@@ -1,15 +1,20 @@
 "use server"
 
-import { cookies } from "next/headers"
+import { cookies, headers } from "next/headers"
 import { redirect } from "next/navigation"
 import { db } from "@/lib/db"
 import { recipes } from "@/lib/db/schema"
 import { and, eq } from "drizzle-orm"
+import { isSameOriginHeaders, verifyDashboardToken } from "@/lib/auth"
 
 async function checkAuth() {
+  const headersList = await headers()
+  if (!isSameOriginHeaders(headersList)) {
+    throw new Error("Forbidden")
+  }
   const cookieStore = await cookies()
   const token = cookieStore.get("dashboard_auth")?.value
-  if (!token || token !== process.env.DASHBOARD_SECRET_TOKEN) {
+  if (!(await verifyDashboardToken(token))) {
     throw new Error("Unauthorized")
   }
 }

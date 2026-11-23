@@ -5,6 +5,7 @@ import { slugify } from "@/lib/slug"
 import { generateRecipe } from "@/lib/generate-recipe-pure"
 import { checkRateLimit } from "@/lib/rate-limit"
 import { preGenerationGate } from "@/lib/pre-generation-gate"
+import { getTrustedClientIp, requireDashboardAuth } from "@/lib/auth"
 
 export const maxDuration = 30
 
@@ -33,11 +34,11 @@ function getDefaultTechniques(cuisine: string): string {
 }
 
 export async function POST(req: Request) {
+  const authError = await requireDashboardAuth(req)
+  if (authError) return authError
+
   // Rate limiting — protège les quotas Serper + Cloudflare
-  const ip =
-    req.headers.get("x-forwarded-for") ??
-    req.headers.get("x-real-ip") ??
-    "unknown"
+  const ip = getTrustedClientIp(req.headers)
   const maxPerMinute = parseInt(
     process.env.RATE_LIMIT_MAX_PER_MINUTE ?? "3",
     10,

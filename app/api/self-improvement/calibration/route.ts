@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { getCalibrationStats } from "@/lib/queries"
+import { requireDashboardAuth } from "@/lib/auth"
 
 export const maxDuration = 15
 
@@ -13,7 +14,10 @@ export const maxDuration = 15
  * Calibration is "ready" when 50+ articles have been scored — at that
  * point, a v2.0 weighted formula can be derived via regression.
  */
-export async function GET() {
+export async function GET(req: Request) {
+  const authError = await requireDashboardAuth(req)
+  if (authError) return authError
+
   try {
     const stats = await getCalibrationStats()
 

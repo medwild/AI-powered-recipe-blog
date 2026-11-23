@@ -2,12 +2,10 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { getRecipeBySlug } from "@/lib/queries"
 import { RECIPE_SLUG_REDIRECTS } from "@/lib/recipe-slug-redirects"
+import { getAuthorizedPublicOrigin } from "@/lib/auth"
 
 function origin(req: NextRequest): string {
-  const host =
-    req.headers.get("x-forwarded-host") ?? req.headers.get("host") ?? "localhost:3000"
-  const proto = req.headers.get("x-forwarded-proto") ?? "http"
-  return `${proto}://${host}`
+  return getAuthorizedPublicOrigin(req.url, req.headers.get("host"))
 }
 
 export const dynamic = "force-dynamic"

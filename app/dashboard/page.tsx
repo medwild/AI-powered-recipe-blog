@@ -7,6 +7,7 @@ import { RecipeGenerator } from "@/components/dashboard/recipe-generator"
 import { RecipeRow } from "@/components/dashboard/recipe-row"
 import { DashboardLogout } from "@/components/dashboard/dashboard-logout"
 import { getAllRecipes } from "@/lib/queries"
+import { verifyDashboardToken } from "@/lib/auth"
 
 export const dynamic = "force-dynamic"
 
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
 export default async function DashboardPage() {
   const cookieStore = await cookies()
   const token = cookieStore.get("dashboard_auth")?.value
-  if (!token || token !== process.env.DASHBOARD_SECRET_TOKEN) {
+  if (!(await verifyDashboardToken(token))) {
     redirect("/login")
   }
 

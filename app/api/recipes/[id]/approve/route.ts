@@ -1,19 +1,15 @@
 import { NextResponse } from "next/server"
-import { cookies } from "next/headers"
 import { db } from "@/lib/db"
 import { recipes } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
+import { requireDashboardAuth } from "@/lib/auth"
 
 export async function POST(
-  _req: Request,
+  req: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  // Auth check
-  const cookieStore = await cookies()
-  const token = cookieStore.get("dashboard_auth")?.value
-  if (!token || token !== process.env.DASHBOARD_SECRET_TOKEN) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-  }
+  const authError = await requireDashboardAuth(req)
+  if (authError) return authError
 
   const { id } = await params
   const numericId = parseInt(id, 10)

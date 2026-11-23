@@ -12,8 +12,12 @@ import { db } from "@/lib/db"
 import { recipes } from "@/lib/db/schema"
 import { eq, and } from "drizzle-orm"
 import { insertContextualLinksBatch, logInternalLinks } from "@/lib/internal-linker"
+import { requireDashboardAuth } from "@/lib/auth"
 
-export async function POST() {
+export async function POST(req: Request) {
+  const authError = await requireDashboardAuth(req)
+  if (authError) return authError
+
   const all = await db
     .select()
     .from(recipes)

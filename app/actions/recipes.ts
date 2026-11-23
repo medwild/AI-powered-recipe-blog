@@ -8,11 +8,16 @@ import { eq, and, sql } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 import { runSeoGate } from "@/lib/seo/gate"
 import type { GateResult } from "@/lib/seo/types"
+import { getTrustedClientIp, isSameOriginHeaders, verifyDashboardToken } from "@/lib/auth"
 
 async function checkAuth() {
+  const headersList = await headers()
+  if (!isSameOriginHeaders(headersList)) {
+    throw new Error("Forbidden")
+  }
   const cookieStore = await cookies()
   const token = cookieStore.get("dashboard_auth")?.value
-  if (!token || token !== process.env.DASHBOARD_SECRET_TOKEN) {
+  if (!(await verifyDashboardToken(token))) {
     throw new Error("Unauthorized")
   }
 }
@@ -176,9 +181,7 @@ export async function rateRecipe(
 
   // One vote per IP per recipe
   const headersList = await headers()
-  const ip = headersList.get("x-forwarded-for")?.split(",")[0]?.trim()
-    ?? headersList.get("x-real-ip")
-    ?? "unknown"
+  const ip = getTrustedClientIp(headersList)
   const ipHash = createHash("sha256").update(`${ip}:recipe-ratings`).digest("hex").substring(0, 16)
 
   const [existing] = await db

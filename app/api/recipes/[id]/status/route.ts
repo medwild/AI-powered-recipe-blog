@@ -2,11 +2,15 @@ import { NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { recipes } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
+import { requireDashboardAuth } from "@/lib/auth"
 
 export async function GET(
-  _req: Request,
+  req: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  const authError = await requireDashboardAuth(req)
+  if (authError) return authError
+
   const { id } = await params
   const numericId = parseInt(id, 10)
 

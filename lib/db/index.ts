@@ -74,7 +74,14 @@ let db: DbType
 if (process.env.DATABASE_URL) {
   try {
     pool =
-      globalForDb.pool ?? new Pool({ connectionString: process.env.DATABASE_URL })
+      globalForDb.pool ??
+      new Pool({
+        connectionString: process.env.DATABASE_URL,
+        max: 3,
+        idleTimeoutMillis: 10_000,
+        connectionTimeoutMillis: 15_000,
+        allowExitOnIdle: true,
+      })
     if (process.env.NODE_ENV !== "production") globalForDb.pool = pool
     db = drizzle(pool, { schema })
   } catch {

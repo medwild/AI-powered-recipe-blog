@@ -8,8 +8,13 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-const POLL_INTERVAL_MS = 2000
-const MAX_POLL_ATTEMPTS = 150 // 150 × 2s = 5 min max (matches maxDuration)
+const MAX_POLL_ATTEMPTS = 35 // ~5 min max with progressive backoff (5s -> 8s -> 12s)
+
+function getNextPollIntervalMs(attempt: number): number {
+  if (attempt < 6) return 5000
+  if (attempt < 16) return 8000
+  return 12000
+}
 
 export function RecipeGenerator() {
   const router = useRouter()
@@ -151,10 +156,10 @@ export function RecipeGenerator() {
         })
       }
 
-      // Continue polling after POLL_INTERVAL_MS
+      // Continue polling with progressive backoff to avoid unnecessary Neon compute wake-ups
       pollingRef.current = setTimeout(
         () => pollStatus(recipeId, toastId),
-        POLL_INTERVAL_MS,
+        getNextPollIntervalMs(attemptsRef.current),
       )
     } catch {
       if (mountedRef.current) {
