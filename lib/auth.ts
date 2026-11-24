@@ -56,36 +56,68 @@ const DEFAULT_ALLOWED_HOSTS = new Set([
   "chefaugustin.com",
   "localhost",
   "127.0.0.1",
-  "ais-dev-6rsfynhs32nnbwa2ya6xob-427750206559.europe-west1.run.app",
-  "ais-pre-6rsfynhs32nnbwa2ya6xob-427750206559.europe-west1.run.app",
+  "ais-dev-4uyvipbr6hgaum7i34nx67-271396358419.europe-west1.run.app",
+  "ais-pre-4uyvipbr6hgaum7i34nx67-271396358419.europe-west1.run.app",
 ])
 
+function isLoopbackHost(host: string): boolean {
+  const hostname = host.trim().toLowerCase().split(":")[0]
+  return hostname === "localhost" || hostname === "127.0.0.1" || hostname === "[::1]"
+}
+
+function isInternalOrLoopbackHost(host: string): boolean {
+  const hostname = host.trim().toLowerCase().split(":")[0]
+  return isLoopbackHost(hostname) || hostname === "0.0.0.0"
+}
+
+function normalizeHostValue(raw: string | null | undefined): string {
+  if (!raw) return ""
+  const first = raw.split(",")[0]?.trim().toLowerCase() ?? ""
+  if (!first || /[\s/@\\]/.test(first)) return ""
+  if (first.endsWith(":443")) return first.slice(0, -4)
+  if (first.endsWith(":80")) return first.slice(0, -3)
+  return first
+}
+
+function parseConfiguredAllowedEntries(): string[] {
+  const sources = [
+    process.env.ALLOWED_ORIGINS,
+    process.env.APP_URL,
+    process.env.NEXT_PUBLIC_SITE_URL,
+  ]
+  const entries: string[] = []
+  for (const src of sources) {
+    if (!src) continue
+    for (const part of src.split(",")) {
+      const trimmed = part.trim().toLowerCase()
+      if (trimmed) entries.push(trimmed)
+    }
+  }
+  return entries
+}
+
 export function isAllowedHost(host: string): boolean {
-  const normalized = host.trim().toLowerCase()
+  const normalized = normalizeHostValue(host)
   if (!normalized) return false
 
   const hostname = normalized.split(":")[0]
 
-  if (DEFAULT_ALLOWED_HOSTS.has(hostname) || DEFAULT_ALLOWED_HOSTS.has(normalized)) {
+  if (DEFAULT_ALLOWED_HOSTS.has(normalized) || (isLoopbackHost(hostname) && DEFAULT_ALLOWED_HOSTS.has(hostname))) {
     return true
   }
 
-  const envAllowed = process.env.ALLOWED_ORIGINS || process.env.NEXT_PUBLIC_SITE_URL
-  if (envAllowed) {
-    const parts = envAllowed.split(",")
-    for (const part of parts) {
-      const trimmed = part.trim().toLowerCase()
-      if (!trimmed) continue
-      try {
-        const parsedHost = trimmed.includes("://") ? new URL(trimmed).host.toLowerCase() : trimmed
-        const parsedHostname = parsedHost.split(":")[0]
-        if (hostname === parsedHostname || hostname === parsedHost) {
-          return true
-        }
-      } catch {
-        if (hostname === trimmed.split(":")[0]) {
-          return true
-        }
+  for (const entry of parseConfiguredAllowedEntries()) {
+    try {
+      const parsedHost = normalizeHostValue(entry.includes("://") ? new URL(entry).host : entry)
+      if (!parsedHost) continue
+      const parsedHostname = parsedHost.split(":")[0]
+      if (normalized === parsedHost || (isLoopbackHost(hostname) && hostname === parsedHostname)) {
+        return true
+      }
+    } catch {
+      const fallbackEntry = normalizeHostValue(entry)
+      if (fallbackEntry && normalized === fallbackEntry) {
+        return true
       }
     }
   }
@@ -94,31 +126,120 @@ export function isAllowedHost(host: string): boolean {
 }
 
 /**
- * Returns an explicitly authorized origin for redirects.
- * Ignores untrusted client headers such as `x-forwarded-host` or `x-forwarded-proto`.
- * Only allows loopback (`localhost` / `127.0.0.1`) or explicit whitelisted origins;
- * otherwise forces the configured public origin.
+ * Resolves the effective request target host.
+ * Trusts `x-forwarded-host` ONLY when the direct `host` is an internal/loopback
+ * address (reverse-proxy forwarding to local port 3000) AND the forwarded host
+ * is an explicitly allowlisted non-loopback origin.
  */
-export function getAuthorizedPublicOrigin(reqUrl?: string, hostHeader?: string | null): string {
-  const normalizedHostHeader = hostHeader?.trim().toLowerCase() ?? ""
-  let candidate = normalizedHostHeader
-  if (!candidate && reqUrl) {
+function resolveTrustedTargetHost(
+  headerStore: { get(name: string): string | null },
+  fallbackHost = "",
+): string {
+  const directHost = normalizeHostValue(headerStore.get("host")) || normalizeHostValue(fallbackHost)
+  const forwardedHost = normalizeHostValue(headerStore.get("x-forwarded-host"))
+
+  if (directHost && !isInternalOrLoopbackHost(directHost)) {
+    return directHost
+  }
+
+  if (forwardedHost && !isInternalOrLoopbackHost(forwardedHost) && isAllowedHost(forwardedHost)) {
+    return forwardedHost
+  }
+
+  return directHost
+}
+
+/**
+ * Returns an explicitly authorized origin for redirects.
+ * Ignores untrusted `x-forwarded-host` / `x-forwarded-proto` headers: a forwarded
+ * host is honored only behind an internal/loopback `Host` when explicitly allowlisted.
+ * Otherwise allows loopback (`localhost` / `127.0.0.1`) or explicit whitelisted hosts,
+ * falling back to the configured public origin.
+ */
+export function getAuthorizedPublicOrigin(
+  reqUrl?: string,
+  hostHeader?: string | null,
+  forwardedHostHeader?: string | null,
+): string {
+  const normalizedHostHeader = normalizeHostValue(hostHeader)
+  const normalizedForwardedHost = normalizeHostValue(forwardedHostHeader)
+
+  let reqUrlHost = ""
+  if (reqUrl) {
     try {
-      candidate = new URL(reqUrl).host.toLowerCase()
+      reqUrlHost = normalizeHostValue(new URL(reqUrl).host)
     } catch {
-      candidate = ""
+      reqUrlHost = ""
     }
   }
 
-  if (candidate && isAllowedHost(candidate)) {
-    const hostname = candidate.split(":")[0]
-    if (hostname === "localhost" || hostname === "127.0.0.1") {
-      return `http://${candidate}`
+  const directCandidate = normalizedHostHeader || reqUrlHost
+
+  if (directCandidate && !isInternalOrLoopbackHost(directCandidate) && isAllowedHost(directCandidate)) {
+    return `https://${directCandidate}`
+  }
+
+  if (
+    (!directCandidate || isInternalOrLoopbackHost(directCandidate)) &&
+    normalizedForwardedHost &&
+    !isInternalOrLoopbackHost(normalizedForwardedHost) &&
+    isAllowedHost(normalizedForwardedHost)
+  ) {
+    return `https://${normalizedForwardedHost}`
+  }
+
+  if (directCandidate && isAllowedHost(directCandidate)) {
+    if (isLoopbackHost(directCandidate)) {
+      return `http://${directCandidate}`
     }
-    return `https://${candidate}`
+    return `https://${directCandidate}`
   }
 
   return getConfiguredPublicOrigin()
+}
+
+/**
+ * Returns dashboard session cookie attributes appropriate for the target origin.
+ * AI Studio HTTPS preview origins run inside a cross-site iframe, requiring
+ * `SameSite=None; Secure; Partitioned`; production and localhost retain `SameSite=Lax`.
+ */
+export function getDashboardCookieOptions(req: Request): {
+  httpOnly: true
+  secure: boolean
+  sameSite: "lax" | "none"
+  partitioned?: boolean
+  path: "/"
+} {
+  let fallbackHost = ""
+  try {
+    fallbackHost = new URL(req.url).host
+  } catch {
+    fallbackHost = ""
+  }
+
+  const targetHost = resolveTrustedTargetHost(req.headers, fallbackHost)
+  const targetHostname = targetHost.split(":")[0]
+  const isAiStudioPreview =
+    isAllowedHost(targetHost) &&
+    !isLoopbackHost(targetHost) &&
+    targetHostname.endsWith(".run.app")
+
+  if (isAiStudioPreview) {
+    return {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      partitioned: true,
+      path: "/",
+    }
+  }
+
+  return {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+  }
 }
 
 /**
@@ -139,28 +260,49 @@ export function isSameOriginHeaders(
   headerStore: { get(name: string): string | null },
   fallbackHost = "",
 ): boolean {
-  const secFetchSite = headerStore.get("sec-fetch-site")?.toLowerCase()
+  const secFetchSite = headerStore.get("sec-fetch-site")?.trim().toLowerCase()
   if (secFetchSite === "cross-site") {
     return false
   }
 
-  const origin = headerStore.get("origin")
+  const origin = headerStore.get("origin")?.trim()
   if (!origin) {
     return true
   }
 
+  let parsedOrigin: URL
   try {
-    const originHost = new URL(origin).host.toLowerCase()
-    return isAllowedHost(originHost)
+    parsedOrigin = new URL(origin)
   } catch {
     return false
   }
+
+  if (parsedOrigin.protocol !== "https:" && parsedOrigin.protocol !== "http:") {
+    return false
+  }
+
+  const originHost = normalizeHostValue(parsedOrigin.host)
+  if (!originHost || !isAllowedHost(originHost)) {
+    return false
+  }
+
+  if (!isLoopbackHost(originHost) && parsedOrigin.protocol !== "https:") {
+    return false
+  }
+
+  const targetHost = resolveTrustedTargetHost(headerStore, fallbackHost)
+  if (!targetHost) {
+    return false
+  }
+
+  return originHost === targetHost
 }
 
 /**
  * Checks that browser-originated state-changing requests come from an explicitly
- * authorized same-origin host. Requests with an explicit `Authorization: Bearer`
- * header bypass this check because browsers never attach Bearer headers cross-site.
+ * authorized same-origin host matching the request target. Requests with an explicit
+ * `Authorization: Bearer` header bypass this check because browsers never attach
+ * Bearer headers cross-site.
  */
 export function isSameOriginRequest(req: Request): boolean {
   let fallbackHost = ""

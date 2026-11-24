@@ -29,7 +29,11 @@ export async function middleware(req: NextRequest) {
     const token = req.cookies.get("dashboard_auth")?.value
     const valid = await verifyDashboardToken(token)
     if (!valid) {
-      const loginOrigin = getAuthorizedPublicOrigin(req.url, req.headers.get("host"))
+      const loginOrigin = getAuthorizedPublicOrigin(
+        req.url,
+        req.headers.get("host"),
+        req.headers.get("x-forwarded-host"),
+      )
       const loginUrl = new URL("/login", loginOrigin)
       const res = NextResponse.redirect(loginUrl, 307)
       res.headers.set("X-Robots-Tag", "noindex, nofollow")

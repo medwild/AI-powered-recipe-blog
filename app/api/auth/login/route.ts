@@ -1,7 +1,12 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { checkRateLimit } from "@/lib/rate-limit"
-import { getTrustedClientIp, isSameOriginRequest, verifyDashboardToken } from "@/lib/auth"
+import {
+  getDashboardCookieOptions,
+  getTrustedClientIp,
+  isSameOriginRequest,
+  verifyDashboardToken,
+} from "@/lib/auth"
 
 export async function GET() {
   return NextResponse.json(
@@ -105,11 +110,8 @@ export async function POST(req: NextRequest) {
     : NextResponse.json({ ok: true }, { headers: { "Cache-Control": "no-store" } })
 
   res.cookies.set("dashboard_auth", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    ...getDashboardCookieOptions(req),
     maxAge: 60 * 60 * 24 * 7,
-    path: "/",
   })
 
   return res

@@ -478,6 +478,124 @@ describe("Phase 0B Final Security Gate — Auth, Cookie, CSRF, Rate Limit & Prox
     )
     expect(spoofBypassAttempt.status).toBe(429)
   })
+
+  it("allows configured AI Studio preview origins (direct and loopback-proxied) and rejects stale or mismatched origins", async () => {
+    const newPreviewHost = "ais-dev-4uyvipbr6hgaum7i34nx67-271396358419.europe-west1.run.app"
+    const newPreviewOrigin = `https://${newPreviewHost}`
+    const stalePreviewOrigin = "https://ais-dev-6rsfynhs32nnbwa2ya6xob-427750206559.europe-west1.run.app"
+
+    // 1. Stale old-account preview origin is rejected with 403
+    const staleLogin = await loginPOST(
+      new NextRequest(`https://${newPreviewHost}/api/auth/login`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          host: newPreviewHost,
+          origin: stalePreviewOrigin,
+          "x-real-ip": "198.51.100.201",
+        },
+        body: JSON.stringify({ token: TEST_SECRET }),
+      }),
+    )
+    expect(staleLogin.status).toBe(403)
+
+    // 2. Cross-allowed-host mismatch (preview origin targeting production host) is rejected with 403
+    const crossAllowedHost = await loginPOST(
+      new NextRequest("https://www.chefaugustin.com/api/auth/login", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          host: "www.chefaugustin.com",
+          origin: newPreviewOrigin,
+          "x-forwarded-host": newPreviewHost,
+          "x-real-ip": "198.51.100.202",
+        },
+        body: JSON.stringify({ token: TEST_SECRET }),
+      }),
+    )
+    expect(crossAllowedHost.status).toBe(403)
+
+    // 3. Invalid token on new preview origin is rejected with 401 (not 403)
+    const invalidTokenPreview = await loginPOST(
+      new NextRequest("http://localhost:3000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          host: "localhost:3000",
+          "x-forwarded-host": newPreviewHost,
+          origin: newPreviewOrigin,
+          "x-real-ip": "198.51.100.203",
+        },
+        body: JSON.stringify({ token: "wrong-token" }),
+      }),
+    )
+    expect(invalidTokenPreview.status).toBe(401)
+    expect(invalidTokenPreview.headers.get("set-cookie")).toBeNull()
+
+    // 4. Valid login on loopback-proxied preview origin succeeds with iframe-safe cookie flags
+    const validPreviewLogin = await loginPOST(
+      new NextRequest("http://localhost:3000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          host: "localhost:3000",
+          "x-forwarded-host": newPreviewHost,
+          origin: newPreviewOrigin,
+          "x-real-ip": "198.51.100.204",
+        },
+        body: JSON.stringify({ token: TEST_SECRET }),
+      }),
+    )
+    expect(validPreviewLogin.status).toBe(200)
+    const previewCookie = validPreviewLogin.headers.get("set-cookie") ?? ""
+    expect(previewCookie).toContain("dashboard_auth=")
+    expect(previewCookie).toContain("HttpOnly")
+    expect(previewCookie).toContain("Secure")
+    expect(previewCookie.toLowerCase()).toContain("samesite=none")
+    expect(previewCookie.toLowerCase()).toContain("partitioned")
+
+    // 5. Unauthenticated /dashboard on preview redirects to preview /login (not production)
+    const unauthPreviewDash = await middleware(
+      new NextRequest("http://localhost:3000/dashboard", {
+        headers: {
+          host: "localhost:3000",
+          "x-forwarded-host": newPreviewHost,
+        },
+      }),
+    )
+    expect(unauthPreviewDash.status).toBe(307)
+    expect(unauthPreviewDash.headers.get("location")).toBe(`${newPreviewOrigin}/login`)
+
+    // 6. Authenticated /dashboard on preview succeeds
+    const authPreviewDash = await middleware(
+      new NextRequest("http://localhost:3000/dashboard", {
+        headers: {
+          host: newPreviewHost,
+          cookie: `dashboard_auth=${TEST_SECRET}`,
+        },
+      }),
+    )
+    expect(authPreviewDash.status).toBe(200)
+    expect(authPreviewDash.headers.get("x-robots-tag")).toBe("noindex, nofollow")
+
+    // 7. Logout on preview succeeds and clears cookie with matching attributes
+    const previewLogout = await logoutPOST(
+      new NextRequest("http://localhost:3000/api/auth/logout", {
+        method: "POST",
+        headers: {
+          host: "localhost:3000",
+          "x-forwarded-host": newPreviewHost,
+          origin: newPreviewOrigin,
+        },
+      }),
+    )
+    expect(previewLogout.status).toBe(303)
+    expect(previewLogout.headers.get("location")).toBe("/login")
+    const clearedPreviewCookie = previewLogout.headers.get("set-cookie") ?? ""
+    expect(clearedPreviewCookie).toContain("dashboard_auth=;")
+    expect(clearedPreviewCookie).toContain("Max-Age=0")
+    expect(clearedPreviewCookie.toLowerCase()).toContain("samesite=none")
+  })
 })
 
 describe("Phase 0B Final Security Gate — All 9 Protected Routes & 7 Server Actions (Isolated Mocks)", () => {

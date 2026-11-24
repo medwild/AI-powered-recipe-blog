@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
-import { isSameOriginRequest } from "@/lib/auth"
+import { getDashboardCookieOptions, isSameOriginRequest } from "@/lib/auth"
 
 export async function POST(req: NextRequest) {
   if (!isSameOriginRequest(req)) {
@@ -18,12 +18,9 @@ export async function POST(req: NextRequest) {
     },
   })
   res.cookies.set("dashboard_auth", "", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    ...getDashboardCookieOptions(req),
     maxAge: 0,
     expires: new Date(0),
-    path: "/",
   })
   return res
 }
