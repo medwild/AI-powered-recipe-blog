@@ -13,12 +13,6 @@ export type Instruction = {
   text: string
 }
 
-export type ImageVariant = {
-  label: string
-  url: string
-  prompt: string
-}
-
 export type Recipe = {
   id: number
   slug: string
@@ -29,7 +23,6 @@ export type Recipe = {
   excerpt: string | null
   contentMarkdown: string | null
   heroImageUrl: string | null
-  imageVariants: ImageVariant[] | null
   prepTime: string | null
   cookTime: string | null
   totalTime: string | null
@@ -38,10 +31,8 @@ export type Recipe = {
   ingredients: Ingredient[]
   instructions: Instruction[]
   tags: string[]
-  serpData: Record<string, unknown> | null
   jsonLd: Record<string, unknown> | null
   status: string
-  workflowLog: unknown[] | null
   content_type: string | null
   category: string | null
   linked_content_id: number | null

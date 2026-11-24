@@ -34,9 +34,6 @@ function loadSnapshot(): PublicSnapshotPayload {
 function adaptRecipe(r: PublicRecipeRecord): Recipe {
   return {
     ...r,
-    imageVariants: null,
-    serpData: null,
-    workflowLog: null,
     status: "published",
     publishedAt: r.publishedAt ? new Date(r.publishedAt) : null,
     createdAt: new Date(r.createdAt),
@@ -55,7 +52,6 @@ function adaptArticle(a: PublicArticleRecord): Recipe {
     excerpt: a.excerpt,
     contentMarkdown: a.contentMarkdown,
     heroImageUrl: a.heroImageUrl,
-    imageVariants: null,
     prepTime: null,
     cookTime: null,
     totalTime: null,
@@ -64,10 +60,8 @@ function adaptArticle(a: PublicArticleRecord): Recipe {
     ingredients: [],
     instructions: [],
     tags: a.tags,
-    serpData: null,
     jsonLd: a.jsonLd,
     status: "published",
-    workflowLog: null,
     content_type: a.content_type,
     category: a.category,
     linked_content_id: a.linked_content_id,

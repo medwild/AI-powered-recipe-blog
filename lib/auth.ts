@@ -51,35 +51,43 @@ function getConfiguredPublicOrigin(): string {
   return CANONICAL_PUBLIC_ORIGIN
 }
 
+const DEFAULT_ALLOWED_HOSTS = new Set([
+  "www.chefaugustin.com",
+  "chefaugustin.com",
+  "localhost",
+  "127.0.0.1",
+  "ais-dev-6rsfynhs32nnbwa2ya6xob-427750206559.europe-west1.run.app",
+  "ais-pre-6rsfynhs32nnbwa2ya6xob-427750206559.europe-west1.run.app",
+])
+
 export function isAllowedHost(host: string): boolean {
   const normalized = host.trim().toLowerCase()
   if (!normalized) return false
 
-  let configuredHost = ""
-  try {
-    configuredHost = new URL(getConfiguredPublicOrigin()).host.toLowerCase()
-  } catch {
-    configuredHost = "www.chefaugustin.com"
-  }
-
-  if (
-    normalized === configuredHost ||
-    normalized === "www.chefaugustin.com" ||
-    normalized === "chefaugustin.com"
-  ) {
-    return true
-  }
-
   const hostname = normalized.split(":")[0]
-  if (hostname === "localhost" || hostname === "127.0.0.1") {
+
+  if (DEFAULT_ALLOWED_HOSTS.has(hostname) || DEFAULT_ALLOWED_HOSTS.has(normalized)) {
     return true
   }
 
-  if (
-    process.env.NODE_ENV !== "production" &&
-    (hostname.endsWith(".cloudworkstations.dev") || hostname.endsWith(".run.app"))
-  ) {
-    return true
+  const envAllowed = process.env.ALLOWED_ORIGINS || process.env.NEXT_PUBLIC_SITE_URL
+  if (envAllowed) {
+    const parts = envAllowed.split(",")
+    for (const part of parts) {
+      const trimmed = part.trim().toLowerCase()
+      if (!trimmed) continue
+      try {
+        const parsedHost = trimmed.includes("://") ? new URL(trimmed).host.toLowerCase() : trimmed
+        const parsedHostname = parsedHost.split(":")[0]
+        if (hostname === parsedHostname || hostname === parsedHost) {
+          return true
+        }
+      } catch {
+        if (hostname === trimmed.split(":")[0]) {
+          return true
+        }
+      }
+    }
   }
 
   return false
@@ -88,8 +96,8 @@ export function isAllowedHost(host: string): boolean {
 /**
  * Returns an explicitly authorized origin for redirects.
  * Ignores untrusted client headers such as `x-forwarded-host` or `x-forwarded-proto`.
- * Only allows loopback (`localhost` / `127.0.0.1`) or dev preview origins when actually
- * targeted on those hosts; otherwise forces the configured public origin.
+ * Only allows loopback (`localhost` / `127.0.0.1`) or explicit whitelisted origins;
+ * otherwise forces the configured public origin.
  */
 export function getAuthorizedPublicOrigin(reqUrl?: string, hostHeader?: string | null): string {
   const normalizedHostHeader = hostHeader?.trim().toLowerCase() ?? ""
@@ -102,17 +110,12 @@ export function getAuthorizedPublicOrigin(reqUrl?: string, hostHeader?: string |
     }
   }
 
-  if (candidate) {
+  if (candidate && isAllowedHost(candidate)) {
     const hostname = candidate.split(":")[0]
     if (hostname === "localhost" || hostname === "127.0.0.1") {
       return `http://${candidate}`
     }
-    if (
-      process.env.NODE_ENV !== "production" &&
-      (hostname.endsWith(".cloudworkstations.dev") || hostname.endsWith(".run.app"))
-    ) {
-      return `https://${candidate}`
-    }
+    return `https://${candidate}`
   }
 
   return getConfiguredPublicOrigin()
@@ -148,18 +151,7 @@ export function isSameOriginHeaders(
 
   try {
     const originHost = new URL(origin).host.toLowerCase()
-    if (!isAllowedHost(originHost)) {
-      return false
-    }
-
-    const hostHeader = headerStore.get("host")?.trim().toLowerCase() ?? ""
-    const forwardedHost = headerStore.get("x-forwarded-host")?.split(",").pop()?.trim().toLowerCase() ?? ""
-    const expectedHost =
-      (hostHeader && isAllowedHost(hostHeader) ? hostHeader : "") ||
-      (forwardedHost && isAllowedHost(forwardedHost) ? forwardedHost : "") ||
-      fallbackHost.toLowerCase()
-
-    return Boolean(expectedHost) && originHost === expectedHost
+    return isAllowedHost(originHost)
   } catch {
     return false
   }

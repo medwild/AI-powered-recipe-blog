@@ -1,11 +1,19 @@
 /**
  * Static public data provider reading exclusively from data/public-content.json.
- * Replaces lib/queries.ts for the 100% static public export.
+ * Replaces lib/queries.ts for public routes without runtime SQL queries.
+ *
+ * Adapts snapshot ISO string timestamps and fields into strict `Recipe` types
+ * compatible with all existing public components and JSON-LD builders.
  */
 
 import fs from "node:fs"
 import path from "node:path"
-import type { PublicSnapshotPayload, PublicRecipeRecord, PublicArticleRecord } from "./public-types"
+import type { Recipe } from "@/lib/db/schema"
+import type {
+  PublicSnapshotPayload,
+  PublicRecipeRecord,
+  PublicArticleRecord,
+} from "./public-types"
 
 let cachedSnapshot: PublicSnapshotPayload | null = null
 
@@ -20,13 +28,59 @@ function loadSnapshot(): PublicSnapshotPayload {
   return cachedSnapshot
 }
 
+function adaptRecipe(r: PublicRecipeRecord): Recipe {
+  return {
+    ...r,
+    imageVariants: null,
+    serpData: null,
+    workflowLog: null,
+    status: "published",
+    publishedAt: r.publishedAt ? new Date(r.publishedAt) : null,
+    createdAt: new Date(r.createdAt),
+    updatedAt: new Date(r.updatedAt),
+  }
+}
+
+function adaptArticle(a: PublicArticleRecord): Recipe {
+  return {
+    id: a.id,
+    slug: a.slug,
+    keyword: a.keyword,
+    title: a.title,
+    metaTitle: a.metaTitle,
+    metaDescription: a.metaDescription,
+    excerpt: a.excerpt,
+    contentMarkdown: a.contentMarkdown,
+    heroImageUrl: a.heroImageUrl,
+    imageVariants: null,
+    prepTime: null,
+    cookTime: null,
+    totalTime: null,
+    servings: null,
+    difficulty: null,
+    ingredients: [],
+    instructions: [],
+    tags: a.tags,
+    serpData: null,
+    jsonLd: a.jsonLd,
+    status: "published",
+    workflowLog: null,
+    content_type: a.content_type,
+    category: a.category,
+    linked_content_id: a.linked_content_id,
+    publishedAt: a.publishedAt ? new Date(a.publishedAt) : null,
+    createdAt: new Date(a.createdAt),
+    updatedAt: new Date(a.updatedAt),
+  }
+}
+
 export function getPublicSnapshot(): PublicSnapshotPayload {
   return loadSnapshot()
 }
 
-export async function getPublishedRecipes(): Promise<PublicRecipeRecord[]> {
+export async function getPublishedRecipes(): Promise<Recipe[]> {
   const snap = loadSnapshot()
-  return [...snap.recipes]
+  return snap.recipes.map(adaptRecipe)
 }
 
 export async function getPublishedRecipesLight() {
@@ -40,7 +94,7 @@ export async function getPublishedRecipesLight() {
     totalTime: r.totalTime,
     servings: r.servings,
     tags: r.tags,
-    publishedAt: r.publishedAt,
+    publishedAt: r.publishedAt ? new Date(r.publishedAt) : null,
   }))
 }
 
@@ -58,7 +112,7 @@ export async function getPublishedRecipesByTag(tag: string) {
       totalTime: r.totalTime,
       servings: r.servings,
       tags: r.tags,
-      publishedAt: r.publishedAt,
+      publishedAt: r.publishedAt ? new Date(r.publishedAt) : null,
     }))
 }
 
@@ -72,7 +126,7 @@ export async function getLatestRecipeHero() {
   }
 }
 
-export async function searchPublishedRecipes(query?: string, category?: string) {
+export async function searchPublishedRecipes(query?: string, category?: string): Promise<Recipe[]> {
   const snap = loadSnapshot()
   let results = [...snap.recipes]
 
@@ -91,7 +145,7 @@ export async function searchPublishedRecipes(query?: string, category?: string) 
     results = results.filter((r) => r.tags.some((t) => t.toLowerCase().includes(cat)))
   }
 
-  return results
+  return results.map(adaptRecipe)
 }
 
 export async function getRecipeCategories(): Promise<string[]> {
@@ -100,7 +154,7 @@ export async function getRecipeCategories(): Promise<string[]> {
 }
 
 export type RelatedRecipeData = Pick<
-  PublicRecipeRecord,
+  Recipe,
   "id" | "slug" | "title" | "heroImageUrl" | "excerpt" | "tags" | "totalTime" | "servings" | "difficulty"
 > & { score: number }
 
@@ -138,21 +192,21 @@ export async function getRelatedRecipes(currentId: number, tags: string[]): Prom
   return scored
 }
 
-export async function getRecipeBySlug(slug: string): Promise<PublicRecipeRecord | null> {
+export async function getRecipeBySlug(slug: string): Promise<Recipe | null> {
   const snap = loadSnapshot()
   const found = snap.recipes.find((r) => r.slug === slug)
-  return found ?? null
+  return found ? adaptRecipe(found) : null
 }
 
-export async function getRecipeById(id: number): Promise<PublicRecipeRecord | null> {
+export async function getRecipeById(id: number): Promise<Recipe | null> {
   const snap = loadSnapshot()
   const found = snap.recipes.find((r) => r.id === id)
-  return found ?? null
+  return found ? adaptRecipe(found) : null
 }
 
-export async function getPublishedArticles(): Promise<PublicArticleRecord[]> {
+export async function getPublishedArticles(): Promise<Recipe[]> {
   const snap = loadSnapshot()
-  return [...snap.articles]
+  return snap.articles.map(adaptArticle)
 }
 
 export async function getPublishedArticlesLight() {
@@ -163,14 +217,14 @@ export async function getPublishedArticlesLight() {
     title: a.title,
     heroImageUrl: a.heroImageUrl,
     category: a.category,
-    publishedAt: a.publishedAt,
+    publishedAt: a.publishedAt ? new Date(a.publishedAt) : null,
   }))
 }
 
-export async function getArticleBySlug(slug: string): Promise<PublicArticleRecord | null> {
+export async function getArticleBySlug(slug: string): Promise<Recipe | null> {
   const snap = loadSnapshot()
   const found = snap.articles.find((a) => a.slug === slug)
-  return found ?? null
+  return found ? adaptArticle(found) : null
 }
 
 export async function getLinkedArticle(recipeId: number) {
@@ -196,7 +250,7 @@ export async function getRelatedForArticle(linkedRecipeId: number | null) {
     totalTime: r.totalTime,
     servings: r.servings,
     tags: r.tags,
-    publishedAt: r.publishedAt,
+    publishedAt: r.publishedAt ? new Date(r.publishedAt) : null,
   })
 
   let linked: ReturnType<typeof recipeCardSelect>[] = []
@@ -228,7 +282,7 @@ export async function getRecipesBySlugs(slugs: string[]) {
     totalTime: r.totalTime,
     servings: r.servings,
     tags: r.tags,
-    publishedAt: r.publishedAt,
+    publishedAt: r.publishedAt ? new Date(r.publishedAt) : null,
   })
 
   return snap.recipes.filter((r) => slugSet.has(r.slug)).map(recipeCardSelect)

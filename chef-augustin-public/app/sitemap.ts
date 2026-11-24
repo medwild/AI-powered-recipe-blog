@@ -8,7 +8,7 @@ import { CANONICAL_CATEGORIES } from "@/lib/category-consolidation"
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.chefaugustin.com"
 
 const ARTICLE_CATEGORIES = ["techniques", "guides", "histoire", "equipement", "idees"]
-const STATIC_PAGES = ["privacy", "terms", "about"]
+const STATIC_PAGES = ["privacy", "terms"]
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [recipeRows, articles, categories] = await Promise.all([

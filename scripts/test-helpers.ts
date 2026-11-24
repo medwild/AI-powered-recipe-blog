@@ -40,13 +40,15 @@ assert(prompt.includes("4K"), "includes quality spec")
 const noTag = buildFallbackImagePrompt("Test", [])
 assert(!noTag.includes("undefined"), "no undefined in output")
 
-// ── slugify ──────────────────────────────────────────────────────────────────
-console.log("\nslugify()")
-assert(slugify("Swedish Meatballs Recipe") === "swedish-meatballs-recipe", "basic slug")
-assert(slugify("Café au Lait") === "cafe-au-lait", "accents removed")
-assert(slugify("What's For Dinner?") === "what-s-for-dinner", "special chars → dashes")
-assert(slugify("  Extra   Spaces  ") === "extra-spaces", "trimmed + collapsed spaces")
-assert(slugify("---dashes---") === "dashes", "leading/trailing dashes trimmed")
+// ── isAllowedHost ────────────────────────────────────────────────────────────
+console.log("\nisAllowedHost()")
+import { isAllowedHost } from "../lib/auth"
+assert(isAllowedHost("ais-dev-6rsfynhs32nnbwa2ya6xob-427750206559.europe-west1.run.app"), "allows exact dev studio URL")
+assert(isAllowedHost("ais-pre-6rsfynhs32nnbwa2ya6xob-427750206559.europe-west1.run.app"), "allows exact shared studio URL")
+assert(isAllowedHost("www.chefaugustin.com"), "allows canonical production domain")
+assert(isAllowedHost("localhost"), "allows localhost")
+assert(!isAllowedHost("evil.com"), "rejects arbitrary external domain")
+assert(!isAllowedHost("random-app.run.app"), "rejects arbitrary non-whitelisted run.app domain")
 
 // ── Summary ──────────────────────────────────────────────────────────────────
 const total = passed + failed

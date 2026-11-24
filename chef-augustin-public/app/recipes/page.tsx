@@ -55,6 +55,7 @@ export default async function RecipesPage() {
     totalTime: r.totalTime,
     servings: r.servings,
     tags: r.tags ?? [],
+    publishedAt: r.publishedAt,
   }))
 
   const displayArticles = articles

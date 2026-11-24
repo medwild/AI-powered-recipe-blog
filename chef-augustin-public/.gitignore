@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Next.js build outputs
+.next/
+out/
+
+# TypeScript incremental cache
+*.tsbuildinfo
+
+# Environment & secrets (forbidden in public standalone repo)
+.env
+.env.*
+
+# Logs & OS files
+npm-debug.log*
+.DS_Store

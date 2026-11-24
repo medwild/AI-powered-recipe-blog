@@ -115,6 +115,12 @@ vi.mock("@/lib/internal-linker", () => ({
   logInternalLinks: vi.fn(async () => {}),
 }))
 
+vi.mock("@/lib/public-data", () => ({
+  getRecipeBySlug: vi.fn(async (slug: string) =>
+    slug === "sample-chicken" ? { slug: "sample-chicken" } : null,
+  ),
+}))
+
 vi.mock("@/lib/queries", () => ({
   getRecipeBySlug: vi.fn(async (slug: string) =>
     slug === "sample-chicken" ? { slug: "sample-chicken" } : null,
